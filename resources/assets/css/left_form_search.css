@@ -1,0 +1,832 @@
+/*** Discover Mobile ***/
+.discover-mobile {display: none;width: calc(100% - 35px);height: 198px;margin: auto;position: relative;top: -52px;}
+@media (max-width: 800px) {
+    .discover-mobile {
+        display: block
+    }
+
+    #projects_2blk{    margin-top: 30px;}
+    #projects_2blk .projects{
+        padding-top:0!important;
+        margin-top:0!important	
+    }
+    #projects_2blk .projects:first-child{
+        padding-bottom:0
+    }
+    #projects_2blk h3.blog-heading{
+        /*margin-top:0!important	*/
+        padding-top:0
+    }
+    #projects_2blk .project-build-slider {
+        float: right;margin-top:0
+    }
+
+}
+.discover-mobile .title {
+    width: 100%;
+    height: 52px;
+    background-color: rgba(38, 69, 132, 0.76);
+    color: #fff;
+    border-radius: 7px 7px 0 0 
+}
+.discover-mobile .title h3 {font-size: 21px;padding: 12px 37px 8px 0;background-image: url(/img/binoculars.svg);background-repeat: no-repeat;background-position: right 10px;background-size: 33px;text-align: center;line-height: 1;margin-top: 0px;display: inline-block;}
+.discover-mobile .title img {
+    width: 32px;
+    position: absolute;
+    top: 8px;
+    right: 0
+}
+.discover-mobile .title div {width: auto; margin: auto;position: relative; text-align: center; }
+.discover-mobile .search-box {padding: 12px 10px 16px 10px;border-radius: 0 0 7px 7px;background-color: rgba(199, 219, 242, 0.8);direction: rtl;/* height: 178px; */overflow: hidden;}
+.discover-mobile .search-box select {
+    width: 100%;
+    height: 40px;
+    outline: none;
+    border: 0px;
+    color: #fff;
+    font-size: 17px;
+    border-right: 7px solid #0D8DD3;
+    border-radius: 5px 0 0 5px;
+    padding: 0 10px 3px 0;
+    -webkit-appearance: none;
+    background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' fill='%23ffffff'><polygon points='0,0 100,0 50,50'/></svg>") no-repeat;
+    background-size: 12px;
+    background-position: 10px 17px;
+    background-color: #465979;
+}
+.discover-mobile .search-box .city {
+    float: right;
+    width: 50%;
+    padding-left: 5px
+}
+.discover-mobile .search-box .estate {
+    float: right;
+    width: 50%;
+    padding-right: 5px
+}
+.discover-mobile .search-box .room {
+    float: right;
+    width: 50%;
+    padding-left: 5px;
+    margin-top: 10px
+}
+.discover-mobile .search-box .budget {
+    float: right;
+    width: 50%;
+    padding-right: 5px;
+    margin-top: 10px
+}
+.discover-mobile .search-box .extra {
+    float: right;
+    width: 50%;
+    padding-left: 5px;
+    margin-top: 10px
+}
+.discover-mobile .search-box .search {
+    width: 50%;
+    float: right;
+    padding-right: 5px;
+    margin-top: 10px
+}
+.discover-mobile .search-box .search button {background-color: #0D8DD3;border: 0px;width: 100%;height: 40px;color: #fff;font-size: 19px;border-radius: 5px 5px 5px 25px;cursor: pointer;outline: none;}
+.discover-mobile .search-box .search button span {position: relative;/* top: -5px */}
+
+
+.blk_searh{
+    width: 100%;
+    background-color: #fff;
+    position: relative;
+    margin-top: 15px;
+    border-radius: 5px;
+    padding: 0;
+    color: #1F3A73;
+    border: 1px solid lightgray;
+    /*font-family: MontserratRegular,serif;*/
+}
+.blk_searh:before, .currency:before {
+    content: "";
+    display: block;
+    border-style: solid;
+    border-width: 36px 36px 0 0;
+    border-color: #E9EBEE transparent;
+    position: absolute;
+    top: -1px;
+    left: -1px;
+}
+.blk_searh .discover-mobile{
+    display:block;
+    width:100%;
+    height:auto;
+    top:0;
+    /* background-color:#fff; */
+}
+.blk_searh .discover-mobile .title{background-color:#fff;color:#203C73;height: auto;border-top-left-radius: 83px;padding: 0 44px;}
+.blk_searh .discover-mobile .title h3{font-size: 27px;padding-right: 56px;background-image: url('/img/left_search.jpg');background-repeat: no-repeat;background-position: right 20px;background-size: 52px;text-align: center;line-height: 1;margin-top: 0px;}
+.blk_searh .discover-mobile .title i{
+    color:#203C73
+}
+.blk_searh .search-box{background-color:#fff;height: auto;overflow: hidden;}
+.blk_searh .search button span{top:0!important;background-image: url('/img/send.png');padding-left: 40px;background-repeat: no-repeat;background-size: 42px;background-position: left center;font-size: 20px;padding-bottom: 10px;display: inline-block;}
+.blk_searh .search-box .estate {
+    padding-right: 0;
+    padding-left:5px
+}
+
+.blk_searh .search-box .budget{
+    margin-top: 0;
+}
+
+
+
+
+
+
+/** Start Most Watched Style **/
+.most-watched {
+    clear:both;
+    width: 100%;
+    height: 343px;
+    background-color: #fff;
+    position: relative;
+    margin-top: 15px;
+    border-radius: 5px;
+    padding: 15px;
+    color: #1F3A73;
+    border: 1px solid lightgray;
+}
+
+.mobile-screen {
+    display: none
+} 
+
+@media (max-width: 800px) {
+    .desktop-screen {
+        display: none
+    }
+
+    .mobile-screen {
+        display: block
+    }
+    .about-damas .damas img {
+        width: 100px;
+        margin-top: 6px;
+    }
+}
+
+
+.most-watched:before {
+    content: "";
+    display: block;
+    border-style: solid;
+    border-width: 31px 31px 0 0;
+    border-color: lightgray transparent;
+    position: absolute;
+    top: -1px;
+    left: -1px;
+}
+
+.most-watched:after {
+    content: "";
+    display: block;
+    border-style: solid;
+    border-width: 31px 31px 0 0;
+    border-color: #E9EBEE transparent;
+    position: absolute;
+    top: -2px;
+    left: -1px;
+}
+
+
+.most-watched .title {
+    width: 270px;
+    height: 44px;
+    float: right;
+    position: relative;
+    margin-bottom: 15px
+}
+
+
+
+
+.most-watched .title i {
+    position: absolute;
+    top: -20px;
+    right: 0
+}
+
+.most-watched .title h3 {
+    position: absolute;
+    top: 4px;
+    right: 62px;
+    font-size: 27px;
+    /*font-family: dinnextregular*/
+}
+
+@media (max-width: 800px) {
+    .most-watched .title h3 {
+        font-size: 28px
+    }
+}
+
+.most-watched .post {
+    width: 100%;
+    height: 254px;
+    clear: both;
+    margin-top: 15px;
+    /*overflow: hidden;*/
+    position: relative
+}
+
+.most-watched .post .slider {
+    position: absolute;
+    width: 100%
+}
+
+.most-watched .post .items {
+    width: 100%;
+    height: 74px;
+    border: 1px solid lightgray;
+    margin-bottom: 15px;
+    cursor: pointer;
+}
+
+.most-watched .items .photo {
+    /*width: 118px;*/
+    width: 86px;
+    height: 100%;
+    float: right;
+    background-color: cornflowerblue    
+}
+
+.most-watched .items .info {
+    float: right;
+    width: calc(100% - 86px);
+    height: 100%;
+    padding: 2px 5px;
+    position: relative;
+    background-color: #fff;
+    overflow:hidden
+}
+
+.most-watched .items .info .name {
+    float: right;
+    font-size: 26px;
+    height: 26px;
+    margin: 0 0 0 5px;
+    /*font-family: MontserratRegular,serif*/
+}
+
+@media (max-width: 800px) {
+    .most-watched .items .info .name {
+        font-size: 27px;
+    }
+
+    .most-watched .items .info .name span {
+        top: -9px
+    }
+}
+
+.most-watched .items .info .name span {
+    position: relative;
+    top: -5px;
+    font-weight: bold;
+}
+
+.most-watched .items .info .about {
+    /*font-family: DroidNaskhRegular;*/
+    font-size: 12px;
+    color: #1F3A73;
+    text-align: right;
+    line-height: 1.3;
+    width: 100%;
+    direction: rtl;
+}
+
+@media (max-width: 800px) {
+    .most-watched .items .info .about {
+        font-size: 13px;
+        direction: rtl
+    }
+}
+
+.most-watched .items .info .views {
+    font-size: 11px;
+    position: absolute;
+    left: 5px;
+    bottom: 2px
+}
+/** End Most Watched Style **/
+
+
+
+
+.certificate{    clear: both;}
+
+.certificate .nav button, .most-watched .nav button {
+    background-color: transparent;
+    border: 0
+}
+
+
+.certificate .arrow, .most-watched .arrow {
+    background-color: #E9EBEE;
+    width: 34px;
+    height: 25px;
+    text-align: center;
+    cursor: pointer;
+    font-size: 24px;
+    color:#1F3A73;
+    border: 0px !important;
+    position: absolute;
+    top: 25px;
+    outline: none
+
+}
+.certificate .arrow i, .most-watched .arrow i {
+    position: relative;
+    top: -5px
+}
+
+.certificate .up, .most-watched .up {
+    left: 20px
+}
+
+.certificate .down, .most-watched .down {
+    left: 57px
+}
+
+.certificate .nav .disabled, .most-watched .nav .disabled {
+    opacity: 0.5
+}
+
+
+
+
+
+
+/** Start Projects Style **/
+.content section .projects {
+    width: 100%;
+    background-color: #fff;
+    position: relative;
+    padding: 10px 15px 15px 0;
+    border-radius: 5px;
+    border: 1px solid lightgray
+}
+
+
+
+
+
+.content section .projects:before {
+    content: "";
+    display: block;
+    border-style: solid;
+    border-width: 31px 31px 0 0;
+    border-color: lightgray transparent;
+    position: absolute;
+    top: -1px;
+    left: -1px
+}
+
+.content section .projects:after {
+    content: "";
+    display: block;
+    border-style: solid;
+    border-width: 31px 31px 0 0;
+    border-color: #E9EBEE transparent;
+    position: absolute;
+    top: -2px;
+    left: -1px
+}
+
+
+
+
+.content .project-build .title {
+    text-align: right;
+    height: 50px;
+    color: #1F3A73
+}
+
+
+.content .project-build .title div {
+    height: 100%;
+    width: 100%;
+    float: right;
+    position: relative;
+    padding-top: 14px;
+    overflow: visible;
+}
+
+@media (max-width: 800px) {
+    .content .projects .title div {
+        margin: auto;
+        float: none !important
+    }
+}
+
+
+.content .project-build .title .iconhproj {
+    position: absolute;
+    top: 0px;
+    right: 0px
+}
+
+
+
+/** Drop Option Project **/
+/*
+.content .projects .title .drop-menu {
+    position: relative;
+    bottom: 3px;
+    width: 26px;
+    height: 26px;
+    float: right!important;
+    margin-right: 5px;
+}
+
+.content .projects .title .drop-select {
+    color: #fff;
+    font-size: 15px;
+    cursor: pointer;
+    width: 26px;
+    height: 26px;
+    background-color: #1F3A73;
+    text-align: center;
+    border-radius: 50%;
+    padding: 6px
+}
+
+.content .projects .title .drop-menu:hover .drop-option {
+    display: block
+}
+
+
+.content .projects .title .drop-option {
+    background-color: #1F3A73;
+    width: 130px;
+    list-style: none;
+    padding: 0;
+    z-index: 2;
+    position: absolute;
+    top: 40px;
+    left: -6px;
+    display: none;
+    border-radius: 3px;
+    font-size: 15px
+    
+}
+
+.content .projects .title .drop-option a {
+    color: #fff;
+    display: block;
+    height: 30px;
+    padding: 0 10px;
+    text-decoration: none;
+    transition: all .15s ease-in-out
+}
+
+.content .projects .title .drop-option a:hover {
+    background-color: #fff;
+    color: #1F3A73;
+}*/
+
+
+
+/***************/
+
+.projects .more-option {
+    width: 207px;
+    height: 211px;
+    border: 1px solid lightgray;
+    border-radius: 5px;
+    color: #1F3A73;
+    transition: all .2s ease-in-out;
+    cursor: pointer;
+    position: relative;
+    top: 42px
+}
+
+.projects .more-option:hover {
+    transform: scale(1.1)
+}
+
+.projects .more-option .logo {
+    height: 114px;
+    width: 100%;
+    background-image: linear-gradient(to right, #0B65B3, #56DBFF);
+}
+
+.projects .more-option .logo img {
+    width: 105px;
+    height: 80px;
+    margin: auto;
+    position: relative;
+    top: 20px
+}
+
+.projects .more-option:before {
+    content: "";
+    display: block;
+    border-style: solid;
+    border-width: 21px 21px 0 0;
+    border-color: lightgray transparent;
+    position: absolute;
+    top: -1px;
+    left: -1px;
+
+}
+
+.projects .more-option:after {
+    content: "";
+    display: block;
+    border-style: solid;
+    border-width: 21px 21px 0 0;
+    border-color: #fff transparent;
+    position: absolute;
+    top: -2px;
+    left: -1px;
+
+}
+
+.projects .more-option span {
+    display: block;
+    font-size: 25px;
+    text-align: center;
+}
+.projects .more-option i {
+    display: block;
+    text-align: center;
+    margin-right: 14px
+}
+
+
+.more-option .flaticon-copy-files.flaticon-copy-files:before {font-size: 40px;}
+.content .project-build .title h3 {
+    position: relative;
+    /* margin-top: 14px; */
+    margin-right: 46px;
+    float: right;
+}
+
+.content .project-build .project-build-slider {
+    height: 287px;
+    margin-top: 8px;
+    cursor: grab
+}
+
+.content .projects .slick-track {
+    margin-right: 2px
+}
+
+.content .projects .slider .item {
+    width: 288px;
+    height: 100%;
+    margin-left: 20px;
+    border-radius: 5px;
+    position: relative;
+    border: 1px solid lightgray;
+}
+
+.content .projects .slider .item:before {
+    content: "";
+    display: block;
+    border-style: solid;
+    border-width: 21px 21px 0 0;
+    border-color: lightgray transparent;
+    position: absolute;
+    top: -1px;
+    left: -1px;
+
+}
+
+.content .projects .slider .item:after {
+    content: "";
+    display: block;
+    border-style: solid;
+    border-width: 21px 21px 0 0;
+    border-color: #fff transparent;
+    position: absolute;
+    top: -2px;
+    left: -1px;
+
+}
+
+@media (max-width: 800px) {
+    .content .project-build .project-build-slider {
+        height: auto;
+    }
+    .content .projects .slider .item {
+        width: 302px;
+        margin-right: 15px;
+        margin-left: 0;
+    }
+    .is_mobile_ar .item {
+        margin-right: 15px;
+    }
+    .is_mobile_en .item {
+        margin-left: 15px;
+    }
+    .projects .more-options {
+        width: 185px;
+        height: 45px;
+        font-size: 23px;
+        margin: 10px auto 12px;
+    }
+    .content section .projects {
+        margin-top: 15px;
+        background-color: transparent;
+        border: 0;
+        overflow:hidden;
+        padding-right: 0
+    }
+
+    .content section .projects:after {
+        content: "";
+        border: 0
+    }
+
+    .content section .projects:before {
+        content: "";
+        border: 0
+    }
+
+    .content .projects .slider .item:after {
+        content: "";
+        display: block;
+        border-style: solid;
+        border-width: 21px 21px 0 0;
+        border-color: #E9EBEE transparent;
+        position: absolute;
+        top: -1px;
+        left: -1px;
+
+    }
+    .content .projects .owl-next, .content .projects .owl-prev {
+        display: none
+    }
+}
+
+
+
+
+/** Start Slider Projects Style **/
+.content .projects .owl-nav div,.how-to-use .owl-nav div {
+    width: 58px;
+    height: 58px;
+    background-color: rgba(31, 58, 155, 0.7) !important;
+    color: #fff !important;
+    font-size: 35px !important;
+    border-radius: 50%;
+    position: absolute;
+    top: calc(45% - 20px);
+    outline: none;
+    cursor: pointer;
+    text-align: center;
+    transition: background .1s ease-in-out
+}
+.how-to-use .owl-nav div {
+    width: 38px;
+    height: 38px;
+    font-size: 25px !important;
+}
+.content .projects .owl-nav div:hover {
+    background-color: rgba(31, 58, 155, 1) !important
+}
+
+.content .projects .owl-nav i {
+    position: relative;
+    top: 0;
+    padding: 0 20px
+}
+
+.content .projects .owl-prev i {
+    padding: 0 17px
+}
+
+.content .projects .owl-next {
+    left: 10px
+}
+.use .owl-next {
+    left: 0px
+}
+
+.content .projects .owl-prev{
+    right: 10px;
+}
+.use .owl-prev {
+    right: 0px;
+}
+/*.content .projects */
+.owl-nav .disabled {
+    display: none
+}
+.most-watched-desktop .slider .owl-nav{
+    position: absolute;
+    top: -68px;
+    left: -18px;}
+
+.most-watched-desktop .owl-nav .disabled button{
+    border: 1px solid #0066cc;
+    cursor: default;
+    /* background-color: #0099cc;*/
+    color: #ffffff;
+}
+.most-watched-desktop .owl-nav .disabled{
+    display: block;
+}
+.most-watched-mobile .post{overflow-y: scroll;}
+
+/** End Project Slider Style **/
+@media (max-width:800px){
+    .content .projects .owl-next,.content .projects .owl-prev{display:none}
+    .projects .more-option:after{border-color:#e9ebee transparent}
+
+    .project-card {
+        /*height: 357px!important;*/
+        height:388px!important;
+        overflow: hidden;
+    }
+}
+
+
+.list_projects .txt{position:relative}
+.list_projects .txt h2{ margin: 30px 57px 26px 0;
+                        text-align:right;
+}
+.list_projects .txt .flaticon-copy-files{
+    float: right;
+    position: absolute;
+    top: -19px;
+    right: 5px;
+}
+.post-card  .contain .about-project a{color: #1F3A73;}
+.post-card  .contain .about-project{
+    font-size: 26px!important;
+    text-align: center!important;
+    padding: 7px 6px;
+    height: auto;
+}
+@media (max-width: 800px) {
+    .post-card{height: 375px!important /*349px!important;*/ }
+    .post-card .contain .image-project {
+        height: 300px!important;
+    }
+}
+
+
+
+
+
+
+/****-- iPad in landscape --****/
+@media only screen 
+and (min-device-width : 768px) 
+and (max-device-width : 1024px) 
+and (orientation : landscape) { 
+
+    .discover-mobile {
+        top: -53px !important;
+        z-index: 99999;
+        margin-bottom: 0px!important;
+    }
+}
+
+/****-- iPad in portrait --****/
+@media only screen 
+and (min-device-width : 768px) 
+and (max-device-width : 1024px) 
+and (orientation : portrait) { 
+    .discover-mobile {
+        top: -53px !important;
+        z-index: 99999;
+    }
+}
+
+
+
+/* 
+  ##Device = Low Resolution Tablets, Mobiles (Landscape)
+  ##Screen = B/w 481px to 767px
+*/
+
+@media (min-width: 481px) and (max-width: 767px) {
+    .discover-mobile {
+        top: -81px;
+        z-index: 99999;
+    }
+}
+
+/* 
+  ##Device = Most of the Smartphones Mobiles (Portrait)
+  ##Screen = B/w 320px to 479px
+*/
+
+@media (min-width: 320px) and (max-width: 480px) {
+    .discover-mobile {
+        top: -81px;
+        z-index: 99999;
+    }
+
+}

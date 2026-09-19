@@ -1,0 +1,225 @@
+.message-icon{display:none!important}
+.fa-whatsapp{
+    cursor:pointer;
+}
+#page-top{
+    margin-top:99px;
+}
+.clearfix{clear:both}
+.hidden{display:none}
+
+.full_width{
+    width:100%;
+}
+.full_width .down-form form {
+    width: 77%;
+}
+
+
+.top-icon {
+    position: fixed !important;
+    right: 15px;
+    font-size: 20px !important;
+    bottom: 15px;
+    border-radius: 50%;
+    z-index: 9999;
+    display: none;
+    width: 40px;
+    height: 40px;
+    background-color: #264584;
+    color: #fff;
+    line-height: 40px !important;
+    text-align: center;
+    cursor: pointer;
+}
+@media (max-width: 767px) {
+    .top-icon {
+        right: auto;
+        left: 10px; }
+}
+.top-icon-mobile {
+    top: 95px !important;
+    bottom: auto !important;
+}
+
+.pl5{padding-left:5px}
+.pr5{padding-right:5px}
+.pl10{padding-left:10px}
+.pr10{padding-right:10px}
+
+
+.project-card .share i {color:#1F3A73}
+
+
+
+.project-card .share .shareBtnsFloating{
+    position: absolute;
+    left: 0;
+    top: 49px;
+    display:none
+}
+.project-card .share .shareBtnsFloating .fa-facebook{
+    left: 17px!important;
+    top: 4px!important;
+    font-size: 23px;}
+
+.project-card .share .shareBtnsFloating .fa-whatsapp{
+    left: -1px!important;
+    top: 38px!important;
+    font-size: 23px;
+    color: white;
+}
+
+.smlprice{font-size:22px!important;top:0!important}
+.project-card .contain .title-project .bed{margin: 5px 7px 0 7px!important}
+
+
+@-webkit-keyframes slideOutUp {
+    from {
+        -webkit-transform: translate3d(0, 0, 0);
+        transform: translate3d(0, 0, 0);
+    }
+
+    to {
+        visibility: hidden;
+        -webkit-transform: translate3d(0, -100%, 0);
+        transform: translate3d(0, -100%, 0);
+    }
+}
+
+@keyframes slideOutUp {
+    from {
+        -webkit-transform: translate3d(0, 0, 0);
+        transform: translate3d(0, 0, 0);
+    }
+
+    to {
+        visibility: hidden;
+        -webkit-transform: translate3d(0, -100%, 0);
+        transform: translate3d(0, -100%, 0);
+    }
+}
+
+.slideOutUp {
+    -webkit-animation-name: slideOutUp;
+    animation-name: slideOutUp;
+}
+
+
+
+@-webkit-keyframes slideInUp {
+    from {
+        -webkit-transform: translate3d(0, 100%, 0);
+        transform: translate3d(0, 100%, 0);
+        visibility: visible;
+    }
+
+    to {
+        -webkit-transform: translate3d(0, 0, 0);
+        transform: translate3d(0, 0, 0);
+    }
+}
+
+@keyframes slideInUp {
+    from {
+        -webkit-transform: translate3d(0, 100%, 0);
+        transform: translate3d(0, 100%, 0);
+        visibility: visible;
+    }
+
+    to {
+        -webkit-transform: translate3d(0, 0, 0);
+        transform: translate3d(0, 0, 0);
+    }
+}
+
+.slideInUp {
+    -webkit-animation-name: slideInUp;
+    animation-name: slideInUp;
+}
+
+
+
+
+
+
+.certificate .slider .item {
+    width: auto;
+    margin: 0;
+}
+.most-watched .slider .item {
+    width: auto;
+    margin: 0;
+}
+
+
+
+
+
+
+
+.dkeywords{direction:rtl;color:#1F3A73;margin: 16px 6px;overflow: hidden;}
+.dkeywords span{
+    width: 100%;
+    text-align: right;
+    float: right;margin-top:5px;
+}
+.dkeywords a{
+    border:1px solid #1F3A73;
+    color:#1F3A73;
+    padding: 4px 10px 5px 10px;
+    border-radius:6px;
+    margin: 0 2px;
+    overflow: hidden;
+    float: right;
+}
+.dkeywords a:hover{
+    color:#ffffff;
+    background-color: #1F3A73;
+}
+@media (max-width: 767px) {
+    .dkeywords a {
+        margin-bottom: 4px;
+    }
+    .dkeywords {
+        margin: 12px 0;
+    }
+}
+
+
+div.email .inptemail{
+    width: 100%;
+    height: 38px;
+    float: right;
+    font-size: 14px;
+    border: 0px;
+    color: #1F3A73;
+    direction: rtl;
+    background-color: #E9EBEE;
+    border-right: 6px solid #1F3A73;
+    border-radius: 0 0 0 15px;
+    padding: 0 10px 0 10px;
+    margin-top: 12px;
+}
+.down-form-content .down-form form  .inptemail {
+    margin-top: 14px;}
+
+.project-card .contain .title-project .bed{
+    background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' fill='%23264584'><polygon points='0,0 100,0 50,50'/></svg>") 45px 7px no-repeat #132467;
+    background-size: 10px;
+}
+
+/*.project-card .likeCardItem{
+position:relative;
+}
+.project-card .likeCardItem .fa-heart-o{
+z-index:9;
+}
+.project-card .likeCardItem .fa-heart{
+position: absolute;
+left: -1px;
+color: rgba(71,78,82,.4);
+}*/
+
+
+

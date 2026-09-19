@@ -1,0 +1,644 @@
+
+/*=========== FOOTER ===========*/
+
+footer {
+    position:relative;
+    background-color: #264584;
+    color: #fff;
+    width: 100%;
+    /*min-height: 600px;*/
+    margin: 20px 0 0 0;
+    /*    font-family: DroidNaskhRegular*/
+}
+footer .contain {
+    width: 1080px;
+    margin: auto;
+    padding: 20px 0 0 0
+}
+
+footer .contain .links {
+    float: right;
+    width: 50%;
+    text-align: right
+}
+footer .contain ul {
+    list-style: none
+}
+footer .contain .links ul {
+    margin: 20px 0 0 0
+}
+footer .contain .links .links1 {
+    float: right;
+    width: 50%;
+    padding: 0 0 0 20px
+}
+footer .contain .links .links2 {
+    float: right;
+    width: 50%;
+    padding: 0 0 0 20px
+}
+
+footer .contain .h3{
+    /*    font-family: dinnextregular;*/
+    width: 100%;
+    padding: 0 0 10px 0;
+    border-bottom: 1px solid #fff;
+    display: block;
+}
+footer .contain .links a {
+    color: #C0C7D1;
+    font-size: 14px;
+    line-height: 2.5
+}
+
+footer .contain .post-contact {
+    float: right;
+    width: 50%;
+    text-align: right;
+    line-height: 1.5;
+    font-size: 13px
+}
+
+footer .contain .post-contact .post2 a {
+    display: block;
+}
+footer .privacy a {border:1px solid;padding: 1px 2px 4px 5px;border-radius: 5px;/* padding-right: 23px; *//* background-image: url('/img/footer_icons.jpg'); *//* background-repeat: no-repeat; */}
+
+footer .contain .post-contact a {
+    color: #C0C7D1;
+    overflow: auto;
+    text-align: right;
+}
+
+footer .last-posts div {
+    width: 100%;
+    height: 53px;
+    margin: 0 0 15px 0
+}
+footer .last-posts .post1 {
+    /*    margin: 20px 0 0 0*/
+    margin-top: 30px
+}
+
+footer .last-posts {
+    float: right;
+    width: 50%;
+    padding: 0 0 0 15px
+}
+
+footer .last-posts img {
+    float: right;
+    margin: 0 0 0 10px
+}
+
+footer .contain .post-contact .contact {
+    float: right;
+    width: 50%;
+    color: #C0C7D1;
+    direction: ltr
+}
+
+footer .contact .h3 {
+    color: #fff
+}
+footer .contact .info span{
+    /* background-image: url(/img/footer_icons.jpg); */
+    /* background-repeat: no-repeat; */
+    /* padding-left: 24px; */
+    display: block;
+    /* height: 20px; */
+    clear: both;
+    position: relative;
+}
+footer .contact .info span#first,
+footer .contact .info span#second,
+footer .contact .info span#third{
+    padding-left: 18px;
+    margin-bottom: 10px;
+}
+footer .contact .info span#first b,
+footer .contact .info span#second b,
+footer .contact .info span#third b{
+    margin-right: 2px;
+}
+footer .contact .info span svg{
+    position: absolute;
+    left: 0px;
+    top: 2px;
+}
+footer .contact .info #third span,
+footer .contact .info #second span,
+.adr span{
+    float: left;
+    display: contents !important;
+}
+
+footer .contact .info #second span.two{
+    float: left;
+    display: block !important;
+    width: 100%;
+    padding-left: 52px;
+}
+footer .contact .info #first{
+    background-position: 0px -91px;
+}
+footer .contact .info #second{
+    background-position: 0px 0px;
+    margin-bottom: 27px !important;
+}
+footer .contact .info #third{
+    background-position: 0px -21px;
+}
+footer .contact .info {
+    text-align: left;
+    margin: 30px 0 0 0;
+    position: relative;
+}
+footer .socialicon i{
+    padding: 8px;
+    font-size: 25px;
+    color:#fff
+}
+footer .socialicon .fa-facebook:before {
+    color: #264584;
+    background-color: white;
+    padding: 5px 5px 0px 7px;
+    font-size: 21px;
+    border-radius: 4px;
+}
+footer .socialicon {
+    width: 100%;
+    margin: 20px 0;
+    padding: 0 0 20px 0;
+    border-bottom: 1px solid;
+    text-align: center;
+    display: -webkit-box;
+}
+
+footer .socialicon a {
+    margin: 3px;
+}
+
+footer .socialicon a i {
+    transition: all 0.15s ease-in-out
+}
+/*
+footer .contain .post-contact .contact .socialicon a:hover i {
+    background-color: #fff;
+    color: #264584
+}*/
+
+footer .contact form input {
+    float: right;
+    width: 80%;
+    direction: rtl;
+    height: 30px;
+    border: 0px;
+    outline: none;
+    color: #264584;
+    padding: 0 10px
+}
+footer .contact form {
+    width: 100%;
+    margin: 15px 0 20px 0
+}
+footer .contact form button {
+    float: right;
+    width: 20%;
+    border: 0px;
+    outline: none;
+    height: 30px;
+    background-color: #337AB7;
+    color: #fff
+}
+
+footer .privacy {
+    margin: 30px auto;
+    padding: 0;
+    text-align: center;
+}
+
+footer .privacy #use {
+    margin: 0 10px 0 0;
+    background-position: right 0px top -65px;
+    display: inline-block;
+    direction: rtl;
+}
+footer .privacy #privacy {
+    /* background-position: right 0px top -41px; */
+    display: inline-block;
+    direction: rtl;
+}
+footer .privacy svg{margin: 0px 2px -3px 0;/* padding: 0 0 0 0; */}
+/*footer .contain .logo img {
+    width: 112px
+}*/
+
+footer .contain .logo {
+    width: 132px;
+    margin: 40px auto
+}
+footer .contain .copyright {
+    text-align: center;
+    font-size: 11px;
+    position: relative;
+    bottom: 15px;
+}
+
+footer .contain .contact {
+    float: right;
+    width: 25%
+}
+
+
+
+
+@media (min-width: 1100px) {
+    .content .location-importance .line1 .institutions {
+        width: 50%;
+        padding-left: 20px
+    }
+
+    .content .location-importance .line1 .location {
+        width: 50%;
+    }
+
+    .content .location-importance .line2 .look {
+        width: 50%
+    }
+
+    .content .location-importance .line2 .transport {
+        width: 50%
+    }
+}
+
+
+@media (max-width: 1100px) {
+    .content{
+        width: 780px;
+        /*margin: -44px auto*/
+    }
+    .content .about_project {
+        width: 780px
+    }
+
+    .content .project-info-content {
+        display: none
+    }
+
+    .content .project-info-content-smallscreen {
+        display: inline-block
+    }
+
+    .content .colmun1 {
+        width: 412px
+    }
+
+    .content .location-importance {
+        width: 412px
+    }
+
+    .content .location-importance .line1 .institutions {
+        width: 100%;
+        clear: both
+    }
+
+    .content .location-importance .line1 .location {
+        clear: both;
+        width: 100%
+    }
+
+    .content .location-importance .line2 .look {
+        clear: both
+    }
+
+    .content .location-importance .line2 .look {
+        width: 100%
+    }
+
+    .content .location-importance .line2 .transport {
+        width: 100%
+    }
+
+    .content .colmun2 {
+        width: 366px;
+    }
+
+
+
+    /*.content .colmun1 .location-importance-content .title1 h2 {
+    margin: -5px 58px 15px 0
+    }*/
+
+    .content .colmun1 iframe {
+        width: 412px;
+        height: 408px;
+    }
+
+    .down-form-content {
+        margin: 0px;
+        width: 100%
+    }
+
+    .content .project-info-content-smallscreen .project-info {
+        margin-top: 45px
+    }
+
+    footer .contain {
+        width: 780px
+    }
+
+    footer .contain .post-contact {
+        clear: both;
+        width: 100%
+    }
+
+    footer .contain .links {
+        width: 100%
+    }
+    footer .contain .logo {
+        width: 132px;
+        margin: 10px auto 40px auto;
+    }
+
+}
+@media (max-width: 1024px) {
+    .content{
+        width: 414px
+    }
+    .content .about_project {
+        width: 100%;
+    }
+
+    .content .form {
+        width: 414px
+    }
+
+    .content .project-info-content {
+        display: none
+    }
+
+    .content .project-info-content-smallscreen {
+        display: inline-block;
+        clear: both;
+        padding: 0px;
+        width: 100%;
+    }
+
+    .content .project-info-content-smallscreen .project-info {
+        padding: 0px
+    }
+
+    .content .about_project .serv1 {
+        float: none;
+        width: 100%
+    }
+
+    .content .about_project .serv2 {
+        float: none;
+        width: 100%
+    }
+
+    .content .about_project .serv3 {
+        float: none;
+        width: 100%
+    }
+
+    .content .about_project .serv4 {
+        float: none;
+        width: 100%
+    }
+
+    .content .about-title h2 {
+        display: block
+    }
+
+    .content .about_project h2 {
+        display: none
+    }
+
+    .content .colmun2 {
+        width: 414px;
+        margin-top: 5px
+    }
+
+    .down-form-content {
+        width: 100%;
+    }
+
+    .down-form-content .down-form form {
+        width: 100%
+    }   
+
+    .down-form-content .down-form .img img {
+        display: none
+    }
+
+    .down-form-content .down-form {
+        padding: 20px 20px 20px 30px 
+    }
+
+    footer {
+        overflow: hidden
+    }
+
+    footer .contain {
+        width: 414px;
+        overflow: hidden
+    }
+
+    footer .contain .post-contact .last-posts {
+        width: 100%
+    }
+
+    footer .contain .post-contact .contact {
+        clear: both;
+        width: 100%
+    }
+
+    footer .contain .links {
+        width: 100%
+    }
+    footer .contain .links ul{padding:0}
+    footer .contain .links .links1,footer .contain .links .links2{padding-left:15px}
+
+}
+@media only screen and (max-width: 455px) {
+    .content{
+        width: 92%
+    }
+    .content .form-content   {
+        width: 100%
+    }
+    .content .form-content .form   {
+        width: 100%
+    }
+    .content .project-info-content-smallscreen .project-info {
+        width: 100%;
+        margin: 15px 0 0 0
+    }
+    .content .about-title h2 {
+        width: 100%
+    }
+    .content .about_project {
+        width: 100%;
+        /*        min-height: 430px;*/
+    }
+    .content .colmun2 {
+        width: 100%;
+        margin: 0px
+    }
+    .content .colmun1 {
+        width: 100%
+    }
+    .content .colmun1 .youtube-video {
+        /*display: none*/
+        height: 248px;    border: 1px solid #e9ebee;
+    }
+    .content .colmun1 iframe {
+        width: 100%;
+        height: 248px;
+    }
+    .content .colmun1 .prices-list-content .prices-list  .list {
+        font-size: 4px
+    }
+    .down-form-content {
+        width: 100%;
+        margin: auto
+    }
+    .down-form-content .down-form form {
+        width: 100%
+    }   
+    footer .contain {
+        width: 92%
+    }
+
+
+}
+
+
+
+
+
+
+
+
+/** Start About Damas **/
+.about-damas {
+    width: 100%;
+    height: auto;
+    background-color: #fff;
+    position: relative;
+    margin-top: 16px;
+    border-radius: 5px;
+    padding: 15px;
+    color: #1F3A73;
+    border: 1px solid lightgray;
+}
+
+.about-damas:before {
+    content: "";
+    display: block;
+    border-style: solid;
+    border-width: 31px 31px 0 0;
+    border-color: lightgray transparent;
+    position: absolute;
+    top: -1px;
+    left: -1px;
+}
+
+.about-damas:after {
+    content: "";
+    display: block;
+    border-style: solid;
+    border-width: 31px 31px 0 0;
+    border-color: #E9EBEE transparent;
+    position: absolute;
+    top: -2px;
+    left: -1px;
+}
+
+.about-damas .damas {
+    float: right;
+    margin: 0 0 0 5px
+}
+
+.about-damas .damas img {
+    width: 136px;
+}
+
+.about-damas .about_d {
+    /*    font-family: DroidNaskhRegular;*/
+    color: #000;
+    font-size: 14px;
+    text-align: justify;direction: rtl;
+    line-height: 1.6;
+    width: 100%
+}
+.about-damas .read-more_d {
+    background-color: #123985;
+    color: #fff;
+    width: 150px;
+    height: 45px;
+    border-radius: 5px;
+    margin: 15px auto 0;
+    font-size: 24px;
+    text-align: center;
+    transition: all 0.2s ease-in-out;
+    cursor: pointer;
+    /*    font-family: dinnextregular;*/
+    display:block
+}
+
+.about-damas .read-more:hover {
+    transform: scale(1.1)
+}
+/** End About Damas **/
+
+
+
+@media (min-width: 840px) and (max-width: 1024px) {
+
+    footer .contain {
+        width: 609px!important;
+    }
+    footer {
+        min-height:auto!important;
+    }
+
+    #section_callcenter.down-form-content .title h1 {
+        top: 17px!important;
+
+    }
+    .most-watched .items .info .about {
+        font-size: 15px;
+        clear: both;
+        padding-right: 7px;
+        padding-top: 10px;
+        text-align: right;
+    }
+    .header .logo .text {
+        top: 41px;
+        left: 130px;
+    }
+    .hideonbigtab{display:none}
+    .content .colmun1 {
+        width: 100%;
+    }
+
+    .content {width: 808px !important;margin: 0 auto 0 auto!important;}
+    .content section {width: 100%;float: left;margin:0!important}
+    .mobile-screen {
+        display: block;
+    }
+
+    .project-card .contain .image-project img{height:auto!important}
+}
+
+div.privacy a:hover path {
+    fill: #264584;
+}
+div.privacy a:hover {
+    background-color:#fff;
+    color:#264584
+}

@@ -1,0 +1,24 @@
+
+.colored {
+    font-style: normal;
+    color: #264584 !important;
+    line-height: 25px;
+    font-weight: normal; }
+a {
+  text-decoration: none !important; }
+
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+/*  font-family:"dinnextmedium";*/
+}
+/* end global */
+@media (max-width: 767px) {
+  body {
+    padding-top: 70px; } }
+
+/*# sourceMappingURL=global.css.map */

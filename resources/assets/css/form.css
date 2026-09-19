@@ -1,0 +1,207 @@
+/* start sass */
+.main-head, .call-center h2 {
+  color: #264584;
+  margin-top: 0;
+  letter-spacing: 2px;
+  border-bottom: 2px solid #264584;
+  padding-bottom: 20px;
+  width: auto;
+  position: relative;
+  font-weight: bold; }
+  .main-head:after, .call-center h2:after {
+    position: absolute;
+    content: '';
+    bottom: -10px;
+    left: calc(50% - 10px);
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: #fff;
+    border: 2px solid #264584; }
+  .main-head:before, .call-center h2:before {
+    position: absolute;
+    content: '';
+    bottom: -5px;
+    z-index: 20;
+    left: calc(50% - 5px);
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: #264584; }
+  @media (max-width: 767px) {
+    .main-head, .call-center h2 {
+      font-size: 24px !important;
+	  position: inherit;
+      letter-spacing: 0; } }
+
+/* end sass */
+/* start call-center */
+.call-center {
+    clear: both;
+  /*overflow: hidden;*/
+  padding-top: 10px;
+  padding-bottom: 30px;
+}
+  .call-center h2 {
+    margin: 20px auto 40px auto;
+    width: 500px; }
+  .call-center aside {
+    margin-bottom: 10px; }
+    .call-center aside img {
+      height: 350px;
+      margin-top: -146px; }
+  .call-center .input-group {
+    margin-bottom: 40px;
+    height: 40px; }
+    .call-center .input-group span {
+      border-radius: 0;
+      border: 0;
+      outline: none;
+      box-shadow: none;
+      background-color: #264584;
+      color: #fff; }
+    .call-center .input-group .form-control {
+      border-radius: 0; }
+  .call-center .form-group {
+    /*margin-bottom: 40px;*/ }
+  .call-center textarea {
+      overflow: hidden;
+    margin-bottom: 35px;
+    max-width: 100%;
+    min-height: 130px; }
+  .call-center .form-control {
+    border-radius: 0;
+    outline: none;
+    box-shadow: none;
+    border: 0;
+    border-bottom: 2px solid #5877b6 !important;
+    height: 40px;
+    background-color: #fafafa !important; }
+  .call-center button[type="submit"] {
+    background-color: #264584 !important;
+    color: #fff;
+    box-shadow: 5px 5px 10px 2px rgba(100, 100, 100, 0.15); }
+  @media (max-width: 767px) {
+      .slide-active .call-center {
+          position: inherit !important;
+      }
+    .call-center h2 {
+      margin-bottom: 15px !important;
+        position: relative;
+      width: auto !important; }
+      
+      .call-center aside {
+          margin-bottom: 0;
+      }
+}
+textarea[name=message]::-webkit-input-placeholder {font-size: 11px;}
+textarea[name=message]::-moz-placeholder {font-size: 11px;}
+textarea[name=message]::-ms-input-placeholder {font-size: 11px;}
+
+/* end call-center */
+
+/*# sourceMappingURL=form.css.map */
+
+/*CallUsMobile*/
+
+/*.callusmobile ::-webkit-input-placeholder {
+  color: #cbdfe6 !important; }
+
+.callusmobile ::-moz-placeholder {
+  color: #cbdfe6 !important; }
+
+.callusmobile :-ms-input-placeholder {
+  color: #cbdfe6 !important; }
+
+.callusmobile :-moz-placeholder {
+  color: #cbdfe6 !important;
+}*/
+.callusmobile {
+	position: relative;
+	border-radius: 30px;
+}
+.callusmobile h2 {margin-top: 10px;}
+.callusmobile h2>span>span {
+	background: #00b04c;
+	color: #FFF;
+	font-weight: normal;
+	margin-left: 15px;
+}
+.callusmobile h2>span i:before {
+	font-size: 25px;
+	margin: 0 !important;
+}
+.callusmobile h2>span {position: relative;}
+.callusmobile h2>span:after {
+	content: "";
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	z-index: 9;
+}
+.formindex h2>span>span:after, .formindex h2>span>span:before {border: none;}
+.callusmobile h2>b {border-bottom: 1px solid;}
+.callusmobile .closebtn {
+	position: absolute;
+	top: 15px;
+	left: 15px;
+	background: red;
+	border-radius: 100%;
+	color: #FFF;
+	width: 20px;
+	height: 20px;
+	line-height: 22px;
+	text-align: center;
+	cursor: pointer;
+	padding: 0 !important;
+}
+.callusmobile div[class*=col-] {
+	padding-left: 5px;
+	padding-right: 5px;
+}
+.callusmobile select, .callusmobile input {padding: 0;}
+.callusmobile>div .form-control {
+	border-radius: 0 0 0 10px !important;
+	padding: 10px 5px;
+}
+.callusmobile>div .select button {
+	background-color: #0a8fd4;
+	width: auto;
+	clip-path: none;
+	border-radius: 100%;
+	text-align: center;
+	display: block;
+}
+.callusmobile>div .select button img {
+	margin: auto;
+	width: 70%;
+}
+.has-form-error {
+	margin-bottom: 10px;
+	display: block;
+}
+
+.form1mobile {
+	border-radius: 20px;
+	padding: 14px;
+	color: #264584;
+}
+.form1mobile .badge {
+	background: transparent;
+	color: #264584;
+	border: 1px solid;
+}
+.form-section .form1mobile  h2 {
+	margin: 0;
+	font-size: 35px;
+}
+.form-section .form1 .callusmobile {
+	background-color: transparent;
+	padding: 0;
+}
+.form-section .form1 .callusmobile .form-control, .form-section .form1 .callusmobile select {
+	border-right: 5px solid #264584;
+	background: #FFF;
+	height: auto !important;
+	color: #264584;
+}

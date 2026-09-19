@@ -1,0 +1,1439 @@
+body{
+    margin:0;
+    padding: 0;
+    background-color: #E9EBEE;
+    position: relative;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none; 
+    user-select: none;
+}
+
+
+/** fonts **/
+/*
+@font-face {
+    font-family: dinnextregular;
+    src: url(../fonts/ar/DINNEXTARABICREGULAR.otf);
+}
+@font-face {
+    font-family: dinnextmedium;
+    src: url(../fonts/ar/DINNEXTARABICMEDIUM.otf);
+}
+@font-face {
+    font-family: dinnextbold;
+    src: url(../fonts/ar/DIN_NEXT_ARABIC_BOLD.otf);
+}
+
+@font-face {
+    font-family: dinnextlight;
+    src: url(../fonts/ar/DIN_NEXT_ARABIC_LIGHT.otf);
+}
+@font-face {
+    font-family: DroidNaskhBold;
+    src: url(../fonts/ar/DroidNaskh-Bold.ttf);
+}
+@font-face {
+    font-family: DroidNaskhRegular;
+    src: url(../fonts/ar/DroidNaskh-Regular.ttf);
+}
+@font-face {
+    font-family: MontserratBoldItalic;
+    src: url(../fonts/en/Montserrat-BoldItalic.ttf);
+}
+@font-face {
+    font-family: MontserratBold;
+    src: url(../fonts/en/Montserrat-Bold.ttf);
+}
+@font-face {
+    font-family: Montserrat-SemiBold;
+    src: url(../fonts/en/Montserrat-SemiBold.ttf);
+}
+@font-face {
+    font-family: MontserratMedium;
+    src: url(../fonts/en/Montserrat-Medium.ttf);
+}
+@font-face {
+    font-family: MontserratRegular;
+    src: url(../fonts/en/Montserrat-Regular.ttf);
+}*/
+/*@font-face {
+    font-family: MontserratLight;
+    src: url(../fonts/en/Montserrat-Light.ttf);
+}
+*/
+/** Disable Dragging Image **/
+img {
+    pointer-events: none
+}
+
+a.telephone[href^=tel]{
+    text-decoration: inherit;
+    color: #ffffff!important;
+}
+
+
+/*** Header Style **/
+
+.header ul {
+    list-style: none;
+    margin: 0;
+    padding: 0
+}
+
+.header .navbar1 .contain {
+    margin-right: 78px;
+}
+
+/**** First NavBar Style ***/
+.header {
+    width: 100%;
+    color: #fff;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 9999;
+}
+.header .navbar1 {
+    background-color: #132467 ;
+    height: 37px;;
+    width: 100%;
+    text-align: center;
+}
+
+.header .navbar1 li {
+    float: right
+}
+
+.header .navbar1 .contain {
+    float: right;
+    margin-top: 6.5px
+}
+
+
+
+.header .navbar1 .contain div {
+    float: right
+}
+.header .navbar1 .contain .language {
+    width: 110px;
+    font-size: 14px;
+    font-family: montserratRegular;
+    border-left: 1px solid #fff;
+    direction: ltr;
+    unicode-bidi: embed;
+}
+.header .navbar1 .contain .language img {
+    width:24px;
+    height: 24px
+}
+
+.header .navbar1 .contain .language a {
+    text-decoration: none;
+    color: #fff;
+
+}
+.header .navbar1 .contain .language span {
+    position: relative;
+    top: 2px;   
+}
+.header .navbar1 .contain .language a:hover {
+    text-decoration:underline;
+}
+/*
+.header .devise {
+    width: 104px;
+    height: 24px;
+    border-left: 1px solid #fff;
+    position: relative
+}*/
+.header .devise i {
+    margin: 0px;
+    font-size: 10px;
+    padding: 0px;
+    text-align: center;
+    float: right;
+    margin-top: -6px;
+}
+.header .devise i:before{
+    margin-left: 10px;
+    margin-right: 5px;
+}
+
+.header .devise select {
+    outline: none;
+    color: #fff;
+    position: relative;
+    right:auto;
+    top: 4px;
+    font-size: 12px;
+    border: 0px;
+    background: #264584;
+    float: right;
+    line-height: 19px;
+    position: relative;
+}
+
+.header .navbar1 .devise select {
+    background: #132467
+}
+@media (max-width: 420px) {
+    /*.header .devise {
+        width: 90px;
+    }*/
+    .devise i {
+        right: 54px
+    }
+    .devise select {
+        right: 0px
+    }
+    .header .navbar1 .contain .room {
+        width: 80px !important
+    }
+    .header .navbar1 .contain .room select {
+        right: 5px !important
+    }
+    .header .navbar1 .contain .room i {
+        right: 56px !important
+    }
+}
+
+
+.header .navbar1 .contain .room {
+    width: 100px;
+    height: 24px;
+    /*font-family: montserratRegular;*/
+    border-left: 1px solid #fff;
+    position: relative
+}
+.header .navbar1 .contain .room i {
+    position: absolute;
+    top: -1px;
+    right: 63px
+}
+.header .navbar1 .contain .room select {
+    width: 50px;
+    font-size: 14px;
+    background: #132467;
+    color: #fff;
+    border: 0px;
+    position: absolute;
+    top: 2px;
+    right: 11px;
+    outline: none
+
+}
+.header .navbar1 .contain .room select option {
+    text-align: center
+}
+.header .navbar1 .contain .whatsapp1 {
+    width: 267px;
+    height: 24px;
+    border-left: 1px solid #fff;
+}
+.header .navbar1 .contain .whatsapp1 a{
+    float: right;
+    color: #ffffff;
+}
+.header .navbar1 .contain .whatsapp1 i {
+    float: left;
+    font-size: 26px;
+    margin-left: 15px
+}
+.header .navbar1 .contain .whatsapp1 #num {
+    font-family: 'Montserrat', sans-serif !important;
+    font-size: 14px;
+    position: relative;
+    left: -5px;
+    top: -1px;
+    direction: ltr;
+    unicode-bidi: embed;
+}
+.header .navbar1 .contain .whatsapp1 #ar {
+    font-size: 14px;
+    float: right;
+    margin-right: 17px;
+    margin-top: -6px;
+    color: rgba(255, 255, 255, 0.5)
+}
+.header .navbar1 .contain .whatsapp1 #en {
+    font-family: 'Montserrat', sans-serif !important;
+    font-size: 8.5px;
+    position: relative;
+    left: -17px;
+    top: -10px;
+    color: rgba(255, 255, 255, 0.5)
+}
+
+.header .navbar1 .contain .whatsapp2 {
+    max-width: 229px;
+    height: 24px;
+
+}
+.header .navbar1 .contain .whatsapp2 i {
+    float: left;
+    font-size: 26px;
+}
+.header .navbar1 .contain .whatsapp2 #num {
+    font-family: 'Montserrat', sans-serif !important;
+    font-size: 14px;
+    position: relative;
+    top: -1px;
+    direction: ltr;
+    unicode-bidi: embed;
+
+    margin-right: 8px;
+    margin-left: 5px;
+}
+.header .navbar1 .contain .whatsapp2 #ar {
+    font-size: 10px;
+    float: right;
+    margin-right: 15px;
+    margin-top: 0px;
+    color: rgba(255, 255, 255, 0.5)
+}
+.header .navbar1 .contain .whatsapp2 #en {
+    font-family: 'Montserrat', sans-serif !important;
+    font-size: 10px;
+    float: right;
+    margin-right: 25px;
+    margin-top: -12px;
+    clear:both;
+    color: rgba(255, 255, 255, 0.5)
+}
+
+
+
+
+
+/*** Second NavBar Style ***/
+
+
+.header .navbar2 {
+    background-color: #264584;
+    height: 56px;;
+    width: 100%;
+    text-align: center;
+    padding-top: 10px;
+}
+
+.header .navbar2 ul {
+    margin: 0;
+    padding: 0;
+    list-style: none
+}
+
+.header .navbar2 .contain {
+    float: right;
+    height: 35px;
+    margin-right: 30px;
+}
+@media (max-width: 1024px) {
+    .header .navbar2 .contain {
+        margin-right: 21px
+    } 
+}
+
+.header .navbar2 .contain .after-search {
+    float: right;
+    height: 35px;
+    border-left: 1px solid #fff;
+    display: none
+}
+
+.header .navbar2 .contain .after-search .drop-search i {
+    font-size: 26px;
+    margin: 5px 0 0 11px;
+    cursor: pointer
+}
+.header .navbar2 .contain .after-search .dropdown-menu {
+    border-radius: 5px;
+    background-color: #264584;
+    border: 2px solid #fff;
+    padding: 0px;
+    margin: 15px 0 0 0;
+    position: relative;
+}
+.header .navbar2 .contain .after-search .dropdown-menu  button {
+    position: absolute;
+    top: 20px;
+    left: 18px
+
+}
+.header .navbar2 .contain .after-search .dropdown-menu i {
+    font-size: 26px;
+    color: #fff;
+    cursor: pointer
+}
+.header .navbar2 .contain .after-search .dropdown-menu input {
+    width: 220px;
+    height: 36px;
+    border: 0px;
+    border-radius: 20px;
+    background-color: rgba(255, 255, 255, 0.5);
+    color: #132467;
+    padding: 0 10px 0 40px;
+    direction: rtl;
+    margin: 15px;
+    font-family: DroidNaskhRegular !important;
+}
+
+.homepage .content .form .title .num {
+    font-family: 'Montserrat', sans-serif !important;
+}
+
+
+@media only screen and (max-width: 1250px) {
+    .header .navbar2 .contain .after-search {
+        display: block
+    }
+    .header .navbar2 .contain .search {
+        display: none
+    }
+}
+
+
+
+.header .navbar2 .contain .whatsapp {
+    float:right;
+    height: 35px;
+    padding-left: 15px;
+    border-left: 1px solid #fff;
+    display: none
+}
+.header .navbar2 .contain .whatsapp1 {
+    float:right;
+}
+.header .navbar2 .contain .whatsapp a {
+    color: #fff
+}
+.header .navbar2 .contain .whatsapp i {
+    font-size: 33px;
+    margin-top: 1.5px;
+    padding: 0px
+}
+.header .navbar2 .contain .home-search {
+    float: right;
+    width: 58px;
+    height: 35px;
+    border-left: 1px solid #fff
+}
+.header .navbar2 .contain .home-search img {
+    width: 39px;
+    position: relative;
+    top: -1px
+}
+.header .navbar2 .contain .envelope {
+    float: right;
+    height: 35px;
+    padding: 0 15px;
+    display: none
+}
+.header .navbar2 .contain .envelope a {
+    color: #fff
+}
+.header .navbar2 .contain .envelope i {
+    font-size: 32px;
+    margin-top: 2.25px;
+}
+.header .navbar2 .contain .home {
+    float: right;
+    width: 58px;
+    text-align: center
+}
+.header .navbar2 .contain .home a {
+    color: #fff
+}
+.header .navbar2 .contain .home i {
+    font-size: 38px;
+    margin: 0px
+}
+
+.header .parent_menu a {
+    /*display: block;*/
+    text-align: right;
+    color: #fff;
+    text-decoration: none;
+    transition: all .2s ease-in-out;
+
+    padding: 5px 22px 5px 22px;
+    /*padding: 8px*/
+}
+
+.header .parent_menu a:hover {
+    background-color: transparent;
+    color: #f7b44d;
+}
+
+.header .navbar2 .contain{float:right}
+.header .navbar2 .blk_search{margin-right:0}
+.header .navbar2 .naviga{float:right;margin-right:50px}
+.header .navbar2 .search_form button{
+    background-color: transparent;border: 0px;float: right;
+}
+.parent_menu{float:right;position: relative;}
+/*.header .navbar2 .contain li .drop span{padding: 0 14px;}*/
+/*.header .navbar2 .contain .collection {
+ float: right;
+ position: relative;
+Width: 197px;
+}*/
+.header .navbar2 .naviga .parent_menu:last-child  .drop{
+    border-left:0 none;
+}
+.header .navbar2 .drop {
+    height: 35px;
+    font-size: 15px;
+    margin: 0px;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+}
+.header .navbar2 .drop:hover {
+    color: #f7b44d;
+    background-color: transparent;
+}
+.header .navbar2  .drop span {
+    position: relative;
+    top: 2px;
+    float: right;
+}
+
+
+/*.header .navbar2 .contain .blog-estate {
+    float: right;
+    width: 140px
+}
+.header .navbar2 .contain .damas-estate {
+    float: right;
+    width: 140px
+}*/
+.header .navbar2  .search {
+    float: right;
+    margin-top: 2px;
+    margin-right: 40px
+}
+
+
+
+
+.header .navbar2 .parent_menu .dropdown-menu {
+    background-color: #264584;
+    border-radius: 0px;
+    padding: 0px;
+    margin: 37px 0 0 0;
+    position: absolute;
+    top: 10px;
+    min-width: 187px
+}
+
+.header .navbar2 .naviga .fa-angle-down {
+    position: relative;
+    top: 4px;
+    right: 5px
+}
+
+
+
+
+.header .navbar2 .contain .damas-estate .drop {
+    border:0px
+}
+.header .navbar2 .contain .search input {
+    width: 220px;
+    height: 30px;
+    border: 0px;
+    border-radius: 20px;
+    background-color: rgba(255, 255, 255, 0.5);
+    color: #fff;
+    padding: 0 10px;
+    direction: rtl
+}
+.header .navbar2 .contain .search input::placeholder {
+    color: #fff
+}
+.header .navbar2 .contain .search input:focus {
+    outline: none
+}
+
+.header .navbar2 .contain .search i {
+    color: #fff;
+    font-size: 22px;
+    cursor: pointer
+}
+
+.header .navbar2 .show-menu {
+    float:left;
+    margin-left: 15px;
+    cursor: pointer;
+    display: none;
+    margin-top: 6px
+}
+
+.header .navbar2 .show-menu #line1 {
+    background-color: #fff;
+    height: 2.5px;
+    width: 30px;
+    border-radius: 5px
+}
+.header .navbar2 .show-menu #line2 {
+    background-color: #fff;
+    height: 3px;
+    width: 30px;
+    border-radius: 5px;
+    margin-top: 7px
+}
+.header .navbar2 .show-menu #line3 {
+    background-color: #fff;
+    height: 3px;
+    width: 30px;
+    border-radius: 5px;
+    margin-top: 7px
+}
+
+
+
+/** Drop Menu For Mobile **/
+.header .navbar2 .drop-menu {
+    color: #fff;
+    background-color: #264584;
+    display: none;
+    padding: 35px 0px 0 10px;
+    margin-top: 10px;
+    overflow: auto;
+    width: 100%;
+    height: 400px;
+
+}
+
+
+
+
+
+.header .drop-menu .top .tel {
+    float: left;
+    border-bottom: 1px solid #fff;
+    width: 300px;
+}
+
+.header .drop-menu .top .whatsapp1 {
+    width: 300px
+}
+.header .drop-menu .top .whatsapp1 #num {
+    font-size: 19px;
+    font-family: MontserratMedium;
+    position: relative;
+    float: left;
+    margin: 4px
+}
+.header .drop-menu .top .whatsapp2 #ar {
+    font-size: 20px;
+    font-family: dinnextlight;
+    color: rgba(255,255,255,0.5);
+    position: relative;
+    top: -10px;
+    left:2px
+}
+.header .drop-menu .top .whatsapp1 #en {
+    float: right;
+    font-size: 12px;
+    font-family: MontserratMedium;
+    color: rgba(255,255,255,0.5);
+    position: relative;
+    top: -13px
+
+}
+.header .drop-menu .top .whatsapp1 i {
+    font-size: 26px;
+    float: left;
+    margin-top: 3.5px
+}
+
+.header .drop-menu .top .whatsapp2 {
+    padding-bottom:10px;
+}
+.header .drop-menu .top .whatsapp2 #num {
+    font-size: 18px;
+    font-family: MontserratMedium;
+    position: relative;
+    float: left;
+    margin: 4px 4px 5px 4px
+}
+
+.header .drop-menu .top .whatsapp2 #en {
+    font-size: 12px;
+    float: right;
+    font-family: MontserratMedium;
+    color: rgba(255,255,255,0.5);
+    position: relative;
+    top: -3px
+
+}
+.header .drop-menu .top .whatsapp2 i {
+    font-size: 26px;
+    float: left;
+    margin-top: 3.5px
+}
+
+.header .drop-menu .top .search-lang {
+    float: left;
+    margin: 5px 0px 0px 20px ;
+    direction: ltr
+}
+.header .drop-menu .top .search-lang a i {
+    font-size: 22px;
+    margin-right: 5px;
+    cursor: pointer
+}
+.header .drop-menu .top .search-lang a {
+    color: #fff;
+    cursor: pointer;
+}
+.header .drop-menu .top .search-lang #lan {
+    font-size: 17px;
+    padding-left: 7px;
+    height: 25px;
+    border-left: 1px solid #fff;
+    font-family: MontserratRegular
+}
+.header .drop-menu .bottom {
+    margin-right: 10px;
+    font-size: 20px;
+    text-align: right;
+    font-family: dinnextregular;
+}
+
+.header .drop-menu .bottom ul {
+
+}
+
+.header .drop-menu .bottom span {
+    display: inline-block;
+    border-bottom: 1px solid #fff;
+    direction: ltr
+}
+
+.header .drop-menu .bottom span i {
+    margin: 2px 10px 0 0
+}
+
+.header .drop-menu .bottom li li {
+    border-bottom: 1px solid #fff;
+
+}
+
+.header .drop-menu .bottom li li a {
+    transition: all .2s ease-in-out;
+    padding-right: 15px
+}
+
+.header .drop-menu .bottom li li a:hover {
+    background-color: #fff;
+    color: #264584
+}
+
+.header .drop-menu .bottom a {
+    display: block;
+    color: #fff;
+    padding: 5px 0px 9px 0;
+    text-decoration: none
+}
+
+.header .drop-menu .bottom ul a {
+    font-size: 13px;
+}
+/************/
+
+
+.header .logo {
+    position: absolute;
+    left: 60px;
+    top: 0px;
+    color: rgba(255,255,255,0.6);
+    font-size: 13px
+}
+.header .logo .text {
+    position: relative;
+    top: 48px;
+    left: 150px;
+    font-style: italic;
+}
+.header .logo #last {
+    position: relative;
+    top: -5px
+}
+.header .logo img {
+    width: 132px;
+    position: absolute;
+    top: 38px;
+    left:0px;
+    z-index: 2;
+}
+.header .logo .image-logo {
+    position: relative
+}
+
+
+body {
+    font-family: '29LTBukra-Regular' !important;
+}
+.content .form .info .tel .num{
+    font-family: 'Montserrat', sans-serif !important;
+}
+
+.header .navbar1 .contain .devise select {
+    -webkit-appearance:none;
+}
+.header .navbar1 .contain .devise:before{
+    content: "";
+    position: absolute;
+    right: -7px;
+    top: 10px;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 5px 5px 0 5px;
+    border-color: #ffffff transparent transparent transparent;
+    z-index: 999;
+}
+
+
+
+/** Media Query **/
+
+@media (max-width: 1180px) {
+    .header .navbar2 .contain .search input  {
+        display: none
+    }
+}
+@media (max-width: 1070px) {
+    .header .navbar1 .contain .whatsapp1  {
+        /*display: none*/
+        text-align:right
+    }
+    .header .navbar1 .contain .whatsapp2 #num {
+        display: none
+    }
+    .header .navbar1 .contain .whatsapp2 #ar {
+        display: none
+    }
+    .header .navbar1 .contain .whatsapp2 #en {
+        display: none
+    }
+    .header .navbar1 .contain .whatsapp2 i {
+        margin-right: 15px
+    }
+    .header .navbar2 .contain .search {
+        display: none
+    }
+}
+@media (max-width: 1024px) {
+
+    .header .navbar2 .show-menu {
+        display: block
+    }
+    .header .navbar2 .contain .parent_menu  {
+        display: none
+    }
+    .header .logo .text {
+        display: none;
+    }
+
+}
+
+
+@media (max-width: 1366px) {
+    /*.header .navbar1 .contain .whatsapp1  {
+        display: none
+    }*/
+    .header .navbar1 .contain .room {
+        border:0px
+    }
+    .header .navbar1 .contain .language  {
+        display: none
+    }
+    .header .navbar2 .contain .search  {
+        display: none
+    }
+    .header .navbar2 .contain .home  {
+        display: none
+    }
+    .header .navbar2 .contain .whatsapp  {
+        display: block
+    }
+    .header .navbar2 .contain .envelope  {
+        display: block
+    }
+    .header .navbar2 .contain .after-search {
+        display: none
+    }
+
+}
+#section_home .full-container img{width:100%!important}
+
+
+@media (max-width: 1024px) {
+    body{padding-top: 93px!important}
+
+    /*    .devise {
+            float: right;
+        position: relative;
+        display: block;
+        height: 30px;    
+        }
+            .header .devise select {
+        background: #264584}
+            
+            .header .devise i {
+        position: absolute;
+        right: 55px;
+        top: -1px}
+            .header .devise select {
+        position: absolute;
+        right: 6px;
+        top: 8px;}
+            .header .navbar2 .drop-menu {
+        padding-top: 25px;
+        margin-top: 3px;}*/
+
+}
+@media (max-width: 1366px) {
+
+    .header .navbar2 .contain {
+        margin-right: 17px
+    }
+    .header .navbar2 .contain .whatsapp {
+        height: 26px;
+        margin-top: 3px;
+        padding-left: 13px
+    }
+    .header .navbar2 .contain .whatsapp i {
+        font-size: 26px;
+    }
+    .header .navbar2 .contain .home-search {
+        height: 26px;
+        width: 52px;
+        margin-top: 3px
+    }
+    .header .navbar2 .contain .home-search img {
+        width: 30px;
+
+    }
+    .header .navbar2 .contain .envelope {
+        padding: 0 13px
+    }
+    .header .navbar2 .contain .envelope i {
+        font-size: 22px;
+        margin-top: 2.5px
+    }
+    .header .navbar2 .show-menu {
+        margin-top: 8px;
+        margin-left: 10px
+    }
+    .header .navbar2 .show-menu #line1 {
+        width: 25px;
+        height: 2px
+    }
+    .header .navbar2 .show-menu #line2 {
+        width: 25px;
+        height: 2px;
+        margin-top: 6px
+    }
+    .header .navbar2 .show-menu #line3 {
+        width: 25px;
+        height: 2px;
+        margin-top: 6px
+    }
+    .header .logo {
+        position: absolute;
+        left: 12px;
+    }
+
+
+    .header .drop-menu .top .whatsapp1 #num {
+        font-size: 13px;
+        margin-top: 6px;    direction: ltr;
+    }
+    .header .drop-menu .top .whatsapp2 #num {
+        font-size: 13px;
+        margin-top: 6px;    direction: ltr;
+    }
+    .header .drop-menu .top .tel {
+        width: 255px
+    }
+    .header .drop-menu .top .whatsapp1 #ar {
+        left: -15px
+    }
+    .header .drop-menu .top .whatsapp1 #en {
+        left: -45px
+    }
+    .header .drop-menu .top .whatsapp2 #en {
+        top: -11px
+    }
+    .devise {
+        float: right;
+        position: relative;
+        display: block;
+        height: 30px;    
+    }
+    /*.header .devise select {
+background:transparent}
+    */
+    .header .navbar2 .drop-menu {
+        padding-top: 25px;
+        margin-top: 3px;}
+    .header .navbar2 .contain .whatsapp {
+        padding-left: 11px
+    }
+    .header .navbar2 .contain .envelope {
+        border-left: 1px solid #fff;
+        height: 26px;
+        margin-top: 4px !important;
+    }
+}
+
+
+@media (max-width: 1150px) {
+    .header .logo .text {
+        display: none;
+    }
+    .header .parent_menu a {
+        font-size: 13px;
+    }
+}
+@media (max-width: 960px) {
+    .header .parent_menu a {
+        font-size: 13px;
+        padding: 0px 12px;
+    }
+}
+
+
+@media (max-width: 515px) {
+    body{padding-top: 77px!important}
+    .header .logo .text {
+        display: none
+    }
+
+    .header .navbar1 {
+        background-color: #132467;
+        height: 37px;
+        width: 100%;
+        text-align: center;
+    }
+    .header .navbar2 {
+        height: 40px;
+        padding-top: 3px;
+    }
+    .header .logo img {
+        width: 100px;
+        height: auto;
+        top: 44px;
+        left: 0px;
+        z-index: 2;
+    }
+} 
+.search_form{
+
+}
+
+.project-card .contain .details .button {
+    width: 100%;
+    height: 35px;
+    font-family: dinnextmedium;
+    padding-bottom: 20px;
+    color: #fff;
+    background-color: #1F3A73;
+    border: 0px;
+    margin-top: 5px;
+    cursor: pointer;
+    display: inline-block;
+    text-align: center;
+    text-decoration: none;
+}
+#section_home{
+    padding-top: 51px;
+}
+
+.img-fluid {
+    max-width: 100%;
+    height: auto;
+}
+
+
+
+/* 
+  ##Device = Tablets, Ipads (portrait)
+  ##Screen = B/w 768px to 1024px
+*/
+
+@media (min-width: 768px) and (max-width: 1024px) {
+    .header .logo .text {
+        display: none;
+    }
+    .down-form-content .title h2 {
+        position: absolute;
+        top: 20px;
+        right: 50px;
+        font-size: 20px;
+    }
+}
+
+
+
+
+/* iPad in landscape */
+@media only screen 
+and (min-device-width : 768px) 
+and (max-device-width : 1024px) 
+and (orientation : landscape) {
+    .header .navbar2 .contain .whatsapp {
+        border-left: 0px;
+    }
+    .navbar2 .fa-whatsapp {
+        background-color: #00B04C;
+        color: #ffffff;
+        width: 35px;
+        height: 35px;
+        border-radius: 50%;
+        padding: 5px 9px 0px 6px !important;
+        position: relative;
+        text-align: center;
+        margin: 0px !important;
+        top: -4px;
+        right: -5px;
+    }
+    .navbar2 .fa-whatsapp:after {
+        content: "";
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        border: 1px solid rgba(0, 176, 76, 1);
+        display: inline-block;
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        animation-name: test;
+        animation-duration: 1.5s;
+        animation-delay: .65s;
+        animation-iteration-count: infinite;
+        animation-timing-function: ease-in-out;
+    }
+    @keyframes test {
+        from {
+            transform: scale(1);
+            border: 1px solid rgba(0; 176, 76, 1) ;
+        }
+        to {
+            transform: scale(1.1);
+            border: 1px solid rgba(0, 176, 76, 0) ;
+        }
+    }
+    .header .navbar1 .contain .whatsapp1 i {
+        float: inherit;
+        font-size: 17px;
+        margin-left: 0px;
+        margin-right: 5px;
+        position: relative;
+        top: 2px;
+    }
+    .header .logo img {
+        top: 36px;
+        width: 120px;
+    }
+    .header .navbar1 {
+        height: 34px;
+    }
+    .header .navbar1 .contain {
+        margin-top: 4.5px;
+    }
+    .header .navbar2 {
+        height: 49px;
+    }
+}
+
+/* iPad in portrait */
+@media only screen 
+and (min-device-width : 768px) 
+and (max-device-width : 1024px) 
+and (orientation : portrait) { 
+    .header .navbar2 .contain .whatsapp {
+        border-left: 0px;
+    }
+    .navbar2 .fa-whatsapp {
+        background-color: #00B04C;
+        color: #ffffff;
+        width: 35px;
+        height: 35px;
+        border-radius: 50%;
+        padding: 5px 9px 0px 6px !important;
+        position: relative;
+        text-align: center;
+        margin: 0px !important;
+        top: -4px;
+        right: -5px;
+    }
+    .navbar2 .fa-whatsapp:after {
+        content: "";
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        border: 1px solid rgba(0, 176, 76, 1);
+        display: inline-block;
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        animation-name: test;
+        animation-duration: 1.5s;
+        animation-delay: .65s;
+        animation-iteration-count: infinite;
+        animation-timing-function: ease-in-out;
+    }
+    @keyframes test {
+        from {
+            transform: scale(1);
+            border: 1px solid rgba(0; 176, 76, 1) ;
+        }
+        to {
+            transform: scale(1.1);
+            border: 1px solid rgba(0, 176, 76, 0) ;
+        }
+    }
+    .header .navbar1 .contain .whatsapp1 i {
+        float: inherit;
+        font-size: 17px;
+        margin-left: 0px;
+        margin-right: 5px;
+        position: relative;
+        top: 2px;
+    }
+    .header .logo img {
+        top: 36px;
+        width: 120px;
+    }
+    .header .navbar1 {
+        height: 34px;
+    }
+    .header .navbar1 .contain {
+        margin-top: 4.5px;
+    }
+    .header .navbar2 {
+        height: 49px;
+    }
+    body {
+        padding-top: 83px!important;
+    }
+    .whatsapp1{
+        float: right;
+    }
+    .whatsapp1 i{
+        margin: 0px 4px;
+    }
+    .header .navbar1 .contain .devise {
+        width: auto;
+        height: 24px;
+        border-left: 0px;
+        position: relative;
+        float: right;
+    }
+    .header .devise select {
+        position: relative;
+        right: auto;
+        top: 7px;
+        float: right;
+    }
+    .header .devise i {
+        position: relative;
+        right: auto;
+        top: -4px;
+        margin-right: 5px;
+    }
+}
+
+
+
+
+/* 
+  ##Device = Low Resolution Tablets, Mobiles (Landscape)
+  ##Screen = B/w 481px to 767px
+*/
+
+@media (min-width: 481px) and (max-width: 767px) {
+    .header .navbar2 .contain .whatsapp {
+        border-left: 0px;
+    }
+    .navbar2 .fa-whatsapp {
+        background-color: #00B04C;
+        color: #ffffff;
+        width: 35px;
+        height: 35px;
+        border-radius: 50%;
+        padding: 5px 9px 0px 6px !important;
+        position: relative;
+        text-align: center;
+        margin: 0px !important;
+        top: -4px;
+        right: -5px;
+    }
+    .navbar2 .fa-whatsapp:after {
+        content: "";
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        border: 1px solid rgba(0, 176, 76, 1);
+        display: inline-block;
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        animation-name: test;
+        animation-duration: 1.5s;
+        animation-delay: .65s;
+        animation-iteration-count: infinite;
+        animation-timing-function: ease-in-out;
+    }
+    @keyframes test {
+        from {
+            transform: scale(1);
+            border: 1px solid rgba(0; 176, 76, 1) ;
+        }
+        to {
+            transform: scale(1.1);
+            border: 1px solid rgba(0, 176, 76, 0) ;
+        }
+    }
+    .header .navbar1 .contain .whatsapp1 i {
+        float: inherit;
+        font-size: 17px;
+        margin-left: 0px;
+        margin-right: 5px;
+        position: relative;
+        top: 2px;
+    }
+    .header .logo img {
+        top: 36px;
+        width: 120px;
+        left: -7px;
+    }
+    .header .navbar1 {
+        height: 34px;
+    }
+    .header .navbar1 .contain {
+        margin-top: 4.5px;
+    }
+    .header .navbar2 {
+        height: 49px;
+    }
+    select {
+        -webkit-appearance:none;
+    }
+    .header .navbar1 .contain .devise:before{
+        content: "";
+        position: absolute;
+        right: -4px;
+        top: 13px;
+        width: 0;
+        height: 0;
+        border-style: solid;
+        border-width: 5px 5px 0 5px;
+        border-color: #ffffff transparent transparent transparent;
+        z-index: 999;
+    }
+    a.telephone{
+        color: #ffffff;
+    }
+
+}
+
+
+/* 
+  ##Device = Most of the Smartphones Mobiles (Portrait)
+  ##Screen = B/w 320px to 479px
+*/
+
+@media (min-width: 320px) and (max-width: 480px) {
+    .header .navbar2 .contain .whatsapp {
+        border-left: 0px;
+    }
+    .navbar2 .fa-whatsapp {
+        background-color: #00B04C;
+        color: #ffffff;
+        width: 35px;
+        height: 35px;
+        border-radius: 50%;
+        padding: 5px 9px 0px 6px !important;
+        position: relative;
+        text-align: center;
+        margin: 0px !important;
+        top: -4px;
+        right: -5px;
+    }
+    .navbar2 .fa-whatsapp:after {
+        content: "";
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        border: 1px solid rgba(0, 176, 76, 1);
+        display: inline-block;
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        animation-name: test;
+        animation-duration: 1.5s;
+        animation-delay: .65s;
+        animation-iteration-count: infinite;
+        animation-timing-function: ease-in-out;
+    }
+    @keyframes test {
+        from {
+            transform: scale(1);
+            border: 1px solid rgba(0; 176, 76, 1) ;
+        }
+        to {
+            transform: scale(1.1);
+            border: 1px solid rgba(0, 176, 76, 0) ;
+        }
+    }
+    .header .navbar1 .contain .whatsapp1 i {
+        float: inherit;
+        font-size: 17px;
+        margin-left: 0px;
+        margin-right: 5px;
+        position: relative;
+        top: 2px;
+    }
+    .header .logo img {
+        top: 36px;
+        width: 120px;
+        left: -7px;
+    }
+    .header .navbar1 {
+        height: 34px;
+    }
+    .header .navbar1 .contain {
+        margin-top: 4.5px;
+    }
+    .header .navbar2 {
+        height: 49px;
+    }
+    #our_services h2, .down-form-content .title h1, .prices-list-content .title h2, h2.title_icon, .certificate .title h3, .content .colmun2 .title h2, .content .colmun1 .location-importance-content .title1 h2, .content .about_project h2 {
+        font-size: 18px;
+    }
+    select {
+        -webkit-appearance:none;
+    }
+    .header .navbar1 .contain .devise:before{
+        content: "";
+        position: absolute;
+        right: -4px;
+        top: 13px;
+        width: 0;
+        height: 0;
+        border-style: solid;
+        border-width: 5px 5px 0 5px;
+        border-color: #ffffff transparent transparent transparent;
+        z-index: 999;
+    }
+    a.telephone{
+        color: #ffffff;
+    }
+}

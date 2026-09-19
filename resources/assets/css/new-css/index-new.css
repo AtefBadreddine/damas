@@ -1,0 +1,698 @@
+
+.cover .discover h1 {
+    padding: 10px 0;
+    font-size: 27px;
+}
+.cover .search-box button {
+    font-size: 17px;
+}
+.cover .search-box select option{
+    padding: 5px 10px;
+}
+
+.content .project-build .title h3{
+    font-size: 25px;
+}
+.project-build{
+    margin-bottom: 30px;
+}
+.about-damas .read-more_d{
+    font-size: 18px !important;
+    padding: 8px;
+}
+
+
+.content .how-to-use {
+    padding: 0px 9px 0 0;
+}
+.content .how-to-use .title h2 {
+    top: 17px;
+    right: 70px;
+}
+.content .how-to-use .title i {
+    right: 11px;
+}
+.content .how-to-use .title {
+    height: 65px;
+}
+.how-to-use .owl-nav .owl-next i{
+    float: left;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    padding-top: 8px;
+    padding-right: 5px;
+}
+.how-to-use .owl-nav .owl-prev i{
+    float: left;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    padding-top: 8px;
+    padding-left: 5px;
+}
+.more-videos {
+    width: 200px;
+    height: 45px;
+}
+.projects .more-options{
+    font-size: 18px;
+    padding: 9px;
+}
+.news .read-more{
+    width: 200px;
+    height: 45px;
+    font-size: 18px;
+    padding: 9px;
+}
+.news .post-title{
+    font-size: 25px;
+    line-height: 55px;
+}
+.news .news-slider .post2 .mainnews .about h3 a{
+    font-size: 20px;
+}
+.news .mainnews .about .continue-reading{
+    font-size: 17px; 
+}
+
+.new-videos .title span{
+    font-size: 25px;
+    top: 12px;
+}
+.news .subnews1 .title a{
+    font-size: 20px; 
+}
+.more-videos{
+    font-size: 18px;
+    padding: 6px;
+}
+.new-videos .sub-video .item .title,
+.new-videos .main-video .title {
+    font-size: 16px;
+    line-height: 23px;
+}
+.projects .more-option span {
+    font-size: 20px;
+}
+.down-form-content .down-form form input {
+    font-size: 13px;
+}
+.discover-mobile .search-box select{
+    font-size: 15px;
+}
+.blk_searh .search button span{
+    font-size: 15px;
+}
+.contact .main-head{
+    letter-spacing: 0px;
+}
+.mod4_full .global-new-item h4{
+    font-size: 17px!important;
+}
+.mod4_full .continue-reading a:hover{
+    color: #55acee;
+}
+.text-danger {
+    direction: rtl;
+    float: right;
+    width: 100%;
+    text-align: right;
+}
+
+
+.flaticon-gift:before,
+.flaticon-share:before {
+    font-size: 30px;
+    font-weight: normal;
+}
+
+.project-card .contain .info-project .coin span {
+    top: 3px;
+}
+.project-card .contain .title-project .bed:after{
+    content: "\f0d7";
+    display: inline-block;
+    font: normal normal normal 14px/1 FontAwesome;
+    font-size: inherit;
+    text-rendering: auto;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    position: absolute;
+    top: 4px;
+    right: 4px;
+}
+.project-card .contain .title-project .bed{
+    background: none;
+    width: 70px;
+    border: 1px solid #1F3A73;
+    padding: 5px 5px;
+    height: 25px;
+}
+.project-card .contain .title-project .bed span {
+    right: 16px;
+    top: 3px;
+}
+.project-card .contain .title-project .bed i {
+    top: 1px;
+}
+.project-card .contain .title-project .dropdown-menu li a {
+    width: 100%;
+    display: block;
+}
+.project-card .contain .title-project .dropdown-menu li a:hover{
+    background-color: #1F3A73;
+    color: #ffffff;
+}
+
+.project-card .contain .title-project .price {
+    font-size: 16px !important;
+    top: 0px !important;
+    width: auto;
+    display: inline-table;
+    text-align: left;
+    direction: ltr;
+    height: 24px;
+    line-height: 30px;
+    padding-top: 3px;
+}
+.project-card .contain .title-project .price strong{
+    float: left;
+    font-size: 20px;
+    margin: 0px 4px;
+    font-weight: normal;
+    position: relative;
+    top: -2px;
+    letter-spacing: -1px;
+}
+.project-card .contain .title-project .price span{
+    font-size: 26px;
+    float: left;
+    position: relative;
+    top: -3px;
+}
+.project-card .contain .title-project {
+    margin: 5px 0px;
+    width: 100%;
+    display: table;
+    text-align: center;
+}
+.project-card .contain .title-project .price,
+.project-card .contain .title-project .bed,
+.project-card .contain .title-project .start {
+    display: inline-block;
+    float: none;
+}
+.project-card .contain .title-project .start {
+    top: -2px;
+    font-size: 15px;
+}
+.project-card .contain .title-project .bed {
+    margin: 5px 3px 0 3px!important;
+}
+.project-card .contain .title-project .bed img{
+    width: 19px;
+    float: left;
+    position: relative;
+    top: -2px;
+}
+.project-card .contain .title-project .dropdown-menu {
+    min-width: 70px;
+}
+#results-content .col-md-6 {
+    padding-left: 0px;
+}
+.project-card .contain .title-project .dropdown-menu li {
+    width: 100%;
+    margin: 0px;
+}
+.content .projects .slider .item {
+    border-top: 0px;
+}
+
+.row.info i:before{
+    margin-left: 0px !important;
+}
+.content .projects .item {
+    border-top: 0px;
+}
+
+
+.news .news-slider .post2 .mainnews .photo a img:nth-child(2){
+    display: none;
+}
+.news .news-slider .post2 .mainnews {
+    width: 100%;
+    height: auto;
+}
+.news .mainnews .about .continue-reading {
+    position: relative;
+    bottom: auto;
+    margin-top: 30px;
+}
+.news .subnews1 .item .photo img {
+    max-height: inherit;
+}
+/*.new-videos .main-video .video img,
+.new-videos .main-video .video {
+    height: auto;
+}*/
+
+
+
+/*******---- Start New Content ----*******/
+.contentNew{
+    width: 100%;
+    position: relative;
+    margin-top: 15px;
+    display: grid;
+}
+.contentNew .text-cont{
+    width: 100%;
+    min-width: 100px;
+    background-color: #fff;
+    position: relative;
+    padding: 15px;
+    border-radius: 5px;
+    border: 1px solid lightgray;
+}
+.contentNew .text-cont:before{
+    content: "";
+    display: block;
+    border-style: solid;
+    border-width: 31px 31px 0 0;
+    border-color: #E9EBEE transparent;
+    position: absolute;
+    top: -2px;
+    left: -1px;
+}
+.contentNew h3{
+    float: right;
+    width: 100%;
+    font-size: 25px;
+    color: #1F3A73;
+    text-align: right;
+}
+.contentNew p{
+    font-size: 16px;
+    color: #555;
+    text-align: justify;
+    direction: rtl;
+}
+.contentNew img{
+    width: 40px;
+    vertical-align: bottom;
+    margin-left: 8px;
+}
+/*******---- End New Content ----*******/
+
+
+
+/************-- Start All Responsive --*************/
+
+
+@media only screen and (max-width: 1400px){
+
+
+}
+
+@media (min-width: 1300px) and (max-width: 1500px) {
+
+
+}
+
+
+@media (min-width: 1024px) and (max-width: 1500px) {
+
+    .new-videos .sub-video .item .title{
+        font-size: 14px;
+    }
+}
+@media (min-width: 1024px) and (max-width: 1300px) {
+
+
+}
+
+
+@media only screen and (max-width: 1230px){
+
+}
+
+
+@media only screen and (max-width: 1080px){
+
+}
+
+@media (min-width: 768px) and (max-width: 1024px) {
+
+    /*    .content section {
+            width: calc(100% - 295px);
+            margin-top: 15px !important;
+        }*/
+    .content aside {
+        width: 280px;
+        margin-top: 15px;
+    }
+    .blk_searh .discover-mobile .title h3, .certificate .title h3, .most-watched .title h3, .content .how-to-use .title h2 {
+        font-size: 14px;
+    }
+    .content .project-build .title h3 {
+        font-size: 22px;
+    }
+    .most-watched .items .info .name {
+        font-size: 20px;
+    }
+    .most-watched .items .info .about {
+        font-size: 10px;
+        padding-right: 0px;
+        padding-top: 0px;
+    }
+    .currency .col2 div:first-of-type span:first-of-type, .currency .col2 div:nth-of-type(3) span:first-of-type,
+    .currency .col1 div:nth-of-type(2) span:first-of-type, .currency .col1 div:nth-of-type(4) span:first-of-type,
+    .currency .col1 div:first-of-type span:first-of-type, .currency .col1 div:nth-of-type(3) span:first-of-type {
+        font-size: 15px;
+    }
+    .currency .col1 div:nth-of-type(2), .currency .col1 div:nth-of-type(4) {
+        margin-top: 4px;
+    }
+    .currency .col2 div:nth-of-type(2), .currency .col2 div:nth-of-type(4) {
+        margin-top: 4px;
+    }
+    .currency .col1 div span:last-of-type,
+    .currency .col2 div span:last-of-type {
+        font-size: 11px;
+    }
+    #section_callcenter_left {
+        width: 100%;
+    }
+    #section_callcenter_left h4{
+        font-size: 14px;
+    }
+    #section_callcenter.down-form-content .title h2 {
+        top: 10px!important;
+    }
+    .mod4_full .global-new-item h4 {
+        font-size: 14px!important;
+        line-height: 20px;
+    }
+}
+
+
+@media (min-width: 300px) and (max-width: 1024px) {
+
+    .leftbarfixed{
+        width: 100% !important;
+        position: inherit !important;
+        top: auto !important;
+    }
+}
+
+
+
+
+@media (max-width: 768px){
+    .content .how-to-use .title h2 {
+        right: 25px;
+    }
+    .content .project-build .title h3 {
+        font-size: 20px;
+    }
+}
+
+
+
+
+
+
+
+/* 
+  ##Device = Desktops
+  ##Screen = 1281px to higher resolution desktops
+*/
+
+@media (min-width: 1281px) {
+
+
+
+}
+
+/* 
+  ##Device = Laptops, Desktops
+  ##Screen = B/w 1025px to 1280px
+*/
+
+@media (min-width: 1024px) and (max-width: 1280px) {
+
+    .news .news-slider .post2 .mainnews .photo a img:nth-child(2){
+        display: none;
+    }
+    .news .news-slider .post2 .mainnews {
+        height: auto;
+    }
+    .news .news-slider .post2 .mainnews .photo {
+        width: 100%;
+        height: auto;
+    }
+    .news .news-slider .post2 .mainnews .about {
+        width: 100%;
+        height: auto;
+    }
+    .news .mainnews .about .continue-reading {
+        position: relative;
+        bottom: -5px;
+        font-size: 15px;
+    }
+    .news .subnews1 .title a {
+        font-size: 12px;
+        text-overflow: inherit;
+        white-space: inherit;
+        overflow: visible;
+        line-height: 20px;
+        padding: 5px 10px;
+    }
+    .news .subnews1 .item .title {
+        min-height: 70px;
+    }
+    .new-videos .main-video {
+        width: calc(100% - 0px);
+        height: auto;
+    }
+    .new-videos .sub-video {
+        width: 100%;
+        float: left;
+    }
+    .new-videos .main-video .video {
+        height: auto;
+    }
+    .new-videos .main-video .video img {
+        height: auto;
+    }
+    .new-videos .sub-video .item .title,
+    .new-videos .main-video .title {
+        font-size: 13px;
+        line-height: 23px;
+        padding: 5px;
+    }
+    .new-videos .sub-video .item {
+        height: auto;
+    }
+    .new-videos .sub-video .item .video img {
+        height: auto;
+    }
+    .new-videos .sub-video .col-6{
+        float: left;
+        width: 50%;
+    }
+    .new-videos .sub-video .col-6:nth-child(1){
+        padding-right: 5px;
+    }
+    .new-videos .sub-video .col-6:nth-child(2){
+        padding-left: 5px;
+    }
+    .more-videos {
+        font-size: 16px;
+        padding: 9px;
+    }
+
+}
+
+/* 
+  ##Device = Tablets, Ipads (portrait)
+  ##Screen = B/w 768px to 1024px
+*/
+
+@media (min-width: 768px) and (max-width: 1024px) {
+
+    .news .news-slider .post2 .mainnews .photo a img:nth-child(2){
+        display: none;
+    }
+    .news .news-slider .post2 .mainnews {
+        height: auto;
+    }
+    .news .news-slider .post2 .mainnews .photo {
+        width: 100%;
+        height: auto;
+    }
+    .news .news-slider .post2 .mainnews .about {
+        width: 100%;
+        height: auto;
+    }
+    .news .mainnews .about .continue-reading {
+        position: relative;
+        bottom: -5px;
+        font-size: 15px;
+    }
+    .news .subnews1 .title a {
+        font-size: 12px;
+        text-overflow: inherit;
+        white-space: inherit;
+        overflow: visible;
+        line-height: 20px;
+        padding: 5px 10px;
+    }
+    .news .subnews1 .item .title {
+        min-height: 70px;
+    }
+    .new-videos .main-video {
+        width: calc(100% - 0px);
+        height: auto;
+    }
+    .new-videos .sub-video {
+        width: 100%;
+        float: left;
+    }
+    .new-videos .main-video .video {
+        height: auto;
+    }
+    .new-videos .main-video .video img {
+        height: auto;
+    }
+    .new-videos .sub-video .item .title,
+    .new-videos .main-video .title {
+        font-size: 13px;
+        line-height: 23px;
+        padding: 5px;
+    }
+    .new-videos .sub-video .item {
+        height: auto;
+    }
+    .new-videos .sub-video .item .video img {
+        height: auto;
+    }
+    .new-videos .sub-video .col-6{
+        float: left;
+        width: 50%;
+    }
+    .new-videos .sub-video .col-6:nth-child(1){
+        padding-right: 5px;
+    }
+    .new-videos .sub-video .col-6:nth-child(2){
+        padding-left: 5px;
+    }
+    .more-videos {
+        font-size: 16px;
+        padding: 9px;
+    }
+
+}
+
+/* 
+  ##Device = Tablets, Ipads (landscape)
+  ##Screen = B/w 768px to 1024px
+*/
+
+@media (min-width: 768px) and (max-width: 1024px) and (orientation: landscape) {
+
+
+
+}
+
+
+/* ipad portrait  */
+@media only screen 
+and (min-device-width : 768px) 
+and (max-device-width : 1024px)  { 
+    .news .owl-carousel .owl-stage-outer {
+        max-height: 575px !important;
+    }
+    .news .news-slider {
+        min-height: inherit !important;
+    }
+}
+
+/* ipad landscape */
+@media only screen 
+and (min-device-width : 768px) 
+and (max-device-width : 1024px) 
+and (orientation : landscape) { 
+    .news .owl-carousel .owl-stage-outer {
+        max-height: 575px !important;
+    }
+    .news .news-slider {
+        min-height: inherit !important;
+    }
+}
+
+
+/* 
+  ##Device = Low Resolution Tablets, Mobiles (Landscape)
+  ##Screen = B/w 481px to 767px
+*/
+
+@media (min-width: 481px) and (max-width: 767px) {
+    .news .subnews1 .title a {
+        font-size: 17px;
+    }
+    .news {
+        max-height: inherit;
+    }
+    .content section.home-page {
+        width: calc(100% - 0px);
+    }
+
+}
+
+/* 
+  ##Device = Most of the Smartphones Mobiles (Portrait)
+  ##Screen = B/w 320px to 479px
+*/
+
+@media (min-width: 320px) and (max-width: 480px) {
+
+    .news {
+        max-height: inherit;
+    }
+    .news .subnews1 .title a {
+        font-size: 15px;
+    }
+    .content .how-to-use .title h2 {
+        right: 20px !important;
+        font-size: 20px !important;
+    }
+    .content .project-build .title h3 {
+        font-size: 19px;
+    }
+    .news .subnews1 .item {
+        display: block;
+    }
+    .news .subnews1 .item .col-6 {
+        max-width: 100%;
+    }
+    .new-videos .title span {
+        font-size: 20px;
+        top: 16px;
+    }
+    .content .project-build .title h3 {
+        font-size: 18px;
+    }
+    .news .post-title {
+        font-size: 20px;
+    }
+    .project-card .contain .about-project {
+        font-size: 13px;
+    }
+    .content section.home-page {
+        width: calc(100% - 0px);
+    }
+
+}

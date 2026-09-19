@@ -1,0 +1,882 @@
+.content .project-info-content .project-info .title span:first-of-type {
+    font-size: 30px !important;
+}
+.content .project-info-content .project-info .title span:last-of-type {
+    position: relative !important;
+    top: 0px !important;
+    left: 0px !important;
+    font-weight: bold;
+    font-style: italic;
+}
+.content .project-info-content .project-info .title span:first-of-type {
+    top: 0px !important;
+    font-size: 27px !important;
+}
+.project-info .titilediv h1 {
+    text-align: right !important;
+    font-size: 27px !important;
+}
+.project-info .titilediv h1{
+    font-weight: bold;
+    font-style: italic;
+}
+.content .project-info-content .project-info .info .location {
+    width: 33.3333% !important;
+    height: auto !important;
+    float: right !important;
+    text-align: center !important;
+    margin-top: 0px !important;
+}
+.content .project-info-content .project-info .info .apartment i {
+    float: none !important;
+}
+
+.content .project-info-content .project-info .info .apartment {
+    width: 33.3333% !important;
+    margin: 8px auto !important;
+    text-align: center !important;
+    min-height: 120px;
+}
+.content .project-info-content .project-info .info .distance {
+    width: 33.3333% !important;
+    margin: 0px auto 0px auto !important;
+    text-align: center !important;
+    min-height: 100px;
+}
+.content .project-info-content .project-info .info .apartment span {
+    float: left !important;
+    font-size: 18px !important;
+    margin: -1px 0px 0 0 !important;
+    width: 100% !important;
+    top: -5px !important;
+}
+.content .project-info-content .project-info .info .coin span {
+    float: left !important;
+    font-size: 18px !important;
+    margin: 0px !important;
+    width: 100% !important;
+    text-align: center !important;
+    margin-top: 0px !important;
+    top: -12px !important;
+}
+
+.content .project-info-content .project-info .info .target div {
+    top: -4px !important;
+    right: 0px !important;
+    left: auto !important;
+    font-size: 18px !important;
+    float: right !important;
+    width: 100% !important;
+}
+.content .project-info-content .project-info .info .distance div {
+    margin: 0px !important;
+    font-size: 18px !important;
+    width: 100% !important;
+    margin-top: -7px !important;
+}
+.content .project-info-content .project-info .info .distance i {
+    float: none !important;
+}
+.content .project-info-content .project-info .info .location .text #d2{
+    font-size: 17px !important;
+}
+.content .project-info-content .project-info .info .location .text #d1 {
+    font-size: 18px !important;
+    text-align: center !important;
+}
+.content .project-info-content .project-info .info .location .text {
+    margin: 0px !important;
+    text-align: center !important;
+    float: left !important;
+    width: 100% !important;
+}
+.content .project-info-content .project-info .info .location i {
+    float: none !important;
+    margin: 0px !important;
+    position: relative !important;
+    top: 3px !important;
+}
+.content .project-info-content .project-info .info .key {
+    margin: 0px !important;
+    width: 33.3333% !important;
+    padding-right: 0px !important;
+    text-align: center !important;
+    min-height: 100px;
+}
+.content .project-info-content .project-info .info .key i {
+    float: none !important;
+}
+.content .project-info-content .project-info .info .coin i {
+    float: none !important;
+}
+.content .project-info-content .project-info .info .key span {
+    position: relative;
+    top: 0px !important;
+    left: auto !important;
+    font-size: inherit;
+    float: left !important;
+    font-family: inherit;
+    margin: 0;
+    width: 100%;
+}
+.content .project-info-content .project-info .info .coin {
+    width: 33.3333% !important;
+    float: left !important;
+    margin: 8px 0px 0px 0px !important;
+    text-align: center !important;
+}
+.content .project-info-content .project-info .info .target {
+    width: 33.3333% !important;
+    text-align: center !important;
+    margin-top: 0px !important;
+}
+.content .project-info-content .project-info .info .target i {
+    float: none !important;
+}
+
+.content .project-info-content .project-info .giftdiv,
+.content .project-info-content .project-info .sharediv,
+.content .project-info-content .project-info .likediv {
+    font-size: 20px !important;
+}
+.content .project-info-content .project-info .giftdiv,
+.content .project-info-content .project-info .sharediv,
+.content .project-info-content .project-info .likediv {
+    font-size: 12px !important;
+    text-align: center !important;
+}
+.flaticon-gift:before, 
+.flaticon-share:before,
+.likediv .fa {
+    font-size: 22px !important;
+}
+.socialPlugin .socials {
+    margin-top: -23px !important;
+}
+.socialPlugin .socials .fa {
+    height: 35px !important;
+    width: 35px !important;
+    font-size: 16px !important;
+}
+.project-info .info_en {
+    width: 50%;
+}
+.content .project-info-content .project-info .info .target span {
+    top: -10px !important;
+    left: auto !important;
+    float: left;
+    width: 100%;
+}
+.project-info .info_en {
+    width: 100% !important;
+}
+.content .project-info-content .project-info .info .target i {
+    left: auto !important;
+}
+.content .project-info-content .project-info .info .distance span {
+    top: -1px !important;
+    left: auto !important;
+    float: left !important;
+    width: 100% !important;
+}
+
+.prices-list .top .pay .progres .txt,
+.prices-list .still,
+.prices-list .top .money .txt .txt2 span,
+.prices-list .top .money .txt .txt1 span {
+    font-size: 17px;
+}
+.prices-list .list .titles span {
+    font-size: 14px;
+}
+.content .colmun1 .prices-list-content .prices-list .top .pay .progres .txt {
+    float: left;
+}
+.content .form .title .room {
+    width: auto !important;
+    height: auto !important;
+    margin: 8px 6px 0 0px !important;
+    float: left !important;
+}
+.content .form .title .room .text {
+    top: 0px !important;
+    float: left !important;
+    display: block;
+    clear: initial !important;
+    font-size: 15px !important;
+}
+.content .form .title .room .bed {
+    float: left !important;
+    width: auto !important;
+}
+.content .form .title .room .bed span {
+    top: 0px !important;
+    left: -7px !important;
+}
+.content .form .title .num {
+    float: right !important;
+    font-size: 15px !important;
+    display: block !important;
+}
+.content .form .title {
+    float: left !important;
+    width: 100% !important;
+}
+.content .form .title .num span {
+    font-size: 24px;
+}
+.content .form .info .tel .service {
+    font-size: 13px !important;
+}
+.content .project-info-content .project-info .title {
+    float: left !important;
+    width: auto !important;
+    padding-right: 0px;
+    padding-left: 0px;
+}
+.shear-content-btn {
+    float: right;
+    display: block;
+    position: relative;
+    min-width: 188px;
+}
+.socialPlugin {
+    right: -40px !important;
+}
+.content .project-info-content .project-info .gift,
+.content .project-info-content .project-info .share,
+.content .project-info-content .project-info .like {
+    width: auto !important;
+    display: block;
+}
+.content .colmun1 .prices-list-content .prices-list .list .titles .price div:first-child {
+    padding-top: 9px !important;
+}
+
+.section-text .pay{
+    border: none !important;
+}
+.section-text .pay .still{
+    margin: 0px !important;
+    width: 100% !important;
+}
+
+.prices-list .list .col5 div {
+    border-radius: 0px 4px 4px 0px;
+}
+.prices-list .list .col1 div {
+    border-radius: 4px 0px 0px 4px;
+}
+.prices-list .list .titles .num-room div {
+    border-radius: 4px 0px 0px 4px;
+}
+.prices-list .list .titles .notes div {
+    border-radius: 0px 4px 4px 0px;
+}
+.content .colmun1 .prices-list-content .prices-list .list .titles .notes div:before {
+    left: -16px !important;
+    right: auto !important;
+}
+.content .colmun1 .prices-list-content .prices-list .list .titles .notes {
+    padding: 0 0px 0px 5px !important;
+}
+.content .colmun1 .prices-list-content .prices-list .list .titles .space {
+    padding: 0 21px 0 0px !important;
+}
+.content .colmun1 .prices-list-content .prices-list .list .titles .num-room {
+    padding: 0 21px 0 0 !important;
+}
+.content .colmun1 .prices-list-content .prices-list .list .col5 {
+    padding: 0 0 0px 0px !important;
+}
+.content .colmun1 .prices-list-content .prices-list .list .titles span {
+    font-size: 12px !important;
+}
+
+.content .colmun1 .prices-list-content .prices-list .top .section-payment .pay{
+    margin-right: 10px;
+    padding-right: 10px;
+}
+
+
+
+
+/* 
+  ##Device = Tablets, Ipads (portrait)
+  ##Screen = B/w 768px to 1024px
+*/
+
+@media (min-width: 768px) and (max-width: 1024px) {
+    .project-info .titilediv h1 {
+        text-align: center !important;
+    }
+    .project-info .titilediv h1 {
+        text-align: center !important;
+    }
+    .down-form-content .title h2 {
+        font-size: 19px!important;
+    }
+    .content .project-info-content-smallscreen .project-info .info .location {
+        width: 100% !important;
+        height: auto !important;
+        text-align: center !important;
+        min-height: 130px !important;
+    }
+    .content .project-info-content-smallscreen .project-info .info .location .text {
+        float: right !important;
+        margin: 0px !important;
+        width: 100% !important;
+        text-align: center !important;
+        margin-top: -10px !important;
+    }
+    .content .project-info-content-smallscreen .project-info .info .location i {
+        float: none !important;
+    }
+    .content .project-info-content-smallscreen .project-info .info .location .text #d2 {
+        top: auto !important;
+        right: auto !important;
+    }
+    .content .project-info-content-smallscreen .project-info .info .location .text #d1 {
+        font-size: 20px !important;
+    }
+    .content .project-info-content-smallscreen .project-info .info .apartment {
+        float: left !important;
+        width: 100% !important;
+        text-align: center !important;
+        background-color: transparent;
+        margin: 0px !important;
+        min-height: 140px !important;
+    }
+    .content .project-info-content-smallscreen .project-info .info .apartment i {
+        float: none !important;
+    }
+    .content .project-info-content-smallscreen .project-info .info .apartment span {
+        float: right !important;
+        font-size: 20px !important;
+        margin: auto !important;
+        width: 100% !important;
+        margin-top: -6px !important;
+    }
+    .content .project-info-content-smallscreen .project-info {
+        width: 100% !important;
+        height: auto !important;
+    }
+    .content .project-info-content-smallscreen .project-info .info .coin {
+        width: 100% !important;
+        float: right !important;
+        margin: 0px 0 0 0 !important;
+        text-align: center !important;
+        min-height: 130px !important;
+    }
+    .content .project-info-content-smallscreen .project-info .info .coin i {
+        float: none !important;
+    }
+    .content .project-info-content-smallscreen .project-info .info .coin span {
+        float: right !important;
+        font-size: 20px !important;
+        margin: 0 !important;
+        width: 100% !important;
+        margin-top: -20px !important;
+    }
+    .content .project-info-content-smallscreen .project-info .info .key {
+        width: 100% !important;
+        text-align: center !important;
+        float: left !important;
+        margin: 0px !important;
+        text-align: center !important;
+        min-height: 130px !important;
+    }
+    .content .project-info-content-smallscreen .project-info .info .key i {
+        float: none;
+    }
+    .content .project-info-content-smallscreen .project-info .info .key span {
+        float: right !important;
+        font-size: 20px !important;
+        margin: 0px !important;
+        width: 100% !important;
+    }
+    .content .project-info-content-smallscreen .project-info .info .target {
+        font-size: 20px !important;
+        width: 100% !important;
+        margin: 0px !important;
+        direction: rtl !important;
+        float: left !important;
+        text-align: center !important;
+    }
+    .content .project-info-content-smallscreen .project-info .info .target i {
+        float: none !important;
+    }
+    .content .project-info-content-smallscreen .project-info .info .target div {
+        float: left !important;
+        margin: 0px !important;
+        width: 100% !important;
+        margin-top: -15px !important;
+    }
+    .content .project-info-content-smallscreen .project-info .info .distance {
+        font-size: 20px !important;
+        width: 100% !important;
+        float: right !important;
+        direction: rtl !important;
+        text-align: center !important;
+    }
+    .content .project-info-content-smallscreen .project-info .info .distance i {
+        float: none !important;
+    }
+    .content .project-info-content-smallscreen .project-info .info .distance div {
+        float: left !important;
+        margin: 0px !important;
+        width: 100% !important;
+        margin-top: -15px !important;
+    }
+
+
+
+}
+
+
+/* 
+  ##Device = Low Resolution Tablets, Mobiles (Landscape)
+  ##Screen = B/w 481px to 767px
+*/
+
+@media (min-width: 481px) and (max-width: 767px) {
+    .project-info .titilediv h1 {
+        text-align: center !important;
+    }
+    .project-info .titilediv h1 {
+        text-align: center !important;
+    }
+    .down-form-content .title h2 {
+        font-size: 19px!important;
+    }
+    .content .project-info-content-smallscreen .project-info .info .location {
+        width: 100% !important;
+        height: auto !important;
+        text-align: center !important;
+        min-height: 130px !important;
+    }
+    .content .project-info-content-smallscreen .project-info .info .location .text {
+        float: right !important;
+        margin: 0px !important;
+        width: 100% !important;
+        text-align: center !important;
+        margin-top: -10px !important;
+    }
+    .content .project-info-content-smallscreen .project-info .info .location i {
+        float: none !important;
+    }
+    .content .project-info-content-smallscreen .project-info .info .location .text #d2 {
+        top: auto !important;
+        right: auto !important;
+    }
+    .content .project-info-content-smallscreen .project-info .info .location .text #d1 {
+        font-size: 20px !important;
+    }
+    .content .project-info-content-smallscreen .project-info .info .apartment {
+        float: left !important;
+        width: 100% !important;
+        text-align: center !important;
+        background-color: transparent;
+        margin: 0px !important;
+        min-height: 140px !important;
+    }
+    .content .project-info-content-smallscreen .project-info .info .apartment i {
+        float: none !important;
+    }
+    .content .project-info-content-smallscreen .project-info .info .apartment span {
+        float: right !important;
+        font-size: 20px !important;
+        margin: auto !important;
+        width: 100% !important;
+        margin-top: -6px !important;
+    }
+    .content .project-info-content-smallscreen .project-info {
+        width: 100% !important;
+        height: auto !important;
+    }
+    .content .project-info-content-smallscreen .project-info .info .coin {
+        width: 100% !important;
+        float: right !important;
+        margin: 0px 0 0 0 !important;
+        text-align: center !important;
+        min-height: 130px !important;
+    }
+    .content .project-info-content-smallscreen .project-info .info .coin i {
+        float: none !important;
+    }
+    .content .project-info-content-smallscreen .project-info .info .coin span {
+        float: right !important;
+        font-size: 20px !important;
+        margin: 0 !important;
+        width: 100% !important;
+        margin-top: -20px !important;
+    }
+    .content .project-info-content-smallscreen .project-info .info .key {
+        width: 100% !important;
+        text-align: center !important;
+        float: left !important;
+        margin: 0px !important;
+        text-align: center !important;
+        min-height: 130px !important;
+    }
+    .content .project-info-content-smallscreen .project-info .info .key i {
+        float: none;
+    }
+    .content .project-info-content-smallscreen .project-info .info .key span {
+        float: right !important;
+        font-size: 20px !important;
+        margin: 0px !important;
+        width: 100% !important;
+    }
+    .content .project-info-content-smallscreen .project-info .info .target {
+        font-size: 20px !important;
+        width: 100% !important;
+        margin: 0px !important;
+        direction: rtl !important;
+        float: left !important;
+        text-align: center !important;
+    }
+    .content .project-info-content-smallscreen .project-info .info .target i {
+        float: none !important;
+    }
+    .content .project-info-content-smallscreen .project-info .info .target div {
+        float: left !important;
+        margin: 0px !important;
+        width: 100% !important;
+        margin-top: -15px !important;
+    }
+    .content .project-info-content-smallscreen .project-info .info .distance {
+        font-size: 20px !important;
+        width: 100% !important;
+        float: right !important;
+        direction: rtl !important;
+        text-align: center !important;
+    }
+    .content .project-info-content-smallscreen .project-info .info .distance i {
+        float: none !important;
+    }
+    .content .project-info-content-smallscreen .project-info .info .distance div {
+        float: left !important;
+        margin: 0px !important;
+        width: 100% !important;
+        margin-top: -15px !important;
+    }
+    .content .project-info-content {
+        padding: 0px !important;
+    }
+    .content .project-info-content .project-info .info .key span {
+        top: 10px!important;
+    }
+    .content .project-info-content .project-info {
+        overflow: hidden;
+    }
+
+
+}
+
+
+
+
+/* 
+  ##Device = Most of the Smartphones Mobiles (Portrait)
+  ##Screen = B/w 320px to 479px
+*/
+
+@media (min-width: 320px) and (max-width: 480px) {
+    .content .project-info-content .project-info .title span:first-of-type {
+        font-size: 18px !important;
+    }
+    .content .project-info-content .project-info .title span:last-of-type {
+        position: relative !important;
+        top: 0px !important;
+        left: 0px !important;
+        font-size: 30px !important;
+    }
+    .content .project-info-content .project-info .title span:first-of-type {
+        top: 0px !important;
+    }
+    .project-info .titilediv h1 {
+        text-align: center !important;
+        font-size: 20px !important;
+    }
+    .content .project-info-content .project-info .info .location {
+        width: 50% !important;
+        height: auto !important;
+        float: right !important;
+        text-align: center !important;
+        margin-top: 0px !important;
+    }
+    .content .project-info-content .project-info .info .apartment i {
+        float: none !important;
+    }
+
+    .content .project-info-content .project-info .info .apartment {
+        width: 50% !important;
+        margin: 8px auto !important;
+        text-align: center !important;
+        min-height: 120px;
+    }
+    .content .project-info-content .project-info .info .distance {
+        width: 50% !important;
+        margin: 0px !important;
+        text-align: center !important;
+        min-height: 100px;
+    }
+    .content .project-info-content .project-info .info .apartment span {
+        float: left !important;
+        font-size: 18px !important;
+        margin: -1px 0px 0 0 !important;
+        width: 100% !important;
+        top: -5px !important;
+    }
+    .content .project-info-content .project-info .info .coin span {
+        float: left !important;
+        font-size: 18px !important;
+        margin: 0px !important;
+        width: 100% !important;
+        text-align: center !important;
+        margin-top: 0px !important;
+        top: -12px !important;
+    }
+
+    .content .project-info-content .project-info .info .target div {
+        top: -4px !important;
+        right: 0px !important;
+        left: auto !important;
+        font-size: 18px !important;
+        float: right !important;
+        width: 100% !important;
+    }
+    .content .project-info-content .project-info .info .distance div {
+        margin: 0px !important;
+        font-size: 18px !important;
+        width: 100% !important;
+        margin-top: -7px !important;
+    }
+    .content .project-info-content .project-info .info .distance i {
+        float: none !important;
+    }
+    .content .project-info-content .project-info .info .location .text #d2{
+        font-size: 17px !important;
+    }
+    .content .project-info-content .project-info .info .location .text #d1 {
+        font-size: 18px !important;
+        text-align: center !important;
+    }
+    .content .project-info-content .project-info .info .location .text {
+        margin: 0px !important;
+        text-align: center !important;
+        float: left !important;
+        width: 100% !important;
+    }
+    .content .project-info-content .project-info .info .location i {
+        float: none !important;
+        margin: 0px !important;
+        position: relative !important;
+        top: 3px !important;
+    }
+    .content .project-info-content .project-info .info .key {
+        margin: 0px !important;
+        width: 50% !important;
+        padding-right: 0px !important;
+        text-align: center !important;
+        min-height: 100px;
+    }
+    .content .project-info-content .project-info .info .key i {
+        float: none !important;
+    }
+    .content .project-info-content .project-info .info .coin i {
+        float: none !important;
+    }
+    .content .project-info-content .project-info .info .key span {
+        position: relative;
+        top: 0px !important;
+        left: auto !important;
+        font-size: inherit;
+        float: left !important;
+        font-family: inherit;
+        margin: 0;
+        width: 100%;
+    }
+    .content .project-info-content .project-info .info .coin {
+        width: 50% !important;
+        float: left !important;
+        margin: 8px 0px 0px 0px !important;
+        text-align: center !important;
+    }
+    .content .project-info-content .project-info .info .target {
+        width: 50% !important;
+        text-align: center !important;
+        margin-top: 0px !important;
+        padding-left: 0px !important;
+    }
+    .content .project-info-content .project-info .info .target i {
+        float: none !important;
+    }
+
+    .content .project-info-content .project-info .giftdiv,
+    .content .project-info-content .project-info .sharediv,
+    .content .project-info-content .project-info .likediv {
+        font-size: 20px !important;
+    }
+    .content .project-info-content .project-info .giftdiv,
+    .content .project-info-content .project-info .sharediv,
+    .content .project-info-content .project-info .likediv {
+        font-size: 12px !important;
+        text-align: center !important;
+    }
+    .flaticon-gift:before, 
+    .flaticon-share:before,
+    .likediv .fa {
+        font-size: 22px !important;
+    }
+    .socialPlugin .socials {
+        margin-top: -23px !important;
+    }
+    .socialPlugin .socials .fa {
+        height: 35px !important;
+        width: 35px !important;
+        font-size: 16px !important;
+    }
+    .project-info .info_en {
+        width: 50%;
+    }
+    .content .project-info-content .project-info .info .target span {
+        top: -10px !important;
+        left: auto !important;
+        float: left;
+        width: 100%;
+    }
+    .project-info .info_en {
+        width: 100% !important;
+    }
+    .content .project-info-content .project-info .info .target i {
+        left: auto !important;
+    }
+    .content .project-info-content .project-info .info .distance span {
+        top: -1px !important;
+        left: auto !important;
+        float: left !important;
+        width: 100% !important;
+    }
+
+    .content .title h1 {
+        font-size: 14px!important;
+    }
+    .flaticon-money:before {
+        font-size: 45px;
+        margin-left: 0px;
+        margin-right: 20px;
+    }
+    .content .colmun1 .prices-list-content .prices-list .top .money .txt .txt1 span {
+        font-size: 12px !important;
+        line-height: 16px;
+    }
+    .exchange-currency {
+        top: -2px;
+    }
+    .content .project-info-content .project-info .info .key span {
+        top: 10px!important;
+    }
+    .content .project-info-content .project-info {
+        overflow: hidden;
+    }
+    .socialPlugin {
+        bottom: auto !important;
+        top: 115px;
+    }
+    .formgift .h3, .formgift .h2 {
+        font-size: 17px;
+    }
+    .formgift .h2 {
+        text-align: left;
+        padding: 10px 15px;
+    }
+    .fancybox-slide--html .fancybox-close-small {
+        top: -2px;
+    }
+    .date-title strong {
+        margin-left: 0px;
+        margin-right: 5px;
+    }
+    .content .colmun1 .prices-list-content .prices-list .list .col1 div:after,
+    .content .colmun1 .prices-list-content .prices-list .list .col3 div:after,
+    .content .colmun1 .prices-list-content .prices-list .list .col4 div:after,
+    .content .colmun1 .prices-list-content .prices-list .list .col2 div:before,
+    .content .colmun1 .prices-list-content .prices-list .list .col4 div:before,
+    .content .colmun1 .prices-list-content .prices-list .list .col5 div:before,
+    .prices-list .list .col2 div:after,
+    .prices-list .list .col2 div:before,
+    .content .colmun1 .prices-list-content .prices-list .list .titles .notes div:before,
+    .content .colmun1 .prices-list-content .prices-list .list .titles .price div:first-child:after,
+    .content .colmun1 .prices-list-content .prices-list .list .titles .price div:first-child:before,
+    .content .colmun1 .prices-list-content .prices-list .list .titles .space div:before,
+    .content .colmun1 .prices-list-content .prices-list .list .titles .num-room div:after,
+    .content .colmun1 .prices-list-content .prices-list .list .titles .space div:before,
+    .content .colmun1 .prices-list-content .prices-list .list .titles .space div:after{
+        display: none !important;
+    }
+
+    .content .colmun1 .prices-list-content .prices-list .list .titles .num-room {
+        padding: 0 1px 0 0 !important;
+    }
+    .prices-list .list .titles .price {
+        padding: 0 0 0 0px !important;
+    }
+    .content .colmun1 .prices-list-content .prices-list .list .titles .price span {
+        margin: 0px;
+        left: -4px;
+        top: -8px;
+    }
+    .exchange-currency {
+        top: -9px;
+        right: -7px;
+        left: auto;
+        padding: 0px 15px 0px 0px;
+    }
+
+    .content .colmun1 .prices-list-content .prices-list .top .money {
+        padding: 0px !important;
+        margin: 0px !important;
+    }
+    .content .colmun1 .prices-list-content .prices-list .top .money .txt {
+        margin: -10px 0px 0 0 !important;
+    }
+    .content .colmun1 .prices-list-content .prices-list .top {
+        min-height: initial !important;
+    }
+    .project-card .share i.fa-heart, .project-card .share i.fa-heart-o {
+        margin: 4px 13px 0 0px;
+    }
+    .content .colmun2 .title h3 {
+        top: 20px!important;
+        left: 10px!important;
+        float: left!important;
+    }
+    .homepage .content .form .title .num {
+        font-size: 16px!important;
+    }
+    .content .form .title .num span {
+        font-size: 22px !important;
+    }
+    .content .colmun1 .prices-list-content .prices-list .top .section-payment .pay {
+        max-width: 150px;
+        border-left: 0px;
+        border-right: 1px solid;
+    }
+    .content .colmun1 .prices-list-content .prices-list .top .pay .progres {
+        margin: 0 0 0 0px !important;
+    }
+    .content .colmun1 .prices-list-content .prices-list .top .pay .progres .txt {
+        font-size: 15px !important;
+        margin: 0px !important;
+        left: -3px !important;
+    }
+    .content .colmun1 .prices-list-content .prices-list .list .titles .notes div,
+    .content .colmun1 .prices-list-content .prices-list .list .titles .price div:first-child,
+    .content .colmun1 .prices-list-content .prices-list .list .titles .space div,
+    .content .colmun1 .prices-list-content .prices-list .list .titles .num-room div {
+        height: 30px !important;
+    }
+
+}

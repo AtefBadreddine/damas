@@ -1,0 +1,17 @@
+
+
+.tree, .main-tree {
+    text-align: left;
+}
+.tree-title:before {
+    right: auto;
+    left: -12px;
+}
+.tree-item {
+    margin-left: 0px;
+}
+.tree-item:before {
+    right: auto;
+    left: -5px;
+    transform: rotate(180deg);
+}

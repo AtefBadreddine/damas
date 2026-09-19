@@ -1,0 +1,101 @@
+    /*
+    Flaticon icon font: Flaticon
+    Creation date: 26/12/2018 03:41
+    */
+
+    @font-face {
+  font-family: "Flaticon";
+  src: url("./Flaticon.eot");
+  src: url("./Flaticon.eot?#iefix") format("embedded-opentype"),
+       url("./Flaticon.woff") format("woff"),
+       url("./Flaticon.ttf") format("truetype"),
+       url("./Flaticon.svg#Flaticon") format("svg");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+  @font-face {
+    font-family: "Flaticon";
+    src: url("./Flaticon.svg#Flaticon") format("svg");
+  }
+}
+
+    .fi:before{
+        display: inline-block;
+  font-family: "Flaticon";
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  line-height: 1;
+  text-decoration: inherit;
+  text-rendering: optimizeLegibility;
+  text-transform: none;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  font-smoothing: antialiased;
+    }
+
+    .flaticon-one-finger-tap-gesture-of-outlined-hand-symbol:before { content: "\f100"; }
+.flaticon-construction:before { content: "\f101"; }
+.flaticon-verified:before { content: "\f102"; }
+.flaticon-coin-of-dollar:before { content: "\f103"; }
+.flaticon-bed:before { content: "\f104"; }
+.flaticon-like:before { content: "\f105"; }
+.flaticon-binoculars:before { content: "\f106"; }
+.flaticon-share:before { content: "\f107"; }
+.flaticon-like-1:before { content: "\f108"; }
+.flaticon-resize:before { content: "\f109"; }
+.flaticon-coin:before { content: "\f10a"; }
+.flaticon-room-key:before { content: "\f10b"; }
+.flaticon-subway:before { content: "\f10c"; }
+.flaticon-video:before { content: "\f10d"; }
+.flaticon-gift:before { content: "\f10e"; }
+.flaticon-headset:before { content: "\f10f"; }
+.flaticon-pin:before { content: "\f110"; }
+.flaticon-apartment:before { content: "\f111"; }
+.flaticon-departures:before { content: "\f112"; }
+.flaticon-targeting:before { content: "\f113"; }
+.flaticon-rising:before { content: "\f114"; }
+.flaticon-duplicate:before { content: "\f115"; }
+.flaticon-price:before { content: "\f116"; }
+.flaticon-money:before { content: "\f117"; }
+.flaticon-house-plans:before { content: "\f118"; }
+.flaticon-account:before { content: "\f119"; }
+.flaticon-home:before { content: "\f11a"; }
+.flaticon-ski:before { content: "\f11b"; }
+.flaticon-graph:before { content: "\f11c"; }
+.flaticon-map-location:before { content: "\f11d"; }
+.flaticon-investment:before { content: "\f11e"; }
+    
+    $font-Flaticon-one-finger-tap-gesture-of-outlined-hand-symbol: "\f100";
+    $font-Flaticon-construction: "\f101";
+    $font-Flaticon-verified: "\f102";
+    $font-Flaticon-coin-of-dollar: "\f103";
+    $font-Flaticon-bed: "\f104";
+    $font-Flaticon-like: "\f105";
+    $font-Flaticon-binoculars: "\f106";
+    $font-Flaticon-share: "\f107";
+    $font-Flaticon-like-1: "\f108";
+    $font-Flaticon-resize: "\f109";
+    $font-Flaticon-coin: "\f10a";
+    $font-Flaticon-room-key: "\f10b";
+    $font-Flaticon-subway: "\f10c";
+    $font-Flaticon-video: "\f10d";
+    $font-Flaticon-gift: "\f10e";
+    $font-Flaticon-headset: "\f10f";
+    $font-Flaticon-pin: "\f110";
+    $font-Flaticon-apartment: "\f111";
+    $font-Flaticon-departures: "\f112";
+    $font-Flaticon-targeting: "\f113";
+    $font-Flaticon-rising: "\f114";
+    $font-Flaticon-duplicate: "\f115";
+    $font-Flaticon-price: "\f116";
+    $font-Flaticon-money: "\f117";
+    $font-Flaticon-house-plans: "\f118";
+    $font-Flaticon-account: "\f119";
+    $font-Flaticon-home: "\f11a";
+    $font-Flaticon-ski: "\f11b";
+    $font-Flaticon-graph: "\f11c";
+    $font-Flaticon-map-location: "\f11d";
+    $font-Flaticon-investment: "\f11e";

@@ -1,0 +1,69 @@
+    /*
+    Flaticon icon font: Flaticon
+    Creation date: 05/11/2018 21:36
+    */
+
+    @font-face {
+  font-family: "Flaticon";
+  src: url("./Flaticon.eot");
+  src: url("./Flaticon.eot?#iefix") format("embedded-opentype"),
+       url("./Flaticon.woff") format("woff"),
+       url("./Flaticon.ttf") format("truetype"),
+       url("./Flaticon.svg#Flaticon") format("svg");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+  @font-face {
+    font-family: "Flaticon";
+    src: url("./Flaticon.svg#Flaticon") format("svg");
+  }
+}
+
+    .fi:before{
+        display: inline-block;
+  font-family: "Flaticon";
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  line-height: 1;
+  text-decoration: inherit;
+  text-rendering: optimizeLegibility;
+  text-transform: none;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  font-smoothing: antialiased;
+    }
+
+    .flaticon-one-finger-tap-gesture-of-outlined-hand-symbol:before { content: "\f100"; }
+.flaticon-call-center:before { content: "\f101"; }
+.flaticon-subway:before { content: "\f102"; }
+.flaticon-crane:before { content: "\f103"; }
+.flaticon-verified:before { content: "\f104"; }
+.flaticon-video:before { content: "\f105"; }
+.flaticon-like:before { content: "\f106"; }
+.flaticon-binoculars:before { content: "\f107"; }
+.flaticon-like-1:before { content: "\f108"; }
+.flaticon-share:before { content: "\f109"; }
+.flaticon-size-square:before { content: "\f10a"; }
+.flaticon-room-key:before { content: "\f10b"; }
+.flaticon-coin:before { content: "\f10c"; }
+.flaticon-bed:before { content: "\f10d"; }
+.flaticon-dollar:before { content: "\f10e"; }
+    
+    $font-Flaticon-one-finger-tap-gesture-of-outlined-hand-symbol: "\f100";
+    $font-Flaticon-call-center: "\f101";
+    $font-Flaticon-subway: "\f102";
+    $font-Flaticon-crane: "\f103";
+    $font-Flaticon-verified: "\f104";
+    $font-Flaticon-video: "\f105";
+    $font-Flaticon-like: "\f106";
+    $font-Flaticon-binoculars: "\f107";
+    $font-Flaticon-like-1: "\f108";
+    $font-Flaticon-share: "\f109";
+    $font-Flaticon-size-square: "\f10a";
+    $font-Flaticon-room-key: "\f10b";
+    $font-Flaticon-coin: "\f10c";
+    $font-Flaticon-bed: "\f10d";
+    $font-Flaticon-dollar: "\f10e";

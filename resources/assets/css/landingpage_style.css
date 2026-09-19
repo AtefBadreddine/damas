@@ -1,0 +1,1680 @@
+.cap1,.cap2,.cap3{text-transform:uppercase;word-spacing:2px}.cap1,.cap11,.cap2,.cap22,.cap3{word-spacing:2px}section{width:100%}.main-container{padding:0;background-size:cover;overflow:hidden;width:100%;box-shadow:0 10px 40px 5px rgba(0,0,0,.2)}.carousel{width:100%!important;height:100vh}.carousel-inner{height:100%}.carousel-indicators{bottom:0}.carousel-control.left,.carousel-control.right{background-image:none;width:5%;color:#001f5e}.carousel .item{width:100%;height:100%}.carousel .item img{width:100%!important;height:100%;padding-top:60px}.cap1,.cap11,.cap2,.cap22,.cap3,.cap33{color:#efefef;padding:10px;font-weight:700;border-radius:20px;text-align:center}//For Each Slider Of The Three .carousel-caption{top:30%;left:1%}.cap-smart{top:35%;left:7%!important;right:auto;width:50%!important}.cap-inter,//End Of second Slider -------------------------------------------------- //Third Slider ------------------------------------------------------ .cap-inter{left:5%}//first slide --------------------------------------------- .cap-social{top:40%;left:5%}.cap1{background-color:#001f5e;margin:0 5%}.cap11{background-color:rgba(0,0,0,.5);margin-top:20px}.cap2{background-color:#001f5e;margin:auto}.cap22{background-color:rgba(0,0,0,.5);margin-top:20px}.cap3{background-color:#001f5e;margin:0 0 -20px 22%}.cap33{background-color:rgba(0,0,0,.5);word-spacing:5px;margin-top:20px!important}//END OF Third Slider --------------------------------------------------- .carousel-caption h3{padding:.5em}.carousel-caption .cap-social>h3:first-child{animation-delay:1s}.carousel-caption h3:nth-child(2){animation-delay:1.5s}.carousel-caption button{animation-delay:3s}.cap1,.cap11,.cap2,.cap22,.cap3,.cap33{width:80%;font-size:40px}@media(max-width:1024px){.cap-inter{width:100%!important}.cap-smart{width:70%!important;left:15%}.cap1,.cap11,.cap2,.cap22,.cap3,.cap33{width:100%;font-size:20px;line-height:30px}}.form-section .media{overflow:initial}.whatsapp-pulse,.whatsapp-pulse:hover{color:#fff}.whatsapp-pulse{position:fixed;width:50px;height:50px;background:#42ce6c;color:#fff;border-radius:50%;text-align:center;line-height:50px;font-size:48px;z-index:999999999;right:80px;top:6px}.whatsapp-icon{position:relative;display:block;right:inherit;top:inherit;margin:auto}.whatsapp-pulse i.fa.fa-whatsapp{font-size:35px}.whatsapp-pulse:after,.whatsapp-pulse:before{content:'';display:block;position:absolute;border:50%;border:1px solid #009688;left:-20px;right:-20px;top:-20px;bottom:-20px;border-radius:50%;animation:animatepulse 1.5s linear infinite;opacity:0}.whatsapp-pulse:after{animation-delay:.5s}@keyframes animatepulse{0%{transform:scale(.5);opacity:0}50%{opacity:1}100%{transform:scale(1.2);opacity:0}}
+body{    padding-top: 77px;}
+.header .navbar1 .contain .devise {
+    width: auto;
+    height: 24px;
+    border-left: 1px solid #fff;
+    position: relative;
+}
+
+.content .project-info-content .project-info {
+    margin-top: 28px;
+}
+.content .form-content {
+    margin-top: -88px;
+}
+
+.content .colmun1 .location-importance {
+    min-height: 346px;}
+
+h2.title_icon{
+    text-align: center;
+    font-family: dinnextregular;
+    font-size: 22px;
+    background-image: url(/img/turkey.png);
+    background-repeat: no-repeat;
+    background-position: right 1px;
+    background-size: 44px;
+    padding-right: 53px;
+    display: inline-block;
+    padding-bottom: 15px;
+}
+#work_steeps{
+    max-width: 100%;
+    min-height: 276px;
+    border-radius: 5px;
+    position: relative;
+    padding: 0;
+    overflow: hidden;
+    margin: 25px 0 0 0;
+    background: #fff;
+    padding: 20px 15px 10px 15px;  
+    text-align: right;
+}
+.content .colmun1 .prices-list-content{margin-bottom:28px}
+#work_steeps img{width:100%}
+#our_services {
+    max-width: 100%;
+    min-height: 300px;
+    background-color: #fff;
+    border-radius: 5px;
+    position: relative;
+    padding: 20px 15px 20px 15px;
+    overflow: hidden;
+    margin: -10px 0 0 0;
+    float: right;
+    direction:rtl
+}
+#our_services:after {
+    content: "";
+    display: inline-block;
+    border-style: solid;
+    border-width: 35px 35px 0 0;
+    border-color: #E9EBEE transparent;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+}
+#our_services .row div{
+    text-align:center
+}
+#our_services .row div h5{
+    padding: 6px 3px;
+    text-align: center;
+    font-size: 13px;
+    line-height: 23px;
+}
+#our_services .row div p{
+    font-family: DroidNaskhRegular;
+    padding: 1px 8px;
+    font-size: 15px;
+}
+footer{
+    overflow: hidden;
+    color: #d5d5d5 !important;
+    background: #264584;
+    font-size: 13px;
+    line-height: 22px;
+    position: relative;
+    padding: 30px 0 !important;
+    box-shadow: 0 -15px 40px 5px rgba(100,100,100,.05);
+    margin-top: 20px;
+}
+footer a{
+    color: #d5d5d5 !important;
+}
+footer a:hover{
+    color: #ffffff !important;
+}
+.content .project-info-content .project-info {
+    height: auto;}
+.header{position: fixed;
+        top: 0;z-index:99999}
+.content{margin:0 auto}
+#section_home {
+    padding-top: 0;
+    background-color: white;
+}
+.how-to-use .owl-nav i {
+    top: -4px;
+    font-size: 29px;
+}
+.how-to-use .owl-prev{
+    right:0!important
+}
+.how-to-use .owl-next{
+    left:0!important
+}
+.how-to-use .owl-nav div , .owl-landing .owl-nav div {
+    width: 58px;
+    height: 58px;
+    background-color: rgba(31, 58, 155, 0.7) !important;
+    color: #fff !important;
+    font-size: 35px !important;
+    border-radius: 50%;
+    position: absolute;
+    top: calc(45% - 20px);
+    outline: none;
+    cursor: pointer;
+    text-align: center;
+    transition: background .1s ease-in-out;
+}
+.how-to-use .owl-nav div{
+    width: 50px;
+    height: 50px;
+}
+.how-to-use .owl-next,.owl-landing .owl-next {
+    left: 10px;
+}
+.how-to-use .owl-prev,.owl-landing .owl-prev {
+    right: 10px;
+}
+.how-to-use .owl-nav .disabled, .owl-landing .owl-nav .disabled{display:none}
+.content .form {z-index: 9999}
+
+.content .project-info-content .project-info {
+    margin-top: 13px !important;
+}
+
+
+
+/** Start Certificate Clients Style **/
+.certificate {
+    width: 100%;
+    height: 319px;
+    background-color: #fff;
+    position: relative;
+    margin-top: 15px;
+    border-radius: 5px;
+    padding: 15px 20px;
+    color: #1F3A73;
+    border: 1px solid lightgray
+}
+
+.certificate:before {
+    content: "";
+    display: block;
+    border-style: solid;
+    border-width: 31px 31px 0 0;
+    border-color: lightgray transparent;
+    position: absolute;
+    top: -1px;
+    left: -1px;
+}
+
+.certificate:after {
+    content: "";
+    display: block;
+    border-style: solid;
+    border-width: 31px 31px 0 0;
+    border-color: #E9EBEE transparent;
+    position: absolute;
+    top: -2px;
+    left: -1px;
+}
+
+.certificate .title {
+    position: relative;
+    width: 250px;
+    height: 44px;
+    float: right;
+}
+
+
+
+.certificate  .title i{
+    position: relative;
+    bottom: -1px;
+    right: 0px
+}
+
+.certificate .title h3{
+    position: absolute;
+    bottom: 0px;
+    right: 45px;
+    font-size: 27px
+}
+
+
+
+.certificate .post {
+    height: 225px;
+    width: 100%;
+    margin: 15px 0 0 0;
+    padding: 0;
+    position: relative;
+    overflow: hidden;
+
+}
+
+.certificate .post .slider {
+    position: absolute;
+    width: 100%;
+}
+
+.certificate .post .items {
+    width: 100%;
+    height: auto;
+    margin: 0 0 15px 0;
+    overflow: hidden;
+}
+
+.certificate .post .items .photo {
+    width: 54px;
+    height: 54px;
+    float: right;
+    background-color: #8BFF98;
+    border-radius: 50%;
+    border: 1px solid #C7C8CA
+}
+
+.certificate .post .items .info {
+    float: right;
+    margin: 0 10px 0 0;
+    width: calc(100% - 66px);
+}
+
+.certificate .post .items .info span {
+    display: block;
+    text-align: right;
+    /*max-width: 222px;*/
+}
+
+.certificate .post .items .name {
+    font-family: dinnextmedium;
+    font-size: 16px;
+    position: relative;
+    top: -4px
+}
+
+.certificate .post .items .op {
+    font-family: DroidNaskhRegular;
+    font-size: 14px
+}
+
+
+
+
+.certificate .nav button, .most-watched .nav button {
+    background-color: transparent;
+    border: 0
+}
+
+
+.certificate .nav .arrow, .most-watched .nav .arrow {
+    background-color: #E9EBEE;
+    width: 34px;
+    height: 25px;
+    text-align: center;
+    cursor: pointer;
+    font-size: 24px;
+    color:#1F3A73;
+    border: 0px !important;
+    position: absolute;
+    top: 25px;
+    outline: none
+
+}
+.certificate .nav .arrow i, .most-watched .nav .arrow i {
+    position: relative;
+    top: -8px
+}
+
+.certificate .up, .most-watched .up {
+    left: 20px
+}
+
+.certificate .down, .most-watched .down {
+    left: 57px
+}
+
+.certificate .nav .disabled, .most-watched .nav .disabled {
+    opacity: 0.5
+}
+.content .about_project ul li {
+    line-height: 28px;
+}
+
+
+.certificate .title h3,
+#our_services .row div h5,
+.content .colmun1 .location-importance .title,
+h2{
+    font-family: '29LTBukra-Bold' !important;
+}
+.more-options,
+.content .project-info-content-smallscreen .project-info .info .key span {
+    font-family: '29LTBukra-Regular' !important;
+}
+.down-form-content .down-form,
+.about-damas .about_d,
+.content .colmun1 .location-importance ul li,
+.content .about_project{
+    font-family: DroidNaskhRegular !important;
+}
+
+.about-damas .read-more_d {
+    font-size: 20px;
+    padding: 7px;
+}
+
+.content .colmun1 .prices-list-content .title h2,
+.down-form-content .title h1 {
+    font-size: 25px;
+    font-family: '29LTBukra-Bold' !important;
+}
+.exchange-currency {
+    outline: none;
+    color: #fff;
+    font-size: 12px;
+    background: #132467;
+    border: 0px;
+}
+.list .price .btn-group{
+    float: left;
+    width: 60%;
+    top: 2px;
+}
+.list .price .btn-group button{
+    width: 100%;
+    float: left;
+    display: block;
+    position: absolute !important;
+}
+.list .price .btn-group .dropdown-menu{
+    max-height: 150px;
+    min-height: 150px;
+    overflow-y: auto;
+    direction: ltr;
+}
+.list .price .btn-group .dropdown-menu::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+.list .price .btn-group .dropdown-menu::-webkit-scrollbar-button:start:decrement,
+.list .price .btn-group .dropdown-menu::-webkit-scrollbar-button:end:increment {
+    height: 1px;
+    display: block;
+    background-color: #e9ebee;
+}
+.list .price .btn-group .dropdown-menu::-webkit-scrollbar-button:horizontal:start:decrement,
+.list .price .btn-group .dropdown-menu::-webkit-scrollbar-button:horizontal:end:increment {
+    height: 1px;
+    display: block;
+    background-color: #e9ebee;
+}
+.list .price .btn-group .dropdown-menu::-webkit-scrollbar-track-piece {
+    background-color: #e9ebee;
+}
+.list .price .btn-group .dropdown-menu::-webkit-scrollbar-thumb:vertical,
+.list .price .btn-group .dropdown-menu::-webkit-scrollbar-thumb:horizontal{
+    background-color: #cccccc;
+    border: 1px solid #cccccc;
+    -webkit-border-radius: 6px;
+}
+.prices-list .list .titles .price span {
+    float: right;
+    top: 4px;
+}
+
+.about-damas.desktop-screen {
+    display: none;
+}
+
+.content .project-info-content .project-info {
+    width: 100%;
+}
+.content .project-info-content {
+    padding: 0 0 0 15px;
+    float: right;
+    width: calc(100% - 345px);
+}
+
+.big-content{
+    padding-top: 16px;
+}
+
+.owl-carousel .owl-nav .owl-prev i {
+    top: 3px;
+    right: -3px;
+}
+.owl-carousel .owl-nav .owl-next i {
+    position: relative;
+    top: 3px;
+    left: -3px;
+}
+
+
+@media (min-width: 800px) {
+
+}
+
+@media (max-width: 1024px) {
+    .certificate .title h3 {
+        font-size: 35px
+    }
+    .certificate .post .items .name {font-size: 16px}
+    .certificate .post .items .op {font-size: 14px}
+}
+
+/** End Certificate Clients Style **/
+
+
+
+.content .form form select,
+.content .form form textarea,
+.content .form form input{
+    font-family: DroidNaskhRegular !important;
+}
+
+.content .form .title .room .bed span{
+    font-family: 'Montserrat', sans-serif !important;
+}
+
+.content .colmun1 .prices-list-content {
+    float: none !important;
+}
+
+
+
+@media (max-width: 1024px) {
+    footer {
+        min-height: auto!important
+    }
+    .content .form-content {margin-top:26px}
+    .owl-landing{margin-top:6px}
+
+}
+
+.more-options:hover{color:white}
+.more-options {
+    width: 210px;
+    height: 50px;
+    color: #fff;
+    background-color: #123985;
+    border-radius: 5px;
+    font-size: 20px;
+    text-align: center;
+    margin: 20px auto 6px;
+    transition: all .2s ease-in-out;
+    cursor: pointer;
+    display: block;   
+    padding: 7px;
+}
+@media (max-width: 1366px) {
+    .more-options {
+        width: 181px;
+        height: 39px;
+        font-size: 20px;
+        margin: 18px auto 0;
+    }
+    #our_services{
+        margin-top:14px
+    }
+    #our_services .row div h5 br{display:none}
+    #our_services .row div {
+        margin: 5px 0;}
+}
+
+@media (max-width: 991px) {
+    .content .project-info-content {
+        width: calc(100% - 0px);
+    }
+}
+
+
+
+
+/* 
+  ##Device = Tablets, Ipads (portrait)
+  ##Screen = B/w 768px to 1024px
+*/
+
+@media (min-width: 768px) and (max-width: 1024px) {
+
+
+    .project-internal .form-content{
+        width: 100%;
+        margin-bottom: 30px;
+    }
+    .project-internal .form-content section.form{
+        width: 100%;
+    }
+    .project-internal .project-info-content{
+        width: 100%;
+        padding: 0px;
+    }
+    .project-internal .project-info-content .project-info{
+        width: 100%;
+    }
+    .content .project-info-content-smallscreen .project-info {
+        padding: 0px;
+        width: 100%;
+    }
+    .content .project-info-content .project-info .info .location {
+        width: 100%;
+        height: auto;
+        float: right;
+        text-align: center;
+    }
+    .content .project-info-content .project-info .info .apartment i {
+        float: none;
+    }
+
+    .content .project-info-content .project-info .info .apartment {
+        width: 100%;
+        margin: 8px auto;
+        text-align: center;
+    }
+    .content .project-info-content .project-info .info .distance {
+        width: 100%;
+        margin: 21px auto 0px auto;
+        text-align: center;
+    }
+    .content .project-info-content .project-info .info .apartment span {
+        font-size: 18px !important;
+        margin: -1px 0px 0 0 !important;
+        width: 100%;
+    }
+    .content .project-info-content .project-info .info .coin span {
+        font-size: 18px;
+        margin: 0px;
+        width: 100%;
+        text-align: center;
+        margin-top: -8px;
+    }
+
+    .content .project-info-content .project-info .info .target div {
+        top: -4px;
+        right: 0px;
+        left: auto;
+        font-size: 18px;
+        float: right;
+        width: 100%;
+    }
+    .content .project-info-content .project-info .info .distance div {
+        margin: 0px;
+        font-size: 18px;
+        width: 100%;
+        margin-top: -7px;
+    }
+    .content .project-info-content .project-info .info .distance i {
+        float: none;
+    }
+    .content .project-info-content .project-info .info .location .text #d2{
+        font-size: 17px;
+    }
+    .content .project-info-content .project-info .info .location .text #d1 {
+        font-size: 18px;
+    }
+    .content .project-info-content .project-info .info .location .text {
+        margin: 0px;
+        text-align: center;
+        float: left;
+        width: 100%;
+    }
+    .content .project-info-content .project-info .info .location i {
+        float: none;
+        margin: 0px;
+        position: relative;
+        top: 3px;
+    }
+    .content .project-info-content .project-info .info .key {
+        margin: 22px 0 0 0;
+        width: 100%;
+        padding-right: 7px;
+        text-align: center;
+    }
+    .content .project-info-content .project-info .info .key i {
+        float: none;
+    }
+    .content .project-info-content .project-info .info .coin i {
+        float: none;
+    }
+    .content .project-info-content .project-info .info .key span {
+        font-size: 18px;
+        margin: 0px;
+        width: 100%;
+    }
+    .content .project-info-content .project-info .info .coin {
+        width: 100%;
+        float: left;
+        margin: 8px 0px 0px 0px;
+        text-align: center;
+    }
+    .content .project-info-content .project-info .info .target {
+        width: 100%;
+        text-align: center;
+    }
+    .content .project-info-content .project-info .info .target i {
+        float: none;
+    }
+
+    .content .project-info-content .project-info .giftdiv,
+    .content .project-info-content .project-info .sharediv,
+    .content .project-info-content .project-info .likediv {
+        font-size: 20px;
+    }
+    .content .project-info-content .project-info .giftdiv,
+    .content .project-info-content .project-info .sharediv,
+    .content .project-info-content .project-info .likediv {
+        font-size: 12px;
+        text-align: center;
+    }
+    .flaticon-gift:before, 
+    .flaticon-share:before,
+    .likediv .fa {
+        font-size: 22px;
+    }
+    .socialPlugin .socials {
+        margin-top: -23px;
+    }
+    .socialPlugin .socials .fa {
+        height: 35px;
+        width: 35px;
+        font-size: 16px;
+    }
+
+}
+
+@media (max-width: 1023px){
+    .content {
+        width: calc(100% - 60px) !important;
+    }
+    .content .colmun1 {
+        width: 100%;
+    }
+    .content .colmun2 {
+        width: 100%;
+        top: auto !important;
+        bottom: auto !important;
+    }
+
+}
+
+@media (max-width: 840px){
+    .header .navbar1 .contain .whatsapp1,
+    .header .navbar2 ul{
+        display: none;
+    }
+
+}
+
+
+@media only screen and (max-device-width: 1024px) and (min-device-width: 768px) and (orientation: portrait) {
+
+    .content .colmun1 .location-importance-content .title1 h2{
+        padding-right: 5px !important;
+    }
+}
+
+
+
+/****-- iPad in landscape --****/
+@media only screen 
+and (min-device-width : 768px) 
+and (max-device-width : 1024px) 
+and (orientation : landscape) { 
+
+    .header .navbar2 .contain {
+        display: block;
+    }
+}
+
+/****-- iPad in portrait --****/
+@media only screen 
+and (min-device-width : 768px) 
+and (max-device-width : 1024px) 
+and (orientation : portrait) { 
+    .header .navbar2 .contain {
+        display: block;
+    }
+}
+
+/* 
+  ##Device = Low Resolution Tablets, Mobiles (Landscape)
+  ##Screen = B/w 481px to 767px
+*/
+
+@media (min-width: 481px) and (max-width: 767px) {
+    .header .navbar2 .contain {
+        display: block;
+    }
+
+    .row.info .col-md-4{
+        width: 50%;
+    }
+    .project-info .top .col-lg-2{
+        width: 33.3333%;
+    }
+
+
+    .content .project-info-content-smallscreen .project-info .sharediv {
+        text-align: center;
+    }
+    .content .project-info-content-smallscreen .project-info .giftdiv i {
+        right: auto;
+    }
+    .content .project-info-content-smallscreen .project-info .info {
+        padding: 15px !important;
+    }
+    .content .colmun1 .location-importance .title {
+        font-size: 20px;
+    }
+    .how-to-use .title h2 {
+        font-size: 16px !important;
+        padding-right: 50px!important;
+        line-height: 24px!important;
+    }
+    #slidingPlan .owl-carousel .owl-nav .owl-prev{
+        padding: 7px 4px 0 9px;
+        font-size: 28px;
+    }
+    .how-to-use {
+        padding: 0px 7px 18px 5px;
+    }
+    .prices-list .list .titles .date div {
+        height: 30px;
+        padding-top: 6px;
+    }
+    .prices-list .list .col2 {
+        padding: 0 0px 0 2px;
+    } 
+    prices-list .list .col3 {
+        padding: 0 1px 0 2px;
+    }
+    .prices-list .list .col4 {
+        padding: 0 0px 0 2px;
+    } 
+    .prices-list .list .col1 {
+        padding: 0 0 0 2px;
+    }
+    .prices-list .list .col3 {
+        padding: 0 1px 0 3px;
+    }
+    .prices-list .list .titles .price div:first-child {
+        display: block;
+    }
+    .prices-list .list .titles .date {
+        padding: 0 0px 0 2px;
+    }
+    .prices-list .list div[class^="col"] div {
+        height: 27px;
+    }
+    #section_location iframe{
+        width: 100%;
+        height: 350px;
+    }
+    .certificate .title h3 {
+        font-size: 22px;
+    }
+    #our_services .row div h5 {
+        font-size: 16px;
+    }
+    .down-form-content .title h1 {
+        line-height: 1;
+        top: 18px;
+    }
+    .about-damas .read-more_d {
+        font-size: 20px;
+        padding: 6px;
+    }
+    .more-options {
+        font-size: 17px;
+        padding: 5px;
+    }
+    .header .navbar2 .contain .whatsapp {
+        margin-top: 8px;
+    }
+    .about-damas {
+        display: none;
+    }
+    .content .project-info-content-smallscreen .project-info .title span:last-of-type {
+        top: 0px;
+    }
+    .content .project-info-content-smallscreen .project-info .giftdiv, .content .project-info-content-smallscreen .project-info .sharediv, .content .project-info-content-smallscreen .project-info .likediv {
+        font-size: 13px !important;
+    }
+}
+
+
+/* 
+  ##Device = Most of the Smartphones Mobiles (Portrait)
+  ##Screen = B/w 320px to 479px
+*/
+
+@media (min-width: 320px) and (max-width: 480px) {
+    .header .navbar2 .contain {
+        display: block;
+    }
+    .content {
+        width: calc(100% - 15px) !important;
+    }
+
+    .content .project-info-content-smallscreen .project-info .sharediv {
+        text-align: center;
+    }
+    .content .project-info-content-smallscreen .project-info .giftdiv i {
+        right: auto;
+    }
+    .content .project-info-content-smallscreen .project-info .info {
+        padding: 15px !important;
+    }
+    .content .colmun1 .location-importance .title {
+        font-size: 20px;
+    }
+    .how-to-use .title h2 {
+        font-size: 16px !important;
+        padding-right: 50px!important;
+        line-height: 24px!important;
+    }
+    #slidingPlan .owl-carousel .owl-nav .owl-prev{
+        padding: 7px 4px 0 9px;
+        font-size: 28px;
+    }
+    .how-to-use {
+        padding: 0px 7px 18px 5px !important;
+    }
+    .prices-list .list .titles .date div {
+        height: 30px;
+        padding-top: 6px;
+    }
+    .prices-list .list .col2 {
+        padding: 0 0px 0 2px;
+    } 
+    prices-list .list .col3 {
+        padding: 0 1px 0 2px;
+    }
+    .prices-list .list .col4 {
+        padding: 0 0px 0 2px;
+    } 
+    .prices-list .list .col1 {
+        padding: 0 0 0 2px;
+    }
+    .prices-list .list .col3 {
+        padding: 0 1px 0 3px;
+    }
+    .prices-list .list .titles .price div:first-child {
+        display: block;
+    }
+    .prices-list .list .titles .date {
+        padding: 0 0px 0 2px;
+    }
+    .prices-list .list div[class^="col"] div {
+        height: 27px;
+    }
+    #section_location iframe{
+        width: 100%;
+        height: 300px;
+    }
+    .certificate .title h3 {
+        font-size: 22px;
+    }
+    #our_services .row div h5 {
+        font-size: 15px;
+    }
+    .down-form-content .title h1 {
+        line-height: .8;
+        top: 21px;
+        font-size: 18px;
+    }
+    .about-damas .read-more_d {
+        font-size: 20px;
+        padding: 6px;
+    }
+    .more-options {
+        font-size: 17px;
+        padding: 5px;
+    }
+    .header .navbar2 .contain .whatsapp {
+        margin-top: 8px;
+    }
+    .about-damas {
+        display: none;
+    }
+
+}
+
+
+
+/********---- Start notifications-top ----********/
+.notifications-top{
+    position: fixed;
+    top: 0px;
+    left: 109px;
+    width: 321px;
+    height: auto;
+    z-index: 99999999;
+    background: #ffffff;
+    padding: 13px;
+    border: 1px solid #ccc;
+    border-radius: 0px 0px 4px 4px;
+}
+.notifications-top.close{
+    display: none;
+}
+.notifications-top .col-md-12{
+    float: left;
+    width: 100%;
+}
+.notifications-top .col-md-12.margin-top{
+    margin-top: 15px;
+}
+.notifications-top img{
+    float: right;
+    width: 30px;
+    margin-right: 20px;
+}
+.notifications-top span{
+    float: right;
+    transform: rotate(-90deg);
+    position: relative;
+    top: 3px;
+}
+.notifications-top strong.close-alert{
+    position: absolute;
+    right: 5px;
+    top: 2px;
+    font-size: 12px;
+    width: 20px;
+    height: 20px;
+    border-radius: 100%;
+    background-color: transparent;
+    text-align: center;
+    transition: all 0.5s;
+    cursor: pointer;
+    z-index: 999;
+}
+.notifications-top strong.close-alert:hover{
+    background-color: #cccccc;
+    transition: all 0.5s;
+}
+.notifications-top strong.close-alert i{
+    font-size: 20px;
+    color: #132467;
+    width: 100%;
+}
+.notifications-top i{
+    float: right;
+    font-size: 25px;
+    color: #0974ce;
+}
+.notifications-top p{
+    float: left;
+    width: 100%;
+    color: #132467;
+    margin: 0px;
+    font-size: 13px;
+    text-align: center;
+    direction: rtl;
+}
+.notifications-top button{
+    float: right;
+    margin-left: 5px;
+    background-image: none;
+    background: none;
+    border: 1px solid #ccc;
+    color: #0974ce;
+    font-size: 11px;
+    padding: 9px 15px;
+    border-radius: 3px;
+    font-weight: bold;
+    cursor: pointer;
+}
+.notifications-top button:hover{
+    background-color: #f8f8f8;
+}
+@-moz-keyframes bounce {
+    0%,
+    20%,
+    50%,
+    80%,
+    100% {
+        -moz-transform: translateX(0);
+        transform: translateX(0);
+    }
+    40% {
+        -moz-transform: translateX(-10px);
+        transform: translateX(-10px);
+    }
+    60% {
+        -moz-transform: translateX(-5px);
+        transform: translateX(-5px);
+    }
+}
+@-webkit-keyframes bounce {
+    0%,
+    20%,
+    50%,
+    80%,
+    100% {
+        -webkit-transform: translateY(0);
+        transform: translateY(0);
+    }
+    40% {
+        -webkit-transform: translateY(-10px);
+        transform: translateY(-10px);
+    }
+    60% {
+        -webkit-transform: translateY(-5px);
+        transform: translateY(-5px);
+    }
+}
+@keyframes bounce {
+    0%,
+    20%,
+    50%,
+    80%,
+    100% {
+        -moz-transform: translateY(0);
+        -ms-transform: translateY(0);
+        -webkit-transform: translateY(0);
+        transform: translateY(0);
+    }
+    40% {
+        -moz-transform: translateY(-10px);
+        -ms-transform: translateY(-10px);
+        -webkit-transform: translateY(-10px);
+        transform: translateY(-10px);
+    }
+    60% {
+        -moz-transform: translateY(-5px);
+        -ms-transform: translateY(-5px);
+        -webkit-transform: translateY(-5px);
+        transform: translateY(-5px);
+    }
+}
+
+.bounce {
+    -moz-animation: bounce 2s infinite;
+    -webkit-animation: bounce 2s infinite;
+    animation: bounce 2s infinite;
+}
+
+footer .logo{
+    width: 150px;
+    margin: auto;
+}
+
+
+
+.header .navbar1 .contain .whatsapp.top {
+    float: right;
+    margin-left: 20px;
+    border-left: 0px;
+    margin-top: 0px;
+}
+.navbar1 .whatsapp.top .fa-whatsapp {
+    background-color: #00B04C;
+    color: #ffffff;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    position: relative;
+    margin: 0px !important;
+    top: -3px;
+    right: -6px;
+    font-size: 24px;
+    text-align: center;
+    padding: 3px 3px 3px 3px;
+}
+.navbar1 .whatsapp.top .fa-whatsapp:after {
+    content: "";
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    border: 1px solid rgba(0, 176, 76, 1);
+    display: inline-block;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    animation-name: test;
+    animation-duration: 1.5s;
+    animation-delay: .65s;
+    animation-iteration-count: infinite;
+    animation-timing-function: ease-in-out;
+}
+
+
+
+.titilediv {
+    font-family: '29LTBukra-Bold' !important;
+    font-size: 20px;
+    text-align: right;
+}
+.content .project-info-content .project-info .title span:first-of-type {
+    font-family: 'Montserrat', sans-serif !important;
+    font-style: italic;
+    font-weight: bold;
+    margin: 0px 3px;
+}
+
+#our_services h2,
+.down-form-content .title h1,
+.prices-list-content .title h2,
+h2.title_icon,
+.certificate .title h3,
+.content .colmun2 .title h2,
+.content .colmun1 .location-importance-content .title1 h2,
+.content .about_project h2 {
+    font-size: 23px;
+}
+.content .colmun1 .location-importance .title span {
+    font-size: 20px;
+}
+
+
+@media (min-width: 768px) and (max-width: 1025px) {
+    .content .project-info-content-smallscreen .project-info .giftdiv, .content .project-info-content-smallscreen .project-info .sharediv, .content .project-info-content-smallscreen .project-info .likediv {
+        text-align: center;
+    }
+    .content .project-info-content-smallscreen .project-info .giftdiv i {
+        right: auto;
+    }
+    #our_services h2, .down-form-content .title h1, .prices-list-content .title h2, h2.title_icon, .certificate .title h3, .content .colmun2 .title h2, .content .colmun1 .location-importance-content .title1 h2, .content .about_project h2 {
+        font-size: 18px !important;
+        text-align: right;
+    }
+
+
+}
+
+@media (max-width: 1100px) {
+    #our_services .row div {
+        margin: 5px 0;
+        width: 50% !important;
+        float: right;
+        display: block;
+        max-width: 50%;
+        min-width: 50%;
+    }
+    .header .navbar1 .contain .devise {
+        margin-right: 10px;
+    }
+    .header .navbar2 .contain .whatsapp {
+        margin-right: 5px;
+    }
+}
+
+
+
+/* iPad in landscape */
+@media only screen 
+and (min-device-width : 768px) 
+and (max-device-width : 1024px) 
+and (orientation : landscape) {
+    #section_location {
+        width: 50% !important;
+    }
+    .certificate {
+        width: 96% !important;
+        float: left !important;
+    }
+    #our_services{
+        width: 50%;
+        margin-top: 22px !important;
+        float: right;
+    }
+    .about-damas {
+        display: none !important;
+    }
+    .header .navbar2 .contain .whatsapp {
+        border-left: 0px;
+        margin-top: 0px;
+    }
+    .navbar2 .fa-whatsapp {
+        background-color: #00B04C;
+        color: #ffffff;
+        width: 35px;
+        height: 35px;
+        border-radius: 50%;
+        padding: 5px 9px 0px 6px !important;
+        position: relative;
+        text-align: center;
+        margin: 0px !important;
+        top: -4px;
+        right: -5px;
+    }
+    .navbar2 .fa-whatsapp:after {
+        content: "";
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        border: 1px solid rgba(0, 176, 76, 1);
+        display: inline-block;
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        animation-name: test;
+        animation-duration: 1.5s;
+        animation-delay: .65s;
+        animation-iteration-count: infinite;
+        animation-timing-function: ease-in-out;
+    }
+    @keyframes test {
+        from {
+            transform: scale(1);
+            border: 1px solid rgba(0; 176, 76, 1) ;
+        }
+        to {
+            transform: scale(2);
+            border: 1px solid rgba(0, 176, 76, 0) ;
+        }
+    }
+    .header .navbar1 .contain .whatsapp1 i {
+        float: inherit;
+        font-size: 17px;
+        margin-left: 0px;
+        margin-right: 5px;
+        position: relative;
+        top: 2px;
+    }
+    .header .logo img {
+        top: 36px;
+        width: 120px;
+    }
+    .header .navbar1 {
+        height: 34px;
+    }
+    .header .navbar1 .contain {
+        margin-top: 4.5px;
+    }
+    .header .navbar2 {
+        height: 49px;
+    }
+    body {
+        padding-top: 83px!important;
+    }
+    .whatsapp1{
+        float: right;
+    }
+    .whatsapp1 i{
+        margin: 0px 4px;
+    }
+    .header .navbar1 .contain .devise {
+        width: auto;
+        height: 24px;
+        border-left: 0px;
+        position: relative;
+        float: right;
+        margin-right: 13px;
+    }
+    .header .devise select {
+        position: relative;
+        right: auto;
+        top: 4px;
+        float: right;
+    }
+    .header .devise i {
+        position: relative;
+        right: auto;
+        top: 0px;
+        margin-right: 0px;
+    }
+    #section_callcenter.down-form-content .title h1 {
+        top: 5px!important;
+    }
+    .prices-list-content .prices-list .top .col-md-12 .pay,
+    .prices-list-content .prices-list .top .col-md-12 .money {
+        width: auto !important;
+    }
+    .prices-list-content .prices-list .top .money i {
+        left: auto !important;
+    }
+    section.prices-list-content .prices-list .still {
+        margin: 9px 0 10px 0!important;
+    }
+    .content .about-title h2 {
+        margin-bottom: 5px;
+    }
+    .content .colmun1 .location-importance-content .title1 h2 {
+        text-align: right!important;
+        margin: 22px 20px 0px 0px!important;
+        float: right;
+    }
+    .exchange-currency {
+        right: 60px;
+        left: auto;
+        height: 22px;
+        top: 4px;
+        font-size: 11px;
+        float: left;
+        position: relative;
+    }
+    .prices-list .list .titles .price {
+        padding: 0 0px 0 2px !important;
+    }
+    .content .project-info-content-smallscreen {
+        width: 50% !important;
+        float: right !important;
+    }
+    .content .colmun1 .location-importance .title span {
+        margin: -10px 5px 0 0;
+        font-size: 20px;
+    }
+    .more-options {
+        font-size: 17px;
+        padding: 4px;
+    }
+    #our_services h2{
+        font-size: 22px;
+    }
+
+}
+
+/* iPad in portrait */
+@media only screen 
+and (min-device-width : 768px) 
+and (max-device-width : 1024px) 
+and (orientation : portrait) { 
+    .content .form-content {
+        float: left;
+        width: 100%;
+    }
+    .content .form {
+        margin: auto;
+    }
+    .about-damas {
+        display: none !important;
+    }
+    .content .colmun1 .location-importance .title span {
+        margin: -10px 0px 0 0;
+        font-size: 20px;
+    }
+    .content .colmun1 .location-importance .line1 {
+        margin: 0px 0 0 0;
+    }
+    .how-to-use .title h2 {
+        font-size: 20px !important;
+        line-height: 27px!important;
+        padding: 0px 50px 5px 5px!important;
+        margin: 0px!important;
+    }
+    .more-options {
+        font-size: 15px;
+    }
+    .certificate .title h3 {
+        font-size: 22px;
+    }
+    .content .colmun1 .location-importance-content .title1 h2 {
+        margin: 0px;
+        text-align: right;
+        padding: 7px 78px 10px 5px;
+    }
+    .content .colmun2 .title h2 {
+        top: 33px!important;
+        right: -10px;
+        float: right;
+    }
+    .about-damas .read-more_d {
+        font-size: 15px;
+        padding: 11px;
+    }
+    .content .colmun1 .prices-list-content .title h2, .down-form-content .title h1 {
+        font-size: 20px;
+    }
+
+    .header .navbar2 .contain .whatsapp {
+        border-left: 0px;
+        margin-top: 0px;
+    }
+    .navbar2 .fa-whatsapp {
+        background-color: #00B04C;
+        color: #ffffff;
+        width: 35px;
+        height: 35px;
+        border-radius: 50%;
+        padding: 5px 9px 0px 6px !important;
+        position: relative;
+        text-align: center;
+        margin: 0px !important;
+        top: -4px;
+        right: -5px;
+    }
+    .navbar2 .fa-whatsapp:after {
+        content: "";
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        border: 1px solid rgba(0, 176, 76, 1);
+        display: inline-block;
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        animation-name: test;
+        animation-duration: 1.5s;
+        animation-delay: .65s;
+        animation-iteration-count: infinite;
+        animation-timing-function: ease-in-out;
+    }
+    @keyframes test {
+        from {
+            transform: scale(1);
+            border: 1px solid rgba(0; 176, 76, 1) ;
+        }
+        to {
+            transform: scale(2);
+            border: 1px solid rgba(0, 176, 76, 0) ;
+        }
+    }
+    .header .navbar1 .contain .whatsapp1 i {
+        float: inherit;
+        font-size: 17px;
+        margin-left: 0px;
+        margin-right: 5px;
+        position: relative;
+        top: 2px;
+    }
+    .header .logo img {
+        top: 36px;
+        width: 120px;
+    }
+    .header .navbar1 {
+        height: 34px;
+    }
+    .header .navbar1 .contain {
+        margin-top: 4.5px;
+    }
+    .header .navbar2 {
+        height: 49px;
+    }
+    body {
+        padding-top: 83px!important;
+    }
+    .whatsapp1{
+        float: right;
+    }
+    .whatsapp1 i{
+        margin: 0px 4px;
+    }
+    .header .navbar1 .contain .devise {
+        width: auto;
+        height: 24px;
+        border-left: 0px;
+        position: relative;
+        float: right;
+        margin-right: 13px;
+    }
+    .header .devise select {
+        position: relative;
+        right: auto;
+        top: 4px;
+        float: right;
+    }
+    .header .devise i {
+        position: relative;
+        right: auto;
+        top: 0px;
+        margin-right: 0px;
+    }
+}
+
+
+
+
+@media (min-width: 481px) and (max-width: 767px) {
+    .content .form .title .num {
+        font-size: 20px!important;
+    }
+    .header .devise select {
+        position: relative;
+        right: auto;
+        top: 7px;
+        float: right;
+    }
+    .header .devise i {
+        position: relative;
+        right: auto;
+        top: -4px;
+        margin-right: 5px;
+    }
+    .notifications-top {
+        top: auto;
+        bottom: 0px;
+        left: 0px;
+        width: 100%;
+    }
+    .notifications-top p {
+        font-size: 14px;
+    }
+    .whatsapp1{
+        float: right;
+        margin-top: 7px;
+    }
+    .whatsapp1 i{
+        margin: 0px 5px;
+    }
+    .header .navbar1 .contain .devise {
+        border-left: 0px;
+        width: auto;
+        margin-top: -3px;
+        padding-right: 3px;
+        margin-right: 13px;
+    }
+    .header .devise i {
+        position: relative;
+        right: auto;
+        left: auto;
+        top: 3px;
+        float: left;
+        margin-top: -5px !important;
+    }
+    .header .flaticon-coin-of-dollar:before {
+        margin: 0px;
+    }
+    .owl-carousel.owl-rtl {
+        background-color: white;
+    } 
+    .how-to-use .use {
+        height: 290px !important;
+    }
+    .how-to-use .owl-carousel .owl-item{
+        min-height: 290px !important;
+    }
+    .slick-slider {
+        height: 380px;
+    }
+    .header .navbar2 {
+        padding-top: 3px;
+    }
+    body {
+        padding-top: 83px!important;
+    }
+    .exchange-currency {
+        left: auto !important;
+        height: 22px !important;
+        top: 4px !important;
+        font-size: 11px !important;
+        position: relative !important;
+        padding: 0px !important;
+        float: right;
+    }
+    .list .price span{
+        margin-left: 20px;
+    }
+    .list .price span:before{
+        content: "";
+        position: absolute;
+        left: -10px;
+        top: 7px;
+        width: 0;
+        height: 0;
+        border-style: solid;
+        border-width: 4px 4px 0 4px;
+        border-color: #ffffff transparent transparent transparent;
+        z-index: 999;
+    }
+    .big-content{
+        padding-top: 6px;
+    }
+    .content .colmun2 {
+        overflow: hidden;
+    }
+}
+
+
+
+@media (min-width: 320px) and (max-width: 480px) {
+    .header .devise select {
+        position: relative;
+        right: auto;
+        top: 7px;
+        float: right;
+    }
+    .header .devise i {
+        position: relative;
+        right: auto;
+        top: -4px;
+    }
+    .notifications-top {
+        top: auto;
+        bottom: 0px;
+        left: 0px;
+        width: 100%;
+    }
+    .notifications-top p {
+        font-size: 14px;
+    }
+    .whatsapp1{
+        float: right;
+        margin-top: 7px;
+    }
+    .whatsapp1 i{
+        margin: 0px 5px;
+    }
+    .header .navbar1 .contain .devise {
+        border-left: 0px;
+        width: auto;
+        margin-top: -3px;
+        padding-right: 3px;
+        margin-right: 10px;
+    }
+    .header .devise i {
+        position: relative;
+        right: auto;
+        left: auto;
+        top: 3px;
+        float: left;
+        margin-top: -5px !important;
+    }
+    .header .flaticon-coin-of-dollar:before {
+        margin: 0px;
+    }
+    .owl-carousel.owl-rtl {
+        background-color: white;
+    } 
+    .fancybox-slide{
+        padding: 0px;
+    }
+    .how-to-use .use {
+        height: 290px !important;
+    }
+    .how-to-use .owl-carousel .owl-item{
+        min-height: 290px !important;
+    }
+    #our_services h2, .down-form-content .title h1, .prices-list-content .title h2, h2.title_icon, .certificate .title h3, .content .colmun2 .title h2, .content .colmun1 .location-importance-content .title1 h2, .content .about_project h2 {
+        font-size: 18px;
+    }
+    .exchange-currency {
+        left: auto !important;
+        height: 22px !important;
+        top: 4px !important;
+        font-size: 11px !important;
+        position: relative !important;
+        padding: 0px !important;
+        float: right;
+    }
+    .list .price span{
+        margin-left: 20px;
+    }
+    .list .price span:before{
+        content: "";
+        position: absolute;
+        left: -10px;
+        top: 7px;
+        width: 0;
+        height: 0;
+        border-style: solid;
+        border-width: 4px 4px 0 4px;
+        border-color: #ffffff transparent transparent transparent;
+        z-index: 999;
+    }
+    .big-content{
+        padding-top: 6px;
+    }
+    .content .colmun2 {
+        overflow: hidden;
+    }
+}
+
+/********---- End notifications-top ----********/

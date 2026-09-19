@@ -1,0 +1,206 @@
+
+
+
+.select-sorting {
+    margin-left: 0px;
+    margin-right: 30px;
+}
+.results-count {
+    border-radius: 5px 0px 0px 5px;
+    top: -1px;
+}
+.bootstrap-select {
+    border-left: 0px;
+}
+.select-sorting button{
+    border-radius: 0px 5px 5px 0px !important;
+}
+.bootstrap-select.btn-group .dropdown-toggle .caret, .filter-search .btn-dropdown .caret {
+    right: 8px;
+    left: auto;
+}
+.rightcol8 .btn-group:nth-child(8) button,
+.rightcol8 .btn-group:nth-child(7) button,
+.rightcol8 .btn-group:nth-child(6) button,
+.rightcol8 .btn-group:nth-child(5) button,
+.rightcol8 .btn-group:nth-child(4) button,
+.rightcol8 .btn-group:nth-child(3) button,
+.select-sorting button {
+    padding-right: 20px!important;
+    padding-left: 34px !important;
+    background-position: left 8px bottom 8px!important;
+}
+.rightcol8 .select-sorting button {
+    background-position: left -3px bottom -214px!important;
+    top: -1px;
+}
+.rightcol8 .btn-group:nth-child(3) button{
+    background-position: left -3px bottom -181px!important;
+}
+.rightcol8 .btn-group:nth-child(4) button{
+    background-position: left -3px bottom -147px!important;
+}
+.rightcol8 .btn-group:nth-child(5) button{
+    background-position: left -4px bottom -108px!important;
+}
+.rightcol8 .btn-group:nth-child(6) button{
+    background-position: left -4px bottom -68px!important;
+}
+.rightcol8 .btn-group:nth-child(7) button{
+    background-position: left 0px bottom -30px!important;
+}
+.rightcol8 .btn-group:nth-child(8) button{
+    background-position: left -3px bottom 2px!important;
+}
+
+.results-lists {
+    float: left;
+}
+#MapAffix {
+    right: 40px;
+    left: auto !important;
+}
+.results-lists {
+    padding-right: 15px;
+    padding-left: 45px;
+}
+.content .projects .project-card .contain .title-project div,
+.project-card .contain .title-project .price strong,
+.project-card .contain .title-project .price {
+    font-size: 20px !important;
+}
+.project-card .contain .title-project .price span {
+    top: -2px;
+}
+
+
+@media (min-width: 1200px) and (max-width: 1450px) {
+    .content .projects .project-card .contain .title-project div, .project-card .contain .title-project .price strong, .project-card .contain .title-project .price {
+        font-size: 16px !important;
+    }
+}
+
+
+@media (min-width: 1024px) and (max-width: 1300px) {
+    .project-card {
+        height: 286px;
+    }
+}
+
+@media (min-width: 1024px) and (max-width: 1200px) {
+    .results-container {
+        padding-top: 115px;
+    }
+
+
+}
+@media (min-width: 1024px) and (max-width: 1100px) {
+    .content .projects .project-card .contain .title-project div, .project-card .contain .title-project .price strong, .project-card .contain .title-project .price {
+        font-size: 16px !important;
+    }
+
+}
+
+
+/* 
+  ##Device = Desktops
+  ##Screen = 1281px to higher resolution desktops
+*/
+
+@media (min-width: 1281px) {
+
+
+
+}
+
+/* 
+  ##Device = Laptops, Desktops
+  ##Screen = B/w 1025px to 1280px
+*/
+
+@media (min-width: 1025px) and (max-width: 1280px) {
+
+
+
+}
+
+/* 
+  ##Device = Tablets, Ipads (portrait)
+  ##Screen = B/w 768px to 1024px
+*/
+
+@media (min-width: 768px) and (max-width: 1024px) {
+    #MapAffix {
+        width: calc(60% - 45px)!important;
+    }
+    .project-card {
+        height: 291px;
+    }
+    .results-lists {
+        padding-right: 0px;
+        padding-left: 32px;
+    }
+    .project-card .contain .info-project .key span,
+    .content .projects .project-card .contain .info-project .size #num {
+        font-size: 10px;
+    }
+    .results-count {
+        top: -4px;
+    }
+
+}
+
+/* 
+  ##Device = Tablets, Ipads (landscape)
+  ##Screen = B/w 768px to 1024px
+*/
+
+@media (min-width: 768px) and (max-width: 1024px) and (orientation: landscape) {
+
+
+
+}
+
+/* 
+  ##Device = Low Resolution Tablets, Mobiles (Landscape)
+  ##Screen = B/w 481px to 767px
+*/
+
+@media (min-width: 481px) and (max-width: 767px) {
+    .results-lists {
+        padding-right: 15px;
+        padding-left: 15px;
+    }
+    #MapAffix {
+        right: 0px;
+    }
+}
+
+/* 
+  ##Device = Most of the Smartphones Mobiles (Portrait)
+  ##Screen = B/w 320px to 479px
+*/
+
+@media (min-width: 320px) and (max-width: 480px) {
+    .results-lists {
+        padding-right: 15px;
+        padding-left: 15px;
+    }
+    .content .projects .project-card .contain .title-project div, .project-card .contain .title-project .price strong, .project-card .contain .title-project .price {
+        font-size: 16px !important;
+    }
+    #MapAffix {
+        right: 0px;
+    }
+    #show_more.btnLoadMoreProjets.loading {
+        padding-right: 15px !important;
+        padding-left: 30px !important;
+        width: 190px !important;
+    }
+    .lds-ring {
+        right: auto;
+        left: 26px;
+    }
+
+
+}

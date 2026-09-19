@@ -1,0 +1,339 @@
+# Use PHP56 as default
+#AddHandler application/x-httpd-php56 .php
+Redirect 301 /contact /contact-us
+Redirect 301 /en/contact /en/contact-us
+Redirect 301 /amp/en/property-for-sale/istanbul /en/amp/property-for-sale/istanbul
+Redirect 301 /amp/en/apartments-for-sale/bursa /en/amp/apartments-for-sale/bursa
+Redirect 301 /amp/en/apartments-for-sale/turkey /en/amp/apartments-for-sale/turkey
+Redirect 301 /amp/en/villas-for-sale/turkey /en/amp/villas-for-sale/turkey
+Redirect 301 /amp/en/apartments-for-sale/trabzon /en/amp/apartments-for-sale/trabzon
+Redirect 301 /amp/en/shops-for-sale/turkey /en/amp/shops-for-sale/turkey
+Redirect 301 /amp/en/villas-for-sale/istanbul /en/amp/villas-for-sale/istanbul
+Redirect 301 /amp/en/apartments-for-sale/istanbul/basaksehir /en/amp/apartments-for-sale/istanbul/basaksehir
+Redirect 301 /amp/en/property-for-sale/istanbul/ispartakule /en/amp/property-for-sale/istanbul/ispartakule
+Redirect 301 /amp/en/property-for-sale/trabzon /en/amp/property-for-sale/trabzon
+Redirect 301 /amp/en/property-for-sale/istanbul/basin-express /en/amp/property-for-sale/istanbul/basin-express
+Redirect 301 /amp/en/property-for-sale/istanbul/buyukcekmece /en/amp/property-for-sale/istanbul/buyukcekmece
+Redirect 301 /amp/en/property-for-sale/istanbul/bahcesehir /en/amp/property-for-sale/istanbul/bahcesehir
+Redirect 301 /amp/en/property-for-sale/istanbul/halkali /en/amp/property-for-sale/istanbul/halkali
+Redirect 301 /amp/en/offices-for-sale/turkey /en/amp/offices-for-sale/turkey
+Redirect 301 /amp/en/apartments-for-sale/antalya /en/amp/apartments-for-sale/antalya
+Redirect 301 /amp/en/offices-for-sale/istanbul /en/amp/offices-for-sale/istanbul
+Redirect 301 /amp/en/apartments-for-sale/istanbul/beylikduzu /en/amp/apartments-for-sale/istanbul/beylikduzu
+Redirect 301 /amp/en/apartments-for-sale/istanbul /en/amp/apartments-for-sale/istanbul
+Redirect 301 /amp/en/property-for-sale/turkey/ispartakule /en/amp/property-for-sale/turkey/ispartakule
+Redirect 301 /amp/en/property-for-sale/turkey/government-guarantee /en/amp/property-for-sale/turkey/government-guarantee
+Redirect 301 /amp/en/property-for-sale/turkey/beylikduzu /en/amp/property-for-sale/turkey/beylikduzu
+Redirect 301 /amp/en/property-for-sale/istanbul/sancaktepe /en/amp/property-for-sale/istanbul/sancaktepe
+Redirect 301 /amp/en/property-for-sale/turkey/smart-homes /en/amp/property-for-sale/turkey/smart-homes
+Redirect 301 /amp/en/property-for-sale/turkey /en/amp/property-for-sale/turkey
+Redirect 301 /amp/en/property-for-sale/bursa /en/amp/property-for-sale/bursa
+
+Redirect 301 /blog/nature-tax-system-Turkey-impact-real-estate /blog/taxes-turkey
+Redirect 301 /blog/Imports-exports-Turkey /blog/turkish-exports-imports-2017
+Redirect 301 /blog/beylikd%C3%BCz%C3%BC-district-istanbul /blog/beylikduzu-district-future-real-estate-investment
+Redirect 301 /blog/reasons-popularity-Belek-Dozo-Istanbul /blog/beylikduzu-district-future-real-estate-investment
+Redirect 301 /blog/about-us /about-us
+Redirect 301 /en/blog/most-important-tourist-attraction-Istanbul /en/blog/most-important-tourist-areas-istanbul
+Redirect 301 /en/blog/Home-Designs-Turkey /en/blog/category/design-decoration
+Redirect 301 /en/blog/Imports-exports-Turkey  /en/blog/turkish-exports-imports-2017
+Redirect 301 /blog/pasin-express-istanbul-new-center /blog/basin-ekspres-istanbul-new-center
+
+<IfModule mod_rewrite.c>
+    <IfModule mod_negotiation.c>
+        Options -MultiViews
+    </IfModule>
+
+    RewriteEngine On
+    
+RewriteCond %{REQUEST_URI} !^/\.well-known/acme-challenge/[0-9a-zA-Z_-]+$
+RewriteCond %{REQUEST_URI} !^/\.well-known/cpanel-dcv/[0-9a-zA-Z_-]+$
+RewriteCond %{REQUEST_URI} !^/\.well-known/pki-validation/[A-F0-9]{32}\.txt(?:\ Comodo\ DCV)?$
+    RewriteRule ^(.+)/$ /$1 [NE,R=301,L]
+    RewriteCond %{THE_REQUEST} /index\.php [NC]
+RewriteCond %{REQUEST_URI} !^/\.well-known/acme-challenge/[0-9a-zA-Z_-]+$
+RewriteCond %{REQUEST_URI} !^/\.well-known/cpanel-dcv/[0-9a-zA-Z_-]+$
+RewriteCond %{REQUEST_URI} !^/\.well-known/pki-validation/[A-F0-9]{32}\.txt(?:\ Comodo\ DCV)?$
+    RewriteRule ^(.*?)index\.php(?:/(.*))?$ /$1$2? [L,R=301,NC,NE]
+    
+    # Redirect Trailing Slashes If Not A Folder...
+    #RewriteCond %{REQUEST_URI} !^/\.well-known/pki-validation/[A-F0-9]{32}\.txt(?:\ Comodo\ DCV)?$
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_URI} !^/[0-9]+\..+\.cpaneldcv$
+RewriteCond %{REQUEST_URI} !^/\.well-known/pki-validation/[A-F0-9]{32}\.txt(?:\ Comodo\ DCV)?$
+    RewriteCond %{HTTP_HOST} !^www\. [NC]
+RewriteCond %{REQUEST_URI} !^/\.well-known/acme-challenge/[0-9a-zA-Z_-]+$
+RewriteCond %{REQUEST_URI} !^/\.well-known/cpanel-dcv/[0-9a-zA-Z_-]+$
+    RewriteRule ^(.*)$ https://www.%{HTTP_HOST}/$1 [R=301,L]
+    #RewriteRule ^(.*)/$ /$1 [L,R=301]
+    #RewriteRule ^(.*)$ https://www.damas.net/$1 [L,R=301,NC]
+    #RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [NC,R=301,L]
+
+    # Handle Front Controller...
+    #RewriteCond %{REQUEST_FILENAME} !-d
+    #RewriteCond %{REQUEST_FILENAME} !-f
+    #RewriteCond %{REQUEST_URI} !^/[0-9]+\..+\.cpaneldcv$
+    #RewriteCond %{REQUEST_URI} !^/\.well-known/pki-validation/[A-F0-9]{32}\.txt(?:\ Comodo\ DCV)?$
+RewriteCond %{REQUEST_URI} !^/[0-9]+\..+\.cpaneldcv$
+RewriteCond %{REQUEST_URI} !^/\.well-known/pki-validation/[A-F0-9]{32}\.txt(?:\ Comodo\ DCV)?$
+RewriteCond %{REQUEST_URI} !^/\.well-known/acme-challenge/[0-9a-zA-Z_-]+$
+RewriteCond %{REQUEST_URI} !^/\.well-known/cpanel-dcv/[0-9a-zA-Z_-]+$
+    RewriteRule ^ index.php [L]
+
+#    RewriteCond %{HTTP_HOST} !^www\. [NC,OR]
+#    RewriteCond %{HTTPS} off
+#    RewriteCond %{HTTP_HOST} ^(?:www\.)?(.+)$ [NC]
+#    RewriteRule ^ https://www.%1%{REQUEST_URI} [R=301,L,NE]
+
+    #RewriteCond %{HTTP:X-Forwarded-Proto} =http
+RewriteCond %{REQUEST_URI} !^/[0-9]+\..+\.cpaneldcv$
+RewriteCond %{REQUEST_URI} !^/\.well-known/pki-validation/[A-F0-9]{32}\.txt(?:\ Comodo\ DCV)?$
+RewriteCond %{REQUEST_URI} !^/\.well-known/acme-challenge/[0-9a-zA-Z_-]+$
+RewriteCond %{REQUEST_URI} !^/\.well-known/cpanel-dcv/[0-9a-zA-Z_-]+$
+    RewriteRule ^ https://www.%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+</IfModule>
+
+ExpiresActive On
+ExpiresByType image/jpg "access 1 year"
+ExpiresByType image/jpeg "access 1 year"
+ExpiresByType image/gif "access 1 year"
+ExpiresByType image/png "access 1 year"
+ExpiresByType text/css "access 1 month"
+ExpiresByType application/pdf "access 1 month"
+ExpiresByType text/x-javascript "access 1 month"
+ExpiresByType text/javascript "access 1 month"
+ExpiresByType application/javascript "access 1 month"
+ExpiresByType application/x-shockwave-flash "access 1 month"
+ExpiresByType image/x-icon "access 1 year"
+ExpiresByType application/x-font-woff "access plus 1 month"
+ExpiresByType application/x-font-ttf "access plus 1 month"
+
+<IfModule mod_filter.c>
+    AddOutputFilterByType DEFLATE "application/atom+xml" \
+        "application/javascript" \
+        "application/json" \
+        "application/ld+json" \
+        "application/manifest+json" \
+        "application/rdf+xml" \
+        "application/rss+xml" \
+        "application/schema+json" \
+        "application/vnd.geo+json" \
+        "application/vnd.ms-fontobject" \
+        "application/x-font-ttf" \
+        "application/x-javascript" \
+        "application/x-web-app-manifest+json" \
+        "application/xhtml+xml" \
+        "application/xml" \
+        "font/eot" \
+        "font/opentype" \
+        "image/bmp" \
+        "image/svg+xml" \
+        "image/vnd.microsoft.icon" \
+        "image/x-icon" \
+        "text/cache-manifest" \
+        "text/css" \
+        "text/html" \
+        "text/javascript" \
+        "text/plain" \
+        "text/vcard" \
+        "text/vnd.rim.location.xloc" \
+        "text/vtt" \
+        "text/x-component" \
+        "text/x-cross-domain-policy" \
+        "text/xml"
+</IfModule>
+RewriteCond %{HTTP_HOST} ^damasturk\.com$
+RewriteCond %{REQUEST_URI} !^/[0-9]+\..+\.cpaneldcv$
+RewriteCond %{REQUEST_URI} !^/\.well-known/pki-validation/[A-F0-9]{32}\.txt(?:\ Comodo\ DCV)?$
+RewriteCond %{REQUEST_URI} !^/\.well-known/acme-challenge/[0-9a-zA-Z_-]+$
+RewriteCond %{REQUEST_URI} !^/\.well-known/cpanel-dcv/[0-9a-zA-Z_-]+$
+RewriteRule ^/?$ "https\:\/\/www\.damasturk\.com\/" [R=301,L]
+
+RewriteCond %{HTTP_USER_AGENT} ^Alexibot [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^Aqua_Products [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^BackDoorBot/1.0 [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^BecomeBot [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^BlackWidow [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^BlekkoBot [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^BlowFish/1.0 [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^BotALot [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^Bot\ mailto:craftbot@yahoo.com [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^BuiltBotTough [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^Bullseye/1.0 [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^BunnySlippers [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^CheeseBot [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^CherryPicker [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^ChinaClaw [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^Copernic [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^CopyRightCheck [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^Crescent [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^Custo [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^DISCo [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^DittoSpyder [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^Dotbot [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^Download\ Demon [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^EirGrabber [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^EmailCollector [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^EmailSiphon [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^EmailWolf [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^Enterprise_Search [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^EroCrawler [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^Exabot [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^Express\ WebPictures [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^ExtractorPro [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^GetWeb! [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^Gigabot [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^Go!Zilla [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^Go-Ahead-Got-It [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^GrabNet [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^Grafula [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^HMView [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^HTTrack [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^Harvest/1.5 [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^Image\ Stripper [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^Image\ Sucker [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^Indy\ Library [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^InfoNaviRobot [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^InterGET [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^JennyBot [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^JetCar [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^Jetbot [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^LNSpiderguy [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^LeechFTP [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^LexiBot [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^LinkScan [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^LinkWalker [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^LinkextractorPro [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^MIDown\ tool [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^MIIxpc [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^MJ12bot [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^MSIECrawler [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^Mass\ Downloader [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^Mister\ PiX [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^NICErsPRO [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^Navroad [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^NearSite [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^NetAnts [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^NetMechanic [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^NetSpider [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^NetZIP [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^Net\ Vampire [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^Nutch [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^Octopus [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^Offline\ Explorer [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^Offline\ Navigator [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^Openbot [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^Openfind [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^PageGrabber [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^Papa\ Foto [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^PerMan [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^ProPowerBot/2.14 [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^ProWebWalker [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^Python-urllib [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^RMA [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^ReGet [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^RealDownload [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^RepoMonkey [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^Rogerbot [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^SiteSnagger [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^Sitebot [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^SmartDownload [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^SpankBot [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^Stanford [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^SuperBot [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^SuperHTTP [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^Surfbot [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^Szukacz/1.4 [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^Teleport [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^TeleportPro [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^Teleport\ Pro [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^Telesoft [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^Teoma [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^TheNomad [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^True_Robot [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^URL_Spider_Pro [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^VCI [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^VoidEYE [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^WWW-Collector-E [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^WWWOFFLE [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^WebAuto [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^WebBandit [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^WebCopier [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^WebEnhancer [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^WebFetch [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^WebGo\ IS [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^WebLeacher [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^WebReaper [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^WebSauger [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^WebStripper [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^WebVac [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^WebWhacker [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^WebZip [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^Web\ Image\ Collector [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^Web\ Sucker [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^WebmasterWorldForumBot [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^Website\ Quester [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^Website\ eXtractor [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^Wget [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^Widow [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^Xaldon\ WebSpider [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^Xenu [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^Zeus [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^asterias [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^b2w/0.1 [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^cosmos [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^dotbot [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^dumbot [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^eCatch [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^es [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^exabot [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^gigabot [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^grub [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^grub-client [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^hloader [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^httplib [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^humanlinks [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^ia_archiver [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^larbin [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^libWeb/clsHTTP [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^looksmart [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^lwp-trivial [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^lwp-trivial/1.34 [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^moget [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^naver [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^pavuk [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^pcBrowser [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^psbot [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^rogerbot [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^scooter [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^searchpreview [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^sootle [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^spanner [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^suzuran [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^tAkeOut [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^toCrawl/UrlDispatcher [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^turingos [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^Blinkx/DFS-Fetch [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^CheckLinks [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^EC2LinkFinder [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^findlinks [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^freshlinks.exe [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^InfoLink [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^InternetLinkAgent [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^link_checker [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^LinkAlarm [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^linkbot [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^LinkChecker [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^linkdex.com [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^LinkLint [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^linklooker [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^Linkman [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^LinkScan [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^LinksManager.com_bot [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^LinkSweeper [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^radian6_linkcheck [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^ShowLinks [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^WebLinker [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^yolinkBot [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^ScrapeBox [NC,OR]

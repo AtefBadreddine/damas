@@ -1,0 +1,802 @@
+
+.contentNew p,
+#show_more,
+.content .form .title .room .text,
+.slide-text > a,
+.drop-menu ul.bottom,
+.header .drop-menu .bottom li li a,
+.discover-mobile .search-box .search button span,
+.project-card .contain .details .button,
+.content .form form .budget select,
+.content .form form .time select,
+.content .form,
+.content .project-info-content .project-info .info .location .text #d2,
+.content .project-info-content .project-info .info .distance div,
+.content .project-info-content .project-info .info .target div,
+.news .mainnews .about span,
+.news .mainnews .about h3,
+.post-card .contain .about-project a,
+.mod4_full .continue-reading a,
+.blog-heading,
+.newsletter-title,
+.contact form input,
+.discover-mobile .search-box select,
+footer .contain .copyright,
+.last-posts a p,
+footer .contain .links a,
+.down-form-content .down-form form .options select,
+.down-form-content .down-form form,
+.projects .more-option span,
+.more-videos,
+.news .read-more,
+.projects .more-options,
+.about-damas .read-more_d,
+.cover .discover .search-box,
+.cover .discover h1,
+.header .navbar2 .contain .search input,
+.header .contain .language span,
+.header .navbar2 .naviga,
+.colored,
+body{
+    /*    font-family: MontserratRegular !important;*/
+    font-family: 'Montserrat', sans-serif !important;
+}
+
+h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6,
+.content .projects .project-card .contain .title-project div,
+.content .projects .project-card .contain .title-project .price,
+.content .colmun1 .location-importance .title,
+#about-content h1,
+.note-example .icoli1 .note .leaad strong,
+.project-card .contain .about-project,
+.content .project-info-content .project-info .giftdiv,
+.content .project-info-content .project-info .sharediv,
+.content .project-info-content .project-info .likediv,
+.content .project-info-content .project-info .info .location .text,
+.project-info .titilediv h1,
+.blk_searh .discover-mobile .title h3,
+.certificate .title h2,
+.most-watched .title h3,
+.content .how-to-use .title h2,
+.content .project-build .title h3,
+.down-form-content .title h1,
+.news .post-title,
+.news .news-slider .post2 .mainnews .about h3 a,
+.news .mainnews .about .continue-reading,
+.news .title,
+.new-videos .title span,
+footer .contain .h3,
+footer .contact form button,
+.new-videos .sub-video .item .title,
+.new-videos .main-video .title,
+.blk_searh .search button span
+.contact .main-head,
+.mod4_full .global-new-item .colored,
+.text-center-title .ctitle,
+.blog-heading{
+    /*    font-family: MontserratMedium!important;*/
+    font-family: 'Montserrat', sans-serif !important;
+}
+.most-popular .social aside a,
+#about-content, .filter-container,
+.project-card, .projects .more-option span, .project-card .contain .about-project a, .newsletter-title, .last-posts a p, .contact .info, footer .contain .links a, .mod4_full .continue-reading a, .cover .discover .search-box select, .content .project-info-content .project-info .info, .key span.ffdinn {
+    font-family: 'Montserrat', sans-serif !important;
+}
+
+.project-card .contain .title-project .price,
+.project-card .contain .title-project .price strong {
+    font-weight: bold;
+}
+
+#show_more{
+    /*    font-family: MontserratRegular !important;*/
+    font-size: 20px !important;
+    padding: 6px 8px 12px 8px !important;
+}
+#about-content,
+.filter-container{
+    /*    font-family: MontserratRegular !important;*/
+}
+.down-form-content .down-form form .options select, .down-form-content .down-form form, .most-watched .items .info .about, .certificate .post .items .info span, .most-watched .items .info .about, .about-damas .about_d, .news .mainnews .about span, .content .colmun1 .location-importance, .content .about_project, .blk_model .media-body, #about-content, .note-example .icoli1 .note, .news .news-slider .post2 .mainnews .about span,
+.content .project-info-content .project-info .giftdiv, .content .project-info-content .project-info .sharediv, .content .project-info-content .project-info .likediv, .content .project-info-content .project-info .info .location .text, .project-info .titilediv h1, .blk_searh .discover-mobile .title h3, .certificate .title h2, .most-watched .title h3, .content .how-to-use .title h2, .down-form-content .title h1, .news .post-title, .news .news-slider .post2 .mainnews .about h3 a, .news .mainnews .about .continue-reading, .news .title, .new-videos .title span, footer .contain .h3, footer .contact form button, .new-videos .sub-video .item .title, .new-videos .main-video .title, .blk_searh .search button span
+.contact .main-head, .mod4_full .global-new-item .colored, h4 .ctitle, .blog-heading {
+    /*    font-family: Montserrat-Semibold !important;*/
+    font-family: 'Montserrat', sans-serif !important;
+}
+.newsletter-title,
+.last-posts a p,
+.contact .info,
+footer .contain .links a,
+.mod4_full .continue-reading a,
+.cover .discover .search-box select,
+.content .project-info-content .project-info .info,
+.key span.ffdinn{
+    /*    font-family: MontserratMedium !important;*/
+    font-family: 'Montserrat', sans-serif !important;
+}
+.certificate .post .items .info span.name,
+.content .colmun1 .location-importance,
+.content .about_project,
+.blk_model .media-body,
+#about-content,
+.note-example .icoli1 .note,
+.news .news-slider .post2 .mainnews .about span{
+    /*    font-family: MontserratRegular !important;*/
+    font-family: 'Montserrat', sans-serif !important;
+}
+
+h1,h2,h3{
+    font-weight: bold;
+}
+
+.dropOption .select {
+    margin-top: 1px;
+}
+.drop-menu .top ul li a span.arabic,
+.header .contain .language span,
+.langList li:nth-child(1) a,
+.header .contain .language .dropdown-menu a span{
+    font-family: '29LTBukra-Regular' !important;
+}
+.header .navbar2 {
+    display: block;
+}
+.header .navbar2 .blk_search,
+.header .navbar2 .contain{
+    float: right;
+}
+.header .navbar2 .naviga{
+    float: left;
+    margin-left: 30px;
+}
+.englishType{
+    display: block;
+}
+.arabicType{
+    display: none;
+}
+.header .navbar2 .naviga .parent_menu:last-child .drop {
+    border-left: 0px;
+}
+.header .navbar2 .drop:after {
+    left: auto;
+    right: 0px;
+    top: 6px;
+}
+.header .navbar2 .contain li {
+    float: right !important;
+}
+.header .navbar2 .naviga .fa-angle-down {
+    top: 5px;
+    float: right;
+    right: -7px;
+}
+.header .navbar2 .search_form button {
+    float: left;
+    margin-top: 2px;
+}
+.dropOption .select {
+    margin: 0px 5px 0 5px;
+}
+.select-room .dropdown--image .dropdown__select-wrap span {
+    margin-top: 6px;
+}
+.header .contain .language span {
+    top: 1px;
+}
+.language .dropdown button a{
+    top: 2px;
+    position: relative;
+}
+.header .navbar2 .contain .after-search {
+    border-left: 0px;
+    border-right: 0px;
+}
+.header .navbar2 .contain .after-search:after{
+    display: block;
+}
+.content .how-to-use .title h2 {
+    right: auto;
+    top: 20px;
+    left: 46px;
+}
+.content .how-to-use {
+    padding: 0px 9px 0 9px;
+}
+.project-card .contain .image-project img {
+    height: 156px;
+}
+.content .projects .project-card .contain .title-project div {
+    float: none;
+}
+.project-card .contain .title-project .start {
+    top: -5px;
+}
+.project-card .contain .title-project .price{
+    top: 0px !important;
+}
+.project-card .contain .title-project .bed span {
+    right: 20px;
+    top: 1px;
+}
+.project-card .contain .title-project .bed:after {
+    top: 4px;
+    right: 6px;
+}
+.project-card .contain .title-project .bed i {
+    top: -1px;
+    left: -16px;
+}
+.news .post-title {
+    font-size: 20px;
+    line-height: 35px;
+    font-weight: bold;
+    font-style: italic;
+}
+.new-videos .sub-video .item .title {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+.header .navbar2 .search-content-mobile form input {
+    float: left;
+    text-align: left;
+    direction: ltr;
+    padding-right: 0px;
+    padding-left: 9px;
+}
+.header .navbar2 .search-content-mobile form button {
+    float: right;
+    position: relative;
+    top: 1px;
+}
+.header .navbar2 .search-content-mobile form button img{
+    transform: rotate(180deg);
+}
+.content .colmun1 .prices-list-content .prices-list .list .titles .num-room div:after {
+    border-color: transparent #132467;
+}
+.content .colmun1 .prices-list-content .prices-list .list .titles .space div:before {
+    border-color: #132467 transparent;
+}
+.content .colmun1 .prices-list-content .prices-list .list .titles .space div:after {
+    border-color: transparent #132467;
+}
+.content .colmun1 .prices-list-content .prices-list .list .titles .notes div:before {
+    border-color: #132467 transparent;
+}
+.content .colmun1 .prices-list-content .prices-list .list .titles .date div:after {
+    border-color: transparent #132467;
+}
+.content .colmun1 .prices-list-content .prices-list .list .titles .date div:before {
+    border-color: #132467 transparent;
+}
+.content .colmun1 .prices-list-content .prices-list .list .titles .price div:first-child:after {
+    border-color: transparent #132467;
+}
+.content .colmun1 .prices-list-content .prices-list .list .titles .price div:first-child:before {
+    border-color: #132467 transparent;
+}
+.blk_searh .discover-mobile .title h3,
+.certificate .title h2,
+.most-watched .title h3,
+.content .how-to-use .title h2,
+.content .project-build .title h3{
+    font-weight: bold;
+    font-style: italic;
+}
+
+/**********---- Start New Menu ----*********/
+.header .logo {
+    float: left;
+}
+.header .navbar1 {
+    border-radius: 0px 0px 0px 40px;
+}
+.header .navbar2 .naviga {
+    float: left;
+    margin-left: 0px;
+}
+.header .navbar2 {
+    padding-left: 15px;
+    padding-top: 13px;
+    padding-right: 38px;
+}
+.header .navbar2 .contain li.after-search:after,
+.header .navbar2 .contain li:after {
+    left: auto;
+    right: 0px;
+}
+.header .contain {
+    margin-left: 0px;
+    margin-right: 0px;
+    float: right;
+}
+.navbar1 .contain li {
+    float: right !important;
+    direction: rtl !important;
+}
+.header .contain li:after {
+    left: auto;
+    right: 0px;
+}
+.header .contain .language {
+    width: auto;
+    margin-right: 0px;
+    margin-left: 5px;
+}
+.header .navbar1 {
+    padding: 0px 37px;
+}
+.language .dropdown-toggle:after {
+    top: 1px;
+    right: auto;
+    left: 3px;
+}
+.dropdown__select:after {
+    right: auto;
+    left: 0px;
+}
+.dropdown--image .dropdown__select {
+    padding-right: 10px;
+    padding-left: 20px;
+}
+.select-room .dropdown__select img {
+    float: right;
+}
+.dropdown--image .dropdown__select-wrap span {
+    margin-right: 6px;
+}
+.select-currency .dropdown__options-wrap .dropdown__option {
+    padding-left: 0px;
+    padding-right: 30px;
+    text-align: right;
+    background-position: right;
+}
+.dropdown__option span {
+    float: right;
+    border-left: 0px;
+    border-right: 1px solid #b7b7b7;
+    margin-right: 10px;
+    margin-left: 0px;
+}
+.select-room .dropdown__option span {
+    border-right: 0px;
+    width: 100%;
+}
+.dropdown--image .dropdown__options-wrap.active, .dropdown__options-wrap.active {
+    left: auto;
+    right: -3px;
+}
+.header .contain .language img {
+    float: right;
+}
+.navbar1 .contain .dropdown-menu a span {
+    top: 1px;
+    border-left: 0px;
+    padding-left: 0px;
+    margin-left: 0px;
+    float: right;
+    border-right: 1px solid lightgray;
+    padding-right: 8px;
+    margin-right: 8px;
+}
+.navbar1 .contain .dropdown-menu {
+    padding: 10px;
+    right: 0px;
+    left: auto;
+}
+.header .contain .whatsapp2 i,
+.header .contain .whatsapp1 i {
+    float: right;
+    margin-left: 15px;
+    margin-right: 15px;
+}
+.header .contain .whatsapp2 #num,
+.header .contain .whatsapp1 #num {
+    float: right;
+    left: 0px;
+    top: 2px;
+    margin: 0px
+}
+.header .contain .whatsapp1 #en {
+    top: -3px;
+    left: -15px;
+}
+.header .contain .whatsapp1 #ar {
+    margin-right: 31px;
+}
+.header .contain .whatsapp2 {
+    width: 232px;
+}
+.header .contain .whatsapp2 #ar,
+.header .contain .whatsapp2 #en {
+    float: left;
+}
+.header .contain .whatsapp2 #en {
+    left: 10px;
+    top: 3px;
+    position: relative;
+}
+/**********---- End New Menu ----*********/
+
+
+.content .projects .project-card .contain .about-project {
+    min-height: 55px;
+    line-height: 1.4;
+}
+.project-card .contain .title-project .start {
+    top: -1px !important;
+}
+.project-card .contain .title-project .bed i {
+    top: 2px;
+}
+.project-card .contain .title-project .bed span {
+    top: 3px;
+}
+.project-card .contain .title-project .price {
+    font-size: 15px !important;
+}
+.project-card .contain .title-project .price span {
+    font-size: 23px;
+}
+.project-card .contain .title-project .price strong {
+    font-size: 17px;
+}
+.blk_searh .discover-mobile .title h3 {
+    font-size: 18px!important;
+}
+
+.text-danger {
+    direction: ltr;
+    text-align: left;
+}
+.down-form-content .title h1 {
+    font-weight: bold;
+    font-style: italic;
+}
+.down-form-content .title h1 {
+    float: left;
+    left: 0px !important;
+}
+.down-form-content .title i {
+    float: left;
+}
+
+.mod4_full .global-new-item .colored {
+    text-align: left;
+    font-weight: bold;
+}
+
+
+.global-new-item .colored {
+    text-align: left;
+}
+.certificate .post .items .info span.name{
+    font-weight: bold;
+}
+.blog-heading1 {
+    font-size: 28px;
+    font-weight: bold;
+}
+
+
+ul.menu .list a {
+    padding: 8px 45px 8px 10px;
+    text-align: left;
+    border-radius: 0px 0px 15px 0px;
+}
+ul.menu .list:before {
+    left: auto;
+    right: 17px;
+}
+ul.menu .list .items a {
+    padding: 8px 10px 8px 10px;
+}
+
+
+.search-int form {
+    float: left;
+}
+.rsult-number p {
+    float: left;
+    text-align: left;
+}
+.search-int form input {
+    padding: 10px 10px 10px 40px;
+}
+.search-int form button {
+    right: auto;
+    left: 0px;
+}
+.leftBar {
+    float: right;
+}
+.search-int {
+    padding-left: 10px;
+}
+.rsult-number {
+    padding-left: 10px;
+}
+
+
+@media (max-width: 1250px) {
+    .header .navbar2 .contain li.after-search:after {
+        display: none;
+    }
+    .header .navbar2 {
+        padding-right: 15px;
+    }
+    .header .navbar2 .contain .home-search:after{
+        display: block;
+    }
+
+}
+@media (max-width: 1100px) {
+    .header .contain .whatsapp2 {
+        display: none;
+    }
+    .cover {
+        margin-top: 93px;
+    }
+    .header .navbar2 .contain .whatsapp {
+        display: none;
+    }
+
+}
+
+
+/* 
+  ##Device = Desktops
+  ##Screen = 1281px to higher resolution desktops
+*/
+
+@media (min-width: 1281px) {
+
+
+
+}
+
+/* 
+  ##Device = Laptops, Desktops
+  ##Screen = B/w 1025px to 1280px
+*/
+
+@media (min-width: 1025px) and (max-width: 1280px) {
+
+
+
+}
+
+
+
+
+@media only screen and (max-width: 1080px){
+    .header .navbar2 .drop {
+        font-size: 13px;
+        padding: 4px 15px;
+    }
+}
+
+@media (min-width: 300px) and (max-width: 1024px) {
+    .header .navbar2 .contain .after-search {
+        margin-left: 10px;
+    }
+    .header .contain {
+        margin-left: 60px;
+    }
+
+
+}
+
+
+@media (min-width: 300px) and (max-width: 980px) {
+    .header .contain {
+        margin-left: 17px;
+    }
+    .header .navbar2 .contain {
+        margin-right: 0px;
+        padding-right: 0px;
+    }
+    .header .contain .whatsapp2:after{
+        display: none;
+    }
+
+}
+
+
+
+/* 
+  ##Device = Tablets, Ipads (portrait)
+  ##Screen = B/w 768px to 1024px
+*/
+
+@media (min-width: 768px) and (max-width: 1024px) {
+    .header .contain li:nth-child(3):after{
+        display: block;
+    }
+
+}
+
+/* 
+  ##Device = Tablets, Ipads (landscape)
+  ##Screen = B/w 768px to 1024px
+*/
+
+@media (min-width: 768px) and (max-width: 1024px) and (orientation: landscape) {
+
+
+
+}
+
+/* 
+  ##Device = Low Resolution Tablets, Mobiles (Landscape)
+  ##Screen = B/w 481px to 767px
+*/
+
+@media (min-width: 481px) and (max-width: 767px) {
+    .header .navbar2 .contain {
+        margin-right: 0px;
+        padding: 0px!important;
+    }
+    .header .drop-menu .bottom li li a {
+        padding-left: 0px;
+    }
+    .project-card .contain .image-project img {
+        height: 235px;
+    }
+    .searchtab.tabmap,
+    .searchtab.tablist{
+        background-size: 18px 18px !important;
+    }
+    .cover {
+        margin-top: 88px;
+    }
+    .header .navbar1 {
+        border-radius: 0px;
+    }
+    .header .navbar2 .contain .home-search:after{
+        display: block;
+    }
+    .header .navbar2 .contain .whatsapp:after{
+        display: none;
+    }
+    .header .contain li:after {
+        left: 0px;
+        right: auto;
+    }
+    .header .navbar1 {
+        padding: 0px 0px;
+    }
+    .header .navbar2 .contain .whatsapp {
+        display: block;
+    }
+    .project-card {
+        height: 377px!important;
+    }
+    .header .contain .room select {
+        text-align: left;
+        direction: ltr;
+        padding-left: 5px;
+    }
+    .discover-mobile .title h3 {
+        padding: 17px 17px 11px 0;
+        width: 100%;
+        text-align: right !important;
+    }
+    .how-to-use .owl-nav .owl-next i {
+        padding-top: 7px;
+        padding-right: 0px;
+        padding-left: 5px;
+    }
+    .how-to-use .owl-nav .owl-prev i {
+        padding-top: 7px;
+        padding-left: 0px;
+        padding-right: 5px;
+    }
+    .header .navbar2 .contain .whatsapp {
+        display: block;
+    }
+    .header .navbar2 .contain li.mobile-search-btn:after{
+        display: block;
+    }
+
+}
+
+/* 
+  ##Device = Most of the Smartphones Mobiles (Portrait)
+  ##Screen = B/w 320px to 479px
+*/
+
+@media (min-width: 320px) and (max-width: 480px) {
+    .header .navbar1 {
+        padding: 0px 0px;
+    }
+    .header .contain li:after {
+        left: 0px;
+        right: auto;
+    }
+    .header .navbar2 .contain .home-search:after{
+        display: block;
+    }
+    .header .navbar2 .contain .whatsapp:after{
+        display: none;
+    }
+    .header .navbar1 {
+        border-radius: 0px;
+    }
+
+    .header .navbar2 .contain {
+        margin-right: 0px;
+        padding: 0px!important;
+    }
+    .header .drop-menu .bottom li li a {
+        padding-left: 0px;
+    }
+    .project-card .contain .image-project img {
+        height: 235px;
+    }
+    .searchtab.tabmap,
+    .searchtab.tablist{
+        background-size: 18px 18px !important;
+        font-size: 20px;
+        padding: 5px 0px;
+    }
+    .cover {
+        margin-top: 88px;
+    }
+    .header .contain .room select {
+        text-align: left;
+        direction: ltr;
+        padding-left: 5px;
+    }
+    .discover-mobile .title h3 {
+        padding: 17px 17px 11px 0;
+        width: 100%;
+        text-align: right !important;
+    }
+    .how-to-use .owl-nav .owl-next i {
+        padding-top: 7px;
+        padding-right: 0px;
+        padding-left: 5px;
+    }
+    .how-to-use .owl-nav .owl-prev i {
+        padding-top: 7px;
+        padding-left: 0px;
+        padding-right: 5px;
+    }
+    .header .navbar2 .contain .whatsapp {
+        display: block;
+    }
+    .header .navbar2 .contain li.mobile-search-btn:after{
+        display: block;
+    }
+    .h1blog {
+        font-size: 25px !important;
+        font-weight: bold !important;
+        font-style: italic !important;
+    }
+    .blog-heading {
+        font-size: 20px;
+        line-height: 30px;
+        margin-bottom: 10px;
+        margin-left: 0px;
+        font-weight: bold;
+        font-style: italic;
+    }
+    .blog-heading1{
+        text-align: center !important;
+    }
+    div.note .pic:before,
+    div.note .pic:after {
+        left: auto;
+    }
+    .header .logo {
+        margin-left: 30px;
+    }
+    .certificate .title i {
+        top: -17px;
+    }
+
+
+}

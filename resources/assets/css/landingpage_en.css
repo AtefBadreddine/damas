@@ -1,0 +1,104 @@
+.header .navbar2 .naviga {
+     margin-left: 325px;
+}
+
+.header .navbar2 .drop {
+    padding: 0;
+}
+.header .parent_menu a {
+    text-align: left;
+    font-size: 16px;
+    font-family: montserratMedium;
+        padding: 5px 16px 5px 17px;
+}
+.header .navbar2 .naviga .parent_menu:last-child .drop{
+    border-left:0 none
+}
+h2.title_icon {
+    background-image: url(/img/turkey.png);
+    background-repeat: no-repeat;
+    background-position: left 1px;
+    background-size: 44px;
+    padding-left: 53px;
+    padding-right: 0;
+    font-size: 24px;
+    display: inline-block;
+    padding-bottom: 15px;
+    padding-top: 3px;
+}
+#our_services{margin-top:25px}
+#our_services h2{text-align:center!important}
+#our_services .col-md-3 h5 {
+    text-align: center!important;}
+
+.certificate .title i {
+    left: 0!important;
+}
+.certificate .title h3 {
+    position: relative;
+    top: 2px!important;
+    left: -12px!important;
+    right: auto!important;
+}
+.more-options,.read-more_d {
+    font-family: montserratMedium;
+    font-size: 22px!important;
+    line-height: 46px;
+}
+#work_steeps {    background-color: #e9ebee;}
+.content .colmun1 .prices-list-content {
+    margin-bottom: 2px;
+}
+.content .colmun1 .prices-list-content .prices-list .top .pay .still {margin: 0px 0 6px 10px;}
+#our_services:after {
+    border-width: 35px 0 0 35px;
+    border-color: #E9EBEE transparent;
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    left: auto;
+}
+
+
+@media (max-width: 800px){
+
+.content .how-to-use .title h2 {
+left: 0;
+}
+
+h2.title_icon {
+padding-right: 0px!important;
+}
+.how-to-use .title {
+    height: auto;
+    overflow: hidden;
+}
+.use .owl-next {
+    left: auto!important;
+    right: 0px;
+}
+.content .how-to-use {
+    padding: 0 0 22px 14px;
+}
+.prices-list-content .prices-list .top .money i {
+    left: 1px!important;
+}
+
+.prices-list-content .prices-list .top .money .txt {
+    top: -61px!important;
+    margin:0}
+
+
+.content .project-info-content .project-info {
+    height: auto;
+    min-height:auto
+}
+.how-to-use .title {
+    overflow: hidden;
+    height: auto;
+    padding-bottom: 8px;
+}
+
+
+
+}

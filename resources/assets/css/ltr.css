@@ -1,0 +1,172 @@
+body, #mainNav {
+	font-family: "jaf-facitweb","Helvetica Neue",Arial,sans-serif !important;
+}
+#mainNav .navbar-brand {
+	margin-left: 0;
+	margin-right: 40px;
+}
+#mainNav ul li a:after {
+	padding-left: 8px;
+	padding-right: 0;
+}
+#mainNav ul li ul {
+	left: 0;
+	right: auto;
+}
+#mainNav .navbar-right li {
+	float: right;
+}
+.carousel-inner .carousel-caption {
+	right:0;
+	left: auto;
+}
+#custom-search-input-header input.btn_search_2 {
+    right: 10px;
+    left: auto;
+    background-position: 15px 0;
+}
+.ml-2 {
+    margin-right: 10px!important;
+	margin-left: auto;
+}
+.larger-input .btn, .larger-input input {
+	margin-left: 20px;
+	margin-right: auto;
+}
+.sharefloating {
+	right: 0;
+	left: auto!important;
+}
+.alikes .alike-item aside h3 {
+	text-align: left !important;
+}
+.form-section .container>.row .merits ul li span {
+	left: -17px;
+	right: auto;
+}
+.sliding3 .item a .layer h3 {text-align: left;float:left;}
+.filter-search .btn-group {
+    float: left !important;
+}
+.blog-heading {text-align: left;}
+.blog-heading:after {
+    left: 0;
+    right: auto;
+}
+.alikes .alike-item aside h3 {
+	text-align: left;
+}
+.pl5 {padding-right: 5px !important;padding-left: 15px !important;}
+.pr5 {padding-left: 5px !important;padding-right: 15px !important;}
+
+.share-icon, .top-icon-mobile, .sharefloatingMobile {
+    left: auto;
+    right: 10px;
+}
+.message-icon-mobile {
+    left: auto !important;
+    right: 0 !important;
+    padding-right: 5px;
+}
+.message-icon-mobile .fa-comment-o {
+    display: none;
+}
+.floating-message-inline .header-overlay-container .header-contactform .form-group .form-control, 
+.floating-message .header-overlay-container .header-contactform .form-group .form-control {
+    border-left: 4px solid #0d8dd3;
+    border-left: 4px solid #0d8dd3;
+    border-radius: 0 5px 5px 0;
+    clip-path: polygon(0 0,95% 0,100% 100%,0 100%);
+    border-right: none;
+}
+.floating-message-inline .header-overlay-container .header-contactform .btn, 
+.floating-message .header-overlay-container .header-contactform .btn {
+    clip-path: polygon(0 0,80% 0,100% 100%,0 100%);
+}
+.floating-message .close-it {
+    clip-path: polygon(0 0,100% 0,100% 100%,8% 100%);
+    text-align: right
+}
+.floating-message .close-it span {
+    right: auto;
+    left: 25px;
+}
+.filter-container .btn-sorting {
+    float: right !important;
+}
+.sharefloating [class*=" flaticon-"]:after,
+.sharefloating [class*=" flaticon-"]:before,
+.sharefloating [class^=flaticon-]:after,
+.sharefloating [class^=flaticon-]:before {
+    margin-left: 0;
+}
+.colored .more {float:right !important;}
+ @media (max-width: 767px) {
+     .formindex span.pull-left {float: right !important;}
+     .formindex>div .form-control, .formindex>div .select select {
+         border-left: 5px solid #0a8fd4;
+         border-right: none;
+     }
+     .formindex>div .form-control {border-radius: 0 5px 5px 0 !important;}
+     .formindex>div .select select {border-radius: 0 0 10px 0;}
+     .formindex>div .select button {clip-path: polygon(0 0,88% 0,100% 100%,0 100%);}
+     .formindex>div .select p{border-radius: 0 0 10px 0;clip-path: polygon(0 0,100% 0,100% 100%,5% 100%);}
+     .floating-message-inline .header-overlay-container .header-contactform .btn, .floating-message .header-overlay-container .header-contactform .btn {
+        width: auto;
+        clip-path: none;
+        border-radius: 0 0 10px 0;
+    }
+    .search-options .dropdown .btn {text-align: left;}
+    .search-options .dropdown .btn span {float:right;}
+    .search-options .dropdown .dropdown-menu li i {margin-right:5px;}
+    .question-icon {left: 10px;right: auto;}
+ }
+ 
+
+.footer_call_us_lg .form-control {
+border-right: 0 none;
+border-left: 5px solid #333399;
+border-radius:0;
+border-bottom-right-radius: 19px;
+
+}
+.footer_call_us_lg>div .select button img {
+-webkit-transform: scaleX(-1);
+transform: scaleX(-1);
+}
+.callusmobile>div .select button img{
+-webkit-transform: scaleX(-1);
+transform: scaleX(-1);
+}
+.footer_call_us_lg aside img {
+-webkit-transform: scaleX(-1);
+transform: scaleX(-1);
+}
+.footer_call_us_lg_in .formblk {
+padding-left: 25px;
+padding-right: 0;
+}
+
+.full_form1 .start_from .text-center{padding:0}
+.full_form1 .whatsapp-icon{
+    line-height: 42px;
+	}
+.sml_send .select button img{
+	-webkit-transform: scaleX(-1);
+transform: scaleX(-1);
+}
+
+
+.project_down_form .footer_call_us_lg aside img {
+margin: 8px 0 0 0;
+}
+.footer_call_us_lg .anim .whatsappidspn span i {
+    margin: 0 0 0 -13px;
+}
+.project_down_form .footer_call_us_lg>div .select button {
+height: 50px;}
+
+.floating-message-inline .header-overlay-container .header-contactform .form-group .form-control, .floating-message .header-overlay-container .header-contactform .form-group .form-control {
+    border-right: 0 none!important;
+}
+

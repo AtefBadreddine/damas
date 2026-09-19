@@ -1,0 +1,4719 @@
+
+/** Header **/
+.header .navbar2 .contain {
+    direction: ltr;
+    float: left;
+    padding-left: 15px;
+    padding-right: 0;
+    width: auto;
+    margin-right: 0;    order: 2;
+}
+.header .contain {
+    margin-left: 59px;
+}
+.header .navbar2 .naviga{float:left}
+.header .navbar2 .contain li {
+    float: left !important;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+    display: block;
+}
+.header .navbar2 .blk_search{
+    width: auto;
+    float: left;
+    padding-left: 9px;order: 4;
+}
+
+.parent_menu {
+    float: left}
+.header .navbar2 .naviga .parent_menu:last-child .drop {
+    border-left: 1px solid #fff;
+}
+.header .navbar2 .search_form button {
+    float: right;
+    -webkit-transform: scaleX(-1);
+    transform: scaleX(-1);
+}
+.header .navbar2 .drop{
+    padding: 3px 25px 0 25px;
+    font-size: 16px;
+}
+.header .parent_menu a {
+    text-align: left}
+.header .drop-menu .bottom {
+    /*    font-family: MontserratMedium;*/
+    text-align: left
+}
+
+.header .drop-menu .bottom li span {
+    direction: rtl
+}
+.header .drop-menu .bottom li span i {
+    margin: 0 0 0 10px;
+}
+
+.header .drop-menu .bottom li li a {
+    padding-left: 15px
+}
+
+.header .drop-menu .bottom i {
+
+}
+
+
+
+
+.header .navbar2 .contain li .dropdown-menu {
+    min-width: 180px
+}
+
+.header .navbar2 .contain li .dropdown-menu li {
+    width: 100%;
+    float: none !important;
+    transition: all .2s ease-in-out
+}
+
+.header .navbar2 .contain li .dropdown-menu li:hover a {
+    color: #264584;
+    background-color: #fff
+}
+
+.header .navbar2 .contain a {
+    width: 100%;
+    text-align: left
+}
+
+.header .navbar2 .contain .home-search {
+    border-left: 0px
+}
+
+.header .navbar2 .contain .fa-angle-down {
+    margin-left: 10px
+}
+
+.header .navbar2 .blog-estate {
+    border-right: 1px solid #fff;
+    width: 110px !important;
+
+}
+
+.header .navbar2 .contain .search {
+    float: left !important;
+}
+
+.header .navbar2 .contain .search input {
+    direction: ltr
+}
+
+.header .navbar2 .contain .after-search {
+    border-left: 0px;
+    border-right: 1px solid #fff;
+    padding: 0 15px 0 0
+}
+
+.header .navbar2 .contain .envelope {
+
+}
+
+.header .navbar2 .show-menu {
+    margin-top: 0px;
+}
+
+@media (max-width: 980px) {
+    .header .navbar2 .contain{
+        padding: 0 37px 0 0
+    }
+
+    .header .navbar2 .contain li {
+        float: right !important
+    }
+    .header .navbar2 {
+        display: block!important;
+    }
+}
+
+@media (max-width: 770px) {
+    .header .navbar2 .contain {
+        padding: 0 22px 0 
+    }
+}
+
+@media (max-width: 420px) {
+    .header .navbar2 .contain {
+        padding: 2px 15px 0 
+    }
+
+    .header .navbar2 .contain .envelope {
+        margin: 3px 0 0 0;
+        padding: 0 10px 0;
+        height: 26px
+    }
+
+    .header .navbar2 .contain .envelope i {
+        position: relative;
+        top: -2px
+    }
+
+    .header .navbar2 .show-menu {
+        margin-top: -25px;
+    }
+}
+
+
+
+/*****************************/
+
+
+
+
+/** Media Query **/
+@media (max-width: 1250px) {
+    .header .navbar2 .contain .after-search {
+        display: block
+    }
+    .header .navbar2 .contain .search {
+        display: none
+    }
+}
+@media (max-width: 1180px) {
+    .header .navbar2 .contain .search input  {
+        display: none
+    }
+}
+@media (max-width: 1070px) {
+    .header .navbar1 .contain .whatsapp1  {
+        display: none
+    }
+    .header .navbar1 .contain .whatsapp2 #num {
+        display: none
+    }
+    .header .navbar1 .contain .whatsapp2 #ar {
+        display: none
+    }
+    .header .navbar1 .contain .whatsapp2 #en {
+        display: none
+    }
+    .header .navbar1 .contain .whatsapp2 i {
+        margin-right: 15px
+    }
+    .header .navbar2 .contain .search {
+        display: none
+    }
+}
+
+
+@media (max-width: 980px) {
+
+    .header .navbar2 .show-menu {
+        display: block;    position: absolute;
+    }
+    .header .navbar2 .contain {
+        margin: 0;
+        padding-right: 37px;
+    }
+    .header .navbar2 .contain .collection  {
+        display: none
+    }
+    .header .navbar2 .contain .blog-estate  {
+        display: none
+    }
+    .header .navbar2 .contain .damas-estate  {
+        display: none
+    }
+    .header .navbar2 .contain .after-search {
+        display: none;
+    }
+    .header .navbar2 .contain .whatsapp {
+        float: right;
+        display: block;
+        border-right: 0px;
+        border-left: 1px solid #fff;
+        padding: 0 0 0 15px 
+    }
+    .header .navbar1 .whatsapp2 {
+        display: none
+    }
+    .header .navbar1 .contain .room {
+        border-left: 0px
+    }
+    .header .navbar2 .contain .home-search {
+        float: right;
+        border-right:0px;
+    }
+
+
+}
+
+
+@media (max-width: 768px) {
+    .header .navbar1 .contain .whatsapp1  {
+        display: none
+    }
+    .header .navbar1 .contain .whatsapp2 {
+        display: none
+    }
+    .header .navbar1 .contain .room {
+        border:0px
+    }
+    .header .navbar1 .contain  {
+        margin-right: 5px
+    }
+    .header .navbar2 .contain {
+        padding-right: 20px
+    }
+    .header .navbar1 .contain .language  {
+        display: none
+    }
+    .header .navbar2 .contain .search  {
+        display: none
+    }
+    .header .navbar2 .contain .home  {
+        display: none
+    }
+    .header .navbar2 .contain .whatsapp  {
+        display: block
+    }
+    .header .navbar2 .contain .envelope  {
+        display: block
+    }
+    .header .navbar2 .contain .after-search {
+        display: none
+    }
+    .header .navbar2 .contain .home-search {
+        border-left: 1px solid #fff
+    }
+
+}
+@media (max-width: 515px) {
+    .header .logo .text {
+        display: none
+    }
+    .header .navbar2 .contain {
+        float: right;
+    }
+} 
+
+@media (max-width: 450px) {
+    .content .plan-content{margin-top: 17px;}
+    .header .navbar1 .contain {
+        margin-right: 0px
+    }
+    .header .navbar2 .contain {
+        margin-right: 12px
+    }
+
+    .header .navbar2 .contain .whatsapp {
+        padding-left: 11px
+    }
+    .header .navbar2 .contain .envelope {
+        padding: 0 12px
+    }
+    .devise select {
+
+    }
+}
+@media (max-width: 420px) {
+    .header .navbar2 .contain .whatsapp {
+        height: 26px;
+        margin-top: 3px;
+        padding-left: 11px
+    }
+    .header .navbar2 .contain .whatsapp i {
+        font-size: 26px;
+    }
+    .header .navbar2 .contain .home-search {
+        height: 26px;
+        width: 50px;
+        margin-top: 3px
+    }
+    .header .navbar2 .contain .home-search img {
+        width: 30px;
+
+    }
+    .header .navbar2 .contain .envelope {
+        padding: 0 8px;
+        margin-right: 5px
+    }
+    .header .navbar2 .contain .envelope i {
+        font-size: 22px;
+        margin-top: 4.5px
+    }
+    .header .navbar2 .show-menu {
+        margin-top: -26px;
+        margin-left: 10px
+    }
+    .header .navbar2 .show-menu #line1 {
+        width: 25px;
+        height: 2px
+    }
+    .header .navbar2 .show-menu #line2 {
+        width: 25px;
+        height: 2px;
+        margin-top: 6px
+    }
+    .header .navbar2 .show-menu #line3 {
+        width: 25px;
+        height: 2px;
+        margin-top: 6px
+    }
+    /*.header .logo {
+        position: absolute;
+        left: 46px
+    }*/
+
+
+    .header .drop-menu .top .whatsapp1 #num {
+        font-size: 13px;
+    }
+    .header .drop-menu .top .whatsapp2 #num {
+        font-size: 13px;
+    }
+    /*.header .drop-menu .top .tel {
+        width: 255px
+    }*/
+
+    .header .navbar2 .contain {
+        padding-right: 15px
+    }
+    .header .navbar1 .contain {
+        margin-right: 10px
+    }
+    .header .drop-menu .top .whatsapp2 #en {
+        top: 0;
+    }
+    .header .drop-menu .top .whatsapp2 {
+        clear: both;
+        position: relative;
+        top: -8px;
+    }
+}
+
+
+.sharefloating {
+    top: 53%
+}
+/** Start Right Form Style **/
+.right-form textarea, .right-form select, .right-form input {
+    border-radius: 25px 0px 40px 25px;
+}
+.right-form select {
+    border-radius: 25px 0px 25px 25px;
+}
+.right-form-content {
+    right: auto;
+    left: -277px;
+    border-radius: 0 25px 25px 0;
+    /*    font-family: MontserratRegular*/
+}
+
+.right-form .contact {
+    left: auto;
+    right: 0;
+    border-radius: 0 0px 17px 17px
+}
+
+.right-form {
+    border-radius: 0 25px 25px 0
+}
+
+.right-form .contact span {
+    /*    font-family: Montserrat-SemiBold;*/
+    font-size: 14px;
+    position: relative;
+    top: 6px
+}
+
+.right-form form {
+    font-family: inherit
+}
+
+.right-form .contact .whatsapp .whatsapp-icon {
+    padding-top:  2px
+}
+
+
+.right-form .name {
+    float: left;
+    padding: 0 7px 0 0;
+    direction: ltr
+}
+
+
+.right-form .fame {
+    float: left
+}
+
+.right-form input {
+    direction: ltr;
+}
+
+.right-form textarea {
+    direction: ltr;
+}
+
+.right-form select {
+    direction: ltr;
+}
+
+.right-form .time {
+    float: left;
+    padding: 0
+}
+
+.right-form .budget {
+    float: left;
+    padding: 0 35px 0 7px
+}
+
+.right-form button {
+    left: auto;
+    right: 16px;
+}
+
+.right-form button img {
+    transform: rotate(-180deg)
+}
+
+
+/** Discover Mobile **/
+.discover-mobile {
+    /*    font-family: MontserratRegular*/
+}
+
+.discover-mobile .title h3 {
+    font-size: 20px;
+    padding: 12px 0 8px 39px;
+    background-repeat: no-repeat;
+    background-position: 11px center;
+    background-size: 33px;
+    text-align: center!important;
+}
+
+.discover-mobile .title img {
+    right: auto;
+    left: 0
+}
+
+.discover-mobile .title div {
+    /* width: 400px; */
+}
+
+.discover-mobile .search-box .city {
+    float: left;
+    padding: 0 5px 0 0
+}
+
+.discover-mobile .search-box .estate {
+    float: left;
+    padding: 0 0 0 5px
+}
+
+.discover-mobile .search-box .room {
+    float: left;
+    padding: 0 5px 0 0
+}
+
+.discover-mobile .search-box .budget {
+    float: left;
+    padding: 0 0 0 5px
+}
+
+.discover-mobile .search-box .extra {
+    float: left;
+    padding: 0 5px 0 0
+}
+
+.discover-mobile .search-box .search {
+    float: left;
+    padding: 0 0 0 5px
+}
+
+.discover-mobile .search-box select {
+    border-left: 7px solid #0D8DD3;
+    border-right: 0;
+    padding: 5px 23px 5px 3px;
+    border-radius: 0 5px 5px 0;
+    direction: ltr;
+    font-size: 15px;
+    background-position: right 6px center;
+}
+
+.discover-mobile .search-box .search button {
+    border-radius: 5px 5px 25px 5px;
+    direction: ltr;
+    padding: 7px
+}
+
+.discover-mobile .search-box .search button .material-icons {
+    transform: rotateY(0deg)
+}
+
+@media (max-width: 430px) {
+    .discover-mobile .title div {
+        /* width: 233px */
+    }
+
+    .discover-mobile .title h3 {
+        line-height: .9;
+        top: 1px
+    }
+}
+
+
+/****************/
+.cover .discover {
+    /*    font-family: MontserratRegular*/
+}
+.cover .discover h1 {
+    /*    font-family: MontserratMedium;*/
+    font-size: 25px;
+    padding: 12px 0;
+    text-align: center!important;
+}
+
+.cover .discover .search-box {
+    direction: ltr;
+    font-family: inherit
+}
+
+.cover .search-box .city {
+    float: left;
+    padding: 0 10px 0 0
+}
+
+.cover .search-box .estate {
+    float: left;
+    padding: 0 10px 0 0
+}
+
+.cover .search-box .extra {
+    float: left
+}
+
+.cover .search-box .search {
+    float: left;
+    padding: 0 0 0 15px
+}
+.cover .search-box .search i,.btnFilter .fa-search{
+    -webkit-transform: scaleX(-1);
+    transform: scaleX(-1);}
+
+
+
+/** Start Content Style **/
+.content {
+    /*    font-family: MontserratRegular*/
+}
+
+/** End Content Style **/
+
+
+
+
+/** Start Aside Style **/
+.content aside {
+    float: right;
+    direction: ltr
+}
+/** End Aside Style **/
+
+
+/**Start How To Use Style **/
+.content .how-to-use {
+    padding: 0 0 0 14px
+}
+
+.content .how-to-use:before {
+    content: "";
+    display: block;
+    border-style: solid;
+    border-width: 31px 0 0 31px;
+    border-color: lightgray transparent;
+    position: absolute;
+    top: -1px;
+    right: -1px;
+    left: auto
+}
+
+.content .how-to-use:after {
+    content: "";
+    display: block;
+    border-style: solid;
+    border-width: 31px 0 0 31px;
+    border-color: #E9EBEE transparent;
+    position: absolute;
+    top: -2px;
+    right: -1px;
+    left: auto
+}
+
+.content .how-to-use .use img {
+    right: auto;
+    left: 0
+}
+
+.content .how-to-use .title i {
+    right: auto;
+    left: -25px;
+}
+
+.content .how-to-use .title h2 {
+    font-size: 23px;
+    /*    font-family: Montserrat-SemiBold;*/
+    right: auto;
+    top: 20px;
+    left: 46px
+}
+
+.content .how-to-use .use i.use-move-left {
+    display: none
+}
+
+.content .how-to-use .use i.use-move-right {
+    display: block
+}
+
+/**End How To Use Style **/
+
+
+
+
+
+/** Start Attestation Style **/
+.certificate:before {
+    content: "";
+    display: block;
+    border-style: solid;
+    border-width: 31px 0 0 31px;
+    border-color: lightgray transparent;
+    position: absolute;
+    top: -1px;
+    left: auto;
+    right: -1px
+}
+
+.certificate:after {
+    content: "";
+    display: block;
+    border-style: solid;
+    border-width: 31px 0 0 31px;
+    border-color: #E9EBEE transparent;
+    position: absolute;
+    top: -2px;
+    left: auto;
+    right: -1px;
+}
+
+.certificate .title {
+    float: left
+}
+
+.certificate  .title i {
+    transform: rotateY(-180deg);
+    right: auto;
+    left: 0px;
+    top: -6px;
+}
+
+.certificate .title h3 {
+    font-size: 23px;
+    /*    font-family: Montserrat-SemiBold;*/
+    line-height: 2;
+    left: 50px;
+    top: 0;
+}
+
+.certificate .up, .most-watched .up {
+    right: 16px;
+    left: auto
+}
+
+.certificate .nav .arrow i, .most-watched .nav .arrow i {
+    top: -6px
+}
+
+.certificate .down, .most-watched .down {
+    right: 52px;
+    left: auto
+}
+
+.certificate .post .items .photo {
+    float: left
+}
+
+.certificate .post .items .info {
+    float: left;
+    margin: 0 0 0 10px
+}
+
+.certificate .post .items .info span {
+    text-align: left;font-size: 14px;
+}
+
+.certificate .post .items .name {
+    /*    font-family: Montserrat-SemiBold;*/
+    font-size: 18px;
+    position: relative;
+    top: 3px
+}
+
+.certificate .post .items .op {
+    font-family: inherit;
+    font-size: 18px
+}
+/** End Attestation Style **/
+
+
+
+
+/** Start Most Watched Style **/
+.most-watched:before {
+    content: "";
+    display: block;
+    border-style: solid;
+    border-width: 31px 0 0 31px;
+    border-color: lightgray transparent;
+    position: absolute;
+    top: -1px;
+    left: auto;
+    right: -1px
+}
+
+.most-watched:after {
+    content: "";
+    display: block;
+    border-style: solid;
+    border-width: 31px 0 0 31px;
+    border-color: #E9EBEE transparent;
+    position: absolute;
+    top: -2px;
+    left: auto;
+    right: -1px
+}
+
+.most-watched .title {
+    float: left
+}
+
+.most-watched .title h3 {
+    /*    font-family: Montserrat-SemiBold;*/
+    font-size: 23px;
+    top: 9px;
+    left: 58px;
+    right: auto
+}
+
+.most-watched .title i {
+    right: auto;
+    left: -20px;
+}
+
+.most-watched .items .photo {
+    float: left
+}
+
+.most-watched .items .info .about {
+    font-size: 10px;
+    /*    font-family: MontserratRegular;*/
+    direction: ltr;
+    text-align: left;
+}
+
+.most-watched .items .info .name {
+    float: left;
+    margin: 0
+}
+
+.most-watched .items .info .name span {
+    top: -7px;
+    font-size: 23px;
+}
+
+.most-watched .items .info .views {
+    left: auto;
+    right: 5px;
+    font-size: 9px
+}
+/** End Most Watched Style **/
+
+
+
+
+/** Start About Damas **/
+.about-damas:before {
+    content: "";
+    display: block;
+    border-style: solid;
+    border-width: 31px 0 0 31px;
+    border-color: lightgray transparent;
+    position: absolute;
+    top: -1px;
+    left: auto;
+    right: -1px
+}
+
+.about-damas:after {
+    content: "";
+    display: block;
+    border-style: solid;
+    border-width: 31px 0 0 31px;
+    border-color: #E9EBEE transparent;
+    position: absolute;
+    top: -2px;
+    left: auto;
+    right: -1px
+}
+
+.about-damas .damas {
+    float: left;
+    margin: 0 10px 0 0
+}
+
+.about-damas .about_d {
+    /*    font-family: MontserratRegular;*/
+    direction:ltr
+}
+
+.about-damas .read-more {
+    font-size: 19px;
+    padding: 9px
+}
+
+/** End About Damas **/
+
+
+
+
+
+/** Start Section Style **/
+/*.content section {
+    margin: 0 15px 0 0;
+}*/
+
+
+/** End Section Style **/
+
+
+
+
+
+/** Start Project Card Style **/
+.content .projects .project-card {
+    /*    font-family: MontserratRegular*/
+}
+
+@media (max-width: 800px) {
+    /*.content .projects*/ .project-card {
+        height: 390px;
+    } 
+}
+
+
+
+
+.content .projects .project-card .share .d105 {
+    right: auto;
+    left: -6px;
+    padding: 0 6px 0 15px;
+    line-height: 28px;
+}
+
+.content .projects .project-card .share .flaticon-like-1 {
+    left: auto
+}
+
+.content .projects .project-card .share i  {
+    left: auto;
+    right: -152px;
+}
+
+.content .projects .project-card .contain .title-project div {
+    float: left
+}
+
+.content .projects .project-card .contain .title-project .price {
+    font-family: inherit;
+    margin: 0 0 0 5px;
+    direction: ltr;
+}
+
+.content .projects .project-card .contain .title-project .bed {
+    margin: 5px 2px 0 5px!important;
+}
+
+.content .projects .project-card .contain .about-project {
+    font-size: 13px;
+    line-height: 1.3;
+    direction: ltr
+}
+
+.info-project {
+    margin: 3px -9px 0 -9px!important;
+    height: 27px;
+}
+
+.content .projects .project-card .contain .info-project .size {
+    float: left;
+}
+
+.content .projects .project-card .contain .info-project .size i {
+    left: -12px;
+    right: auto
+}
+
+.content .projects .project-card .contain .info-project .size #num {
+    text-align: left;
+    padding: 0;
+    direction: ltr;
+    position: relative;
+    left: 30px;
+    top: 5px;
+    font-size: 13px;
+}
+
+.content .projects .project-card .contain .info-project .key {
+    float: left;
+}
+
+.content .projects .project-card .contain .info-project .key i {
+    left: -8px;
+    top: -2px;
+    right: auto
+}
+
+.content .projects .project-card .contain .info-project .key span {
+    right: auto;
+    left: 33px;
+    top: 2px;
+    font-size: 13px
+}
+
+.content .projects .project-card .contain .info-project .coin {
+    float: right;
+
+}
+
+.content .projects .project-card .contain .info-project .coin i {
+    right: auto;
+    left: -23px
+}
+
+.content .projects .project-card .contain .info-project .coin span {
+    left: 20px;
+    right: auto;
+    font-size: 13px;
+    top: 1px
+}
+
+.content .projects .project-card .contain .details button {
+    /*    font-family: MontserratMedium;*/
+    margin-top: 10px
+}
+/** End Project Card Style **/
+
+
+
+
+/** Start Projects Style **/
+.content section .projects {
+    padding: 20px 0 15px 15px !important
+}
+.list_projects {padding-top:5px}
+.list_projects .txt .flaticon-copy-files {
+    float: left;
+    direction: ltr;
+    position: absolute;
+    top: -19px;
+    left: -10px;
+}
+.list_projects .txt h2 {
+    margin: 30px 0 26px 71px;
+    text-align: left;
+    /*    font-family: dinnextregular;*/
+    direction: ltr;
+}
+.content section .projects:before {
+    content: "";
+    display: block;
+    border-style: solid;
+    border-width: 31px 0 0 31px;
+    border-color: lightgray transparent;
+    position: absolute;
+    top: -1px;
+    left: auto;
+    right: -1px
+}
+
+.content section .projects:after {
+    content: "";
+    display: block;
+    border-style: solid;
+    border-width: 31px 0 0 31px;
+    border-color: #E9EBEE transparent;
+    position: absolute;
+    top: -2px;
+    left: auto;
+    right: -1px
+}
+
+
+
+.content .project-build .title div {
+    float: left;
+    /*    font-family: Montserrat-SemiBold;*/
+    font-size: 24px;
+    padding-top:0
+}
+.content .project-build .title .iconhproj{
+    float:left;
+    position: relative!important;
+    top: 9px!important;
+    margin-right: 0;
+    left:0;
+    text-align: center;
+}
+.content .project-build .title h3 {
+    /* right: auto; */
+    left: -15px;
+    font-size: 24px!important;
+    top: 20px;
+    float:left;
+    margin: 0;
+}
+
+.content .project-build .title .flaticon-crane {
+    /* position: absolute; */
+    /* top: 0px; */
+    left: 0px;
+    /* right: auto; */
+    /* transform: rotateY(-180deg); */
+}
+
+.content .project-ready .title div {
+    width: 390px;
+    float: left;
+    /*    font-family: Montserrat-SemiBold;*/
+    font-size: 24px;
+    text-align: left
+}
+
+.content .project-ready .title h3 {
+    right: auto;
+    left: 46px;
+    font-size: 24px;
+    top: 14px
+}
+
+.content .project-ready .title i:last-of-type {
+    position: absolute;
+    top: 0px;
+    left: -18px;
+    right: auto;
+}
+
+.content .project-metro .title div {
+    width: 345px;
+    float: left;
+    /*    font-family: Montserrat-SemiBold;*/
+    font-size: 24px
+}
+
+.content .project-metro .title h3 {
+    right: auto;
+    left: 46px;
+    font-size: 24px;
+    top: 14px
+}
+
+.content .project-metro .title i:last-of-type {
+    position: absolute;
+    top: 0px;
+    left: -18px;
+    right: auto;
+}
+
+
+
+.content .projects .title .drop-menu {top:14px;float:left!important;left:-6px;}
+
+.content .projects .title .drop-option {
+    font-size: 12px;
+    /*    font-family: MontserratRegular;*/
+    left: 0;
+    width: 194px;
+    top: 32px;
+}
+
+.content .projects .title .drop-option a {
+    padding: 7px 10px;
+    text-align: left
+}
+
+.content .projects .slider .item {
+    margin: 0 20px 0 0 
+}
+
+.content .projects .slider .item:before {
+    content: "";
+    display: block;
+    border-style: solid;
+    border-width: 21px 0 0 21px;
+    border-color: lightgray transparent;
+    position: absolute;
+    top: -1px;
+    left: auto;
+    right: -1px
+
+}
+
+.content .projects .slider .item:after {
+    content: "";
+    display: block;
+    border-style: solid;
+    border-width: 21px 0 0 21px;
+    border-color: #fff transparent;
+    position: absolute;
+    top: -2px;
+    left: auto;
+    right: -1px
+
+}
+
+.content .projects .owl-nav i {
+    top: 5px;
+    padding: 0 15px;
+}
+
+.content .projects .owl-next {
+    left: auto;
+    right: 10px;
+}
+
+.content .projects .owl-prev {
+    right: auto;
+    left: 10px;
+}
+
+.projects .more-option:before {
+    content: "";
+    display: block;
+    border-style: solid;
+    border-width: 21px 0 0 21px;
+    border-color: lightgray transparent;
+    position: absolute;
+    top: -1px;
+    left: auto;
+    right: -1px
+
+}
+
+.projects .more-option:after {
+    content: "";
+    display: block;
+    border-style: solid;
+    border-width: 21px 0 0 21px;
+    /*border-color: #fff transparent;*/
+    position: absolute;
+    top: -2px;
+    left: auto;
+    right: -1px
+
+}
+
+.projects .more-option .logo {
+    border-radius: 5px 0 0 0
+}
+
+.projects .more-options {
+    text-decoration: none;
+    font-size: 19px;
+    padding: 11px;
+    margin: 17px auto 0px auto;
+    display: block;
+    clear: both;
+    float: none;
+}
+
+@media (max-width: 800px) {
+    .content section .projects {
+        padding-left: 0!important
+    }
+
+    .content section .projects:after {
+        content: "";
+        border: 0
+    }
+
+    .content section .projects:before {
+        content: "";
+        border: 0
+    }
+
+    .content .projects .slider .item:after {
+        content: "";
+        display: block;
+        border-style: solid;
+        border-width: 21px 0 0 21px;
+        border-color: #E9EBEE transparent;
+        position: absolute;
+
+
+    }
+
+    .content .title h1 {
+        margin: auto !important;
+        float: none !important;
+        font-size: 18px!important;
+        /*		font-family: MontserratBold!important;*/
+    }
+    #projects_2blk h3.blog-heading{
+        padding-bottom: 20px;}
+
+}
+
+
+
+
+@media (max-width: 490px) {
+    /*.content .project-build .title div {
+        width: 320px
+    }*/
+    .content .project-build .title h3 {
+        top: 26px;
+        line-height: .9;
+        font-size: 19px!important;
+    }
+}
+
+
+
+@media (max-width: 440px) {
+    .content .project-ready .title div {
+        width: 285px
+    }
+
+    .content .project-ready .title h3 {
+        top: 9px;
+        line-height: .9
+    }
+}
+
+/** End Projects Style **/
+
+
+
+/** Start News Style **/
+.news:before {
+    content: "";
+    display: block;
+    border-style: solid;
+    border-width: 31px 0 0 31px;
+    border-color: lightgray transparent;
+    position: absolute;
+    top: -1px;
+    left: auto;
+    right: -1px
+}
+
+.news:after {
+    content: "";
+    display: block;
+    border-style: solid;
+    border-width: 31px 0 0 31px;
+    border-color: #E9EBEE transparent;
+    position: absolute;
+    top: -2px;
+    left: auto;
+    right: -1px
+}
+
+.news .post-title {
+    /*    font-family: Montserrat-Semibold;*/
+    font-size: 24px;
+    top: 0px
+}
+
+@media (max-width: 800px) {
+    .news .post-title {
+        top: -7px
+    }
+}
+
+.news .subnews1 {
+    float: right;
+    direction: ltr
+}
+
+.news .subnews1 .item {
+    margin: 0 0 10px 0;
+}
+
+.news .subnews1 .item:before, .news .subnews .item:before {
+    content: "";
+    display: block;
+    border-width: 20px 0 0 20px;
+    border-style: solid;
+    border-color: lightgray transparent;
+    position: absolute;
+    top: -1px;
+    left: auto;
+    right: -1px;
+}
+
+.news .subnews1 .item:after, .news .subnews .item:after {
+    content: "";
+    display: block;
+    border-width: 20px 0 0 20px;
+    border-style: solid;
+    border-color: #fff transparent;
+    position: absolute;
+    top: -2px;
+    left: auto;
+    right: -1px
+}
+
+.news .subnews1 .item .title {
+    /*    font-family: Montserrat-SemiBold;*/
+    font-size: 17px;
+    text-align: left;
+    line-height: 1.3
+}
+
+@media (max-width: 800px) {
+    .news .subnews1 .item .title {
+        font-size: 11px !important
+    }
+}
+
+
+.news .mainnews {
+    float: left
+}
+
+.news .mainnews:before {
+    content: "";
+    display: block;
+    border-width: 47px 0 0 38px;
+    border-style: solid;
+    border-color: lightgray transparent;
+    position: absolute;
+    top: -1px;
+    left: auto;
+    right: -1px;
+}
+
+.news .mainnews:after {
+    content: "";
+    display: block;
+    border-width: 47px 0 0 37px;
+    border-style: solid;
+    border-color: #fff transparent;
+    position: absolute;
+    top: -2px;
+    left: auto;
+    right: -1px;
+}
+
+.news .mainnews .about {
+    text-align: left;
+    direction: ltr;
+    padding: 5px 10px
+}
+
+.news .mainnews .about h3 {
+    font-size: 24px;
+    /*    font-family: Montserrat-SemiBold*/
+}
+
+.news .mainnews .about span {
+    /*    font-family: MontserratRegular*/
+}
+
+.news .mainnews .about .continue-reading {
+    left: 164px;
+    right: auto;
+    font-size: 20px;
+    /*    font-family: MontserratMedium;*/
+}
+
+
+.news .subnews2 {
+    float: left
+}
+@media (max-width: 800px){
+    .news .mainnews .about .continue-reading {
+        bottom: 6px;
+        right: 10px!important;
+        left: auto!important;
+        text-align: right;
+    }}
+.news .items .item:before {
+    content: "";
+    display: block;
+    border-width: 20px 0 0 20px;
+    border-style: solid;
+    border-color: lightgray transparent;
+    position: absolute;
+    top: -1px;
+    left: auto;
+    right: -1px;
+}
+
+.news .items .item:after {
+    content: "";
+    display: block;
+    border-width: 20px 0 0 20px;
+    border-style: solid;
+    border-color: #fff transparent;
+    position: absolute;
+    top: -2px;
+    left: auto;
+    right: -1px;
+}
+
+.news .subnews2 .items .photo {
+    float: left
+}
+
+.news .subnews2 .items .title {
+    font-size: 17px;
+    /*    font-family: Montserrat-SemiBold;*/
+    text-align: left
+}
+
+@media (max-width: 1220px) {
+    .news .subnews2 .items .title {
+        font-size: inherit !important
+    }
+    .header .logo {
+        position: relative;
+        margin-left: 16px;
+    }
+    .header .navbar2 {
+        display: block!important;
+    }
+}
+
+
+.news .read-more {
+    font-size: 20px;
+    padding: 11px;
+    margin-top: 4px;
+}
+
+.news .news-slider .owl-nav i {
+    top: 3px;
+}
+
+.news .news-slider .post2 .mainnews .photo {
+    float: right;
+    border-radius: 0;
+}
+
+.news .news-slider .post2 .subnews .photo {
+    float: left !important
+}
+
+.news .news-slider .post2 .subnews .title {
+    font-size: 19px !important;
+    /*    font-family: Montserrat-SemiBold;*/
+    text-align: left !important
+}
+
+.news .news-slider .post2 .subnews .two .title {
+    font-size: 17px;
+    line-height: 1.2
+}
+
+.news .news-slider .post3 .subnews .two .photo {
+    float: left
+}
+
+.news .news-slider .post3 .subnews .title {
+    font-size: 18px !important;
+    /*    font-family: Montserrat-SemiBold;*/
+    text-align: left !important
+}
+
+.news .news-slider .post3 .subnews .one .title  {
+    text-align: center !important
+}
+
+@media (max-width: 1130px) {
+    .news .subnews2 .items .title {
+        font-size: 14px !important
+    }
+
+    .news .subnews1 .item .title {
+        font-size: 14px !important
+    }
+
+    .news .news-slider .post3 .subnews .title {
+        font-size: 14px !important
+    }
+
+    .news .news-slider .post2 .subnews .title {
+        font-size: 14px !important;
+        padding: 0 0 0 5px !important
+    }
+}
+
+@media (max-width: 800px) {
+    .news .subnews1 .item .title {
+        font-size: 11px !important
+    }
+
+    .news .mainnews .about h3 {
+        font-size: 16px!important
+    }
+}
+
+
+@media (max-width: 800px) {
+
+    .news:before {
+        content: "";
+        border: 0
+    }
+
+    .news:after {
+        content: "";
+        border: 0
+    }
+
+    .news .mainnews:after {
+        content: "";
+        display: block;
+        border-width: 20px 0 0  20px;
+        border-style: solid;
+        border-color: #E9EBEE transparent;
+        position: absolute;
+        top: -1px;
+        right: -1px
+    }
+
+
+    .news .subnews1 .item:after, .news .subnews .item:after {
+        content: "";
+        display: block;
+        border-width: 20px 0 0 20px;
+        border-style: solid;
+        border-color: #E9EBEE transparent;
+        position: absolute;
+        top: -1px;
+        right: -1px
+    }
+
+}
+
+
+
+/** End News Style **/
+
+
+
+
+/** Start Latset Videos Style **/
+.new-videos {
+    /*    font-family: MontserratRegular*/
+}
+
+.new-videos:before {
+    content: "";
+    display: block;
+    border-style: solid;
+    border-width: 31px 0 0 31px;
+    border-color: lightgray transparent;
+    position: absolute;
+    top: -1px;
+    left: auto;
+    right: -1px
+}
+
+.new-videos:after {
+    content: "";
+    display: block;
+    border-style: solid;
+    border-width: 31px 0 0 31px;
+    border-color: #E9EBEE transparent;
+    position: absolute;
+    top: -2px;
+    left: auto;
+    right: -1px
+}
+
+.new-videos .title:first-of-type {
+    width: 240px
+}
+
+.new-videos .title i {
+    top: 3px;
+    right: auto;
+    left: 0;
+}
+
+.new-videos .title span {
+    /*    font-family: Montserrat-SemiBold;*/
+    font-size: 24px;
+    left: 65px;
+    top: 15px;
+    right: auto
+}
+
+.new-videos .main-video {
+    float: left
+}
+
+.new-videos .main-video:before {
+    content: "";
+    display: block;
+    border-style: solid;
+    border-width: 20px 0 0 20px;
+    border-color: lightgray transparent;
+    position: absolute;
+    top: -1px;
+    left: auto;
+    right: -1px
+}
+
+.new-videos .main-video:after {
+    content: "";
+    display: block;
+    border-style: solid;
+    border-width: 20px 0 0 20px;
+    border-color: #fff transparent;
+    position: absolute;
+    top: -2px;
+    left: auto;
+    right: -1px
+}
+
+.new-videos .main-video .title {
+    font-size: 24px;
+    /*    font-family: Montserrat-SemiBold;*/
+    text-align: left;
+    direction: ltr;
+    padding: 0 5px
+}
+
+.new-videos .sub-video {
+    float: right
+}
+
+.new-videos .sub-video .item:before {
+    content: "";
+    display: block;
+    border-style: solid;
+    border-width: 20px 0 0 20px;
+    border-color: lightgray transparent;
+    position: absolute;
+    top: -1px;
+    left: auto;
+    right: -1px
+}
+
+.new-videos .sub-video .item:after {
+    content: "";
+    display: block;
+    border-style: solid;
+    border-width: 20px 0 0 20px;
+    border-color: #fff transparent;
+    position: absolute;
+    top: -2px;
+    left: auto;
+    right: -1px
+}
+
+.new-videos .sub-video .item .title {
+    font-size: 15px;
+    /*    font-family: Montserrat-SemiBold;*/
+    text-align: left;
+    direction: ltr;
+    padding: 0 5px
+}
+
+.more-videos {
+    width: 182px;
+    height: 46px;
+    font-size: 23px;
+    padding: 5px
+}
+
+@media (max-width: 800px) {
+    .new-videos .main-video .title {
+        font-size: 15px
+    }
+}
+
+@media (max-width: 800px) {
+
+    .new-videos {
+        background-color: transparent;
+        border: 0;
+        padding: 0
+    }
+
+    .new-videos:after {
+        content: "";
+        border: 0
+    }
+
+    .new-videos:before {
+        content: "";
+        border: 0
+    }
+
+
+    .new-videos .main-video:after {
+        content: "";
+        display: block;
+        border-style: solid;
+        border-width: 20px 0 0 20px;
+        border-color: #E9EBEE transparent;
+        position: absolute;
+        top: -1px;
+        right: -1px
+    }
+
+
+
+    .new-videos .sub-video .item:after {
+        content: "";
+        display: block;
+        border-style: solid;
+        border-width: 20px 0 0 20px;
+        border-color: #E9EBEE transparent;
+        position: absolute;
+        top: -1px;
+        right: -1px
+    }
+
+
+
+}
+
+
+/** End Latset Videos Style **/
+
+
+
+/** Start Down Form Style **/
+.down-form-content {
+    /*    font-family: MontserratRegular*/
+}
+
+.down-form-content .down-form:before {
+    content: "";
+    border-style: solid;
+    border-width: 31px 0 0  31px;
+    border-color: lightgray transparent;
+    position: absolute;
+    top: -1px;
+    left: auto;
+    right: -1px
+}
+.down-form-content .title {text-align: left;margin: 13px 0 13px 0!important;}
+.down-form-content .title i {
+    float: left;
+}
+.down-form-content .down-form:after {
+    content: "";
+    border-style: solid;
+    border-width: 31px 0 0  31px;
+    border-color: #E9EBEE transparent;
+    position: absolute;
+    top: -2px;
+    left: auto;
+    right: -1px
+}
+
+.down-form-content .title i {
+    right: auto;
+    left: 0;
+    transform: rotateY(-180deg);
+}
+.down-form-content .title h3{
+    position: relative;
+    left: 0;
+    top: 5px;
+}
+.down-form-content .title h1 {
+    /*    font-family: Montserrat-SemiBold;*/
+    font-size: 24px;
+    right: auto;
+    left: 50px!important;
+    top: 20px!important;
+    text-align: left;
+    direction: ltr;
+}
+
+@media (max-width: 800px) {
+    .down-form-content .title h1 {
+        top: 30px
+    }
+
+    .down-form-content .title i {
+        margin: 0px 0 0 6px;
+    }
+    .down-form-content .title {
+        margin: 10px 0 10px 0 
+    }
+    .down-form-content .title h3 {
+        top: 14px
+    }
+}
+
+@media (max-width: 410px) {
+    .down-form-content .title h1 {
+        top: 18px
+    }
+}
+
+.down-form-content .down-form form {
+    float: left;
+    /*    font-family: MontserratRegular*/
+}
+
+.down-form-content .down-form form input {
+    border-right: 0;
+    border-left: 7px solid #1F3A73!important;
+    border-radius: 0 0 20px 0!important;
+    direction: ltr;
+    border-right: 0 none!important;
+}
+.down-form-content .down-form form .line1 .name input {
+    /*height: 44px;*/
+    width: 100%;
+    border: 0px;
+    color: #1F3A73;
+    background-color: #E9EBEE;
+    border-left: 7px solid #1F3A73;
+    border-radius: 0 0 20px 0;
+    padding: 0 10px;
+    direction: ltr
+}
+/*.down-form-content .down-form form .line1 .fame input {
+    height: 44px;
+    width: 100%;
+    border: 0px;
+    background-color: #E9EBEE;
+    border-left: 7px solid #1F3A73;
+    border-radius: 0 0 20px 0;
+    padding: 0 10px;
+    direction: ltr
+}*/
+
+.down-form-content .down-form form .line1 .name {
+    float: left;
+    padding: 0 10px 0 0
+}
+
+input::placeholder, textarea::placeholder {
+    color: #1F3A73;
+}
+.down-form-content .down-form form .line1 .fame {
+    padding: 0 65px 0 0
+}
+
+.down-form-content .down-form form .whatsapp {
+    left: auto;
+    right: 5px
+}
+
+.down-form-content .down-form form .whatsapp .whatsapp-icon {
+    padding: 4px 0 0 7px;
+}
+
+.down-form-content .down-form form .text textarea {
+    direction: ltr;
+    border-right: 0;
+    border-left: 7px solid #1F3A73;
+    border-radius: 0 0 20px 0;
+}
+
+.down-form-content .down-form form .options select {
+    border-right: 0;
+    border-left: 7px solid #1F3A73;
+    border-radius: 0 0 20px 0;
+    direction: ltr
+}
+
+.down-form-content .down-form form .options .time {
+    float: left;
+    padding: 0 12px 0 0
+}
+
+.down-form-content .down-form form .options .budget {
+    padding: 0 58px 0 0;
+}
+
+.down-form-content .down-form form .options option {
+    /*    font-family: MontserratRegular !important;*/
+    direction: ltr !important
+}
+
+.down-form-content .down-form form .options .btn {
+    left: auto;
+    right: -19px
+}
+
+.down-form-content .down-form form .options .btn img {
+    transform: rotateY(-180deg)
+}
+
+.down-form-content .down-form .img {
+    right: 10px
+}
+
+.down-form-content .down-form .img img {
+    transform: rotateY(-180deg)
+}
+
+
+/** End Down Form Style **/
+
+
+/*=========== FOOTER ===========*/
+
+footer {
+    /*    font-family: MontserratRegular;*/
+    text-align: left
+}
+
+footer .contain .links {
+    float: left;
+    text-align: left;
+    padding: 0 20px 0 0
+}
+footer .contain ul {
+    margin: 20px 0 0 0;
+    padding: 0px
+}
+
+footer .contain .links .links1 {
+    float: left;
+    padding: 0 10px 0 0px
+}
+
+footer .contain .links .links2 {
+    padding: 0 0 0 10px
+}
+
+footer .contain h3{
+    /*    font-family: MontserratMedium;*/
+    font-size: 23px;
+    width: 100%;
+}
+
+footer .contain .post-contact {
+    float: left;
+    text-align: left;
+}
+
+footer .contain .post-contact .last-posts {
+    float: left;
+    text-align: left;
+    padding: 0 10px 0 0
+}
+
+footer .contain .post-contact .last-posts a {
+    text-align: left
+}
+
+footer .contain .post-contact .contact {
+    float: left;
+    padding: 0 0 0 10px
+}
+
+footer .contain .post-contact .last-posts .post1 {
+    margin: 20px 0 0 0
+}
+
+
+footer .contain .post-contact .last-posts img {
+    float: left;
+    margin: 0 10px 0 0px
+}
+
+
+
+footer .contain .post-contact .contact .info {
+    font-size: 12px
+}
+
+footer .contain .post-contact .contact .info span {
+    display: block
+}
+
+footer .contain .post-contact .contact .socialicon {
+    width: 100%;
+    padding: 0 5px 20px;
+    text-align: center;
+    border-bottom: 1px solid
+
+}
+
+footer .contain .post-contact .contact form input {
+    float: left;
+    width: 75%;
+    direction: ltr
+}
+
+
+footer .contain .post-contact .contact form button {
+    float: left;
+    width: 25%;
+    cursor: pointer
+}
+
+footer .contain .post-contact .contact .privacy {
+    width: 100%;
+    text-align: center
+}
+
+footer .contain .post-contact .contact .privacy #use {
+    margin: 0 0 0 10px;
+}
+
+footer .contain .contact {
+    float: left;
+}
+footer .privacy a{
+    /*    font-family:MontserratRegular;*/
+    font-size:12px;
+    padding: 3px 6px 3px 3px;
+}
+footer .privacy #privacy {
+    /* background-position: left 0px top -42px; */
+    direction: ltr;
+}
+footer .privacy #use {
+    /* background-position: left 0px top -66px; */
+    direction: ltr;
+}
+
+
+
+
+@media (max-width: 1100px) {
+    footer .contain .post-contact {
+        clear: both;
+        width: 100%
+    }
+    footer .contain .links {
+        width: 100%
+    }
+
+
+}
+@media (max-width: 800px) {
+
+    .down-form-content {
+        width: 100%;
+    }
+    .down-form-content .down-form form {
+        width: 100%
+    }   
+    .down-form-content .down-form .img img {
+        display: none
+    }
+
+    footer {
+        overflow: hidden
+    }
+
+    footer .contain .links {
+        padding: 0
+    }
+    footer .contain .post-contact .last-posts {
+        width: 100%
+    }
+    footer .contain .post-contact .contact {
+        clear: both;
+        width: 100%;
+        padding: 0
+    }
+    footer .contain .links {
+        width: 100%
+    }
+
+}
+
+
+/*******Project EN Start*******/
+
+/*** content ***/
+
+
+/*** form style **/
+.content .form-content {
+    float: right;
+}
+.content .project-info-content {
+    float: right;
+    /*    font-family: MontserratRegular*/
+}
+
+.content .form .title {
+    width: 242px;
+    margin: auto
+}
+
+.content .form .title .num {
+    float: right;
+    font-size: 30px;
+}
+
+
+.content .form .title .room {
+    width: 70px;
+    height: 40px;
+    margin: 8px 0 0 6px;
+}
+
+.content .form .title .room .text {
+    font-size: 12px;
+    /*    font-family: MontserratRegular;*/
+    position: relative;
+    top: -30px;clear:both
+
+}
+
+.content .form .title .room .bed {
+    width: 56px;
+    float: none
+}
+
+.content .form .title .room .bed span {
+    font-size: 16px;
+    position: relative;
+    top: -30px;
+    left: -2px;
+}
+
+
+.content .form .info .clientimg {
+    float: left;
+}
+
+.content .form .info .tel {
+    float: left;
+    min-width: 128px;
+    margin: auto
+}
+
+.content .form .info .whatsapp {
+    float: right;
+    margin: 12px 0 0 0
+}
+
+.content .form .info .tel .service {
+    font-size: 15px;
+    /*    font-family:MontserratBold ;*/
+    margin: 5px 0px 0 0 
+}
+
+
+
+
+.content .form form {
+    /*    font-family: montserratRegular;*/
+    direction: ltr
+}
+
+.content .form form .name {
+    float: left;
+    padding: 0
+}
+.content .form form .name input {
+    direction: ltr;
+    border-right: 0;
+    border-left: 6px solid #1F3A73;
+    border-radius: 0 0 15px 0 ;
+}
+.content .form form .fame {
+    float: left;
+    padding: 0 0 0 8px
+}
+.content .form form .fame input {
+    border-right: 0;
+    border-left: 6px solid #1F3A73;
+    border-radius: 0 0 15px 0 ;
+    padding: 0 10px 0 10px;
+    direction: ltr
+}
+
+.content .form form .tel {
+    width: 100%
+}
+
+.content .form form .tel input {
+    border-left: 6px solid #1F3A73;
+    border-right: 0;
+    direction: ltr;
+    border-radius: 0 0 15px 0;
+}
+
+
+/*
+.intl-tel-input .flag-dropdown .selected-flag {
+    margin: 6px
+}
+*/
+
+textarea {
+    resize: none
+}
+
+.content .form form .textarea {
+    width: 100%
+}
+
+.content .form form .textarea textarea {
+    direction: ltr;
+    border-radius: 0 0 15px 0;
+    border-right: 0;
+    border-left: 6px solid #1F3A73;
+    resize: none
+}
+
+
+
+.content .form form select {
+    border-radius: 0 0 15px 0;
+    border-right: 0;
+    border-left: 6px solid #1F3A73;
+    font-size: 13px
+}
+
+.content .form form .time select {
+    border-left: 6px solid #1F3A73;
+    border-right: 0;
+
+}
+
+.content .form form .budget {
+    float: left;
+    width: 45%;
+    padding: 0 0 0 8px
+}
+.content .form form .options {
+    width: 100%;
+    padding: 0 50px 0 0;
+    margin: 5px 0 0 0
+}
+.content .form form .time {
+    float: left;
+    width: 55%;
+    padding: 0
+}
+.content .form form .time select {
+    border-left: 6px solid #1F3A73;
+    border-radius: 0 0 15px 0 ;
+    direction: ltr;
+    text-align: left
+}
+
+.content .form form .budget {
+    float: left;
+    width: 45%;
+    padding: 0 0 0 8px
+}
+.content .form form .budget select {
+    text-align: left;
+    border-left: 6px solid #264584;
+    border-right: 0;
+    border-radius: 0 0 15px 0;
+    direction: ltr
+}
+
+
+
+.content .form form .send {
+    position: absolute;
+    right: -3px;
+    bottom: 0px;
+    left: auto
+}
+.content .form form .send img {
+    -webkit-transform: rotateZ(180deg);
+    -moz-transform: rotateZ(180deg);
+    -o-transform: rotateZ(180deg);
+    -ms-transform: rotateZ(180deg);
+    transform: rotateZ(180deg);
+}
+
+
+
+
+
+@media (max-width: 800px) {
+    .content .form-content {
+        width: 414px;
+        margin: auto;
+    }
+    .content .form-content .form {
+        width: 414px;
+        margin: auto;
+    }
+    .content h3 {
+        font-size: 23px !important
+    }
+
+}
+
+@media (max-width: 450px) {
+    .content .form-content {
+        width: 100%;
+        margin: auto;
+    }
+    .content .form-content .form {
+        width: 100%;
+        margin: auto;
+    }
+}
+@media (max-width: 370px) {
+    .content .form-content {
+        width: 100%;
+        margin: auto
+    }
+    .content .form-content .form {
+        width: 100%;
+        padding: 10px
+    }
+    .content .form .info .tel .service {
+        font-size: 12px;
+    }
+    /*.content .form form .send {
+        position: absolute;
+        right: 2px;
+        bottom: 22px;
+    }*/
+}
+
+
+
+/** Project Info Style **/
+
+
+.content .project-info-content {
+    padding: 0 15px 0 0;
+}
+
+.content .project-info-content .project-info {
+    /*    font-family: MontserratLight;*/
+    font-size: 22px
+}
+@media (max-width: 400px) {
+    .content .project-info-content .project-info {
+        padding: 17px;margin-top: 118px;
+    }
+}
+.project-info-content .project-info:after {
+    content: "";
+    display: inline-block;
+    border-style: solid;
+    border-width: 36px 0 0 36px ;
+    border-color: #E9EBEE transparent;
+    position: absolute;
+    right: 0px;
+    top: 0px
+}
+.content .project-info-content .project-info .title {
+    /*    font-family: MontserratBold;*/
+    font-size: 23px;
+    float: left;
+    width: 54%;
+}
+.content .project-info-content .project-info .title span:first-of-type {
+    position: relative;
+    top: -10px;
+    font-size: inherit;
+    font-family: inherit
+}
+.content .project-info-content .project-info .title span:last-of-type {
+    /*    font-family: MontserratBoldItalic;*/
+    font-size: 39px;
+    top: 0;
+}
+.content .project-info-content .project-info .like {
+    float: right;
+    width: 15.3%;
+}
+.content .project-info-content .project-info .likediv {
+    font-family: inherit
+}
+
+.content .project-info-content .project-info .share {
+    width: 15.3%;
+    float: right;
+}
+.content .project-info-content .project-info .sharediv {
+    font-family: inherit
+}
+
+
+.content .project-info-content .project-info .gift {
+    width: 15.3%;
+    float: right;
+}
+.content .project-info-content .project-info .giftdiv {
+    font-family: inherit
+}
+
+
+.content .project-info-content .project-info .info {
+    width: 100%;
+    font-size: 22px;
+    /*    font-family: MontserratMedium;*/
+    margin: 0
+}
+.content .project-info-content .project-info .info .location .text #d1 {
+    font-size: inherit;text-align:left
+}
+
+.content .project-info-content .project-info .info .location {
+    width: 33.33%;
+    height: 60px;
+    float: left;
+    margin: 15px 0 0 0
+}
+.content .project-info-content .project-info .info .location i {
+    float: left;
+    margin: -3px 0 0 -18px
+}
+.content .project-info-content .project-info .info .location .text {
+    /*margin: 5px 0 0 8px;*/
+    margin:4px 0 0 1px;
+    float: left
+}
+
+.content .project-info-content .project-info .info .location .text #d2 {
+    font-size: 14px;
+    left: 1px
+}
+.content .project-info-content .project-info .info .apartment {
+
+    width: 33.33%;
+    margin: 15px 0 0 0;
+    float: left
+
+}
+.content .project-info-content .project-info .info .apartment i {
+    float: left
+}
+.content .project-info-content .project-info .info .apartment span{
+    position: relative;
+    top: 15px;
+    left: 6px;
+    font-size: inherit;
+    float: none
+}
+.content .project-info-content .project-info .info .coin {
+    width: 33.33%;
+    float: left;
+    margin: 15px 0 0 0;
+}
+.content .project-info-content .project-info .info .coin div{
+    float: right;
+}
+.content .project-info-content .project-info .info .coin i {
+    float: left
+}
+.content .project-info-content .project-info .info .coin span {
+    position: relative;
+    top: 15px;
+    left: 8px;
+    float: none;
+    margin: 0;
+    font-size: inherit
+}
+
+
+.content .project-info-content .project-info .info .target {
+    width: 33.33%;
+    float: left;
+    margin: 9px 0 0 0;
+    font-size: inherit;
+    direction: ltr
+
+}
+.content .project-info-content .project-info .info .target i {
+    float: left;
+    position: relative;
+    top:0px;
+    left:-18px
+}
+.content .project-info-content .project-info .info .target span{
+    position: relative;
+    top: 22px;
+    left: -10px
+}
+.content .project-info-content .project-info .info .distance {
+
+    width: 33.33%;
+    margin: 17px 0 0 0;
+    float: left;
+    font-size: inherit;
+    direction: ltr
+
+}
+
+.content .project-info-content .project-info .info .distance div {
+    font-family: inherit;
+    font-size: inherit;
+    float: none;
+    margin: 0
+}
+
+.content .project-info-content .project-info .info .distance i {
+    float: left;
+    position: relative;
+    top: 5px
+}
+.content .project-info-content .project-info .info .distance span{
+    position: relative;
+    top: 13px;
+    left: 14px
+}
+.content .project-info-content .project-info .info .key {
+    width: 33.33%;
+    float: left;
+    margin: 16px 0 0 0;
+}
+.content .project-info-content .project-info .info .key div{
+    margin: auto;
+    width: 150px
+}
+.content .project-info-content .project-info .info .key i {
+    float: left;
+    position: relative;
+    top: 7px
+}
+.content .project-info-content .project-info .info .key span {
+    position: relative;
+    top: 15px;
+    left: 8px;
+    font-size: inherit;
+    float: none;
+    font-family: inherit;
+    margin: 0
+}
+
+@media (max-width: 1100px) {
+    .content .project-info-content {
+        margin: -78px 0 0 0
+    }
+    .content .project-info-content .project-info {
+        width: 414px;
+        min-height: 371px
+    }
+    .content .project-info-content .project-info .title {
+        width: 100%;
+        margin: -18px 0 0 0
+    }
+    .content .project-info-content .project-info .gift {
+        width: 33.33%
+    }
+    .content .project-info-content .project-info .share {
+        width: 33.33%
+    }
+    .content .project-info-content .project-info .like {
+        width: 33.33%
+    }
+    .content .project-info-content .project-info .info {
+        font-size: 18px
+    }
+    .content .project-info-content .project-info .info .location {
+        width: 50%;
+        margin: 5px 0 0 0
+    }
+    .content .project-info-content .project-info .info .apartment {
+        width: 50%;
+        margin: 5px 0 0 0
+
+    }
+    .content .project-info-content .project-info .info .coin {
+        width: 50%;
+        margin: 5px 0 0 0
+
+    }
+    .content .project-info-content .project-info .info .coin div {
+        position: relative;
+        left: -25px;
+        top: 5px
+    }
+    .content .project-info-content .project-info .info .key {
+        width: 50%;
+        margin: 5px 0 0 0
+
+    }
+    .content .project-info-content .project-info .info .distance {
+        width:50%;
+        margin: 5px 0 0 0
+
+    }
+    .content .project-info-content .project-info .info .distance div {
+        position: relative;
+        left: -20px
+    }
+    .content .project-info-content .project-info .info .target {
+        width: 50%;
+        padding: 0 0 0 17px;
+        margin: 5px 0 0 0;
+    }
+    .content .project-info-content .project-info .info .distance span {
+        top: 26px;
+    }
+    .content .project-info-content .project-info .info .key span {
+        top: 25px!important;
+    }
+
+}
+@media (max-width: 800px) {
+    .content .project-info-content {
+        margin:-90px 0px 7px 0
+
+    }
+}
+@media (max-width: 450px) {
+    .content .project-info-content .project-info .title {
+        font-size: 18px;    margin-bottom: 11px;
+    }
+    .content .project-info-content .project-info .info {
+        font-size: 14px;
+        padding-top: 10px;
+    }
+    .content .project-info-content .project-info {
+        width: 100%;
+        padding: 37px 12px 26px 12px!important;
+    }
+    .content .project-info-content {
+        padding: 0
+    }
+
+    .content .about_project h2{
+        margin:0
+    }
+    /*.content .about_project:after {
+content: "";
+display: inline-block;
+border-style: solid;
+border-width: 35px 0 0 35px;
+border-color: #E9EBEE transparent;
+position: absolute;
+top: 0px;
+right: 0px;
+left: auto;
+}*/
+
+
+
+}
+@media (max-width: 380px) {
+    .content .project-info-content .project-info {
+        padding: 12px
+    }
+}
+
+
+/** For Small Screen **/
+
+
+/** About Services Style **/
+.content h3.blog-heading{
+    padding-top:20px;
+    padding-bottom: 20px;
+}
+.content .about_project {
+    /*    font-family: MontserratRegular;*/
+    direction: ltr;
+}
+.content h3 {
+    /*    font-family: Montserrat-SemiBold !important;*/
+    font-size: 25px !important;
+}
+.content .about_project h3 {
+    float: ;
+    color: #1F3A73;
+    padding: 0px;
+    margin: 0px 0 15px 0 ;
+
+    /*	font-family: Montserrat-SemiBold !important;*/
+    font-size: 23px !important;
+}
+
+.content .about-title h3 {
+    color: #1F3A73;
+    padding: 0px;
+    width: 100%;
+    margin: 25px 0 0px 0;
+    text-align: center;
+    /*display: none*/
+}
+
+.content .about_project ul {
+    margin: 0 0px 22px 20px;
+    line-height: 2
+}
+.content .about_project ul li {
+    text-align: left;
+    direction: ltr;
+    float:left
+}
+.content .about_project:after {
+    content: "";
+    display: inline-block;
+    border-style: solid;
+    border-width: 35px 0px 0 35px;
+    position: absolute;
+    right: 0px;
+    top: 0px;
+    left: auto;
+}
+.blk_searh:before, .blk_searh:before {
+    content: "";
+    display: block;
+    border-style: solid;
+    border-width: 33px 0 0 33px;
+    border-color: #E9EBEE transparent;
+    position: absolute;
+    top: -1px;
+    right: -1px;
+    left:auto;
+    z-index: 999;
+}
+.blk_searh .search button span {
+    top: 0!important;
+    background-image: url(/img/send-r.png);
+    padding-left: 0px;
+    padding-right: 40px;
+    background-repeat: no-repeat;
+    background-size: 42px;
+    background-position:right -12px;
+    font-size: 20px;
+    padding-bottom: 10px;
+    display: inline-block;
+}
+
+.about_project .services p {
+    text-align: left
+}
+
+.content .about_project .col1 {
+    float: left;
+}
+.content .about_project .col2 {
+    float: left;
+}
+.content .about_project .serv1 {
+    float: left;
+}
+.content .about_project .serv2 {
+    float: left;
+}
+.content .about_project .serv3 {
+    float: left;
+}
+.content .about_project .serv4 {
+    float: left;
+}
+.content .about_project i {
+    margin: 0 20px 0 0
+}
+
+/*=========== Colmun1 ====================*/
+.content .colmun1 {
+    float: left;
+    /*    font-family: MontserratRegular*/
+}
+
+.content .colmun1 .location-importance-content .title1 .txt {
+    position: static; 
+    overflow:hidden; 
+    text-align:inherit; 
+}
+
+.content .colmun1 .location-importance-content .title1 .txt i {
+    float: left;
+    position: relative;
+    left: 2px;
+}
+.content .colmun1 .location-importance-content .title1 h3 {
+    /*     font-family: MontserratBold;*/
+    font-size: 25px;
+    position: relative;
+    top: 22px;
+    left: -4px;
+}
+.content .colmun1 .location-importance {
+    font-size: 14px;
+    font-family: inherit;
+    direction: ltr
+
+}
+
+.content .colmun1 .location-importance:after {
+    content: "";
+    display: inline-block;
+    border-style: solid;
+    border-width: 35px 0 0 35px ;
+    border-color: #E9EBEE transparent;
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    left: auto
+}
+
+.content .colmun1 .location-importance .title {
+    text-align: left;
+    font-family: inherit;
+}
+
+
+.content .colmun1 .location-importance .title span {
+    font-size: 24px;
+    /*    font-family: MontserratMedium;*/
+} 
+
+.content .colmun1 .location-importance ul {
+    margin-left: -20px;
+    margin-right: 0px
+}
+
+
+.content .colmun1 .location-importance .line1 .institutions {
+    width: 50%;
+    padding-left: 15px
+}
+
+.content .colmun1 .location-importance .line1 .location {
+    width: 50%;
+    padding-right: 15px
+}
+
+
+.content .colmun1 .location-importance .line2 .transport {
+    width: 50%;
+    padding-right: 15px
+}
+.content .colmun1 .location-importance .line2 .look {
+    width: 50%;
+    padding-left: 15px
+}
+
+
+@media (max-width: 1100px) {
+    .content .colmun1 .location-importance .line1 .institutions {
+        width: 100%;
+        padding: 0px
+    }
+    .content .colmun1 .location-importance .line2 .transport {
+        width: 100%;
+        padding: 0px
+    }
+    .content .colmun1 .location-importance .line2 .look {
+        width: 100%;
+        padding: 0px
+    }
+    .content .colmun1 .location-importance .line1 .location {
+        width: 100%;
+        padding: 0px
+    }
+    .content .colmun1 .location-importance-content .title1 h3 {
+        position: relative;
+        top: 7px;
+        left: -8px;
+    }
+}
+@media (max-width: 380px) {
+    .content .colmun1 .location-importance-content .title1 h3 {
+        font-size: 22px!important;
+        top: 0;
+        left: 0;
+    }
+}
+
+
+
+
+
+
+
+/*========= Video ===========*/
+.content .colmun1 iframe {
+    width: 100%;
+    height: 408px;
+    border: 0px;
+}
+.content .colmun1 .youtube-video {
+    width: 100%;
+    height: 408px;
+    border-radius: 5px;
+    background-color: #fff;
+    position: relative;
+    margin: 15px 0 0 0;
+    display: none
+}
+.content .colmun1 .youtube-video:after {
+    content: "";
+    display: inline-block;
+    border-style: solid;
+    border-width: 35px 35px 0 0 ;
+    border-color: #E9EBEE transparent;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+}
+
+div.services .fa{margin-left:0;margin-right:7px}
+/** ==============================**/
+/** Prices List Style **/
+.content .colmun1 .prices-list-content {
+    /*    font-family: MontserratRegular;*/
+}
+.content .colmun1 .prices-list-content .prices-list {
+    /* height: 280px; */
+}
+.content .colmun1 .prices-list:after {
+    content: "";
+    display: inline-block;
+    border-style: solid;
+    border-width: 35px 0 0  35px;
+    border-color: #E9EBEE transparent;
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    left: auto
+}
+.content .colmun1 .prices-list-content  .title {
+    overflow: auto
+}
+.content .colmun1 .prices-list-content  .title i {
+    float: left;
+    position: relative;
+    left: -18px
+}
+.content .colmun1 .prices-list-content .title h3 {
+    /*    font-family: MontserratBold;*/
+    position: relative;
+    left: -8px;
+    top: 20px
+}
+.content .colmun1 .prices-list-content .prices-list .top {
+    font-size: 18px
+}
+.content .colmun1 .prices-list-content .prices-list .top .money .txt span {
+    top: 0 !important
+}
+.content .colmun1 .prices-list-content .prices-list .top .money {
+    float: left;
+    width: 35%;
+    padding-right: 15px;
+    border-left: 0px;
+}
+.content .colmun1 .prices-list-content .prices-list .top .money i {
+    margin: -10px 0 0 -18px;   
+}
+
+.content .colmun1 .prices-list-content .prices-list .top .money .txt .txt1 {
+    /*    font-family: MontserratMedium;*/
+    height: auto
+}
+.content .colmun1 .prices-list-content .prices-list .top .money .txt .txt2 {
+    margin: 5px 0 0 0
+}
+.content .colmun1 .prices-list-content .prices-list .top .pay {
+    width: 65%;
+}
+.content .colmun1 .prices-list-content .prices-list .top .pay .progres {
+    float: left;
+    margin: 0 0 0 15px;
+    direction: ltr
+}
+.content .colmun1 .prices-list-content .prices-list .top .pay .progres .pro {
+    float: left;
+    /*    font-family: MontserratRegular;*/
+    font-size: 22px;
+}
+
+
+.content .colmun1 .prices-list-content .prices-list .top .pay .progres .pro:after {
+    content: "";
+    display: inline-block;
+    height: 35px;
+    width: 35px;
+    border-right: 3px solid #123467;
+    border-bottom: 3px solid #123467;
+    border-radius: 0 0 50px 0px;
+    position: absolute;
+    top: 33.5px;
+    left: 33.5px
+}
+.content .colmun1 .prices-list-content .prices-list .top .pay .progres .txt {
+    top: 8px;
+    left: 8px;
+    width: 89px;
+    overflow: hidden;
+    right: 0;
+    display: block;
+}
+
+.content .colmun1 .prices-list-content .prices-list .top .pay .still {
+    float: left;
+    width: 58%;
+    margin: 0px 0 0 10px;
+    text-align: center;
+    padding: 0 0;
+    display: block;
+}
+
+@media (max-width: 1100px) {
+    .content .colmun1 .prices-list-content .prices-list .top {
+        font-size: 14px !important
+    }
+    .content .colmun1 .prices-list-content .prices-list .top .pay .still {
+        width: 100% !important;
+        margin:0px 10px 0 8px !important
+    }
+    .content .colmun1 .prices-list-content .prices-list .top .progres .pro{
+        -webkit-transform: scale(0.8);
+        -moz-transform: scale(0.8);
+        -o-transform: scale(0.8);
+        -ms-transform: scale(0.8);
+        right: 0
+    }
+    .content .colmun1 .prices-list-content .prices-list .top .money i {
+        top: 0;
+        -webkit-transform: scale(0.7);
+        -moz-transform: scale(0.7);
+        -o-transform: scale(0.7);
+        -ms-transform: scale(0.7);
+    } 
+
+}
+/* ======List===========*/
+.content .colmun1 .prices-list-content .prices-list .list {
+    direction: ltr;
+}
+.content .colmun1 .prices-list-content .prices-list .list .titles {
+    /*    font-family: MontserratMedium;*/
+    font-size: 13px;
+    line-height: 1;
+
+}
+.content .colmun1 .prices-list-content .prices-list .list .titles span {
+    position: relative;
+    top: -3px;
+    direction: ltr;
+    font-size: 10px;
+}
+.content .colmun1 .prices-list-content .prices-list .list .titles .price span {
+    /* float: right; */
+    margin: 8px 0px 0 0px;
+    font-size: 13px;
+}
+/*****/
+.content .colmun1 .prices-list-content .prices-list .list .titles .num-room {
+    float: left;
+    padding: 0  23px 0 0;
+}
+
+.content .colmun1 .prices-list-content .prices-list .list .titles .date {
+    float: left;
+}
+
+.content .colmun1 .prices-list-content .prices-list .list .titles .space {
+    float: left;
+    padding: 0 23px 0 0px
+}
+
+.content .colmun1 .prices-list-content .prices-list .list .titles .price {
+    float: left;
+    text-align: center;
+    padding: 0 17px 0 0;
+}
+
+.content .colmun1 .prices-list-content .prices-list .list .titles .notes {
+    float: left;
+    padding: 0 16px 0px 22px;
+}
+
+.content .colmun1 .prices-list-content .prices-list .list .titles .num-room div {
+    height: 30px;
+    /*padding: 5px 0;*/
+    display: inherit;
+    width: auto;
+    padding: 9px 0;
+}
+
+.content .colmun1 .prices-list-content .prices-list .list .titles .space div {
+    height: 30px;
+    padding: 10px 0;
+    display: inherit;
+    width: auto
+}
+
+.content .colmun1 .prices-list-content .prices-list .list .titles .notes div {
+    padding: 10px 0;
+    display: inherit;
+    width: auto;
+}
+.content .colmun1 .prices-list-content .prices-list .list .titles .price div:first-child {
+    height: 30px;
+    display: inherit;
+    width: auto;
+    direction: ltr;
+    padding-top: 5px;
+}
+
+.content .colmun1 .prices-list-content .prices-list .list .titles .date div {
+    height: 30px;
+    padding: 10px 0;
+    display: inherit;
+    width: auto
+}
+.content .colmun1 .prices-list-content .prices-list .list .titles .num-room div:after{
+    content: "";
+    display: inline-block;
+    border-style: solid;
+    border-width: 30px 0 0 16px;
+    border-color: transparent #132467;
+    position: absolute;
+    top: 0;
+    right: -16px;
+    left: auto
+
+}
+.content .colmun1 .prices-list-content .prices-list .list .titles .space div:before{
+    content: "";
+    display: inline-block;
+    border-style: solid;
+    border-width: 30px 0 0 16px;
+    border-color: #132467 transparent ;
+    position: absolute;
+    top: 0;
+    left: -16px
+
+}
+.content .colmun1 .prices-list-content .prices-list .list .titles .space div:after{
+    content: "";
+    display: inline-block;
+    border-style: solid;
+    border-width: 30px 0 0 16px;
+    border-color: transparent #132467 ;
+    position: absolute;
+    top: 0;
+    right: -16px
+
+}
+
+.content .colmun1 .prices-list-content .prices-list .list .titles .date div:before{
+    content: "";
+    display: inline-block;
+    border-style: solid;
+    border-width: 30px 0 0 16px;
+    border-color:#132467 transparent;
+    position: absolute;
+    top: 0;
+    left: -16px
+
+}
+.content .colmun1 .prices-list-content .prices-list .list .titles .date div:after{
+    content: "";
+    display: inline-block;
+    border-style: solid;
+    border-width: 30px 0 0 16px;
+    border-color: transparent #132467 ;
+    position: absolute;
+    top: 0;
+    right: -16px
+
+}
+
+
+.content .colmun1 .prices-list-content .prices-list .list .titles .price div:first-child:before{
+    content: "";
+    display: inline-block;
+    border-style: solid;
+    border-width: 30px 0 0 16px;
+    border-color: #132467 transparent;
+    position: absolute;
+    top: 0;
+    left: -16px
+
+}
+.content .colmun1 .prices-list-content .prices-list .list .titles .price div:first-child:after{
+    content: "";
+    display: inline-block;
+    border-style: solid;
+    border-width: 30px 0 0 16px;
+    border-color: transparent #132467 ;
+    position: absolute;
+    top: 0;
+    right: -16px
+
+}
+
+/** custom select **/
+
+.select {
+    height: 18px;
+    float: right;
+    margin: 6px 15px 0 5px;
+}
+
+.select-styled {
+    text-align: left;
+}
+
+.select-styled:after {
+    content: "";
+    width: 0;
+    height: 0;
+    border: 4px solid transparent;
+    border-color: #fff transparent transparent transparent;
+    position: absolute;
+    top: 7px;
+    right: 0px;
+    left: auto
+}       
+.select-styled:active:after, .select-styled.active:after {
+    top: 3px;
+    border-color: transparent transparent #fff transparent;
+}
+
+
+.select-options li {
+    padding: 7px 10px 0 0 ;
+}
+
+
+
+
+@media (max-width: 1100px) {
+
+    .content .colmun1 .prices-list-content .prices-list .list .titles .price span {
+        margin: 10px 0 0 5px
+    }
+
+
+
+    .select {
+        width: 27px;
+        margin: 5px 0 0 0;
+        height: 15px;
+    }
+    .dropOption .select {
+        width: auto;
+    }
+
+
+    .select-styled:after {
+        content: "";
+        width: 0;
+        height: 0;
+        border: 4px solid transparent;
+        border-color: #fff transparent transparent transparent;
+        position: absolute;
+        top: 5px;
+        right: 0px;
+    }       
+    .select-styled:active:after, .select-styled.active:after {
+        top: 1px;
+        border-color: transparent transparent #fff transparent;
+    }
+
+
+
+
+
+}
+
+@media (max-width: 390px) {
+    .content .colmun1 .prices-list-content .prices-list .list .titles .price span {
+        margin: 10px 0 0 0px
+    }
+    .select {
+        font-size: 7px;
+    }
+}
+
+.content .colmun1 .prices-list-content .prices-list .list .titles .notes div:before{
+    content: "";
+    display: inline-block;
+    border-style: solid;
+    border-width: 30px 0 0 16px;
+    border-color: #132467 transparent;
+    position: absolute;
+    top: 0;
+    left: -16px
+
+}
+
+
+
+/****/
+
+/***/
+.content .colmun1 .prices-list-content .prices-list .list .line1 {
+    font-size: inherit
+}
+.content .colmun1 .prices-list-content .prices-list .list .line2 {
+    margin-top: 7px;
+    font-size: inherit;
+    position: static
+}
+.content .colmun1 .prices-list-content .prices-list .list .line3 {
+    margin-top: 7px;
+    font-size: inherit;
+    position: static
+}
+.content .colmun1 .prices-list-content .prices-list .list .line4 {
+    margin-top: 7px;
+    font-size: inherit;
+    position: static
+}
+.content .colmun1 .prices-list-content .prices-list .list .line5 {
+    margin-top: 7px;
+    font-size: inherit;
+    position: static
+}
+
+.content .colmun1 .prices-list-content .prices-list .list .col1 {
+    float: left;
+    padding: 0  23px 0 0;
+    height: auto
+}
+.content .colmun1 .prices-list-content .prices-list .list .col2 {
+    float: left;
+    padding: 0 24px 0 0;
+}
+.content .colmun1 .prices-list-content .prices-list .list .col3 {
+    float: left;
+    padding: 0 0px 0 0px;
+    height: auto;
+    font-size: 17px;
+}
+.content .colmun1 .prices-list-content .prices-list .list .col4 {
+    float: left;
+    padding: 0 24px 0 0;
+    /*    font-family: Montserrat-SemiBold;*/
+}
+.content .colmun1 .prices-list-content .prices-list .list .col5 {
+    float: left;
+    padding: 0 0 0px 23px
+}
+.content .colmun1 .prices-list-content .prices-list .list .col1 div {
+    display: inherit;
+    width: auto
+}
+.content .colmun1 .prices-list-content .prices-list .list .col2 div {
+    display: inherit;
+    width: auto
+}
+.content .colmun1 .prices-list-content .prices-list .list .col3 div {
+    background-color: #E9EBEE;
+    height: 30px;
+    position: relative;
+    display: inherit;
+    width: auto;
+    font-size: inherit
+}
+.content .colmun1 .prices-list-content .prices-list .list .col4 div {
+    display: inherit;
+    width: auto
+}
+
+.content .colmun1 .prices-list-content .prices-list .list .col5 div {
+    display: inherit;
+    width: auto
+}
+.content .colmun1 .prices-list-content .prices-list .list .col1 div:after{
+    content: "";
+    display: inline-block;
+    border-style: solid;
+    border-width: 30px 0 0 16px;
+    border-color: transparent #E9EBEE;
+    position: absolute;
+    top: 0;
+    right: -16px;
+    left: auto
+
+}
+.content .colmun1 .prices-list-content .prices-list .list .col2 div:before{
+    content: "";
+    display: inline-block;
+    border-style: solid;
+    border-width: 30px 0 0 16px;
+    border-color: #E9EBEE transparent ;
+    position: absolute;
+    top: 0;
+    left: -16px
+
+}
+.content .colmun1 .prices-list-content .prices-list .list .col2 div:after{
+    content: "";
+    display: inline-block;
+    border-style: solid;
+    border-width: 30px 0 0 16px;
+    border-color: transparent #E9EBEE ;
+    position: absolute;
+    top: 0;
+    right: -16px
+
+}
+
+.content .colmun1 .prices-list-content .prices-list .list .col3 div:before{
+    content: "";
+    display: inline-block;
+    border-style: solid;
+    border-width: 30px 0 0 16px;
+    border-color:#E9EBEE transparent;
+    position: absolute;
+    top: 0;
+    left: -16px
+
+}
+.content .colmun1 .prices-list-content .prices-list .list .col3 div:after{
+    content: "";
+    display: inline-block;
+    border-style: solid;
+    border-width: 30px 0 0 16px;
+    border-color: transparent #E9EBEE ;
+    position: absolute;
+    top: 0;
+    right: -16px
+
+}
+
+
+.content .colmun1 .prices-list-content .prices-list .list .col4 div:before{
+    content: "";
+    display: inline-block;
+    border-style: solid;
+    border-width: 30px 0 0 16px;
+    border-color: #E9EBEE transparent;
+    position: absolute;
+    top: 0;
+    left: -16px
+
+}
+.content .colmun1 .prices-list-content .prices-list .list .col4 div:after{
+    content: "";
+    display: inline-block;
+    border-style: solid;
+    border-width: 30px 0 0 16px;
+    border-color: transparent #E9EBEE ;
+    position: absolute;
+    top: 0;
+    right: -16px
+
+}
+
+
+.content .colmun1 .prices-list-content .prices-list .list .col5 div:before{
+    content: "";
+    display: inline-block;
+    border-style: solid;
+    border-width: 30px 0 0 16px;
+    border-color: #E9EBEE transparent;
+    position: absolute;
+    top: 0;
+    left: -16px;
+    right:auto
+
+}
+
+@media (max-width: 1100px) {
+
+    .content .colmun1 .prices-list-content {
+        width: 414px
+    }
+    .content .colmun1 .prices-list-content .prices-list .still {
+        width: 100%
+    }
+    .content .colmun1 .prices-list-content .prices-list .list {
+        font-size: 11px;
+        margin: 15px 0 0 0
+    }
+    .content .colmun1 .prices-list-content .prices-list .list .titles {
+        font-size: 8px
+    }
+    .content .colmun1 .prices-list-content .prices-list .top {
+        font-size: 12px;
+        display: inherit;    min-height: 75px;
+    }
+    .content .colmun1 .prices-list-content .prices-list .top .money .txt span {
+        display: block
+    }
+
+    .content .colmun1 .prices-list-content .prices-list .top .money i {
+        position: relative;
+        left: 40px
+    }
+    .content .colmun1 .prices-list-content .prices-list .top .money .txt {
+
+    }
+    .content .colmun1 .prices-list-content .prices-list .top .money .txt .txt1 {
+        /*        font-family: MontserratMedium;*/
+        width: 80px
+    }
+
+    .content .colmun1 .prices-list-content .prices-list .top .money .txt .txt1 span {
+        position: inherit;
+        top: 0
+    }
+
+    .content .colmun1 .prices-list-content .prices-list .top .money .txt .txt2 span {
+        top: 0
+    }
+    .content .colmun1 .prices-list-content .prices-list .top .pay {
+        border-left: 1px solid ;
+        border-right: 0
+    }
+    .content .colmun1 .prices-list-content .prices-list .top .pay .progres {
+        float: left;
+        position: relative;
+        top: -10px;
+        margin: 0 0 0 15px;
+        width: 100%;
+        direction: inherit
+    }
+    .content .colmun1 .prices-list-content .prices-list .top .pay .progres .pro {
+        float: left;
+        /*        font-family: MontserratRegular;*/
+        font-size: 22px;
+        height: 70px;
+        width: 70px;
+        padding: 15px 0 0 12px ;
+        border: 2px solid rgba(0, 0, 0, 0.23);
+        border-radius: 40px;
+        position: relative
+    }
+
+
+    .content .colmun1 .prices-list-content .prices-list .top .pay .progres .pro:after {
+        content: "";
+        display: inline-block;
+        height: 35px;
+        width: 35px;
+        border-right: 3px solid #123467;
+        border-bottom: 3px solid #123467;
+        border-radius: 0 0 50px 0px;
+        position: absolute;
+        top: 33.5px;
+        left: 33.5px
+    }
+    .content .colmun1 .prices-list-content .prices-list .top .pay .progres .txt {
+        width: 70%;
+        margin: 7px 0 0 0 ;
+        float: none
+    }
+
+    .content .colmun1 .prices-list-content .prices-list .top .pay .still {
+        float: left;
+        background-color: #E9EBEE;
+        padding: 0 10px 0 10px;
+        width: 80%;
+        margin:0px 0 0 31px ;
+        text-align: center
+    }
+    .content .colmun1 .prices-list-content .prices-list .list .titles .num-room {
+        float: left;
+        width: 20%;
+        text-align: center;
+        padding: 0  23px 0 0;
+        position: relative
+    }
+    .content .colmun1 .prices-list-content .prices-list .list .titles .date {
+        float: left;
+        width: 24%;
+        text-align: center;
+        padding: 0 1px 0 23px;
+    }
+    .content .colmun1 .prices-list-content .prices-list .list .titles .space {
+        float: left;
+        width: 16%;
+        text-align: center;
+        padding: 0 23px 0 0px;
+    }
+    .content .colmun1 .prices-list-content .prices-list .list .titles .price {
+        float: left;
+        width: 20%;
+        text-align: center;
+        padding: 0 0px 0 16px
+    }
+    .content .colmun1 .prices-list-content .prices-list .list .titles .notes {
+        float: left;
+        width: 20%;
+        text-align: center;
+        padding: 0 0 0px 23px
+    }
+    .content .colmun1 .prices-list-content .prices-list .list .titles .num-room div {
+        background-color: #132467;
+        height: 22px;
+        position: relative;
+        padding: 5px 0;
+        font-size: 10px;
+    }
+    .content .colmun1 .prices-list-content .prices-list .list .titles .space div {
+        background-color: #132467;
+        position: relative;
+        height: 22px;
+        padding: 10px 0
+    }
+    .content .colmun1 .prices-list-content .prices-list .list .titles .notes div {
+        background-color: #132467;
+        height: 22px;
+        position: relative;
+        padding: 10px 0
+    }
+    .content .colmun1 .prices-list-content .prices-list .list .titles .price div:first-child {
+        background-color: #132467;
+        position: relative;
+        height: 22px;
+    }
+
+    .content .colmun1 .prices-list-content .prices-list .list .titles .date div {
+        background-color: #132467;
+        position: relative;
+        height: 22px;
+        padding: 10px 0
+    }
+    .content .colmun1 .prices-list-content .prices-list .list .titles .num-room div:after{
+        content: "";
+        display: inline-block;
+        border-style: solid;
+        border-width: 22px 0 0 16px;
+        border-color: transparent #132467;
+        position: absolute;
+        top: 0;
+        right: -16px;
+        left: auto
+
+    }
+    .content .colmun1 .prices-list-content .prices-list .list .titles .space div:before{
+        content: "";
+        display: inline-block;
+        border-style: solid;
+        border-width: 22px 0 0 16px;
+        border-color: #132467 transparent ;
+        position: absolute;
+        top: 0;
+        left: -16px
+
+    }
+    .content .colmun1 .prices-list-content .prices-list .list .titles .space div:after{
+        content: "";
+        display: inline-block;
+        border-style: solid;
+        border-width: 22px 0 0 16px;
+        border-color: transparent #132467 ;
+        position: absolute;
+        top: 0;
+        right: -16px
+
+    }
+
+    .content .colmun1 .prices-list-content .prices-list .list .titles .date div:before{
+        content: "";
+        display: inline-block;
+        border-style: solid;
+        border-width: 22px 0 0 16px;
+        border-color:#132467 transparent;
+        position: absolute;
+        top: 0;
+        left: -16px
+
+    }
+    .content .colmun1 .prices-list-content .prices-list .list .titles .date div:after{
+        content: "";
+        display: inline-block;
+        border-style: solid;
+        border-width: 22px 0 0 16px;
+        border-color: transparent #132467 ;
+        position: absolute;
+        top: 0;
+        right: -16px
+
+    }
+
+
+    .content .colmun1 .prices-list-content .prices-list .list .titles .price div:first-child:before{
+        content: "";
+        display: inline-block;
+        border-style: solid;
+        border-width: 22px 0 0 16px;
+        border-color: #132467 transparent;
+        position: absolute;
+        top: 0;
+        left: -16px
+
+    }
+    .content .colmun1 .prices-list-content .prices-list .list .titles .price div:first-child:after{
+        content: "";
+        display: inline-block;
+        border-style: solid;
+        border-width: 22px 0 0 16px;
+        border-color: transparent #132467 ;
+        position: absolute;
+        top: 0;
+        right: -16px
+
+    }
+
+
+    .content .colmun1 .prices-list-content .prices-list .list .titles .notes div:before{
+        content: "";
+        display: inline-block;
+        border-style: solid;
+        border-width: 22px 0 0 16px;
+        border-color: #132467 transparent;
+        position: absolute;
+        top: 0;
+        left: -16px
+
+    }
+
+
+
+    /****/
+
+    /***/
+    .content .colmun1 .prices-list-content .prices-list .list .line1 {
+        margin-top: 7px;
+        font-size: inherit;
+        /*        margin: 0*/
+    }
+    .content .colmun1 .prices-list-content .prices-list .list .line2 {
+        margin-top: 7px
+    }
+    .content .colmun1 .prices-list-content .prices-list .list .line3 {
+        margin-top: 7px
+    }
+    .content .colmun1 .prices-list-content .prices-list .list .line4 {
+        margin-top: 7px
+    }
+    .content .colmun1 .prices-list-content .prices-list .list .line5 {
+        margin-top: 7px
+    }
+
+    .content .colmun1 .prices-list-content .prices-list .list .col1 {
+        float: left;
+        width: 20%;
+        text-align: center;
+        padding: 0  23px 0 0;
+        position: relative
+    }
+    .content .colmun1 .prices-list-content .prices-list .list .col2 {
+        float: left;
+        width: 16%;
+        text-align: center;
+        padding: 0 23px 0 0;
+    }
+    .content .colmun1 .prices-list-content .prices-list .list .col3 {
+        float: left;
+        width: 24%;
+        text-align: center;
+        padding: 0 7px 0 0px;
+    }
+    .content .colmun1 .prices-list-content .prices-list .list .col4 {
+        float: left;
+        width: 20%;
+        text-align: center;
+        padding: 0 0px 0 16px
+    }
+    .content .colmun1 .prices-list-content .prices-list .list .col5 {
+        float: left;
+        width: 20%;
+        text-align: center;
+        padding: 0 0 0px 23px;
+    }
+    .content .colmun1 .prices-list-content .prices-list .list .col1 div {
+        background-color: #E9EBEE;
+        height: 22px;
+        position: relative;
+        padding: 3px 0
+    }
+    .content .colmun1 .prices-list-content .prices-list .list .col2 div {
+        background-color: #E9EBEE;
+        position: relative;
+        height: 22px;
+        padding: 3px 0;
+    }
+    .content .colmun1 .prices-list-content .prices-list .list .col3 div {
+        background-color: #E9EBEE;
+        height: 22px;
+        position: relative;
+        padding: 3px 0;
+        font-size: 13px;
+        margin: 0 -4px 0 23px;
+    }
+    .content .colmun1 .prices-list-content .prices-list .list .col4 div {
+        background-color: #E9EBEE;
+        position: relative;
+        height: 22px;
+        padding: 3px 0
+    }
+
+    .content .colmun1 .prices-list-content .prices-list .list .col5 div {
+        background-color: #E9EBEE;
+        position: relative;
+        height: 22px;
+        padding: 3px 0
+    }
+    .content .colmun1 .prices-list-content .prices-list .list .col1 div:after{
+        content: "";
+        display: inline-block;
+        border-style: solid;
+        border-width: 22px 0 0 16px;
+        border-color: transparent #E9EBEE;
+        position: absolute;
+        top: 0;
+        right: -16px;
+        left: auto
+
+    }
+    .content .colmun1 .prices-list-content .prices-list .list .col2 div:before{
+        content: "";
+        display: inline-block;
+        border-style: solid;
+        border-width: 22px 0 0 16px;
+        border-color: #E9EBEE transparent ;
+        position: absolute;
+        top: 0;
+        left: -16px
+
+    }
+    .content .colmun1 .prices-list-content .prices-list .list .col2 div:after{
+        content: "";
+        display: inline-block;
+        border-style: solid;
+        border-width: 22px 0 0 16px;
+        border-color: transparent #E9EBEE ;
+        position: absolute;
+        top: 0;
+        right: -16px
+
+    }
+
+    .content .colmun1 .prices-list-content .prices-list .list .col3 div:before{
+        content: "";
+        display: inline-block;
+        border-style: solid;
+        border-width: 22px 0 0 16px;
+        border-color:#E9EBEE transparent;
+        position: absolute;
+        top: 0;
+        left: -16px
+
+    }
+    .content .colmun1 .prices-list-content .prices-list .list .col3 div:after{
+        content: "";
+        display: inline-block;
+        border-style: solid;
+        border-width: 22px 0 0 16px;
+        border-color: transparent #E9EBEE ;
+        position: absolute;
+        top: 0;
+        right: -16px
+
+    }
+
+
+    .content .colmun1 .prices-list-content .prices-list .list .col4 div:before{
+        content: "";
+        display: inline-block;
+        border-style: solid;
+        border-width: 22px 0 0 16px;
+        border-color: #E9EBEE transparent;
+        position: absolute;
+        top: 0;
+        left: -16px
+
+    }
+    .content .colmun1 .prices-list-content .prices-list .list .col4 div:after{
+        content: "";
+        display: inline-block;
+        border-style: solid;
+        border-width: 22px 0 0 16px;
+        border-color: transparent #E9EBEE ;
+        position: absolute;
+        top: 0;
+        right: -16px
+
+    }
+
+
+    .content .colmun1 .prices-list-content .prices-list .list .col5 div:before{
+        content: "";
+        display: inline-block;
+        border-style: solid;
+        border-width: 22px 0 0 16px;
+        border-color: #E9EBEE transparent;
+        position: absolute;
+        top: 0;
+        left: -16px
+
+    }
+}
+
+
+@media (max-width: 1100px) {
+
+    .content .colmun1 .prices-list-content .prices-list .top .money {
+        border:0px
+    }
+    .content .colmun1 .prices-list-content .prices-list .top .money .txt {
+        margin: -23px 7px 0 0;
+        width: auto;
+        position: inherit;
+        top: 0
+    }
+    .content .colmun1 .prices-list-content .prices-list .top .pay .progres .txt {
+        position: relative;
+        width: 47%;
+        top: 9px;
+    }
+}
+@media (max-width: 450px)  {
+    .content .about_project ul {
+        margin: 0 0px 22px 0px;
+    }
+    .content .colmun1 .prices-list-content {
+        width: 100%;
+    }
+    .content .colmun1 .prices-list-content .prices-list .list .line1 {
+        margin-top: 4px;
+    }
+    .content .colmun1 .prices-list-content .prices-list .list .line2 {
+        margin-top: 4px;
+    }
+    .content .colmun1 .prices-list-content .prices-list .list .line3 {
+        margin-top: 4px;
+    }
+    .content .colmun1 .prices-list-content .prices-list .list .line4 {
+        margin-top: 4px;
+    }
+    .content .colmun1 .prices-list-content .prices-list .list .titles .num-room {
+        line-height: inherit
+    }
+    .content .colmun1 .prices-list-content .prices-list .list .col1 {
+        padding: 0 1px 0 0;
+    }
+    .content .colmun1 .prices-list-content .prices-list .list .col2 {
+        padding: 0px 21px 0 0px;
+    }
+    .content .colmun1 .prices-list-content .prices-list .list .titles .space {
+        padding: 0px 1px 0 0px !important;
+        line-height: inherit
+    }
+    .content .colmun1 .prices-list-content .prices-list .list .titles .price {
+        padding: 0 0px 0 2px;
+    }
+    .content .colmun1 .prices-list-content .prices-list .list .col4 {
+        padding: 0 0px 0 2px;
+    }
+    .content .colmun1 .prices-list-content .prices-list .list .titles .notes {
+        padding: 0 0 0px 1px;
+    }
+    .content .colmun1 .prices-list-content .prices-list .list .col5 {
+        padding: 0 0 0px 1px;
+    }
+
+}
+@media (max-width: 390px) {
+    .content .colmun1 .prices-list-content .title h3 {
+        position: relative;
+        left: -8px;
+        top: 25px;
+    }
+    .content .colmun1 .prices-list-content .prices-list .list .titles {
+        font-size: 7.5px;
+    }
+    .content .colmun1 .prices-list-content .prices-list .list {
+        font-size: 9px;
+        margin: 9px 0 0 0;
+    }
+}
+
+
+
+
+/***/
+
+
+/***/
+
+/*========= COLMUN2 ==========*/
+
+.content .colmun2 {
+    margin: 20px 0 0 0;
+    float: left;
+    color: #1F3A73;
+    width: 355px;
+    padding: 0 0 0 15px
+}
+.content .colmun2 .map {
+    width:100%;
+    height: 380px;
+    float: right;
+    background-color: #fff;
+    border-radius: 5px;
+    overflow: hidden;
+    position: relative
+
+}
+.content .colmun2 .map:after {
+    content: "";
+    display: inline-block;
+    border-style: solid;
+    border-width: 35px 0 0 35px;
+    border-color: #E9EBEE transparent;
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    left: auto
+}
+
+.content .colmun2 .title  {
+    text-align: left;
+}
+.content .colmun2 .title i {
+    float: left;
+    position: relative;
+}
+
+.content .colmun2 .title h3 {
+    position: relative;
+    top: 0px;
+    left: -10px;
+    /*    font-family: Montserrat-SemiBold*/
+}
+
+/** Plan Style **/
+
+.content .plan-content .plan {
+    /*    padding: 15px;*/
+    width: 100%;
+    background-color: #fff;
+    border-radius: 5px;
+    overflow: hidden;
+    position: relative
+}
+.content .plan-content .plan:after {
+    content: "";
+    border-style: solid;
+    border-width: 36px 0 0 36px;
+    border-color: #E9EBEE transparent;
+    position: absolute;
+    right: 0;
+    top: 0;
+    left: auto
+}
+
+/*** Project Card Style ***/
+.post-card .contain .image-project {
+    height: 183px!important;
+}
+.post-card .contain .about-project {
+    height: 111px!important;
+}
+.project-card-content .project-card {
+    width: 100%;
+    height: 348px;
+    background-color: #fff;
+    border-radius: 5px;
+    position: relative;
+    color: #1F3A73;
+    /*font-size: 19px;*/
+    /*    font-family: MontserratRegular;*/
+}
+@media (max-width: 768px) {
+    .project-card-content .project-card {
+        height: 390px;
+    }
+}
+.content .project-card-content .project-card:after {
+    content: "";
+    display: inline-block;
+    border-style: solid;
+    border-width: 35px 0 0 35px!important;
+    border-color: #E9EBEE transparent;
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    left: auto
+}
+
+.project-card .contain {
+    width: 100%;
+    height: 339px;
+    color: #1F3A73;
+    margin: auto;
+
+    font-size: 19px;
+
+}
+
+.project-card .contain .image-project img {
+    width: 100%;
+    height: 170px
+}
+@media (max-width: 768px) {
+    .project-card .contain .image-project img {
+        height: 235px
+    }
+}
+.project-card .share {
+    width: 100%;
+    height: 0px;
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    z-index: 9;
+    padding: 10px 18px;
+}
+.share .shareBtnsFloating a:last-child{
+    position: absolute;
+    right: -2px;
+    top: 31px;
+}
+.project-card  .share .d105 {
+    float: left;
+    font-size: 22px;
+    /* font-family: MontserratLight; */
+    background-color: rgba(31,58, 115,0.8);
+    color: #fff;
+    transform: skewX(-11deg);
+    padding: 0 15px 0 30px;
+    position: absolute;
+    left: -15px;
+    top: 10px;
+    right: auto;
+}
+.project-card .share i {
+    float: right;
+    position: static
+}
+.project-card .share .flaticon-share2 {
+    padding: 0 11px
+}
+.project-card .contain .title-project {font-size: 18px;margin: 15px 1px 7px 9px;height: 29px;letter-spacing: -1.3px;}
+
+.project-card .contain .title-project .bed {/* font-family: MontserratLight; */border: 1px solid #1F3A73;border-radius: 6px;font-size: 16px;height: 23px;width: 49px;float: right;margin: 3px 4px 0 0;position: relative;}
+.project-card .contain .title-project .start {
+    float: left;
+    font-size: 16px ;
+    margin: 4px 0 0 0;
+    letter-spacing: -0.5px;
+}
+.project-card .contain .title-project .bed i {
+    position: absolute;
+    top: -1px;
+    left: -18px;
+}
+.project-card .contain .title-project .bed span {
+    position: absolute;
+    right: 4px;
+    top: -1.5px;
+    float: right;
+    left: auto;
+}
+.project-card .contain .title-project .price {
+    /*    font-family: MontserratRegular;*/
+    font-size: 21px;
+    margin-left: 5px;
+    margin-right: 0;
+    position: relative;
+    top: 0px;
+    float: left;
+}
+.project-card .contain .about-project {
+    padding: 0 10px;
+    text-align: left;
+    margin: 0;
+    height: 48px;
+    overflow: hidden;
+}
+.project-card .contain .info-project {
+    width: 100%;
+    font-size: 15px;
+    margin-top:10px;
+    padding: 0 8px 0 8px;
+    position: relative;
+    right: 0
+}
+
+.project-card .contain .info-project .size {
+    float: left;
+    width: 33%;
+    position: relative;
+    height: 40px;
+}
+.project-card .contain .info-project .key {
+    float: left;
+    width: 33%;
+    position: relative;
+    height: 40px;
+}
+.project-card .contain .info-project .coin {
+    float: left;
+    width: 33%;
+    position: relative;
+    height: 40px;
+}
+
+.project-card .contain .info-project .size i {
+    position: absolute;
+    left: -19px;
+    top: 4px
+}
+.project-card .contain .info-project .size span {
+    position: absolute;
+    top: 11px;
+    left: 25px
+}
+
+.project-card .contain .info-project .key  i {
+    position: absolute;
+    left: -14px;
+    top: 2px;
+}
+.project-card .contain .info-project .key span {
+    position: absolute;
+    top: 7px;
+    left: 32px;
+    font-size: 13px;
+}
+
+.project-card .contain .info-project .coin i {
+    position: absolute;
+    left:-12px;
+    top: 0px
+}
+
+.project-card .contain .info-project .coin span {
+    position: absolute;
+    top: 4px;
+    right: 2px;
+}
+
+.project-card {
+    overflow: hidden
+}
+.project-card .contain {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    font-family: inherit
+}
+
+.project-card .contain .details button {
+    width: 100%;
+    height: 35px;
+    padding-bottom: 20px;
+    color: #fff;
+    background-color: #1F3A73;
+    border:0px ;
+    margin-top:5px;
+    cursor: pointer;
+    font-family: inherit
+}
+
+.project-card .contain {
+    display: inline-block;
+    vertical-align: middle;
+    -webkit-transform: perspective(1px) translateZ(0);
+    transform: perspective(1px) translateZ(0);
+    box-shadow: 0 0 1px rgba(0, 0, 0, 0);
+    -webkit-transition-duration: 0.3s;
+    transition-duration: 0.3s;
+    -webkit-transition-property: transform;
+    transition-property: transform;
+    -webkit-transition-timing-function: ease-out;
+    transition-timing-function: ease-out;
+}
+/*.project-card .contain:hover, .project-card .contain:focus, .project-card .contain:active {
+  -webkit-transform: translateY(-35px);
+  transform: translateY(-35px);
+}*/
+
+.project-card-content .card2 {
+    margin: 15px 0 0 0
+}
+.project-info .top{display: block;flex-direction: row-reverse;}
+.project-info .info{display: flex; flex-direction: row-reverse;}
+.project-info .info_en{display: block;
+                       flex-direction: row-reverse;
+                       width: 100%;}
+.content .about_project h2{float: left;
+                           font-size: 26px;}
+
+.content .form .title {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: AUTO;
+    flex-direction: row-reverse;
+}
+.content .form form .time select #tm{direction:ltr}
+/*******Project EN End*******/
+
+
+
+
+footer .contain .post-contact .last-posts div {
+    height: auto;overflow:hidden}
+
+.content section{margin:0}
+/*.card-small .info-project{margin: 20px 4px 6px!important;}*/
+
+.iconhproj:before {
+    font-size: 34px;
+    margin-left: 0;
+    margin-right: 20px;
+}
+
+#section_callcenter{
+    margin-top: 16px;
+}
+.most-popular .social aside {
+    font-size: 12px;}
+.most-popular .social aside img {
+    width: 37px;
+}
+.blog-heading {
+    text-align: left;
+    margin: 27px 0 0 5px;
+}
+.most-popular .more {
+    max-height: 44px;}
+
+.blk_model:before, #carousel .item:before{    top: -1px;
+                                              right: -1px;    left: auto;border-width: 31px 0 0 31px}
+.blk_model:after, #carousel .item:after{top: -2px;
+                                        right: -1px;    left: auto;border-width: 31px 0 0 31px}
+.blk_model{text-align:left}
+div.media:after,div.media:before,.mod5 .btmr .col-sm-7:after,.mod5 .btmr .col-sm-7:before,div.global-new-item .news-item:after,div.global-new-item .news-item:before,.blk_mod_mod3 .my-media:after,.blk_mod_mod3 .my-media:before{top: -2px;
+                                                                                                                                                                                                        right: -1px;    left: auto;border-width: 21px 0 0 21px}
+.mod3 .colored {
+    text-align: left;}
+h1, h2, h3, h4, h5, h6{direction:ltr;text-align:left!important;}
+#section_callcenter_left .whatsapp{left:5%;right:auto}
+.text-center-title .ctitle,
+h4 .ctitle {
+    font-size: 15px;
+    margin-left: 64px;
+    margin-right: 0;
+    background-image: url(/img/hborder2.png);
+    background-repeat: no-repeat;
+    background-position: right bottom;
+    background-size: cover;
+    padding-right: 8px;
+    padding-bottom: 10px;
+    padding-left: 0;
+    font-weight: bold;
+}
+.blog-heading1{margin-top:0!important;line-height:38px}
+.sliding3 .layer-slider h2{float:left;padding-left: 15px;}
+.colored {
+    text-align: left;}
+.global-new-item .colored {    padding-top: 4px !important;
+                               text-align: left;}
+.most-popular .social aside a {
+    text-align: left;
+    direction: ltr;
+}
+.content .project-info-content .project-info .cut{display:none}
+.intl-tel-input .flag-dropdown .selected-flag {
+    padding: 11px 15px 6px 14px;
+}
+.content .project-info-content .project-info .title span:last-of-type {
+    position: relative;
+    left: 5px;
+}
+div.about-title h3{display:none}
+.content .colmun1 .location-importance-content .title1 {
+    padding: 11px 0 6px 0}
+
+.flaticon-call-center:before, .flaticon-call-center::after {
+    margin-left: 9px;
+}
+.down-form .intl-tel-input .flag-dropdown .selected-flag {
+    padding: 11px 15px 6px 14px;
+}
+
+.flaticon-balance {float:left}
+.flaticon-investment {float:left}
+.flaticon-award {float:left}
+
+.project-card .share .shareBtnsFloating {
+    position: absolute;
+    right: 20px;
+    top: 49px;
+    display: none;
+}
+
+.socialPlugin {
+    position: absolute;
+    right: 62px;left:auto
+}
+
+@media (max-width: 800px){
+    .text-center-title .ctitle,
+    h4 .ctitle{
+        font-size:16px}
+    .post-card .contain .image-project {
+        height:248px!important
+    }
+    .project-card .contain .about-project {
+        height:51px}
+    /*.content .how-to-use .title h2{
+    left:0
+    }*/
+    .content .projects .title .drop-option {
+        left: auto;
+        width: 138px;
+        top: 32px;
+        right: 0;
+    }
+    .project-build .owl-carousel .owl-stage-outer{float:left}
+    .content .projects .slider .item {
+        margin-right: 0;
+        margin-left: 15px;
+    }
+    .content .project-build .project-build-slider{overflow:hidden}
+    .content .projects .project-card .contain .info-project {margin-top: 13px!important}
+    .results-lists{float:none}
+    .slider .item {
+        width: 302px;
+        margin-right: 0;
+        margin-left: 15px;
+    }
+    .project-card .contain .info-project .size #num {
+        text-align: right;
+        padding: 5px 0 0 17px;
+    }
+    .project-card .contain .info-project{padding:0 0 0 4px}
+    .project-card .contain .info-project .coin i {
+        position: absolute;
+        left: -30px;
+        top: 0px;
+    }
+    .project-card .contain .info-project .coin {
+        float: left;
+        width: 34%;
+        position: relative;
+    }
+    .news .mainnews:before {
+        border-width: 22px 0 0 22px;
+    }
+}
+.project-card-content .info-project {
+    margin: 3px -9px 0 0px!important;
+}
+
+.use-en .owl-carousel .owl-nav.disabled{
+    display:block!important
+}
+.use .owl-next {
+    left: auto;
+    right: 0px;
+}
+.use .owl-prev {
+    left: 0px;
+    right: auto;
+}
+@media (max-width: 800px){
+    .news .subnews1 .item {
+        height: auto!important;
+    }
+    div.title a {font-size: 15px;
+    }
+    .note-example ul{
+        padding-left: 22px;
+    }
+}
+
+
+.langposten .subnews1 .owl-nav .owl-next {
+    position: absolute;
+    right: 0!important;
+    left: auto!important;
+}
+.langposten .subnews1 .owl-nav .owl-prev {
+    position: absolute;
+    left: 0!important;
+    right: auto!important;
+}
+
+
+
+
+
+.blk_searh .discover-mobile .title h3 {
+    font-size: 23px!important;
+    padding-left: 63px;
+    padding-right: 0!important;
+    background-position: left 14px!important;
+    position:relative;
+    left: 0;
+    top: 0px;
+    padding-top: 17px;
+}
+
+.blk_searh .discover-mobile .title img {
+    right: auto;
+    left: 0
+}
+
+.blk_searh .discover-mobile .title div {
+    width: 283px
+}
+
+.blk_searh .discover-mobile .search-box .city {
+    float: left;
+    padding: 0 5px 0 0
+}
+
+.blk_searh .search-box .search img {
+    width: 44px;
+    margin: -7px 0 0 0;
+    transform: rotate(180deg);
+}
+.blk_searh .discover-mobile .search-box .estate {
+    float: left;
+    padding: 0 5px 0 0;
+}
+@media only screen and (max-width: 455px){
+    .content .colmun2 {
+        width: 100%!important;
+        padding-right: 0!important;
+    }}
+
+
+h3.blog-heading{
+    font-size: 23px;
+    /*	font-family: MontserratMedium;*/
+}
+.formgift h2{
+    text-align:center!important;
+    padding: 12px 0 9px 0;
+}
+.formgift h3{
+    text-align:center!important;
+    padding:18px 0 4px 0;
+}
+.formgift .bmobile, .formgift .bname {
+    float: left;}
+.formgift .bname input, .formgift .bmobile input{
+    direction: ltr;
+    border-right: 0 none;
+    border-left: 9px solid #0D8DD3;
+    border-radius: 2px 2px 15px 2px;
+}
+
+.formgift .intl-tel-input .flag-dropdown .selected-flag {
+    padding: 5px 15px 6px 14px!important;
+}
+
+.formgift .bsubmit {
+    float: left;
+    border-radius:15px 2px 2px 2px;
+    -moz-transform: scaleX(-1);
+    -o-transform: scaleX(-1);
+    -webkit-transform: scaleX(-1);
+    transform: scaleX(-1);
+    filter: FlipH;
+    -ms-filter: "FlipH";
+}
+.header .navbar2 .naviga {
+    /*    font-family: MontserratRegular;*/
+    order: 3;
+}
+.header .navbar2 .parent_menu:first-child .drop{
+    border-left:0
+}
+
+.news .subnews1 .col-md-6:last-child {
+    padding-left: 7px;
+    padding-right: 0;
+}
+.news .subnews1 .col-md-6:first-child {
+    padding-right: 7px;
+    padding-left: 0;
+}
+
+.most-watched-desktop .slider .owl-nav {
+    left: auto;
+    right: -16px;
+}
+
+
+.dkeywords{
+    direction:ltr;
+
+}
+.dkeywords span{
+    /*font-family:Montserrat;*/
+    font-weight:bold;
+    float:left
+}
+.dkeywords a{
+    /*font-family:Montserrat;*/
+    float:left;
+}
+
+
+
+div.email .inptemail{
+    border-left: 6px solid #1F3A73;
+    border-right: 0;
+    direction: ltr;
+    border-radius: 0 0 15px 0;
+    float: left;
+}
+.about-damas .read-more_d {
+    height: 42px;
+    /*    font-family: MontserratRegular;*/
+    padding-top: 3px;}
+
+.headpost{font-size: 15px;
+          /*    font-family: "MontserratRegular";*/
+}
+.headpost .pull-right{float:left}
+.headpost .pull-right:last-child{    margin-left: 20px;margin-right:0}
+.project-info .titilediv h1{font-size: 23px;}
+
+.mod4_full .global-new-item p{
+    /*    font-family: MontserratRegular;*/
+    text-align: left;
+    font-size: 14px;
+}
+.mod4_full .global-new-item .news-item {
+    direction: rtl;}
+.mod4_full .global-new-item .colored{line-height:26px}
+.mod4_full .continue-reading{text-align:right;padding-right:15px}
+.cardpost .share .shareBtnsFloating .fa-facebook {
+    right: -17px!important;}
+.cardpost .share .shareBtnsFloating .fa-whatsapp {
+    right: -19px;top:10px!important}
+footer .contain .h3 {
+    /*font-family: MontserratRegular;*/
+}
+@media (max-width: 769px) and (min-width: 540px){
+    .header .navbar2 .contain {
+        float: right;
+    }}
+.header .navbar2{
+    display: flex;
+}
+.header .logo {order: 1;
+}
+
+.right-form .contact span {
+    padding: 0px 3px;
+}

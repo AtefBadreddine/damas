@@ -1,0 +1,1705 @@
+.content .project-info-content .project-info .title span:first-of-type {
+    font-size: 30px;
+}
+.content .project-info-content .project-info .title span:last-of-type {
+    position: relative;
+    top: 0px;
+    left: 10px;
+}
+.project-info .titilediv h1 {
+    text-align: right;
+    font-size: 20px;
+}
+.content .project-info-content .project-info .info .location {
+    width: 100%;
+    height: auto;
+    float: right;
+    text-align: center;
+}
+.content .project-info-content .project-info .info .apartment i {
+    float: none;
+}
+
+.content .project-info-content .project-info .info .apartment {
+    width: 100%;
+    margin: 8px auto;
+    text-align: center;
+}
+.content .project-info-content .project-info .info .distance {
+    width: 100%;
+    margin: 21px auto 0px auto;
+    text-align: center;
+}
+.content .project-info-content .project-info .info .apartment span {
+    font-size: 18px !important;
+    margin: -1px 0px 0 0 !important;
+    width: 100%;
+    text-align: center;
+}
+.content .project-info-content .project-info .info .coin span {
+    font-size: 18px;
+    margin: 0px;
+    width: 100%;
+    text-align: center;
+    margin-top: -8px;
+}
+
+.content .project-info-content .project-info .info .target div {
+    top: -4px;
+    right: 0px;
+    left: auto;
+    font-size: 18px;
+    float: right;
+    width: 100%;
+}
+.content .project-info-content .project-info .info .distance div {
+    margin: 0px;
+    font-size: 18px;
+    width: 100%;
+    margin-top: -7px;
+}
+.content .project-info-content .project-info .info .distance i {
+    float: none;
+}
+.content .project-info-content .project-info .info .location .text #d2{
+    font-size: 17px;
+}
+.content .project-info-content .project-info .info .location .text #d1 {
+    font-size: 18px;
+}
+.content .project-info-content .project-info .info .location .text {
+    margin: 0px;
+    text-align: center;
+    float: left;
+    width: 100%;
+}
+.content .project-info-content .project-info .info .location i {
+    float: none;
+    margin: 0px;
+    position: relative;
+    top: 3px;
+}
+.content .project-info-content .project-info .info .key {
+    margin: 22px 0 0 0;
+    width: 100%;
+    padding-right: 7px;
+    text-align: center;
+}
+.content .project-info-content .project-info .info .key i {
+    float: none;
+}
+.content .project-info-content .project-info .info .coin i {
+    float: none;
+}
+.content .project-info-content .project-info .info .key span {
+    font-size: 18px;
+    margin: 0px;
+    width: 100%;
+}
+.content .project-info-content .project-info .info .coin {
+    width: 100%;
+    float: left;
+    margin: 8px 0px 0px 0px;
+    text-align: center;
+}
+.content .project-info-content .project-info .info .target {
+    width: 100%;
+    text-align: center;
+}
+.content .project-info-content .project-info .info .target i {
+    float: none;
+}
+
+.content .project-info-content .project-info .giftdiv,
+.content .project-info-content .project-info .sharediv,
+.content .project-info-content .project-info .likediv {
+    font-size: 20px;
+}
+.content .project-info-content .project-info .giftdiv,
+.content .project-info-content .project-info .sharediv,
+.content .project-info-content .project-info .likediv {
+    font-size: 12px;
+    text-align: center;
+}
+.flaticon-gift:before, 
+.flaticon-share:before,
+.likediv .fa {
+    font-size: 22px;
+    margin: 2px 0px;
+}
+.content .project-info-content .project-info .giftdiv i {
+    position: relative;
+    right: 0px;
+    top: -2px;
+}
+.content .project-info-content .project-info .title {
+    padding-right: 20px;
+}
+.socialPlugin .socials {
+    margin-top: -23px;
+    margin-left: 7px;
+}
+.socialPlugin .socials .fa {
+    height: 35px;
+    width: 35px;
+    font-size: 16px;
+}
+.prices-list .top .pay .progres .txt,
+.prices-list .still,
+.prices-list .top .money .txt .txt2 span,
+.prices-list .top .money .txt .txt1 span {
+    font-size: 20px;
+}
+.prices-list .list .titles span {
+    font-size: 13px;
+}
+.content .form .info .tel .service {
+    font-size: 15px;
+}
+.content .project-info-content .project-info {
+    margin-top: 102px;
+}
+.content .form .title .room {
+    width: auto;
+    float: right;
+}
+.content .form .title .room .text {
+    font-size: 15px;
+    top: 0px;
+    float: right;
+    padding: 0px 5px;
+}
+.content .form .title .num {
+    font-size: 17px;
+    float: right;
+    font-weight: bold;
+    position: relative;
+    top: 3px;
+}
+.content .form .title .num span{
+    font-size: 24px;
+}
+
+.title-shear-content{
+    float: left;
+    width: 100%;
+    display: block;
+}
+.title-shear-content .project-title{
+    float: right;
+}
+.shear-content-btn{
+    float: left;
+    width: auto;
+}
+.shear-content-btn .gift,
+.shear-content-btn .share,
+.shear-content-btn .like{
+    margin: auto 5px;
+    float: left;
+    width: auto;
+}
+.content .project-info-content .project-info .sharediv {
+    width: auto;
+}
+.prices-list .top .pay .progres .pro {
+    padding: 0;
+    text-align: center;
+    padding-top: 14px;
+    color: #1F3A73;
+}
+.prices-list .top .money .txt .txt1 span {
+    top: -2px;
+}
+.prices-list .top .money .txt .txt2 span {
+    top: -2px;
+}
+.prices-list .still {
+    margin: 5px 15px 0 0;
+    border-radius: 4px;
+}
+.content .colmun1 .location-importance-content .title1 .txt {
+    overflow: hidden;
+    height: auto;
+}
+.prices-list-content .title h2 {
+    margin: 30px -12px 0 0;
+    color: #1F3A73;
+}
+.prices-list-content {
+    float: left;
+    width: 100%;
+}
+
+/*****---- Start Statistics Section ----******/
+.statistics-section{
+    float: left;
+    width: 100%;
+    height: auto;
+    position: relative;
+    display: block;
+    padding: 30px 0px;
+}
+.statistics-section h2{
+    float: left;
+    width: 100%;
+    text-align: right;
+    margin-bottom: 30px;
+}
+.statistics-section .my-row{
+    margin-right: -7.5px;
+    margin-left: -7.5px;
+}
+.statistics-section .col-lg-6{
+    padding-right: 7.5px;
+    padding-left: 7.5px;
+    margin-bottom: 30px;
+}
+.statistics-section .border-bottom{
+    padding-bottom: 10px;
+}
+.statistics-section .title{
+    float: left;
+    width: 100%;
+}
+.statistics-section .title h3{
+    float: left;
+    width: 100%;
+    text-align: center;
+    font-size: 18px;
+}
+.statistics-section .content-new{
+    float: left;
+    width: 100%;
+    min-height: 335px;
+    background-color: #ffffff;
+    border: 1px solid lightgray;
+    border-radius: 5px;
+    position: relative;
+    padding: 10px;
+}
+.statistics-section .content-new:after{
+    content: "";
+    width: 13px;
+    height: 34px;
+    position: absolute;
+    left: 10px;
+    top: -1px;
+    background-color: white;
+    transform: rotate(45deg);
+    border-left: 1px solid lightgray;
+}
+.statistics-section .content-new:before{
+    content: "";
+    width: 16px;
+    height: 35px;
+    position: absolute;
+    left: -2px;
+    top: -12px;
+    background-color: #e9ebee;
+    transform: rotate(45deg);
+}
+.statistics-section .content-new .section{
+    float: left;
+    width: 100%;
+    text-align: center;
+    margin-bottom: 15px;
+}
+.statistics-section .content-new .section.population .image-cont{
+    float: none;
+    width: 65px;
+    height: 54px;
+    background-image: url(/img/general-information-icons.svg);
+    background-repeat: no-repeat;
+    background-position: 0px 0px;
+    background-size: 65px;
+    margin: auto;
+}
+.statistics-section .content-new .section p{
+    float: left;
+    width: 100%;
+    text-align: center;
+    margin: 0px;
+    font-size: 15px;
+    color: #000000;
+}
+.statistics-section .content-new .section span{
+    float: left;
+    width: 100%;
+    text-align: center;
+    margin: 0px;
+    font-size: 15px;
+    color: #000000;
+}
+.statistics-section .content-new .section span strong{
+    float: left;
+    width: 100%;
+    font-size: 22px;
+}
+
+.statistics-section .content-new .section.age .image-cont{
+    float: none;
+    width: 28px;
+    height: 54px;
+    background-image: url(/img/general-information-icons.svg);
+    background-repeat: no-repeat;
+    background-position: -1px -50px;
+    background-size: 65px;
+    margin: auto;
+}
+.statistics-section .content-new .section.age span.sub{
+    float: left;
+    text-align: center;
+    display: table;
+    direction: rtl;
+}
+.statistics-section .content-new .section.age span.sub strong{
+    float: none;
+    width: auto;
+    display: inline-block;
+    padding: 0px 2px;
+}
+.statistics-section #pie2,
+.statistics-section #pie{
+    width: 100%;
+}
+.statistics-section .padding{
+    padding: 0px 20px;
+}
+.statistics-section .border-right{
+    border-right: 1px solid #cccccc;
+}
+.statistics-section .progess-info{
+    float: left;
+    width: 100%;
+    padding: 0px;
+    margin: 0px;
+}
+.statistics-section .progess-info li{
+    float: right;
+    width: 50%;
+    list-style: none;
+}
+.statistics-section .progess-info li span.dot{
+    float: right;
+    width: 12px;
+    height: 12px;
+    background-color: #00B1CA;
+    border-radius: 100%;
+    margin: 5px 0px 0px 5px;
+}
+.statistics-section .progess-info li span.dot.green{
+    background-color: #D9DF23;
+}
+.statistics-section .progess-info li span.dot.red{
+    background-color: #F04C27;
+}
+.statistics-section .progess-info li span.dot.orange{
+    background-color: #FAA61D;
+}
+.statistics-section .progess-info li p{
+    float: right;
+    width: auto;
+    font-size: 13px;
+    color: #000000;
+    margin: 0px;
+}
+.statistics-section .progess-info li.left span.dot,
+.statistics-section .progess-info li.left p{
+    float: left;
+}
+
+/*****---- End Statistics Section ----******/
+
+
+
+/*****---- Start الاسعار التقريبية ----******/
+.section-payment{
+    text-align: center;
+    width: 100%;
+    display: table;
+}
+.section-payment .money {
+    float: none !important;
+    width: auto !important;
+    height: auto !important;
+    display: inline-block !important;
+    margin-bottom: 0px !important;
+}
+.prices-list-content .prices-list .top .section-payment .pay{
+    float: none !important;
+    width: auto !important;
+    height: auto !important;
+    display: inline-block !important;
+}
+.section-payment .pay .progres{
+    top: 0 !important;
+}
+.section-text{
+    width: 100%;
+    display: block;
+    text-align: center;
+}
+.section-text .pay{
+    width: 100% !important;
+    display: block !important;
+    text-align: center !important;
+    margin-bottom: 7px;
+}
+.section-text .pay{
+    border-right: 0px !important;
+}
+.section-text .pay .still{
+    margin: 0px;
+    float: none;
+    display: -webkit-inline-box;
+    font-size: 17px;
+}
+.prices-list .list .sub,
+.prices-list .list .titles .sub{
+    width: 25% !important;
+}
+/*****---- End الاسعار التقريبية ----******/
+
+.content-lest{
+    min-width: 310px;
+}
+
+.date-title {
+    font-size: 13px;
+    padding-top: 5px;
+    color: #1F3A73;
+    font-family: '29LTBukra-Bold' !important;
+}
+
+
+
+@media (max-width: 1100px) {
+    .statistics-section .col-lg-6 {
+        width: 100% !important;
+        max-width: 100%;
+    }
+    .section-text .pay .still {
+        font-size: 15px;
+    }
+    .prices-list-content {
+        margin-bottom: 15px;
+    }
+    .down-form-content .down-form form {
+        width: calc(100% - 0px);
+    }
+    .down-form-content .down-form .img {
+        display: none;
+    }
+    .content .project-info-content {
+        width: calc(100% - 345px);
+        float: right;
+    }
+    .content .project-info-content .project-info {
+        width: 100%;
+    }
+    .content .project-info-content .project-info {
+        margin-top: 70px;
+    }
+    .content .project-info-content .project-info .title {
+        padding-right: 0px;
+        width: 100%;
+        float: left;
+        max-width: 100%;
+    }
+    .content .project-info-content .project-info .title h1{
+        text-align: center;
+    }
+
+}
+/* 
+  ##Device = Tablets, Ipads (portrait)
+  ##Screen = B/w 768px to 1024px
+*/
+
+@media (min-width: 768px) and (max-width: 1024px) {
+
+
+    .project-internal .form-content{
+        width: 100%;
+        margin-bottom: 30px;
+    }
+    .project-internal .form-content section.form{
+        width: 100%;
+    }
+    .project-internal .project-info-content{
+        width: 100%;
+        padding: 0px;
+    }
+    .project-internal .project-info-content .project-info{
+        width: 100%;
+    }
+    .content .project-info-content-smallscreen .project-info {
+        padding: 0px;
+        width: 100%;
+    }
+    .content .project-info-content .project-info .info .location {
+        width: 100%;
+        height: auto;
+        float: right;
+        text-align: center;
+    }
+    .content .project-info-content .project-info .info .apartment i {
+        float: none;
+    }
+
+    .content .project-info-content .project-info .info .apartment {
+        width: 100%;
+        margin: 8px auto;
+        text-align: center;
+    }
+    .content .project-info-content .project-info .info .distance {
+        width: 100%;
+        margin: 21px auto 0px auto;
+        text-align: center;
+    }
+    .content .project-info-content .project-info .info .apartment span {
+        font-size: 18px !important;
+        margin: -1px 0px 0 0 !important;
+        width: 100%;
+    }
+    .content .project-info-content .project-info .info .coin span {
+        font-size: 18px;
+        margin: 0px;
+        width: 100%;
+        text-align: center;
+        margin-top: -8px;
+    }
+
+    .content .project-info-content .project-info .info .target div {
+        top: -4px;
+        right: 0px;
+        left: auto;
+        font-size: 18px;
+        float: right;
+        width: 100%;
+    }
+    .content .project-info-content .project-info .info .distance div {
+        margin: 0px;
+        font-size: 18px;
+        width: 100%;
+        margin-top: -7px;
+    }
+    .content .project-info-content .project-info .info .distance i {
+        float: none;
+    }
+    .content .project-info-content .project-info .info .location .text #d2{
+        font-size: 17px;
+    }
+    .content .project-info-content .project-info .info .location .text #d1 {
+        font-size: 18px;
+    }
+    .content .project-info-content .project-info .info .location .text {
+        margin: 0px;
+        text-align: center;
+        float: left;
+        width: 100%;
+    }
+    .content .project-info-content .project-info .info .location i {
+        float: none;
+        margin: 0px;
+        position: relative;
+        top: 3px;
+    }
+    .content .project-info-content .project-info .info .key {
+        margin: 22px 0 0 0;
+        width: 100%;
+        padding-right: 7px;
+        text-align: center;
+    }
+    .content .project-info-content .project-info .info .key i {
+        float: none;
+    }
+    .content .project-info-content .project-info .info .coin i {
+        float: none;
+    }
+    .content .project-info-content .project-info .info .key span {
+        font-size: 18px;
+        margin: 0px;
+        width: 100%;
+    }
+    .content .project-info-content .project-info .info .coin {
+        width: 100%;
+        float: left;
+        margin: 8px 0px 0px 0px;
+        text-align: center;
+    }
+    .content .project-info-content .project-info .info .target {
+        width: 100%;
+        text-align: center;
+    }
+    .content .project-info-content .project-info .info .target i {
+        float: none;
+    }
+
+    .content .project-info-content .project-info .giftdiv,
+    .content .project-info-content .project-info .sharediv,
+    .content .project-info-content .project-info .likediv {
+        font-size: 20px;
+    }
+    .content .project-info-content .project-info .giftdiv,
+    .content .project-info-content .project-info .sharediv,
+    .content .project-info-content .project-info .likediv {
+        font-size: 12px;
+        text-align: center;
+    }
+    .flaticon-gift:before, 
+    .flaticon-share:before,
+    .likediv .fa {
+        font-size: 22px;
+    }
+    .socialPlugin .socials {
+        margin-top: -23px;
+    }
+    .socialPlugin .socials .fa {
+        height: 35px;
+        width: 35px;
+        font-size: 16px;
+    }
+
+}
+
+
+
+
+/* iPad in landscape */
+@media only screen 
+and (min-device-width : 768px) 
+and (max-device-width : 1024px) 
+and (orientation : landscape) {
+
+    .project-internal .form-content{
+        width: 50%;
+    }
+    .content .project-info-content-smallscreen {
+        display: inline-block;
+        clear: initial;
+        padding: 0px;
+        width: 48%;
+        float: right;
+    }
+
+    .project-info .titilediv h1 {
+        text-align: center;
+    }
+    .project-info .titilediv h1 {
+        text-align: center;
+    }
+    .content .project-info-content-smallscreen .project-info .title span:last-of-type {
+        top: 0px;
+    }
+    /*    .content .project-info-content .project-info .title span:first-of-type {
+            font-family: 'Montserrat-BoldItalic' !important;
+        }*/
+    .down-form-content .title h2 {
+        font-size: 19px!important;
+    }
+    .content .project-info-content-smallscreen .project-info .info .location {
+        width: 100%;
+        height: auto;
+        text-align: center;
+        min-height: 130px;
+    }
+    .content .project-info-content-smallscreen .project-info .info .location .text {
+        float: right;
+        margin: 0px;
+        width: 100%;
+        text-align: center;
+        margin-top: -10px;
+    }
+    .content .project-info-content-smallscreen .project-info .info .location i {
+        float: none;
+    }
+    .content .project-info-content-smallscreen .project-info .info .location .text #d2 {
+        top: auto;
+        right: auto;
+    }
+    .content .project-info-content-smallscreen .project-info .info .location .text #d1 {
+        font-size: 17px;
+    }
+    .content .project-info-content-smallscreen .project-info .info .apartment {
+        float: left;
+        width: 100% !important;
+        text-align: center;
+        background-color: transparent;
+        margin: 0px !important;
+        min-height: 140px;
+    }
+    .content .project-info-content-smallscreen .project-info .info .apartment i {
+        float: none;
+    }
+    .content .project-info-content-smallscreen .project-info .info .apartment span {
+        float: right !important;
+        font-size: 17px !important;
+        margin: auto !important;
+        width: 100% !important;
+        margin-top: -6px !important;
+    }
+    .content .project-info-content-smallscreen .project-info {
+        width: 100%;
+        height: auto;
+    }
+    .content .project-info-content-smallscreen .project-info .info .coin {
+        width: 100%;
+        float: right;
+        margin: 0px 0 0 0;
+        text-align: center;
+        min-height: 130px;
+    }
+    .content .project-info-content-smallscreen .project-info .info .coin i {
+        float: none;
+    }
+    .content .project-info-content-smallscreen .project-info .info .coin span {
+        float: right;
+        font-size: 17px;
+        margin: 0;
+        width: 100%;
+        margin-top: -20px;
+    }
+    .content .project-info-content-smallscreen .project-info .info .key {
+        width: 100% !important;
+        text-align: center !important;
+        float: left;
+        margin: 0px !important;
+        min-height: 130px;
+    }
+    .content .project-info-content-smallscreen .project-info .info .key i {
+        float: none;
+    }
+    .content .project-info-content-smallscreen .project-info .info .key span {
+        float: right;
+        font-size: 17px;
+        margin: 0px !important;
+        width: 100%;
+    }
+    .content .project-info-content-smallscreen .project-info .info .target {
+        font-size: 20px;
+        width: 100%;
+        margin: 0px;
+        direction: rtl;
+        float: left;
+        text-align: center;
+    }
+    .content .project-info-content-smallscreen .project-info .info .target i {
+        float: none;
+    }
+    .content .project-info-content-smallscreen .project-info .info .target div {
+        float: left;
+        margin: 0px;
+        width: 100%;
+        margin-top: -15px;
+        font-size: 17px;
+    }
+    .content .project-info-content-smallscreen .project-info .info .distance {
+        font-size: 20px;
+        width: 100%;
+        float: right;
+        direction: rtl;
+        text-align: center;
+    }
+    .content .project-info-content-smallscreen .project-info .info .distance i {
+        float: none;
+    }
+    .content .project-info-content-smallscreen .project-info .info .distance div {
+        float: left;
+        margin: 0px;
+        width: 100%;
+        margin-top: -15px;
+        font-size: 17px;
+    }
+    .list_projects .txt h2, .prices-list-content .title h2, .content .about_project h2, .content .colmun2 .title h2, .content .colmun1 .location-importance-content .title1 h2,
+    .content .colmun1 .location-importance-content .title1 h2,
+    .content .about-title h2 {
+        font-size: 20px !important;
+        line-height: 28px;
+    }
+    .flaticon-money:before {
+        font-size: 40px;
+        margin-left: 10px;
+    }
+    .prices-list-content .prices-list .top .pay .progres {
+        right: 0px;
+    }
+    .content .project-info-content-smallscreen .project-info .title {
+        font-size: 20px;
+        text-align: center;
+        margin-bottom: 15px;
+        font-weight: bold;
+    }
+    .content .project-info-content-smallscreen .project-info .giftdiv, .content .project-info-content-smallscreen .project-info .sharediv, .content .project-info-content-smallscreen .project-info .likediv {
+        font-size: 13px !important;
+    }
+    .content .project-info-content-smallscreen .project-info {
+        overflow: hidden;
+    }
+    .prices-list .titles div.sub{
+        width: 25% !important;
+    }
+    .prices-list .list .line1 .sub,
+    .prices-list .list .line2 .sub,
+    .prices-list .list .line3 .sub{
+        width: 25% !important;
+        padding: 0px 0px 0px 2px !important;
+    }
+    .date-title {
+        font-size: 13px;
+        padding-top: 5px;
+    }
+    .date-title strong {
+        font-size: 24px;
+        margin-left: 5px;
+    }
+    .prices-list .top .pay .progres .txt {
+        top: 0px;
+        margin-top: 13px;
+        font-size: 15px;
+    }
+    .prices-list .top .money .txt .txt2 span {
+        font-size: 15px !important;
+    }
+    .prices-list .top .pay .progres .pro {
+        margin-top: -6px;
+        height: 60px;
+        width: 60px;
+        font-size: 19px;
+    }
+    .prices-list .top .pay .progres .pro:after {
+        height: 30px;
+        width: 30px;
+        top: 28.5px;
+        left: 28.5px;
+    }
+
+
+    .prices-list .list .titles .num-room.sub {
+        width: 20% !important;
+    }
+    .prices-list .list .titles .notes.sub{
+        width: 25% !important;
+    }
+    .prices-list .list .line1 .col4.sub,
+    .prices-list .list .line2 .col4.sub,
+    .prices-list .list .titles .price.sub {
+        width: 30% !important;
+    }
+    .prices-list .list .line1 .col1.sub,
+    .prices-list .list .line2 .col1.sub{
+        width: 20% !important;
+    }
+    .exchange-currency {
+        left: -15px;
+        height: 22px;
+        top: 4px;
+        font-size: 11px;
+    }
+    .prices-list .list .titles span {
+        font-size: 10px !important;
+        top: -3px;
+    }
+    .prices-list .list .titles .space span {
+        top: 3px;
+    }
+    .prices-list .list .titles .price span {
+        top: 6px;
+        right: 6px;
+    }
+    .prices-list-content .prices-list .still {
+        margin: 8px 0 10px 0!important;
+        font-size: 14px;
+    }
+    .prices-list .list {
+        margin: 0px;
+    }
+    .content .form .title .room .text {
+        font-size: 14px;
+    }
+    .homepage .content .form .title .num {
+        font-size: 18px!important;
+    }
+    .content .form .title .num span {
+        font-size: 20px;
+    }
+    .content .project-info-content-smallscreen .project-info .title .titilediv {
+        font-family: '29LTBukra-Bold' !important; 
+    }
+    .content .project-info-content-smallscreen .project-info .title span:first-of-type{
+        font-family: 'Montserrat', sans-serif !important;
+        font-style: italic;
+        font-weight: bold;
+        margin: 0px 3px;
+    }
+    .project-card .share i {
+        left: -22px;
+    }
+    .formgift .h3,
+    .formgift .h2 {
+        font-size: 20px;
+    }
+
+    .content .form .title .room .bed span {
+        top: -32px;
+        left: -3px;
+    }
+    .prices-list-content {
+        padding: 0px 15px;
+    }
+    .down-form-content {
+        margin-top: 45px;
+    }
+    .certificate .title h3 {
+        font-size: 22px;
+    }
+    .content .project-build .project-build-slider {
+        height: auto;
+    }
+    .project-card .contain .image-project {
+        height: auto;
+    }
+    .project-card .contain .about-project {
+        height: auto;
+    }
+
+
+
+}
+
+/* iPad in portrait */
+@media only screen 
+and (min-device-width : 768px) 
+and (max-device-width : 1024px) 
+and (orientation : portrait) { 
+
+    .content .colmun1 {
+        width: 100% !important;
+    }
+    
+    .project-info .titilediv h1 {
+        text-align: center;
+    }
+    .project-info .titilediv h1 {
+        text-align: center;
+    }
+    .content .project-info-content-smallscreen .project-info .title span:last-of-type {
+        top: 0px;
+    }
+    /*    .content .project-info-content .project-info .title span:first-of-type {
+            font-family: 'Montserrat-BoldItalic' !important;
+        }*/
+    .down-form-content .title h2 {
+        font-size: 19px!important;
+    }
+    .content .project-info-content-smallscreen .project-info .info .location {
+        width: 100%;
+        height: auto;
+        text-align: center;
+        min-height: 130px;
+    }
+    .content .project-info-content-smallscreen .project-info .info .location .text {
+        float: right;
+        margin: 0px;
+        width: 100%;
+        text-align: center;
+        margin-top: -10px;
+    }
+    .content .project-info-content-smallscreen .project-info .info .location i {
+        float: none;
+    }
+    .content .project-info-content-smallscreen .project-info .info .location .text #d2 {
+        top: auto;
+        right: auto;
+    }
+    .content .project-info-content-smallscreen .project-info .info .location .text #d1 {
+        font-size: 17px;
+    }
+    .content .project-info-content-smallscreen .project-info .info .apartment {
+        float: left;
+        width: 100% !important;
+        text-align: center;
+        background-color: transparent;
+        margin: 0px !important;
+        min-height: 140px;
+    }
+    .content .project-info-content-smallscreen .project-info .info .apartment i {
+        float: none;
+    }
+    .content .project-info-content-smallscreen .project-info .info .apartment span {
+        float: right !important;
+        font-size: 17px !important;
+        margin: auto !important;
+        width: 100% !important;
+        margin-top: -6px !important;
+    }
+    .content .project-info-content-smallscreen .project-info {
+        width: 100%;
+        height: auto;
+    }
+    .content .project-info-content-smallscreen .project-info .info .coin {
+        width: 100%;
+        float: right;
+        margin: 0px 0 0 0;
+        text-align: center;
+        min-height: 130px;
+    }
+    .content .project-info-content-smallscreen .project-info .info .coin i {
+        float: none;
+    }
+    .content .project-info-content-smallscreen .project-info .info .coin span {
+        float: right;
+        font-size: 17px;
+        margin: 0;
+        width: 100%;
+        margin-top: -20px;
+    }
+    .content .project-info-content-smallscreen .project-info .info .key {
+        width: 100%;
+        text-align: center;
+        float: left;
+        margin: 0px !important;
+        text-align: center;
+        min-height: 130px;
+    }
+    .content .project-info-content-smallscreen .project-info .info .key i {
+        float: none;
+    }
+    .content .project-info-content-smallscreen .project-info .info .key span {
+        float: right;
+        font-size: 17px;
+        margin: 0px !important;
+        width: 100%;
+    }
+    .content .project-info-content-smallscreen .project-info .info .target {
+        font-size: 20px;
+        width: 100%;
+        margin: 0px;
+        direction: rtl;
+        float: left;
+        text-align: center;
+    }
+    .content .project-info-content-smallscreen .project-info .info .target i {
+        float: none;
+    }
+    .content .project-info-content-smallscreen .project-info .info .target div {
+        float: left;
+        margin: 0px;
+        width: 100%;
+        margin-top: -15px;
+        font-size: 17px;
+    }
+    .content .project-info-content-smallscreen .project-info .info .distance {
+        font-size: 20px;
+        width: 100%;
+        float: right;
+        direction: rtl;
+        text-align: center;
+    }
+    .content .project-info-content-smallscreen .project-info .info .distance i {
+        float: none;
+    }
+    .content .project-info-content-smallscreen .project-info .info .distance div {
+        float: left;
+        margin: 0px;
+        width: 100%;
+        margin-top: -15px;
+        font-size: 17px;
+    }
+    .list_projects .txt h2, .prices-list-content .title h2, .content .about_project h2, .content .colmun2 .title h2, .content .colmun1 .location-importance-content .title1 h2,
+    .content .colmun1 .location-importance-content .title1 h2,
+    .content .about-title h2 {
+        font-size: 20px !important;
+        line-height: 28px;
+    }
+    .flaticon-money:before {
+        font-size: 40px;
+        margin-left: 10px;
+    }
+    .prices-list-content .prices-list .top .pay .progres {
+        right: 0px;
+    }
+    .content .project-info-content-smallscreen .project-info .title {
+        font-size: 20px;
+        text-align: center;
+        margin-bottom: 15px;
+        font-weight: bold;
+    }
+    .content .project-info-content-smallscreen .project-info .giftdiv, .content .project-info-content-smallscreen .project-info .sharediv, .content .project-info-content-smallscreen .project-info .likediv {
+        font-size: 13px !important;
+    }
+    .content .project-info-content-smallscreen .project-info {
+        overflow: hidden;
+    }
+    .prices-list .titles div.sub{
+        width: 25% !important;
+    }
+    .prices-list .list .line1 .sub,
+    .prices-list .list .line2 .sub,
+    .prices-list .list .line3 .sub{
+        width: 25% !important;
+        padding: 0px 0px 0px 2px !important;
+    }
+    .date-title {
+        font-size: 13px;
+        padding-top: 5px;
+    }
+    .date-title strong {
+        font-size: 24px;
+        margin-left: 5px;
+    }
+    .prices-list .top .pay .progres .txt {
+        top: 0px;
+        margin-top: 13px;
+        font-size: 15px;
+    }
+    .prices-list .top .money .txt .txt2 span {
+        font-size: 15px !important;
+    }
+    .prices-list .top .pay .progres .pro {
+        margin-top: -6px;
+        height: 60px;
+        width: 60px;
+        font-size: 19px;
+    }
+    .prices-list .top .pay .progres .pro:after {
+        height: 30px;
+        width: 30px;
+        top: 28.5px;
+        left: 28.5px;
+    }
+
+
+    .prices-list .list .titles .num-room.sub {
+        width: 20% !important;
+    }
+    .prices-list .list .titles .notes.sub{
+        width: 25% !important;
+    }
+    .prices-list .list .line1 .col4.sub,
+    .prices-list .list .line2 .col4.sub,
+    .prices-list .list .titles .price.sub {
+        width: 30% !important;
+    }
+    .prices-list .list .line1 .col1.sub,
+    .prices-list .list .line2 .col1.sub{
+        width: 20% !important;
+    }
+    .exchange-currency {
+        left: -15px;
+        height: 22px;
+        top: 4px;
+        font-size: 11px;
+    }
+    .prices-list .list .titles span {
+        font-size: 10px !important;
+        top: -3px;
+    }
+    .prices-list .list .titles .space span {
+        top: 3px;
+    }
+    .prices-list .list .titles .price span {
+        top: 6px;
+        right: 6px;
+    }
+    .prices-list-content .prices-list .still {
+        margin: 8px 0 10px 0!important;
+        font-size: 14px;
+    }
+    .prices-list .list {
+        margin: 0px;
+    }
+    .content .form .title .room .text {
+        font-size: 14px;
+    }
+    .homepage .content .form .title .num {
+        font-size: 18px!important;
+    }
+    .content .form .title .num span {
+        font-size: 20px;
+    }
+    .content .project-info-content-smallscreen .project-info .title .titilediv {
+        font-family: '29LTBukra-Bold' !important; 
+    }
+    .content .project-info-content-smallscreen .project-info .title span:first-of-type{
+        font-family: 'Montserrat', sans-serif !important;
+        font-style: italic;
+        font-weight: bold;
+        margin: 0px 3px;
+    }
+    .project-card .share i {
+        left: -22px;
+    }
+    .formgift .h3,
+    .formgift .h2 {
+        font-size: 20px;
+    }
+
+    .content .form .title .room .bed span {
+        top: -32px;
+        left: -3px;
+    }
+    .prices-list-content {
+        padding: 0px 15px;
+    }
+    .down-form-content {
+        margin-top: 45px;
+    }
+
+}
+
+
+
+
+/* 
+  ##Device = Low Resolution Tablets, Mobiles (Landscape)
+  ##Screen = B/w 481px to 767px
+*/
+
+@media (min-width: 481px) and (max-width: 767px) {
+    .project-info .titilediv h1 {
+        text-align: center !important;
+    }
+    .project-info .titilediv h1 {
+        text-align: center !important;
+    }
+    .down-form-content .title h2 {
+        font-size: 19px!important;
+    }
+    .content .project-info-content-smallscreen .project-info .info .location {
+        width: 100% !important;
+        height: auto !important;
+        text-align: center !important;
+        min-height: 130px !important;
+    }
+    .content .project-info-content-smallscreen .project-info .info .location .text {
+        float: right !important;
+        margin: 0px !important;
+        width: 100% !important;
+        text-align: center !important;
+        margin-top: -10px !important;
+    }
+    .content .project-info-content-smallscreen .project-info .info .location i {
+        float: none !important;
+    }
+    .content .project-info-content-smallscreen .project-info .info .location .text #d2 {
+        top: auto !important;
+        right: auto !important;
+    }
+    .content .project-info-content-smallscreen .project-info .info .location .text #d1 {
+        font-size: 20px !important;
+    }
+    .content .project-info-content-smallscreen .project-info .info .apartment {
+        float: left !important;
+        width: 100% !important;
+        text-align: center !important;
+        background-color: transparent;
+        margin: 0px !important;
+        min-height: 140px !important;
+    }
+    .content .project-info-content-smallscreen .project-info .info .apartment i {
+        float: none !important;
+    }
+    .content .project-info-content-smallscreen .project-info .info .apartment span {
+        float: right !important;
+        font-size: 20px !important;
+        margin: auto !important;
+        width: 100% !important;
+        margin-top: -6px !important;
+    }
+    .content .project-info-content-smallscreen .project-info {
+        width: 100% !important;
+        height: auto !important;
+    }
+    .content .project-info-content-smallscreen .project-info .info .coin {
+        width: 100% !important;
+        float: right !important;
+        margin: 0px 0 0 0 !important;
+        text-align: center !important;
+        min-height: 130px !important;
+    }
+    .content .project-info-content-smallscreen .project-info .info .coin i {
+        float: none !important;
+    }
+    .content .project-info-content-smallscreen .project-info .info .coin span {
+        float: right !important;
+        font-size: 20px !important;
+        margin: 0 !important;
+        width: 100% !important;
+        margin-top: -20px !important;
+    }
+    .content .project-info-content-smallscreen .project-info .info .key {
+        width: 100% !important;
+        text-align: center !important;
+        float: left !important;
+        margin: 0px !important;
+        text-align: center !important;
+        min-height: 130px !important;
+    }
+    .content .project-info-content-smallscreen .project-info .info .key i {
+        float: none;
+    }
+    .content .project-info-content-smallscreen .project-info .info .key span {
+        float: right !important;
+        font-size: 20px !important;
+        margin: 0px !important;
+        width: 100% !important;
+    }
+    .content .project-info-content-smallscreen .project-info .info .target {
+        font-size: 20px !important;
+        width: 100% !important;
+        margin: 0px !important;
+        direction: rtl !important;
+        float: left !important;
+        text-align: center !important;
+    }
+    .content .project-info-content-smallscreen .project-info .info .target i {
+        float: none !important;
+    }
+    .content .project-info-content-smallscreen .project-info .info .target div {
+        float: left !important;
+        margin: 0px !important;
+        width: 100% !important;
+        margin-top: -15px !important;
+    }
+    .content .project-info-content-smallscreen .project-info .info .distance {
+        font-size: 20px !important;
+        width: 100% !important;
+        float: right !important;
+        direction: rtl !important;
+        text-align: center !important;
+    }
+    .content .project-info-content-smallscreen .project-info .info .distance i {
+        float: none !important;
+    }
+    .content .project-info-content-smallscreen .project-info .info .distance div {
+        float: left !important;
+        margin: 0px !important;
+        width: 100% !important;
+        margin-top: -15px !important;
+    }
+    .prices-list-content .prices-list .list .titles .date div {
+        background-color: #132467;
+        position: relative;
+        height: 22px;
+        padding: 10px 0;
+    }
+    .content .project-info-content-smallscreen .project-info .title {
+        font-size: 20px;
+        text-align: center;
+        margin-bottom: 15px;
+    }
+    .content .project-info-content-smallscreen .project-info {
+        overflow: hidden;
+    }
+    .date-title {
+        font-size: 13px;
+        padding-top: 5px;
+    }
+    .date-title strong {
+        font-size: 24px;
+        margin-left: 5px;
+    }
+    .formgift .h3,
+    .formgift .h2 {
+        font-size: 20px;
+    }
+    .content .form .title .room .bed span {
+        top: -32px;
+        left: -3px;
+    }
+    .prices-list-content {
+        padding: 0px 15px;
+    }
+    .down-form-content {
+        margin-top: 45px;
+    }
+    .project-internal .project-info-content .project-info {
+        width: 100%;
+    }
+
+}
+
+
+/* 
+  ##Device = Most of the Smartphones Mobiles (Portrait)
+  ##Screen = B/w 320px to 479px
+*/
+
+@media (min-width: 320px) and (max-width: 480px) {
+    .project-info .titilediv h1 {
+        text-align: center;
+    }
+    .project-info .titilediv h1 {
+        text-align: center;
+    }
+    .content .project-info-content-smallscreen .project-info .title span:last-of-type {
+        top: 0px;
+    }
+    /*    .content .project-info-content .project-info .title span:first-of-type {
+            font-family: 'Montserrat-BoldItalic' !important;
+        }*/
+    .down-form-content .title h2 {
+        font-size: 19px!important;
+    }
+    .content .project-info-content-smallscreen .project-info .info .location {
+        width: 100%;
+        height: auto;
+        text-align: center;
+        min-height: 130px;
+    }
+    .content .project-info-content-smallscreen .project-info .info .location .text {
+        float: right;
+        margin: 0px;
+        width: 100%;
+        text-align: center;
+        margin-top: -10px;
+    }
+    .content .project-info-content-smallscreen .project-info .info .location i {
+        float: none;
+    }
+    .content .project-info-content-smallscreen .project-info .info .location .text #d2 {
+        top: auto;
+        right: auto;
+    }
+    .content .project-info-content-smallscreen .project-info .info .location .text #d1 {
+        font-size: 17px;
+    }
+    .content .project-info-content-smallscreen .project-info .info .apartment {
+        float: left;
+        width: 100% !important;
+        text-align: center;
+        background-color: transparent;
+        margin: 0px !important;
+        min-height: 140px;
+    }
+    .content .project-info-content-smallscreen .project-info .info .apartment i {
+        float: none;
+    }
+    .content .project-info-content-smallscreen .project-info .info .apartment span {
+        float: right !important;
+        font-size: 17px !important;
+        margin: auto !important;
+        width: 100% !important;
+        margin-top: -6px !important;
+    }
+    .content .project-info-content-smallscreen .project-info {
+        width: 100%;
+        height: auto;
+    }
+    .content .project-info-content-smallscreen .project-info .info .coin {
+        width: 100%;
+        float: right;
+        margin: 0px 0 0 0;
+        text-align: center;
+        min-height: 130px;
+    }
+    .content .project-info-content-smallscreen .project-info .info .coin i {
+        float: none;
+    }
+    .content .project-info-content-smallscreen .project-info .info .coin span {
+        float: right;
+        font-size: 17px;
+        margin: 0;
+        width: 100%;
+        margin-top: -20px;
+    }
+    .content .project-info-content-smallscreen .project-info .info .key {
+        width: 100%;
+        text-align: center;
+        float: left;
+        margin: 0px !important;
+        text-align: center;
+        min-height: 130px;
+    }
+    .content .project-info-content-smallscreen .project-info .info .key i {
+        float: none;
+    }
+    .content .project-info-content-smallscreen .project-info .info .key span {
+        float: right;
+        font-size: 17px;
+        margin: 0px !important;
+        width: 100%;
+    }
+    .content .project-info-content-smallscreen .project-info .info .target {
+        font-size: 20px;
+        width: 100%;
+        margin: 0px;
+        direction: rtl;
+        float: left;
+        text-align: center;
+    }
+    .content .project-info-content-smallscreen .project-info .info .target i {
+        float: none;
+    }
+    .content .project-info-content-smallscreen .project-info .info .target div {
+        float: left;
+        margin: 0px;
+        width: 100%;
+        margin-top: -15px;
+        font-size: 17px;
+    }
+    .content .project-info-content-smallscreen .project-info .info .distance {
+        font-size: 20px;
+        width: 100%;
+        float: right;
+        direction: rtl;
+        text-align: center;
+    }
+    .content .project-info-content-smallscreen .project-info .info .distance i {
+        float: none;
+    }
+    .content .project-info-content-smallscreen .project-info .info .distance div {
+        float: left;
+        margin: 0px;
+        width: 100%;
+        margin-top: -15px;
+        font-size: 17px;
+    }
+    .list_projects .txt h2, .prices-list-content .title h2, .content .about_project h2, .content .colmun2 .title h2, .content .colmun1 .location-importance-content .title1 h2,
+    .content .colmun1 .location-importance-content .title1 h2,
+    .content .about-title h2 {
+        font-size: 20px !important;
+        line-height: 28px;
+    }
+    .flaticon-money:before {
+        font-size: 40px;
+        margin-left: 10px;
+    }
+    .prices-list-content .prices-list .top .pay .progres {
+        right: 0px;
+    }
+    .content .project-info-content-smallscreen .project-info .title {
+        font-size: 20px;
+        text-align: center;
+        margin-bottom: 15px;
+        font-weight: bold;
+    }
+    .content .project-info-content-smallscreen .project-info .giftdiv, .content .project-info-content-smallscreen .project-info .sharediv, .content .project-info-content-smallscreen .project-info .likediv {
+        font-size: 13px !important;
+    }
+    .content .project-info-content-smallscreen .project-info {
+        overflow: hidden;
+    }
+    .prices-list .titles div.sub{
+        width: 25% !important;
+    }
+    .prices-list .list .line1 .sub,
+    .prices-list .list .line2 .sub,
+    .prices-list .list .line3 .sub{
+        width: 25% !important;
+        padding: 0px 0px 0px 2px !important;
+    }
+    .date-title {
+        font-size: 13px;
+        padding-top: 5px;
+    }
+    .date-title strong {
+        font-size: 24px;
+        margin-left: 5px;
+    }
+    .prices-list .top .pay .progres .txt {
+        top: 0px;
+        margin-top: 13px;
+        font-size: 15px;
+    }
+    .prices-list .top .money .txt .txt2 span {
+        font-size: 15px !important;
+    }
+    .prices-list .top .pay .progres .pro {
+        margin-top: -6px;
+        height: 60px;
+        width: 60px;
+        font-size: 19px;
+    }
+    .prices-list .top .pay .progres .pro:after {
+        height: 30px;
+        width: 30px;
+        top: 28.5px;
+        left: 28.5px;
+    }
+
+
+    .prices-list .list .titles .num-room.sub {
+        width: 20% !important;
+    }
+    .prices-list .list .titles .notes.sub{
+        width: 25% !important;
+    }
+    .prices-list .list .line1 .col4.sub,
+    .prices-list .list .line2 .col4.sub,
+    .prices-list .list .titles .price.sub {
+        width: 30% !important;
+    }
+    .prices-list .list .line1 .col1.sub,
+    .prices-list .list .line2 .col1.sub{
+        width: 20% !important;
+    }
+    .exchange-currency {
+        left: -15px;
+        height: 22px;
+        top: 4px;
+        font-size: 11px;
+    }
+    .prices-list .list .titles span {
+        font-size: 10px !important;
+        top: -3px;
+    }
+    .prices-list .list .titles .space span {
+        top: 3px;
+    }
+    .prices-list .list .titles .price span {
+        top: 6px;
+        right: 6px;
+    }
+    .prices-list-content .prices-list .still {
+        margin: 8px 0 10px 0!important;
+        font-size: 14px;
+    }
+    .prices-list .list {
+        margin: 0px;
+    }
+    .content .form .title .room .text {
+        font-size: 14px;
+    }
+    .homepage .content .form .title .num {
+        font-size: 18px!important;
+    }
+    .content .form .title .num span {
+        font-size: 20px;
+    }
+    .content .project-info-content-smallscreen .project-info .title .titilediv {
+        font-family: '29LTBukra-Bold' !important; 
+    }
+    .content .project-info-content-smallscreen .project-info .title span:first-of-type{
+        font-family: 'Montserrat', sans-serif !important;
+        font-style: italic;
+        font-weight: bold;
+        margin: 0px 3px;
+    }
+    .project-card .share i {
+        left: -22px;
+    }
+    .formgift .h3,
+    .formgift .h2 {
+        font-size: 20px;
+    }
+
+    .content .form .title .room .bed span {
+        top: -32px;
+        left: -3px;
+    }
+    .prices-list-content {
+        padding: 0px 15px;
+    }
+    .down-form-content {
+        margin-top: 45px;
+    }
+    .down-form-content {
+        margin-top: 50px !important;
+    }
+    .project-internal .project-info-content .project-info {
+        width: 100%;
+    }
+}

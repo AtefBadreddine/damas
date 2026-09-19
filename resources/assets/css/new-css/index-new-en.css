@@ -1,0 +1,176 @@
+.blk_searh .discover-mobile .title h3, .certificate .title h3, .most-watched .title h3, .content .how-to-use .title h2 {
+    font-size: 20px !important;
+    line-height: 30px;
+}
+.news .subnews1 .title a {
+    font-size: 16px;
+    font-weight: bold;
+}
+.news .post2 .read-more {
+    padding: 6px;
+}
+.new-videos .main-video .title {
+    font-weight: bold;
+}
+.new-videos .title:first-of-type {
+    font-weight: bold;
+    font-style: italic;
+}
+.slide-text {
+    max-width: 665px;
+}
+.slide-text > h1 {
+    line-height: 46px;
+    font-size: 28px;
+    text-align: left !important;
+    text-transform: capitalize;
+}
+.slide-text > h1 span{
+    font-size: 40px;
+    font-weight: bold;
+}
+.slide-text > a{
+    font-weight: bold;
+}
+.slide-text > h1 span {
+    margin-right: 0px;
+    margin-left: 10px;
+}
+.slide-text > p {
+    font-size: 26px;
+    text-transform: capitalize;
+}
+.slide-text > a.btn-default {
+    margin-top: 10px;
+}
+
+.contentNew p{
+    direction: ltr;
+}
+.contentNew .text-cont:before {
+    content: "";
+    display: block;
+    border-style: solid;
+    border-width: 31px 0 0 31px;
+    border-color: #E9EBEE transparent;
+    position: absolute;
+    top: -2px;
+    left: auto;
+    right: -1px;
+}
+.contentNew img {
+    margin-left: 0px;
+    margin-right: 8px;
+}
+/* 
+  ##Device = Desktops
+  ##Screen = 1281px to higher resolution desktops
+*/
+
+@media (min-width: 1281px) {
+
+
+
+}
+
+/* 
+  ##Device = Laptops, Desktops
+  ##Screen = B/w 1025px to 1280px
+*/
+
+@media (min-width: 1025px) and (max-width: 1280px) {
+
+
+
+}
+
+/* 
+  ##Device = Tablets, Ipads (portrait)
+  ##Screen = B/w 768px to 1024px
+*/
+
+@media (min-width: 768px) and (max-width: 1024px) {
+
+}
+
+/* 
+  ##Device = Tablets, Ipads (landscape)
+  ##Screen = B/w 768px to 1024px
+*/
+
+@media (min-width: 768px) and (max-width: 1024px) and (orientation: landscape) {
+
+
+
+}
+
+/* 
+  ##Device = Low Resolution Tablets, Mobiles (Landscape)
+  ##Screen = B/w 481px to 767px
+*/
+
+@media (min-width: 481px) and (max-width: 767px) {
+
+    .project-card .contain .image-project img {
+        height: 235px !important;
+    }
+    .about-damas .read-more_d {
+        font-size: 18px !important;
+        height: auto !important;
+        padding: 4px;
+    }
+    .header .logo {
+        margin-left: 40px;
+    }
+    .slide-text > h1 {
+        line-height: 39px;
+        font-size: 19px;
+        text-align: right !important;
+    }
+    .slide-text > h1 span {
+        font-size: 26px;
+    }
+}
+
+/* 
+  ##Device = Most of the Smartphones Mobiles (Portrait)
+  ##Screen = B/w 320px to 479px
+*/
+
+@media (min-width: 320px) and (max-width: 480px) {
+
+    .project-card .contain .image-project img {
+        height: 235px !important;
+    }
+    .about-damas .read-more_d {
+        font-size: 18px !important;
+        height: auto !important;
+        padding: 4px;
+    }
+    .header .logo {
+        margin-left: 40px;
+    }
+    .slide-text > h1 {
+        line-height: 26px;
+        font-size: 14px;
+        padding-left: 50px;
+        text-align: right !important;
+    }
+    .slide-text > h1 span {
+        font-size: 26px;
+    }
+    .slide-text > h1.title-mob {
+        font-size: 15px;
+        margin-bottom: 5px;
+    }
+    .slide-text > p.text-mob {
+        margin-top: 0px;
+        line-height: 20px;
+        font-weight: 500;
+        font-size: 18px;
+    }
+    .discover-mobile .title h3 {
+        font-size: 14px !important;
+    }
+
+}

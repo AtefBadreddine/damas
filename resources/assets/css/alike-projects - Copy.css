@@ -1,0 +1,108 @@
+/* start sass */
+.main-head {
+  color: #bebebe;
+  margin-top: 0;
+  letter-spacing: 2px;
+  border-bottom: 2px solid #264584;
+  padding-bottom: 20px;
+  width: auto;
+  position: relative;
+  font-weight: bold; }
+  .main-head:after {
+    position: absolute;
+    content: '';
+    bottom: -10px;
+    left: calc(50% - 10px);
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: #fff;
+    border: 2px solid #264584; }
+  .main-head:before {
+    position: absolute;
+    content: '';
+    bottom: -5px;
+    z-index: 20;
+    left: calc(50% - 5px);
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: #264584; }
+  @media (max-width: 767px) {
+    .main-head {
+      font-size: 24px !important;
+      letter-spacing: 0; } }
+
+/* end sass */
+/* start alikes */
+.alikes > aside {
+  min-height: 100px; }
+.alikes .btn {
+  display: block;
+  width: 200px;
+  margin: 20px auto; }
+.alikes > aside > h3 {
+  padding: 15px 0;
+  margin: 0 0 20px 0;
+  background-color: #fafafa; }
+.alikes .alike-item {
+  position: relative;
+  overflow: hidden;
+  height: 280px;
+  margin-bottom: 15px; }
+  .alikes .alike-item:hover aside {
+    bottom: 0 !important; }
+  .alikes .alike-item img {
+    height: 100%;
+    width: 100%; }
+  .alikes .alike-item .try {
+    padding: 10px;
+    position: absolute;
+    top: 5px;
+    left: 10px;
+    font-weight: bolder;
+    border-radius: 5px 0 0 0;
+    background-color: #264584;
+    color: #fff; }
+  .alikes .alike-item aside {
+    position: absolute;
+    bottom: -80px;
+    left: 0;
+    width: 100%;
+    transition: all 0.3s ease-out;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.1)); }
+    .alikes .alike-item aside h3 {
+      color: #fff;
+      font-weight: bolder;
+      text-align: right;
+      margin-right: 20px;
+      margin-bottom: 20px; }
+      .alikes .alike-item aside h3 i {
+        margin-left: 15px; }
+        .alikes .alike-item aside h3 i:before {
+          font-size: 24px; }
+      @media (max-width: 767px) {
+        .alikes .alike-item aside h3 {
+          font-size: 20px; }
+          .alikes .alike-item aside h3 i {
+            margin-left: -6px !important; } }
+    .alikes .alike-item aside ul {
+      list-style: none;
+      color: #fff;
+      display: flex;
+      justify-content: space-around;
+      flex-direction: row-reverse;
+      font-size: 20px;
+      padding: 5px 0; }
+      .alikes .alike-item aside ul li span {
+        line-height: 30px;
+        font-size: 28px;
+        display: block;
+        text-align: center; }
+        .alikes .alike-item aside ul li span:before {
+          line-height: 30px;
+          font-size: 28px !important; }
+
+/* end alikes */
+
+/*# sourceMappingURL=alike-projects.css.map */

@@ -1,0 +1,823 @@
+
+.chart-filters{
+    float: left;
+    width: 100%;
+    height: auto;
+    display: block;
+    margin: 5px 0px 10px 0px;
+    position: relative;
+    z-index: 99;
+}
+
+.chart-filters .col.s4.dropOption{
+    width: 100%;
+    height: auto;
+    min-height: 30px;
+    padding: 0px;
+    border: 1px solid #132467;
+    border-radius: 4px;
+    margin-top: 0px;
+}
+.chart-filters .col.s4.dropOption .select {
+    width: 100% !important;
+}
+.chart-filters .dropdown--image .dropdown__select {
+    padding-right: 0;
+    padding: 0px 5px;
+    text-align: center;
+}
+.chart-filters .dropdown--image .dropdown__options-wraps.active,
+.chart-filters .dropdown__options-wraps.active {
+    left: 0px;
+    border: 1px solid #132467;
+}
+.chart-filters .dropdown__select:after {
+    right: auto;
+    left: 5px;
+    color: #264584;
+}
+.chart-filters .dropdown--image .dropdown__select-wrap span {
+    font-size: 13px;
+    margin-top: 2px;
+    color: #132467;
+}
+.chart-filters .dropdown__option span {
+    color: #132467;
+    border-left: 0px;
+    border-right: 0px;
+    font-size: 13px;
+    width: 100%;
+    text-align: center;
+    margin: 0px;
+}
+.chart-filters .dropdown__option {
+    height: 30px;
+}
+.chart-filters button {
+    height: 30px;
+    font-size: 13px;
+    padding: 0px;
+    width: 100%;
+    text-align: center;
+    margin: 0px;
+    border-radius: 4px;
+    background-color: transparent;
+    border-color: #132467;
+    color: #132467;
+}
+.chart-filters button:focus{
+    box-shadow: none;
+    background-color: #132467;
+    color: #ffffff;
+}
+.chart-filters .col-md-4 {
+    padding-right: 5px;
+    padding-left: 5px;
+    margin-bottom: 10px;
+}
+.statistics-section .content-new.myChart{
+    min-height: 280px;
+}
+
+/************---- Start chart ----*************/
+.chart{
+    float: left;
+    width: 100%;
+    height: auto;
+    padding-top: 15px;
+}
+.chart .lables{
+    float: left;
+    width: 30%;
+    height: 200px;
+    padding-right: 5px;
+}
+.myChart_c .chart .lables{
+    width: 25%;
+}
+.myChart_c .chart .lables ul li p{
+    width: 100%;
+}
+.chart .lables ul{
+    float: left;
+    width: 100%;
+    height: 100%;
+    padding: 0px;
+    margin: 0px;
+}
+.chart .lables ul li{
+    float: left;
+    width: 100%;
+    height: 20%;
+    list-style: none;
+}
+.chart .lables ul li img{
+    float: right;
+    width: 25px;
+}
+.chart .lables ul li p{
+    float: right;
+    font-size: 12px;
+    color: #000042;
+    margin: 0px;
+    position: relative;
+    top: 0px;
+    margin-right: 0px;
+    width: calc(100% - 25px);
+    text-align: right;
+    display: block;
+    padding-right: 4px;
+    line-height: 15px;
+}
+.chart .bars{
+    float: right;
+    width: 70%;
+    height: 200px;
+    position: relative;
+    z-index: 9;
+}
+.myChart_c .chart .bars{
+    width: 75%;
+}
+.chart .bars ul{
+    float: left;
+    width: 100%;
+    height: 100%;
+    padding: 0px;
+}
+.chart .bars ul li{
+    float: left;
+    width: 100%;
+    height: 20%;
+    list-style: none;
+}
+.chart .bars ul li .progress{
+    float: left;
+    height: 19px;
+    position: relative;
+    top: -2px;
+    z-index: 99;
+    background: rgb(239,8,8);
+    background: linear-gradient(90deg, rgba(239,8,8,1) 0%, rgba(138,29,29,1) 49%, rgba(97,9,9,1) 100%);
+}
+.chart .bars ul li .progress.green{
+    background: rgb(0,191,183);
+    background: linear-gradient(90deg, rgba(0,191,183,1) 0%, rgba(0,99,72,1) 49%, rgba(0,99,72,1) 100%);
+}
+.chart .bars ul li .progress span{
+    position: absolute;
+    top: -4px;
+    right: 5px;
+    font-size: 16px;
+    color: #ffffff;
+    height: 19px;
+}
+.chart .bars ul li span.small-w{
+    float: left;
+    position: relative;
+    top: -5px;
+    left: 5px;
+}
+.chart .bars .firstLine{
+    position: absolute;
+    top: -15px;
+    left: 0px;
+    width: 1px;
+    height: calc(100% + 5px);
+    background-color: #666666;
+    z-index: 9;
+    display: inline-table;
+}
+.chart .bars .firstLine span{
+    position: absolute;
+    bottom: -16px;
+    left: -3px;
+    font-size: 12px;
+    color: #666666;
+}
+.chart .bars .secondLine{
+    position: absolute;
+    top: -15px;
+    left: 33%;
+    width: 1px;
+    height: calc(100% + 5px);
+    background-color: #666666;
+    z-index: 9;
+    display: inline-table;
+}
+.chart .bars .secondLine span{
+    position: absolute;
+    bottom: -16px;
+    right: -8px;
+    font-size: 12px;
+    color: #666666;
+}
+.chart .bars .thirdLine{
+    position: absolute;
+    top: -15px;
+    left: 66%;
+    width: 1px;
+    height: calc(100% + 5px);
+    background-color: #666666;
+    z-index: 9;
+    display: inline-table;
+}
+.chart .bars .thirdLine span{
+    position: absolute;
+    bottom: -16px;
+    right: -8px;
+    font-size: 12px;
+    color: #666666;
+}
+.chart .bars .fourthLine{
+    position: absolute;
+    top: -15px;
+    right: 0px;
+    width: 1px;
+    height: calc(100% + 5px);
+    background-color: #666666;
+    z-index: 9;
+    display: inline-table;
+}
+.chart .bars .fourthLine span{
+    position: absolute;
+    bottom: -16px;
+    right: -8px;
+    font-size: 12px;
+    color: #666666;
+}
+.chart-filters .bootstrap-select{
+    width: 100%;
+}
+/************---- End chart ----*************/
+
+
+
+/************---- Start Multi Select ----*************/
+span.multiselect-native-select {
+    position: relative;
+    width: 100%;
+    display: block;
+}
+span.multiselect-native-select .btn-group button,
+span.multiselect-native-select .btn-group{
+    width: 100%;
+}
+.multiselect-selected-text{
+    font-size: 12px;
+    max-width: 80px;
+    overflow: hidden;
+    float: right;
+    text-align: right;
+    direction: rtl;
+    width: 100%;
+    text-align: center;
+}
+.multiselect.dropdown-toggle::after {
+    border-top: 5px solid;
+    border-right: 5px solid transparent;
+    border-bottom: 0;
+    border-left: 5px solid transparent;
+    position: absolute;
+    left: 0px;
+    top: 12px;
+}
+
+.multiselect-container {
+    position: absolute;
+    list-style-type: none;
+    margin: 0;
+    padding: 5px;
+    max-width: 120px;
+    min-width: 120px;
+    border-color: #132467;
+    top: 34px;
+    max-height: 182px !important;
+}
+.multiselect-container .input-group {
+    margin: 0px;
+}
+.multiselect-native-select .btn-group.open button.dropdown-toggle:after{
+    transform: rotate(180deg);
+}
+.multiselect-container>li {
+    padding: 0;
+    text-align: center;
+}
+.multiselect-container>li>a {
+    width: 100%;
+    font-size: 13px;
+    color: #132467;
+    display: block;
+    padding: 0px 0px 5px 0px;
+    border: 1px solid #132467;
+    border-radius: 4px;
+    margin-top: 5px;
+}
+.multiselect-container>li.active>a,
+.multiselect-container>li>a:hover{
+    background-color: #132467;
+    color: #ffffff;
+}
+.multiselect-container>li>a>label {
+    padding: 2px 10px;
+    width: 100%;
+}
+.multiselect-container>li>a>label>input[type=checkbox] {
+    display: none;
+}
+.multiselect-search{
+    height: 30px;
+    border-radius: 4px !important;
+}
+.multiselect-filter .input-group .input-group-addon,
+.multiselect-filter .input-group .input-group-btn{
+    display: none;
+}
+
+
+
+
+
+
+.chart-filters .col-xs-12 {
+    float:left;
+    margin:0 0px 0 0;
+    width:33.3333%;
+    height:40px;
+    position:relative;
+}
+.chart-filters .col-xs-12 label{
+    position:relative;
+}
+.chart-filters-rent label, .chart-filters-rent input,.chart-filters-sale label, .chart-filters-sale input {
+    display:block;
+    position:absolute;
+    top:0;
+    left:0;
+    right:0;
+    bottom:0;
+}
+
+.chart-filters-rent input[type="radio"] , .chart-filters-sale input[type="radio"] {
+    opacity:0.011;
+    z-index:100;
+    width: 100%;
+    height: 100%;
+}
+
+.chart-filters-rent input[type="radio"]:checked + label , .chart-filters-sale input[type="radio"]:checked + label {
+    background-color: #132467;
+    color: #fff;
+}
+
+.chart-filters-rent label , .chart-filters-sale label {
+    padding:5px 4px;
+    border:1px solid #132467; 
+    cursor:pointer;
+    z-index:90;
+    text-align: center;
+    font-size: 13px;
+    border-radius: 4px;
+}
+
+.chart-filters-rent label:hover , .chart-filters-sale label:hover {
+    box-shadow: none;
+    background-color: #132467;
+    color: #ffffff;
+}
+/************---- End Multi Select ----*************/
+
+
+.statistics-section .dropdown--image .dropdown__options-wrap.active,
+.statistics-section .dropdown__options-wrap.active {
+    border: 1px solid #1F3A73;
+    border-bottom: 1px solid #1F3A73 !important;
+}
+
+
+/*scroll bar for safari & chrome*/
+
+.multiselect-container::-webkit-scrollbar,
+.statistics-section .dropdown__options-wrap::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+.multiselect-container::-webkit-scrollbar-button:start:decrement,
+.multiselect-container::-webkit-scrollbar-button:end:increment,
+.statistics-section .dropdown__options-wrap::-webkit-scrollbar-button:start:decrement,
+.statistics-section .dropdown__options-wrap::-webkit-scrollbar-button:end:increment {
+    height: 1px;
+    display: block;
+    background-color: #e9ebee;
+}
+.multiselect-container::-webkit-scrollbar-button:horizontal:start:decrement,
+.multiselect-container::-webkit-scrollbar-button:horizontal:end:increment,
+.statistics-section .dropdown__options-wrap::-webkit-scrollbar-button:horizontal:start:decrement,
+.statistics-section .dropdown__options-wrap::-webkit-scrollbar-button:horizontal:end:increment {
+    height: 1px;
+    display: block;
+    background-color: #e9ebee;
+}
+.multiselect-container::-webkit-scrollbar-track-piece,
+.multiselect-container::-webkit-scrollbar-track-piece {
+    background-color: #e9ebee;
+}
+.multiselect-container::-webkit-scrollbar-thumb:vertical,
+.multiselect-container::-webkit-scrollbar-thumb:horizontal,
+.statistics-section .dropdown__options-wrap::-webkit-scrollbar-thumb:vertical,
+.statistics-section .dropdown__options-wrap::-webkit-scrollbar-thumb:horizontal{
+    background-color: #cccccc;
+    border: 1px solid #cccccc;
+    -webkit-border-radius: 6px;
+}
+
+.speech-bubble {
+    background: rgba(0, 0, 0, 0.8);
+    border-radius: .4em;
+    width: 100px;
+    height: 30px;
+    display: block;
+    position: absolute;
+    top: -45px;
+    color: #ffffff;
+    text-align: center;
+    padding-top: 5px;
+    font-size: 13px;
+    display: none;
+}
+.speech-bubble:after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border: 12px solid transparent;
+    border-top-color: rgba(0, 0, 0, 0.8);
+    border-bottom: 0;
+    border-left: 0;
+    margin-left: -18px;
+    margin-bottom: -12px;
+}
+
+
+
+.section-radar{
+    float: left;
+    width: 100%;
+    height: auto;
+    position: relative;
+}
+.section-radar img{
+    width: 50px;
+}
+.section-radar .icon-one{
+    position: absolute;
+    right: 0px;
+    top: 26%;
+    cursor: pointer;
+}
+.section-radar .icon-one img{
+    width: 60px;
+}
+.section-radar .icon-two{
+    position: absolute;
+    right: 50%;
+    margin-right: -50px;
+    top: 2px;
+    cursor: pointer;
+}
+.section-radar .icon-two img{
+    width: 100px;
+}
+.section-radar .icon-three{
+    position: absolute;
+    left: 0px;
+    top: 26%;
+    cursor: pointer;
+}
+.section-radar .icon-four{
+    position: absolute;
+    left: 10%;
+    bottom: 0;
+    cursor: pointer;
+}
+.section-radar .icon-four img{
+    width: 43px;
+}
+.section-radar .icon-five{
+    position: absolute;
+    right: 10%;
+    bottom: 0px;
+    cursor: pointer;
+}
+.section-radar .icon-five img{
+    width: 48px;
+}
+.section-radar #radarChart{
+    height: 300px !important;
+    width: 300px !important;
+    margin: auto !important;
+}
+.area-services-btn{
+    transition: all .2s ease-in-out;
+}
+.area-services-btn:hover{
+    transform: scale(1.1);
+    transition: all .2s ease-in-out;
+}
+
+/****-- Start Modal --****/
+.area-services-modal{
+    position: fixed;
+    top: 0px;
+    right: 0px;
+    bottom: 0px;
+    left: 0px;
+    background-color: rgba(0,0,0,0.5);
+    z-index: 999999;
+    padding: 100px;
+    display: none;
+}
+.area-services-modal.fadeInDown{
+    display: block;
+}
+.area-services-modal i.fa-close{
+    position: absolute;
+    left: 105px;
+    top: 105px;
+    font-size: 17px;
+    color: #fff;
+    cursor: pointer;
+    background-color: #1F3A73;
+    width: 25px;
+    height: 25px;
+    text-align: center;
+    border-radius: 50%;
+    padding: 4px;
+}
+.area-services-modal i.fa-close:hover{
+    opacity: 0.7;
+}
+.area-services-modal .int-content{
+    float: left;
+    width: 100%;
+    height: 100%;
+    background-color: #ffffff;
+    border-radius: 10px;
+    padding: 30px;
+}
+.area-services-modal .int-content .text{
+    float: left;
+    width: 100%;
+    height: calc(100% - 60px);
+    overflow: auto;
+    padding: 0px 10px;
+}
+/*scroll bar for safari & chrome*/
+
+.area-services-modal .int-content .text::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+.area-services-modal .int-content .text::-webkit-scrollbar-button:start:decrement,
+.area-services-modal .int-content .text::-webkit-scrollbar-button:end:increment {
+    height: 1px;
+    display: block;
+    background-color: #e9ebee;
+}
+.area-services-modal .int-content .text::-webkit-scrollbar-button:horizontal:start:decrement,
+.area-services-modal .int-content .text::-webkit-scrollbar-button:horizontal:end:increment {
+    height: 1px;
+    display: block;
+    background-color: #e9ebee;
+}
+.area-services-modal .int-content .text::-webkit-scrollbar-track-piece {
+    background-color: #e9ebee;
+}
+.area-services-modal .int-content .text::-webkit-scrollbar-thumb:vertical,
+.area-services-modal .int-content .text::-webkit-scrollbar-thumb:horizontal{
+    background-color: #cccccc;
+    border: 1px solid #cccccc;
+    -webkit-border-radius: 6px;
+}
+.area-services-modal .int-content h2{
+    text-align: right;
+    float: right;
+    border-bottom: 2px solid;
+    padding-bottom: 10px;
+    font-size: 22px;
+}
+.area-services-modal .int-content p{
+    text-align: right;
+    font-size: 16px;
+    line-height: 29px;
+    direction: rtl;
+    color: #555555;
+}
+/****-- End Modal --****/
+
+
+
+
+/* 
+  ##Device = Desktops
+  ##Screen = 1281px to higher resolution desktops
+*/
+
+@media (min-width: 1281px) {
+
+
+
+}
+
+/* 
+  ##Device = Laptops, Desktops
+  ##Screen = B/w 1025px to 1280px
+*/
+
+@media (min-width: 1025px) and (max-width: 1280px) {
+
+
+
+}
+
+
+
+
+
+/* 
+  ##Device = Tablets, Ipads (portrait)
+  ##Screen = B/w 768px to 1024px
+*/
+
+@media (min-width: 768px) and (max-width: 1024px) {
+
+    .area-services-btn {
+        animation: shake-animation 4.72s ease infinite;
+        transform-origin: 50% 50%;
+    }
+    .element {
+        margin: 0 auto;
+        width: 150px;
+        height: 150px;
+        background: red;
+    }
+    @keyframes shake-animation {
+        0% { transform:scale(1.0) }
+        1.78571% { transform:scale(1.1) }
+        3.57143% { transform:scale(1.0) }
+        5.35714% { transform:scale(1.1) }
+        7.14286% { transform:scale(1.0) }
+        8.92857% { transform:scale(1.1) }
+        10.71429% { transform:scale(1.0) }
+        100% { transformscale(1.0) }
+    }
+    .area-services-modal .int-content h2 {
+        font-size: 20px;
+        line-height: 30px;
+    }
+}
+
+/* 
+  ##Device = Tablets, Ipads (landscape)
+  ##Screen = B/w 768px to 1024px
+*/
+
+@media (min-width: 768px) and (max-width: 1024px) and (orientation: landscape) {
+
+    .area-services-btn {
+        animation: shake-animation 4.72s ease infinite;
+        transform-origin: 50% 50%;
+    }
+    .element {
+        margin: 0 auto;
+        width: 150px;
+        height: 150px;
+        background: red;
+    }
+    @keyframes shake-animation {
+        0% { transform:scale(1.0) }
+        1.78571% { transform:scale(1.1) }
+        3.57143% { transform:scale(1.0) }
+        5.35714% { transform:scale(1.1) }
+        7.14286% { transform:scale(1.0) }
+        8.92857% { transform:scale(1.1) }
+        10.71429% { transform:scale(1.0) }
+        100% { transformscale(1.0) }
+    }
+    .area-services-modal .int-content h2 {
+        font-size: 20px;
+        line-height: 30px;
+    }
+
+}
+
+/* 
+  ##Device = Low Resolution Tablets, Mobiles (Landscape)
+  ##Screen = B/w 481px to 767px
+*/
+
+@media (min-width: 481px) and (max-width: 767px) {
+    .area-services-modal{
+        padding: 15px;
+    }
+    .area-services-modal .int-content {
+        padding: 5px 10px 30px 10px;
+    }
+    .area-services-modal i.fa-close {
+        left: 20px;
+        top: 20px;
+        font-size: 16px;
+    }
+    .area-services-btn {
+        animation: shake-animation 4.72s ease infinite;
+        transform-origin: 50% 50%;
+    }
+    .element {
+        margin: 0 auto;
+        width: 150px;
+        height: 150px;
+        background: red;
+    }
+    @keyframes shake-animation {
+        0% { transform:scale(1.0) }
+        1.78571% { transform:scale(1.1) }
+        3.57143% { transform:scale(1.0) }
+        5.35714% { transform:scale(1.1) }
+        7.14286% { transform:scale(1.0) }
+        8.92857% { transform:scale(1.1) }
+        10.71429% { transform:scale(1.0) }
+        100% { transformscale(1.0) }
+    }
+    .area-services-modal .int-content h2 {
+        font-size: 20px;
+        line-height: 30px;
+    }
+    .chart .bars ul li .progress span {
+        line-height: 25px;
+    }
+    .multiselect-container>li>a {
+        padding: 2px 0px 2px 0px;
+    }
+}
+
+/* 
+  ##Device = Most of the Smartphones Mobiles (Portrait)
+  ##Screen = B/w 320px to 479px
+*/
+
+@media (min-width: 320px) and (max-width: 480px) {
+    .col-xs-6{
+        width: 50%;
+    }
+    .chart-filters .dropdown--image .dropdown__select-wrap span,
+    .chart-filters-rent label, .chart-filters-sale label {
+        font-size: 12px;
+    }
+    .chart .lables ul li p {
+        font-size: 11px;
+    }
+    .area-services-modal{
+        padding: 15px;
+    }
+    .area-services-modal .int-content {
+        padding: 5px 10px 30px 10px;
+    }
+    .area-services-modal i.fa-close {
+        left: 20px;
+        top: 20px;
+        font-size: 16px;
+    }
+    .area-services-btn {
+        animation: shake-animation 4.72s ease infinite;
+        transform-origin: 50% 50%;
+    }
+    .element {
+        margin: 0 auto;
+        width: 150px;
+        height: 150px;
+        background: red;
+    }
+    @keyframes shake-animation {
+        0% { transform:scale(1.0) }
+        1.78571% { transform:scale(1.1) }
+        3.57143% { transform:scale(1.0) }
+        5.35714% { transform:scale(1.1) }
+        7.14286% { transform:scale(1.0) }
+        8.92857% { transform:scale(1.1) }
+        10.71429% { transform:scale(1.0) }
+        100% { transformscale(1.0) }
+    }
+    .area-services-modal .int-content h2 {
+        font-size: 20px;
+        line-height: 30px;
+    }
+    .chart .bars ul li .progress span {
+        line-height: 25px;
+    }
+    .multiselect-container>li>a {
+        padding: 2px 0px 2px 0px;
+    }
+}

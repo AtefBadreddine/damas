@@ -1,0 +1,55 @@
+# Legacy / backup copies
+___old/
+__old/
+
+# Dependencies
+/vendor/
+/node_modules/
+
+# Environment & secrets
+.env
+.env.*
+!.env.example
+
+# Laravel: compiled & runtime
+/bootstrap/cache/*
+!/bootstrap/cache/.gitignore
+/storage/framework/cache/*
+!/storage/framework/cache/.gitignore
+/storage/framework/sessions/*
+!/storage/framework/sessions/.gitignore
+/storage/framework/views/*
+!/storage/framework/views/.gitignore
+/storage/logs/*
+!/storage/logs/.gitignore
+
+# Archives & local backups
+*.zip
+*.tar
+*.tar.gz
+*.rar
+*.bak
+*.bak-*
+
+# PHPUnit
+.phpunit.result.cache
+
+# Node / frontend build artifacts (if generated)
+npm-debug.log*
+yarn-error.log*
+
+# OS & editor
+.DS_Store
+Thumbs.db
+desktop.ini
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Local PHP / server overrides (keep project defaults in repo)
+/php.ini
+
+# Misc local scratch (screenshots, one-off uploads)
+/lastup/

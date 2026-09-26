@@ -15,7 +15,7 @@ $cardphoto = $post->media;
 data-typ="post" data-code="<?= $post->id; ?>">
 <i class="fa fa-<?= in_array($post->id, session()->get("likedposts.ids", [])) ? 'heart' : 'heart-o'; ?>"></i></a>
 
-<span class="pull-right social shareBtnsFloating" data-url="<?= route('front.blog.post', $post->slug); ?>" data-text="<?= $post->getTitle(); ?>">
+<span class="pull-right social shareBtnsFloating" data-url="<?= $post->frontUrl(); ?>" data-text="<?= $post->getTitle(); ?>">
 <a href="#" class="btnshare" data-network="facebook"><i class="fa fa-facebook"></i></a>
 <a href="#" class="btnshare" data-network="whatsapp"><i class="fa fa-whatsapp"></i></a>
 </span>
@@ -59,7 +59,7 @@ $ih=360;
 
 
 <?php /*if(!$is_mobile){ ?>
-<div class="details"><a href="<?= route('front.blog.post', $post->slug); ?>" <?= $open_blank == true ? 'target="_blank"' : ''; ?>  class="button"><?=trans('front.details')?></a></div>
+<div class="details"><a href="<?= $post->frontUrl(); ?>" <?= $open_blank == true ? 'target="_blank"' : ''; ?>  class="button"><?=trans('front.details')?></a></div>
 <?php }*/ ?>
 
 </div>

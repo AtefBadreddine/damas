@@ -82,7 +82,7 @@ $project_min_price = Helper::decimal_format(@$flavor->price, $project->is_price_
   data-typ="project" data-code="<?= $project->id; ?>">
   <i class="fa fa-heart-o"></i><!--<i class="fa fa-heart"></i>--></a>
 
-  <span class="pull-right social shareBtnsFloating" data-url="<?= route('front.project', $project->slug); ?>" data-text="<?= $project->getName(); ?>">
+  <span class="pull-right social shareBtnsFloating" data-url="<?= $project->frontUrl(); ?>" data-text="<?= $project->getName(); ?>">
   <a href="#" class="btnshare" data-network="facebook"><i class="fa fa-facebook"></i></a>
   <a href="#" class="btnshare" data-network="whatsapp"><i class="fa fa-whatsapp"></i></a>
   </span>
@@ -96,9 +96,9 @@ $project_min_price = Helper::decimal_format(@$flavor->price, $project->is_price_
   <div class="d105"  <?= isset($proj_shema) ? ' property="name"' : '' ?>><b><?= $id_text ?></b><span><?= $id_num ?></span></div>
 
   </div>
-  <div class="contain" id="container" <?php if ($is_mobile) { ?> data-url="<?= route('front.project', $project->slug); ?>"<?php } ?>>
+  <div class="contain" id="container" <?php if ($is_mobile) { ?> data-url="<?= $project->frontUrl(); ?>"<?php } ?>>
   <div class="image-project">
-  <a href="<?= route('front.project', $project->slug); ?>" <?= $open_blank == true ? 'target="_blank"' : ''; ?> <?= isset($proj_shema) ? ' property="url"' : '' ?>>
+  <a href="<?= $project->frontUrl(); ?>" <?= $open_blank == true ? 'target="_blank"' : ''; ?> <?= isset($proj_shema) ? ' property="url"' : '' ?>>
 
   <?php
   $iw = 360;
@@ -319,7 +319,7 @@ $project_min_price = Helper::decimal_format(@$flavor->price, $project->is_price_
   }
   ?>
   <?php if (!$is_mobile) { ?>
-  <div class="details"><a href="<?= route('front.project', $project->slug); ?>" <?= $open_blank == true ? 'target="_blank"' : ''; ?>  class="button"><?= trans('front.details') ?></a></div>
+  <div class="details"><a href="<?= $project->frontUrl(); ?>" <?= $open_blank == true ? 'target="_blank"' : ''; ?>  class="button"><?= trans('front.details') ?></a></div>
   <?php } ?>
   </div>
   </div>
@@ -338,14 +338,14 @@ $project_min_price = Helper::decimal_format(@$flavor->price, $project->is_price_
     <div class="content sec shadow_type" <?= isset($proj_shema) ? ' property="itemListElement" typeof="ListItem"' : '' ?>>
 
 		<?php if( (int)$project->cash_discount != 0 ){ ?>
-        <a class="project_Id" href="<?= localized_route('front.project', $project->slug); ?>">
+        <a class="project_Id" href="<?= $project->frontUrl(); ?>">
             <span class="num"><?= $project->cash_discount ?>%OFF</span>
         </a>
 		<?php } ?>
 		
         <?php  if ($project->link_3d!='') { ?>
             <div class="icon_3d">
-			<a href="<?= localized_route('front.project', $project->slug); ?>#3d">
+			<a href="<?= $project->frontUrl(); ?>#3d">
                 <img width="30" height="20" src="<?= asset("/img/3d-floor-plans-icon.svg"); ?>" alt="3D Floor Plans"/>
 			</a>
             </div>
@@ -354,7 +354,7 @@ $project_min_price = Helper::decimal_format(@$flavor->price, $project->is_price_
         <div class="view_cont">
             <!-- image Project -->
             <div class="int_cont image show">
-                <a href="<?= localized_route('front.project', $project->slug); ?>" <?= $open_blank == true ? 'target="_blank"' : ''; ?> <?= isset($proj_shema) ? ' property="url"' : '' ?>
+                <a href="<?= $project->frontUrl(); ?>" <?= $open_blank == true ? 'target="_blank"' : ''; ?> <?= isset($proj_shema) ? ' property="url"' : '' ?>
 				
 				title="{{ Helper::str_limit(nl2br(preg_replace("/[\r\n]+/", "", $project->getIntoLocation())),340) }}"
 				>
@@ -448,8 +448,8 @@ $project_min_price = Helper::decimal_format(@$flavor->price, $project->is_price_
                     <svg width="15" height="15" version="1.1" id="Layer_1"  x="0px" y="0px" viewBox="0 0 18.2 18.2" xml:space="preserve"><path class="st0" d="M14.6,10.9c-1.3,0-2.4,0.7-3,1.6L7.2,10c0.2-0.6,0.2-1.3,0-1.9l4.4-2.5c0.7,1,1.8,1.6,3,1.6 c2,0,3.6-1.6,3.6-3.6c0-2-1.6-3.6-3.6-3.6c-2,0-3.6,1.6-3.6,3.6c0,0.2,0,0.3,0,0.5L6.4,6.7C5.1,5.2,2.8,5,1.3,6.3 c-1.5,1.3-1.7,3.6-0.4,5.1C2.2,13,4.5,13.2,6,11.9c0.2-0.1,0.3-0.3,0.4-0.4l4.6,2.6c0,0.2,0,0.3,0,0.5c0,2,1.6,3.6,3.6,3.6 c2,0,3.6-1.6,3.6-3.6C18.2,12.5,16.6,10.9,14.6,10.9z M14.6,1.6c1.1,0,2,0.9,2,2s-0.9,2-2,2s-2-0.9-2-2S13.5,1.6,14.6,1.6z M3.7,11.1c-1.1,0-2-0.9-2-2s0.9-2,2-2s2,0.9,2,2S4.8,11.1,3.7,11.1z M14.6,16.5c-1.1,0-2-0.9-2-2s0.9-2,2-2s2,0.9,2,2 S15.7,16.5,14.6,16.5z"/> </svg>
                 </div>
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButtons"> 
-                    <a href="#" data-url="<?= localized_route('front.project', $project->slug); ?>" class="btnshare bluring" data-network="facebook" target="_blank"><i class="fa fa-facebook"></i></a>
-                    <a href="#" data-url="<?= localized_route('front.project', $project->slug); ?>" class="btnshare bluring" data-network="whatsapp" target="_blank"><svg width="39" height="39" viewBox="0 0 39 39"><path fill="#00E676" d="M10.7 32.8l.6.3c2.5 1.5 5.3 2.2 8.1 2.2 8.8 0 16-7.2 16-16 0-4.2-1.7-8.3-4.7-11.3s-7-4.7-11.3-4.7c-8.8 0-16 7.2-15.9 16.1 0 3 .9 5.9 2.4 8.4l.4.6-1.6 5.9 6-1.5z"></path><path fill="#FFF" d="M32.4 6.4C29 2.9 24.3 1 19.5 1 9.3 1 1.1 9.3 1.2 19.4c0 3.2.9 6.3 2.4 9.1L1 38l9.7-2.5c2.7 1.5 5.7 2.2 8.7 2.2 10.1 0 18.3-8.3 18.3-18.4 0-4.9-1.9-9.5-5.3-12.9zM19.5 34.6c-2.7 0-5.4-.7-7.7-2.1l-.6-.3-5.8 1.5L6.9 28l-.4-.6c-4.4-7.1-2.3-16.5 4.9-20.9s16.5-2.3 20.9 4.9 2.3 16.5-4.9 20.9c-2.3 1.5-5.1 2.3-7.9 2.3zm8.8-11.1l-1.1-.5s-1.6-.7-2.6-1.2c-.1 0-.2-.1-.3-.1-.3 0-.5.1-.7.2 0 0-.1.1-1.5 1.7-.1.2-.3.3-.5.3h-.1c-.1 0-.3-.1-.4-.2l-.5-.2c-1.1-.5-2.1-1.1-2.9-1.9-.2-.2-.5-.4-.7-.6-.7-.7-1.4-1.5-1.9-2.4l-.1-.2c-.1-.1-.1-.2-.2-.4 0-.2 0-.4.1-.5 0 0 .4-.5.7-.8.2-.2.3-.5.5-.7.2-.3.3-.7.2-1-.1-.5-1.3-3.2-1.6-3.8-.2-.3-.4-.4-.7-.5h-1.1c-.2 0-.4.1-.6.1l-.1.1c-.2.1-.4.3-.6.4-.2.2-.3.4-.5.6-.7.9-1.1 2-1.1 3.1 0 .8.2 1.6.5 2.3l.1.3c.9 1.9 2.1 3.6 3.7 5.1l.4.4c.3.3.6.5.8.8 2.1 1.8 4.5 3.1 7.2 3.8.3.1.7.1 1 .2h1c.5 0 1.1-.2 1.5-.4.3-.2.5-.2.7-.4l.2-.2c.2-.2.4-.3.6-.5s.4-.4.5-.6c.2-.4.3-.9.4-1.4v-.7s-.1-.1-.3-.2z"></path></svg></a>
+                    <a href="#" data-url="<?= $project->frontUrl(); ?>" class="btnshare bluring" data-network="facebook" target="_blank"><i class="fa fa-facebook"></i></a>
+                    <a href="#" data-url="<?= $project->frontUrl(); ?>" class="btnshare bluring" data-network="whatsapp" target="_blank"><svg width="39" height="39" viewBox="0 0 39 39"><path fill="#00E676" d="M10.7 32.8l.6.3c2.5 1.5 5.3 2.2 8.1 2.2 8.8 0 16-7.2 16-16 0-4.2-1.7-8.3-4.7-11.3s-7-4.7-11.3-4.7c-8.8 0-16 7.2-15.9 16.1 0 3 .9 5.9 2.4 8.4l.4.6-1.6 5.9 6-1.5z"></path><path fill="#FFF" d="M32.4 6.4C29 2.9 24.3 1 19.5 1 9.3 1 1.1 9.3 1.2 19.4c0 3.2.9 6.3 2.4 9.1L1 38l9.7-2.5c2.7 1.5 5.7 2.2 8.7 2.2 10.1 0 18.3-8.3 18.3-18.4 0-4.9-1.9-9.5-5.3-12.9zM19.5 34.6c-2.7 0-5.4-.7-7.7-2.1l-.6-.3-5.8 1.5L6.9 28l-.4-.6c-4.4-7.1-2.3-16.5 4.9-20.9s16.5-2.3 20.9 4.9 2.3 16.5-4.9 20.9c-2.3 1.5-5.1 2.3-7.9 2.3zm8.8-11.1l-1.1-.5s-1.6-.7-2.6-1.2c-.1 0-.2-.1-.3-.1-.3 0-.5.1-.7.2 0 0-.1.1-1.5 1.7-.1.2-.3.3-.5.3h-.1c-.1 0-.3-.1-.4-.2l-.5-.2c-1.1-.5-2.1-1.1-2.9-1.9-.2-.2-.5-.4-.7-.6-.7-.7-1.4-1.5-1.9-2.4l-.1-.2c-.1-.1-.1-.2-.2-.4 0-.2 0-.4.1-.5 0 0 .4-.5.7-.8.2-.2.3-.5.5-.7.2-.3.3-.7.2-1-.1-.5-1.3-3.2-1.6-3.8-.2-.3-.4-.4-.7-.5h-1.1c-.2 0-.4.1-.6.1l-.1.1c-.2.1-.4.3-.6.4-.2.2-.3.4-.5.6-.7.9-1.1 2-1.1 3.1 0 .8.2 1.6.5 2.3l.1.3c.9 1.9 2.1 3.6 3.7 5.1l.4.4c.3.3.6.5.8.8 2.1 1.8 4.5 3.1 7.2 3.8.3.1.7.1 1 .2h1c.5 0 1.1-.2 1.5-.4.3-.2.5-.2.7-.4l.2-.2c.2-.2.4-.3.6-.5s.4-.4.5-.6c.2-.4.3-.9.4-1.4v-.7s-.1-.1-.3-.2z"></path></svg></a>
                 </div>
             </div>
             <!-- Like Project -->
@@ -466,7 +466,7 @@ $project_min_price = Helper::decimal_format(@$flavor->price, $project->is_price_
 
         </div>
         <div class="features_sec">
-            <a class="project_name jazzira_font" href="<?= localized_route('front.project', $project->slug); ?>"><?=$project->getIntroCard();?></a>
+            <a class="project_name jazzira_font" href="<?= $project->frontUrl(); ?>"><?=$project->getIntroCard();?></a>
             <ul class="jazzira_font">
                 <?php list($sclass, $slab) = $project->getStatus(); ?>
 <?php
@@ -547,7 +547,7 @@ $rooms = (int)$flavor->salon + (int)$flavor->room;
 "image" : "{{ $iximg_full }}",
 "name": "{{ htmlentities($project->getIntroCard()) }}",
 "description": "{{  htmlentities($project->getIntoLocation()) }}",
-"url" : "{{ localized_route('front.project', $project->slug) }}",
+"url" : "{{ $project->frontUrl() }}",
     "telephone": "{{ $infos->tel_1 }}",
 	"identifier": "{{ $project->name_en }}"
 }

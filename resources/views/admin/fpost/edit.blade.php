@@ -36,7 +36,7 @@
                                     <label>TR Featured Posts</label>
                                     <select name="fposts[]" class="form-control select2me" multiple>
                                         <option value=""></option>
-                                        @foreach(Helper::query("Post", "all")->where('country','turkey') as $post)
+                                        @foreach(Helper::query("Post", "all")->where('country','turkey')->where('post_type', \App\Enums\PostType::BLOG->value) as $post)
                                         <option value="<?= $post->id; ?>" <?= in_array($post->id, $rows) ? 'selected' : ''; ?>><?= $post->title_ar; ?></option>
                                         @endforeach
                                     </select>
@@ -49,7 +49,7 @@
                                     <label>OM Featured Posts</label>
                                     <select name="fposts_om[]" class="form-control select2me" multiple>
                                         <option value=""></option>
-                                        @foreach(Helper::query("Post", "all")->where('country','oman') as $post)
+                                        @foreach(Helper::query("Post", "all")->where('country','oman')->where('post_type', \App\Enums\PostType::BLOG->value) as $post)
                                         <option value="<?= $post->id; ?>" <?= in_array($post->id, $rows_om) ? 'selected' : ''; ?>><?= $post->title_ar; ?></option>
                                         @endforeach
                                     </select>

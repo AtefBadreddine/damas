@@ -1,5 +1,6 @@
 <?php
 namespace App\Http\Controllers\Admin;
+use App\Enums\PostType;
 use App\Http\Controllers\BaseController;
 use Illuminate\Http\Request;
 use Validator;
@@ -8,6 +9,26 @@ use Input;
 
 class BlogController extends BaseController
 {
+    /**
+     * Post type for the current admin page (blog, developer, report, news).
+     *
+     * @return \App\Enums\PostType
+     */
+    protected function currentPostType()
+    {
+        return PostType::fromRoute(\Route::currentRouteName());
+    }
+
+    /**
+     * Category/tag group: news stays news, other post types share blog.
+     *
+     * @return string
+     */
+    protected function currentCategoryType()
+    {
+        return $this->currentPostType()->categoryType();
+    }
+
     
     
     
@@ -18,7 +39,7 @@ class BlogController extends BaseController
     */
     public function params(Request $request)
     {
-		$type = Helper::container_array(\Route::currentRouteName(), ['admin.news'])?'news':'blog';//.post
+		$type = $this->currentCategoryType();
         
 		$row = Helper::query("BlogParam", "find", ["id" => ($type=='blog')?1:2]);
         if ( $request->isMethod('post') ) {
@@ -43,7 +64,7 @@ class BlogController extends BaseController
     */
     public function paramsOman(Request $request)
     {
-		$type = Helper::container_array(\Route::currentRouteName(), ['admin.news'])?'news':'blog';//.post
+		$type = $this->currentCategoryType();
         
 		$row = Helper::query("BlogParam", "find", ["id" => 3]);
         if ( $request->isMethod('post') ) {
@@ -68,7 +89,7 @@ class BlogController extends BaseController
     */
     public function paramsSyria(Request $request)
     {
-		$type = Helper::container_array(\Route::currentRouteName(), ['admin.news'])?'news':'blog';//.post
+		$type = $this->currentCategoryType();
         
 		$row = Helper::query("BlogParam", "find", ["id" => 4]);
         if ( $request->isMethod('post') ) {
@@ -184,8 +205,18 @@ class BlogController extends BaseController
     */
     public function index()
     {
-        $type = Helper::container_array(\Route::currentRouteName(), ['admin.news']) ? 'news' : 'blog';
-        $tab = Input::get('tab', 'turkey');
+        $postType = $this->currentPostType();
+        $type = $postType->value;
+        $countries = Helper::query("Country", "all");
+        $countryCodes = [];
+        foreach ($countries as $country) {
+            $countryCodes[] = $country->code;
+        }
+        $defaultTab = !empty($countryCodes) ? $countryCodes[0] : 'disabled';
+        $tab = Input::get('tab', $defaultTab);
+        if ($tab !== 'disabled' && !in_array($tab, $countryCodes)) {
+            $tab = $defaultTab;
+        }
     
         $move = Input::get("move");
     
@@ -223,22 +254,21 @@ class BlogController extends BaseController
             return redirect()->back();
         }
         
-        $turkeyCount = Helper::query("Post", "where", [
-            "field" => "type",
-            "value" => $type
-        ])->where('published', 1)
-          ->where('country', 'turkey')
-          ->count();
-        
-        $omanCount = Helper::query("Post", "where", [
-            "field" => "type",
-            "value" => $type
-        ])->where('published', 1)
-          ->where('country', 'oman')
-          ->count();
-        
+        $countryCounts = [];
+        foreach ($countries as $country) {
+            $countryCounts[$country->code] = Helper::query("Post", "where", [
+                "field" => "post_type",
+                "value" => $type
+            ])->where('published', 1)
+              ->where(function ($q) use ($country) {
+                  $q->where('country_id', $country->id)
+                    ->orWhere('country', $country->code);
+              })
+              ->count();
+        }
+
         $disabledCount = Helper::query("Post", "where", [
-            "field" => "type",
+            "field" => "post_type",
             "value" => $type
         ])->where('published', 0)
           ->count();
@@ -256,18 +286,27 @@ class BlogController extends BaseController
             : "desc";
     
         $query = Helper::query("Post", "where", [
-            "field" => "type",
+            "field" => "post_type",
             "value" => $type
         ]);
     
-        if ($tab == 'turkey') {
-            $query->where('published', 1)
-                  ->where('country', 'turkey');
-        } elseif ($tab == 'oman') {
-            $query->where('published', 1)
-                  ->where('country', 'oman');
-        } elseif ($tab == 'disabled') {
+        if ($tab == 'disabled') {
             $query->where('published', 0);
+        } else {
+            $selectedCountry = null;
+            foreach ($countries as $country) {
+                if ($country->code === $tab) {
+                    $selectedCountry = $country;
+                    break;
+                }
+            }
+            $query->where('published', 1);
+            if ($selectedCountry) {
+                $query->where(function ($q) use ($selectedCountry) {
+                    $q->where('country_id', $selectedCountry->id)
+                      ->orWhere('country', $selectedCountry->code);
+                });
+            }
         }
     
         if (isset($_GET['search']) && $_GET['search'] != '') {
@@ -294,9 +333,10 @@ class BlogController extends BaseController
         return view("admin.blog.index", compact(
             "rows",
             "type",
+            "postType",
             "tab",
-            "turkeyCount",
-            "omanCount",
+            "countries",
+            "countryCounts",
             "disabledCount"
         ));
     }
@@ -319,7 +359,7 @@ class BlogController extends BaseController
     */
 //     public function edit(Request $request, $id = null)
 //     {
-// 		$type = Helper::container_array(\Route::currentRouteName(), ['admin.news'])?'news':'blog';//.post
+// 		$type = $this->currentCategoryType();
 		
 //         $row = Helper::query("Post", "find", ['id' => $id]);
 //         if ( $request->isMethod('post') ) {
@@ -336,10 +376,8 @@ class BlogController extends BaseController
             'BLOG DEBUG 001: edit() ENTERED | METHOD=' . $request->method()
         );
     
-        $type = Helper::container_array(
-            \Route::currentRouteName(),
-            ['admin.news']
-        ) ? 'news' : 'blog';
+        $postType = $this->currentPostType();
+        $type = $postType->categoryType();
     
         \Log::info('BLOG DEBUG 002: TYPE CALCULATED');
     
@@ -357,12 +395,17 @@ class BlogController extends BaseController
     
             $this->validate($request, [
                 "slug" => "alpha_dash|unique:{$row->table_name()},slug,$id",
+                "old_slug" => "different:slug",
             ]);
     
             \Log::info('BLOG DEBUG 006: AFTER VALIDATION');
             \Log::info('BLOG DEBUG 007: BEFORE REQUEST ALL');
 
             $inputs = $request->all();
+            unset($inputs['post_type']);
+            $inputs['post_type'] = $postType->value;
+            $inputs['type'] = $type;
+            $inputs['old_slug'] = trim((string) @$inputs['old_slug']) ?: null;
             
             \Log::info('BLOG DEBUG 008: AFTER REQUEST ALL');
             
@@ -435,16 +478,18 @@ class BlogController extends BaseController
             
 			
 			
-			$urls_cache[] = route('front.'.$type.'.post',[$saved_post->slug]);
-			$urls_cache[] = route('front.'.$type);
+			$urls_cache[] = $saved_post->frontUrl();
+			if (\Route::has('front.'.$type)) {
+				$urls_cache[] = route('front.'.$type);
+			}
 			Helper::Clear_cache($urls_cache);
 			
 			
-            return Helper::form_redirect("admin.".$type.".posts", $saved_post, @$inputs['redirect_to_list']);
+            return Helper::form_redirect($postType->adminListRoute(), $saved_post, @$inputs['redirect_to_list']);
         }
         \Log::info('BLOG DEBUG 100: RETURNING EDIT VIEW');
         $countries = Helper::query("Country", "all");
-        return view("admin.blog.edit", compact("row","type","countries"));
+        return view("admin.blog.edit", compact("row","type","postType","countries"));
     }
     
     /**
@@ -465,7 +510,7 @@ class BlogController extends BaseController
     */
     public function categories()
     {
-		$type = Helper::container_array(\Route::currentRouteName(), ['admin.news'])?'news':'blog';//.post
+		$type = $this->currentCategoryType();
 		
 		
 		
@@ -528,7 +573,7 @@ class BlogController extends BaseController
     */
     public function categories_edit(Request $request, $id = null)
     {
-		$type = Helper::container_array(\Route::currentRouteName(), ['admin.news'])?'news':'blog';//.post
+		$type = $this->currentCategoryType();
         $row = Helper::query("PostCategory", "find", ['id' => $id]);
         if ( $request->isMethod('post') ) {
             $this->validate($request, [
@@ -536,13 +581,15 @@ class BlogController extends BaseController
                 "slug"     =>  "required|alpha_dash|unique:{$row->table_name()},slug,$id",
             ]);
             $inputs = $request->all();
+            unset($inputs['country']);
             return Helper::query("PostCategory", "save", [
                 "inputs"    =>  $inputs,
                 "id"        =>  $id,
                 "route"     =>  "admin.".$type.".categories",
             ]);
         }
-        return view("admin.blog.category_edit", compact("row","type"));
+        $countries = Helper::query("Country", "all");
+        return view("admin.blog.category_edit", compact("row","type","countries"));
     }
     
     /**
@@ -566,7 +613,7 @@ class BlogController extends BaseController
     */
     public function tags()
     {
-		$type = Helper::container_array(\Route::currentRouteName(), ['admin.news'])?'news':'blog';//.post
+		$type = $this->currentCategoryType();
 		
 		$rows = Helper::query("Tag", "where", ["field" => "type", "value" => $type])
 			//->orderBy(@$_GET['field'], @$_GET['sort'])
@@ -583,7 +630,7 @@ class BlogController extends BaseController
     */
     public function tags_edit(Request $request, $id = null)
     {
-		$type = Helper::container_array(\Route::currentRouteName(), ['admin.news'])?'news':'blog';//.post
+		$type = $this->currentCategoryType();
         
 		
 		$row = Helper::query("Tag", "find", ['id' => $id]);

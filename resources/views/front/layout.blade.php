@@ -24,6 +24,8 @@ $emptypic = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABA
 
 $citys = App\Models\City::where('id', '!=', 2)->orderBy('placement', 'asc')->get();
 $tags = \App\Models\ProjectCategory::limit(14)->get();
+
+$projectsUrl = route('front.projects');
 ?>
 <!DOCTYPE html>
 <html lang="<?= ($current_lang == 'pe' ? 'fa' : $current_lang); ?>" dir="<?= $style_lang == "ar" ? "ltr" : "ltr"; ?>">
@@ -66,24 +68,30 @@ $tags = \App\Models\ProjectCategory::limit(14)->get();
         <meta name="application-name" content="<?= $og_title; ?>" />
 		
 		@if(in_array('ar',$availables_langs))
-        <link rel="alternate" href="<?= LaravelLocalization::getLocalizedURL("ar"); ?>" hreflang="ar" />
+        <link rel="alternate" href="<?= seo_url("ar"); ?>" hreflang="ar" />
         @endif
 		@if(in_array('en',$availables_langs))
-		<link rel="alternate" href="<?= LaravelLocalization::getLocalizedURL("en"); ?>" hreflang="en"/>
+		<link rel="alternate" href="<?= seo_url("en"); ?>" hreflang="en"/>
         @endif
 		@if(in_array('fr',$availables_langs))
-		<link rel="alternate" href="<?= LaravelLocalization::getLocalizedURL("fr"); ?>" hreflang="fr"/>
+		<link rel="alternate" href="<?= seo_url("fr"); ?>" hreflang="fr"/>
         @endif
 		@if(in_array('pe',$availables_langs))
-		<link rel="alternate" href="<?= LaravelLocalization::getLocalizedURL('pe'); ?>" hreflang='fa'/>
+		<link rel="alternate" href="<?= seo_url('pe'); ?>" hreflang='fa'/>
 		@endif
 		@if(in_array('ru',$availables_langs))
-		<link rel="alternate" href="<?= LaravelLocalization::getLocalizedURL('ru'); ?>" hreflang='ru'/>
+		<link rel="alternate" href="<?= seo_url('ru'); ?>" hreflang='ru'/>
 		@endif
+        <?php $xDefaultLang = in_array(LaravelLocalization::getDefaultLocale(), $availables_langs) ? LaravelLocalization::getDefaultLocale() : reset($availables_langs); ?>
+        @if($xDefaultLang)
+        <link rel="alternate" href="<?= seo_url($xDefaultLang); ?>" hreflang="x-default" />
+        @endif
         
-		<link rel="alternate" type="application/rss+xml" href="<?= url("rss/news") ?>" title="<?= trans('front.news') ?>"/>
-        <link rel="alternate" type="application/rss+xml" href="<?= url("rss/blog") ?>" title="<?= trans('front.blog') ?>"/>
-        <link rel="alternate" type="application/rss+xml" href="<?= url("rss/projects") ?>" title="<?= trans('front.projects') ?>"/>
+		<link rel="alternate" type="application/rss+xml" href="<?= url('rss/news') ?>" title="<?= trans('front.news') ?>"/>
+        <link rel="alternate" type="application/rss+xml" href="<?= url('rss/blog') ?>" title="<?= trans('front.guides') ?>"/>
+        <link rel="alternate" type="application/rss+xml" href="<?= url('rss/developers') ?>" title="<?= trans('front.developer') ?>"/>
+        <link rel="alternate" type="application/rss+xml" href="<?= url('rss/reports') ?>" title="<?= trans('front.report') ?>"/>
+        <link rel="alternate" type="application/rss+xml" href="<?= url('rss/projects') ?>" title="<?= trans('front.projects') ?>"/>
 
 
         <meta name="audience" content="all" />
@@ -91,8 +99,8 @@ $tags = \App\Models\ProjectCategory::limit(14)->get();
         <meta name="author" content="damasturk" />
         <meta name="revisit-after" content="5 hours" />
         
-        <link rel="canonical" href="<?= str_replace('/public/', '/', Request::url()); ?>" />
-        <meta property="og:url" content="<?= Request::url(); ?>" />
+        <link rel="canonical" href="<?= seo_url(); ?>" />
+        <meta property="og:url" content="<?= seo_url(); ?>" />
         <meta property="og:type" content="article" />
         <meta property="og:title" content="<?= $og_title; ?>" />
         @if(@$amp_url)
@@ -124,7 +132,7 @@ $tags = \App\Models\ProjectCategory::limit(14)->get();
             'job/telesales'
         ], true))
         <meta name="robots" content="noindex, nofollow">
-        @elseif(Route::currentRouteName() === 'front.search' && isset($search_noindex) && $search_noindex === true)
+        @elseif((Route::currentRouteName() === 'front.search' || Route::currentRouteName() === 'front.projects' || strpos((string) Route::currentRouteName(), 'front.location.') === 0) && isset($search_noindex) && $search_noindex === true)
         <meta name="robots" content="noindex, follow">
         @elseif(isset($page_index) && ($page_index === "noindex" || $page_index === "noindex, follow"))
         <meta name="robots" content="{{ $page_index }}">
@@ -633,13 +641,13 @@ $tags = \App\Models\ProjectCategory::limit(14)->get();
                         <div class="change_all">
                             <div class="change_lang_modal" style="margin-bottom:2%">
                                 <?php if($current_lang == 'ar'){ ?>
-                                    <a href="<?= ((isset($link_lang) && $link_lang != '') ? $link_lang : LaravelLocalization::getLocalizedURL('en')); ?>">
+                                    <a href="<?= ((isset($link_lang) && $link_lang != '') ? $link_lang : localized_url('en')); ?>">
                                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640" style="fill: currentColor;position:relative;top:6px;width:1.3em"><path d="M415.9 344L225 344C227.9 408.5 242.2 467.9 262.5 511.4C273.9 535.9 286.2 553.2 297.6 563.8C308.8 574.3 316.5 576 320.5 576C324.5 576 332.2 574.3 343.4 563.8C354.8 553.2 367.1 535.8 378.5 511.4C398.8 467.9 413.1 408.5 416 344zM224.9 296L415.8 296C413 231.5 398.7 172.1 378.4 128.6C367 104.2 354.7 86.8 343.3 76.2C332.1 65.7 324.4 64 320.4 64C316.4 64 308.7 65.7 297.5 76.2C286.1 86.8 273.8 104.2 262.4 128.6C242.1 172.1 227.8 231.5 224.9 296zM176.9 296C180.4 210.4 202.5 130.9 234.8 78.7C142.7 111.3 74.9 195.2 65.5 296L176.9 296zM65.5 344C74.9 444.8 142.7 528.7 234.8 561.3C202.5 509.1 180.4 429.6 176.9 344L65.5 344zM463.9 344C460.4 429.6 438.3 509.1 406 561.3C498.1 528.6 565.9 444.8 575.3 344L463.9 344zM575.3 296C565.9 195.2 498.1 111.3 406 78.7C438.3 130.9 460.4 210.4 463.9 296L575.3 296z"/></svg>
                                         <span>EN</span>
                                     </a>
                                 <?php }
                                 elseif($current_lang == 'en'){ ?>
-                                    <a href="<?= ((isset($link_lang) && $link_lang != '') ? $link_lang : LaravelLocalization::getLocalizedURL('ar')); ?>">
+                                    <a href="<?= ((isset($link_lang) && $link_lang != '') ? $link_lang : localized_url('ar')); ?>">
                                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640" style="fill: currentColor;position:relative;top:6px;width:1.3em"><path d="M415.9 344L225 344C227.9 408.5 242.2 467.9 262.5 511.4C273.9 535.9 286.2 553.2 297.6 563.8C308.8 574.3 316.5 576 320.5 576C324.5 576 332.2 574.3 343.4 563.8C354.8 553.2 367.1 535.8 378.5 511.4C398.8 467.9 413.1 408.5 416 344zM224.9 296L415.8 296C413 231.5 398.7 172.1 378.4 128.6C367 104.2 354.7 86.8 343.3 76.2C332.1 65.7 324.4 64 320.4 64C316.4 64 308.7 65.7 297.5 76.2C286.1 86.8 273.8 104.2 262.4 128.6C242.1 172.1 227.8 231.5 224.9 296zM176.9 296C180.4 210.4 202.5 130.9 234.8 78.7C142.7 111.3 74.9 195.2 65.5 296L176.9 296zM65.5 344C74.9 444.8 142.7 528.7 234.8 561.3C202.5 509.1 180.4 429.6 176.9 344L65.5 344zM463.9 344C460.4 429.6 438.3 509.1 406 561.3C498.1 528.6 565.9 444.8 575.3 344L463.9 344zM575.3 296C565.9 195.2 498.1 111.3 406 78.7C438.3 130.9 460.4 210.4 463.9 296L575.3 296z"/></svg>
                                         <span>AR</span>
                                     </a>
@@ -814,7 +822,7 @@ $tags = \App\Models\ProjectCategory::limit(14)->get();
                         </a>
                     </li>
                     <li class="toolt"><span class="tooltiptext"><?= trans("front.projects"); ?></span>
-                        <a class="projects_btn" href="<?= route("front.search", ["property-for-sale", "turkey"]) ?>">
+                        <a class="projects_btn" href="<?= $projectsUrl ?>">
                             <svg width="30" height="31" version="1.1" id="Layer_1"  x="0px" y="0px" viewBox="0 0 25 26" xml:space="preserve"><g> <path class="st0" d="M4.6,5.2l6.6,2l0.3-1.1L4.5,4L1.4,5.8l0.6,1L4.6,5.2z M4.6,5.2"/> <path class="st0" d="M4.6,7.2l6.6,2l0.3-1.1L4.5,6L1.4,7.8l0.6,1L4.6,7.2z M4.6,7.2"/> <path class="st0" d="M4.6,9.2l6.6,2l0.3-1.1L4.5,8L1.4,9.8l0.6,1L4.6,9.2z M4.6,9.2"/> <path class="st0" d="M4.6,11.2l6.6,2l0.3-1.1L4.5,9.9l-3.1,1.8l0.6,1L4.6,11.2z M4.6,11.2"/> <path class="st0" d="M4.6,13.2l6.6,2l0.3-1.1l-7.1-2.1l-3.1,1.8l0.6,1L4.6,13.2z M4.6,13.2"/> <path class="st0" d="M4.6,15.1l6.6,2l0.3-1.1l-7.1-2.1l-3.1,1.8l0.6,1L4.6,15.1z M4.6,15.1"/> <path class="st0" d="M4.6,17.1l6.6,2l0.3-1.1l-7.1-2.1l-3.1,1.8l0.6,1L4.6,17.1z M4.6,17.1"/> <path class="st0" d="M4.6,19.1l6.6,2l0.3-1.1l-7.1-2.1l-3.1,1.8l0.6,1L4.6,19.1z M4.6,19.1"/> <path class="st0" d="M15.4,5.2l6.6,2l0.3-1.1L15.3,4l-3.1,1.8l0.6,1L15.4,5.2z M15.4,5.2"/> <path class="st0" d="M15.4,3.2l6.6,2l0.3-1.1L15.3,2l-3.1,1.8l0.6,1L15.4,3.2z M15.4,3.2"/> <path class="st0" d="M15.4,1.2l6.6,2l0.3-1.1L15.3,0l-3.1,1.8l0.6,1L15.4,1.2z M15.4,1.2"/> <path class="st0" d="M15.4,7.2l6.6,2l0.3-1.1L15.3,6l-3.1,1.8l0.6,1L15.4,7.2z M15.4,7.2"/> <path class="st0" d="M15.4,9.2l6.6,2l0.3-1.1L15.3,8l-3.1,1.8l0.6,1L15.4,9.2z M15.4,9.2"/> <path class="st0" d="M15.4,11.2l6.6,2l0.3-1.1l-7.1-2.1l-3.1,1.8l0.6,1L15.4,11.2z M15.4,11.2"/> <path class="st0" d="M15.4,13.2l6.6,2l0.3-1.1l-7.1-2.1l-3.1,1.8l0.6,1L15.4,13.2z M15.4,13.2"/> <path class="st0" d="M15.4,15.1l6.6,2l0.3-1.1l-7.1-2.1l-3.1,1.8l0.6,1L15.4,15.1z M15.4,15.1"/> <path class="st0" d="M15.4,17.1l6.6,2l0.3-1.1l-7.1-2.1l-3.1,1.8l0.6,1L15.4,17.1z M15.4,17.1"/> <path class="st0" d="M15.4,19.1l6.6,2l0.3-1.1l-7.1-2.1l-3.1,1.8l0.6,1L15.4,19.1z M15.4,19.1"/> <path class="st0" d="M22,24.9v-1.9l0.3-1l-7.1-2.1l-3.1,1.8l0.3,0.5v2.7h-1.2v-1.9l0.3-1l-7.1-2.1l-3.1,1.8l0.3,0.5v2.7H0V26h25 v-1.1H22z M6.1,24.9v-2.3l3.5,0.8v1.5H6.1z M16.9,24.9v-2.3l3.5,0.8v1.5H16.9z M16.9,24.9"/> </g> </svg>
                         </a>
                     </li>
@@ -855,7 +863,7 @@ $tags = \App\Models\ProjectCategory::limit(14)->get();
                     <?php //} ?>
 
                     <li class="toolt"><span class="tooltiptext"><?= trans("front.blog"); ?></span>
-                        <a class="blog_btn" href="<?= route("front.blog") ?>">
+                        <a class="blog_btn" href="<?= route("front.blog.index") ?>">
                             <svg width='30' height='32' version="1.1" id="Layer_1"  x="0px" y="0px" viewBox="0 0 24.3 26.5" xml:space="preserve"><g> <path class="st0" d="M12.1,21.8c-0.7,0-1.5,0-2.2,0c-0.7,0-1.1-0.4-1.1-1c0-0.2,0-0.4,0-0.6c0.1-1-0.3-1.8-0.9-2.6 c-0.4-0.4-0.7-0.9-1.1-1.3c-0.7-0.8-1.2-1.6-1.4-2.6c-1.1-3.9,1.4-7.8,5.5-8.5c3.9-0.7,7.5,1.7,8.3,5.4c0.2,0.9,0.1,1.8,0,2.7 c-0.2,1.2-0.9,2.3-1.7,3.2C16.9,17,16.5,17.5,16,18c-0.4,0.6-0.6,1.2-0.6,1.9c0,0.3,0,0.6,0,0.8c0,0.6-0.4,1-1.1,1 C13.6,21.8,12.9,21.8,12.1,21.8z M13.4,19.9c0-0.2,0-0.3,0-0.4c0-0.7,0.2-1.3,0.6-1.9c0.5-0.8,1.2-1.5,1.7-2.2 c0.4-0.5,0.7-0.9,1-1.4c0.4-0.8,0.5-1.7,0.4-2.6C16.9,8.9,14.8,7,12.4,7c-2.2-0.1-4,1-4.9,2.9c-0.9,1.9-0.5,3.7,0.9,5.3 c0.4,0.5,0.8,0.9,1.2,1.4c0.7,0.9,1.3,2,1.2,3.2c0,0,0,0.1,0,0.1C11.7,19.9,12.5,19.9,13.4,19.9z"/> <path class="st0" d="M12.2,23.8c0.7,0,1.4,0,2.1,0c0.4,0,0.7,0.2,0.7,0.6c0,0.3-0.3,0.6-0.7,0.6c-1.4,0-2.8,0-4.3,0 c-0.4,0-0.7-0.2-0.7-0.6c0-0.3,0.3-0.6,0.7-0.6C10.7,23.8,11.4,23.8,12.2,23.8z"/> <path class="st0" d="M12.1,23.4c-0.7,0-1.4,0-2.1,0c-0.4,0-0.7-0.2-0.7-0.6c0-0.4,0.3-0.6,0.7-0.6c1.4,0,2.8,0,4.2,0 c0.4,0,0.7,0.2,0.7,0.6c0,0.4-0.3,0.6-0.7,0.6C13.5,23.4,12.8,23.4,12.1,23.4z"/> <path class="st0" d="M12.8,1.9c0,0.4,0,0.8,0,1.1c0,0.4-0.3,0.7-0.7,0.7c-0.4,0-0.7-0.3-0.7-0.7c0-0.8,0-1.5,0-2.3 c0-0.4,0.3-0.7,0.7-0.7c0.4,0,0.7,0.3,0.7,0.7c0,0,0,0,0,0C12.8,1.1,12.8,1.5,12.8,1.9z"/> <path class="st0" d="M18.4,6.2c-0.4,0-0.6-0.1-0.7-0.4c-0.1-0.3-0.1-0.5,0.1-0.7c0.6-0.6,1.2-1.2,1.8-1.7c0.3-0.3,0.7-0.2,1,0 c0.3,0.3,0.3,0.7,0,0.9C20,4.9,19.4,5.4,18.8,6C18.7,6.1,18.5,6.1,18.4,6.2z"/> <path class="st0" d="M5.8,6.2C5.7,6.1,5.5,6.1,5.4,6C4.8,5.4,4.3,4.9,3.7,4.3c-0.3-0.3-0.3-0.7,0-1c0.3-0.3,0.7-0.3,1,0 C5.3,3.9,5.9,4.5,6.4,5c0.2,0.2,0.3,0.5,0.2,0.8C6.4,6,6.2,6.2,5.8,6.2z"/> <path class="st0" d="M21.5,19.6c0,0.3-0.1,0.6-0.4,0.7c-0.3,0.1-0.5,0.1-0.8-0.1c-0.6-0.6-1.2-1.2-1.8-1.8 c-0.2-0.2-0.2-0.7,0.1-0.9c0.3-0.2,0.7-0.3,0.9,0c0.6,0.6,1.3,1.2,1.9,1.8C21.4,19.4,21.4,19.5,21.5,19.6z"/> <path class="st0" d="M22.3,12.3c-0.4,0-0.8,0-1.2,0c-0.4,0-0.7-0.3-0.7-0.6c0-0.4,0.3-0.7,0.6-0.7c0.9,0,1.7,0,2.6,0 c0.4,0,0.6,0.3,0.6,0.7c0,0.4-0.3,0.7-0.7,0.7C23.2,12.3,22.8,12.3,22.3,12.3z"/> <path class="st0" d="M1.5,12.3c-0.3,0-0.5,0-0.8,0c-0.4,0-0.7-0.2-0.8-0.6C0,11.3,0.3,11,0.7,11c0.2,0,0.4,0,0.6,0 c0.6,0,1.2,0,1.8,0c0.5,0,0.8,0.3,0.8,0.7c0,0.4-0.3,0.7-0.8,0.7C2.6,12.3,2,12.3,1.5,12.3C1.5,12.3,1.5,12.3,1.5,12.3z"/> <path class="st0" d="M3.6,20.1c-0.4,0-0.6-0.1-0.7-0.4C2.8,19.5,2.8,19.2,3,19c0.6-0.6,1.2-1.2,1.9-1.8C5.1,17,5.6,17,5.8,17.3 c0.2,0.2,0.3,0.6,0.1,0.9c-0.6,0.6-1.2,1.2-1.9,1.8C3.9,20,3.7,20.1,3.6,20.1z"/> <path class="st0" d="M12.1,25.4c0.3,0,0.5,0,0.8,0c0.4,0,0.6,0.3,0.6,0.6c0,0.3-0.3,0.6-0.6,0.6c-0.5,0-1,0-1.5,0 c-0.4,0-0.6-0.3-0.6-0.6c0-0.3,0.3-0.6,0.6-0.6C11.6,25.4,11.9,25.4,12.1,25.4z"/> </g> </svg>
                         </a>
                     </li>
@@ -1008,13 +1016,13 @@ $tags = \App\Models\ProjectCategory::limit(14)->get();
                     </div>
                     <div class="change_lang_footer">
                         <?php if($current_lang == 'ar'){ ?>
-                            <a href="<?= ((isset($link_lang) && $link_lang != '') ? $link_lang : LaravelLocalization::getLocalizedURL('en')); ?>">
+                            <a href="<?= ((isset($link_lang) && $link_lang != '') ? $link_lang : localized_url('en')); ?>">
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640" style="fill: currentColor;padding:0;position:relative;top:9px;left:8px;width:1.5em"><path d="M415.9 344L225 344C227.9 408.5 242.2 467.9 262.5 511.4C273.9 535.9 286.2 553.2 297.6 563.8C308.8 574.3 316.5 576 320.5 576C324.5 576 332.2 574.3 343.4 563.8C354.8 553.2 367.1 535.8 378.5 511.4C398.8 467.9 413.1 408.5 416 344zM224.9 296L415.8 296C413 231.5 398.7 172.1 378.4 128.6C367 104.2 354.7 86.8 343.3 76.2C332.1 65.7 324.4 64 320.4 64C316.4 64 308.7 65.7 297.5 76.2C286.1 86.8 273.8 104.2 262.4 128.6C242.1 172.1 227.8 231.5 224.9 296zM176.9 296C180.4 210.4 202.5 130.9 234.8 78.7C142.7 111.3 74.9 195.2 65.5 296L176.9 296zM65.5 344C74.9 444.8 142.7 528.7 234.8 561.3C202.5 509.1 180.4 429.6 176.9 344L65.5 344zM463.9 344C460.4 429.6 438.3 509.1 406 561.3C498.1 528.6 565.9 444.8 575.3 344L463.9 344zM575.3 296C565.9 195.2 498.1 111.3 406 78.7C438.3 130.9 460.4 210.4 463.9 296L575.3 296z"/></svg>
                                 <span>EN</span>
                             </a>
                         <?php }
                         elseif($current_lang == 'en'){ ?>
-                            <a href="<?= ((isset($link_lang) && $link_lang != '') ? $link_lang : LaravelLocalization::getLocalizedURL('ar')); ?>">
+                            <a href="<?= ((isset($link_lang) && $link_lang != '') ? $link_lang : localized_url('ar')); ?>">
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640" style="fill: currentColor;padding:0;position:relative;top:9px;left:8px;width:1.5em"><path d="M415.9 344L225 344C227.9 408.5 242.2 467.9 262.5 511.4C273.9 535.9 286.2 553.2 297.6 563.8C308.8 574.3 316.5 576 320.5 576C324.5 576 332.2 574.3 343.4 563.8C354.8 553.2 367.1 535.8 378.5 511.4C398.8 467.9 413.1 408.5 416 344zM224.9 296L415.8 296C413 231.5 398.7 172.1 378.4 128.6C367 104.2 354.7 86.8 343.3 76.2C332.1 65.7 324.4 64 320.4 64C316.4 64 308.7 65.7 297.5 76.2C286.1 86.8 273.8 104.2 262.4 128.6C242.1 172.1 227.8 231.5 224.9 296zM176.9 296C180.4 210.4 202.5 130.9 234.8 78.7C142.7 111.3 74.9 195.2 65.5 296L176.9 296zM65.5 344C74.9 444.8 142.7 528.7 234.8 561.3C202.5 509.1 180.4 429.6 176.9 344L65.5 344zM463.9 344C460.4 429.6 438.3 509.1 406 561.3C498.1 528.6 565.9 444.8 575.3 344L463.9 344zM575.3 296C565.9 195.2 498.1 111.3 406 78.7C438.3 130.9 460.4 210.4 463.9 296L575.3 296z"/></svg>
                                 <span>AR</span>
                             </a>
@@ -1094,7 +1102,7 @@ $tags = \App\Models\ProjectCategory::limit(14)->get();
                     foreach ($footer_prjs as $p) {
                         ?>
                         <div class="int_sec post">
-                            <a href="{{ localized_route('front.project',$p->slug) }}">
+                            <a href="{{ $p->frontUrl() }}">
                                 <div class="imageCont"><img class="media-object lazy" loading="lazy" src="{{ Helper::get_thumbnail($p->cardphoto, 100, 56) }}"  alt="damasturk"></div>
                                 <p><?= $p->getIntroCard() ?></p>
                             </a>

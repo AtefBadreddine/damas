@@ -86,4 +86,56 @@ class Country extends BaseModel
     {
         return $this->hasMany("App\Models\Post", "country_id");
     }
+
+    /**
+     * post categories
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function postCategories()
+    {
+        return $this->hasMany("App\Models\PostCategory", "country_id");
+    }
+
+    public function getTitle()
+    {
+        $lang = (\LaravelLocalization::getCurrentLocale() == 'pe' ? 'fa' : \LaravelLocalization::getCurrentLocale());
+        $field = "title_" . $lang;
+        if (isset($this->$field) && $this->$field) {
+            return $this->$field;
+        }
+        return $this->title_en ? $this->title_en : $this->title_ar;
+    }
+
+    /**
+     * Country listing URL: /{locale}/{country}/
+     *
+     * @param bool $absolute
+     * @return string
+     */
+    public function listingUrl($absolute = true)
+    {
+        return route('front.location.country', $this->slug, $absolute);
+    }
+
+    /**
+     * Translated title/content (ar + en).
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function countryContent()
+    {
+        return $this->hasOne("App\Models\CountryContent", "country_id");
+    }
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::deleting(function ($country) {
+            if ($country->countryContent) {
+                $country->countryContent->delete();
+            }
+        });
+    }
 }

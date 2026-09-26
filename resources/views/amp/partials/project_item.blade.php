@@ -23,11 +23,11 @@ $project_min_price = Helper::decimal_format(@$flavor->price,$project->is_price_u
 <div class="alike-item" id="<?= $project->id ?>">
     <span class="try"><?= $project->name_en; ?></span>
     <div class="content-shear">
-        <a href="<?= route('front.project', $project->slug); ?>"><i class="fa fa-heart-o pull-right"></i></a>
-        <a href="<?= route('front.project', $project->slug); ?>"><i class="flaticon-share share pull-right"></i></a>
+        <a href="<?= $project->frontUrl(); ?>"><i class="fa fa-heart-o pull-right"></i></a>
+        <a href="<?= $project->frontUrl(); ?>"><i class="flaticon-share share pull-right"></i></a>
     </div>
     @if($project->card_photo_id)
-    <a href="<?= route('front.project', $project->slug); ?>" <?= $search_page == true ? 'target="_blank"' : ''; ?>>
+    <a href="<?= $project->frontUrl(); ?>" <?= $search_page == true ? 'target="_blank"' : ''; ?>>
         <amp-img src="<?= Helper::get_thumbnail(@$project->cardphoto, 360, 280); ?>" width="360" height="280" layout="responsive"></amp-img>
     </a>
     @endif

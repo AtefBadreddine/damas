@@ -1,4 +1,9 @@
-<textarea name="<?= $name; ?>" class="form-control tinyeditor<?= str_replace(['_ru','_en','_fr'],'',$name)!=$name?'_en':'' ?>">{!! old($name, $row->$name) !!}</textarea>
+<?php
+$editorRows = isset($rows) ? (int) $rows : null;
+$editorHeight = isset($height) ? (int) $height : ($editorRows ? max(120, $editorRows * 24) : 400);
+$rowsAttr = $editorRows ? ' rows="' . $editorRows . '"' : '';
+?>
+<textarea name="<?= $name; ?>"<?= $rowsAttr; ?> class="form-control tinyeditor<?= str_replace(['_ru','_en','_fr'],'',$name)!=$name?'_en':'' ?>">{!! old($name, isset($editor_value) ? $editor_value : $row->$name) !!}</textarea>
 
 @section('scriptjs')
 <script src="<?= asset('tinymce/tinymce.min.js'); ?>"></script>
@@ -20,7 +25,7 @@
         toolbar1: "undo redo | bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | bullist numlist | outdent indent | link unlink | image | forecolor backcolor | fontsizeselect",
         relative_urls: false,
         remove_script_host : false,
-        height: <?= isset($height)?$height:400 ?>,
+        height: <?= $editorHeight ?>,
         /*file_browser_callback : function(field_name, url, type, win) {
             var x = window.innerWidth || document.documentElement.clientWidth || document.getElementsByTagName('body')[0].clientWidth;
             var y = window.innerHeight|| document.documentElement.clientHeight|| document.getElementsByTagName('body')[0].clientHeight;
@@ -62,7 +67,7 @@
         toolbar1: "undo redo | bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | bullist numlist | outdent indent | link unlink | image | forecolor backcolor | fontsizeselect",
         relative_urls: false,
         remove_script_host : false,
-        height: <?= isset($height)?$height:400 ?>,
+        height: <?= $editorHeight ?>,
         /*file_browser_callback : function(field_name, url, type, win) {
             var x = window.innerWidth || document.documentElement.clientWidth || document.getElementsByTagName('body')[0].clientWidth;
             var y = window.innerHeight|| document.documentElement.clientHeight|| document.getElementsByTagName('body')[0].clientHeight;

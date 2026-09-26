@@ -1,11 +1,10 @@
 <?php echo '<?xml version="1.0" encoding="UTF-8"?>'; ?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
-    
-    
-    
     @foreach ($posts as $post)
+        <?php $loc = $post->geoUrl(); ?>
+        @if ($loc)
         <url>
-            <loc><?= ($post->country=='oman'?route("front.blog.post.oman", $post->slug):($post->country=='syria'?route("front.blog.post.syria", $post->slug):route("front.blog.post", $post->slug))); ?></loc>
+            <loc><?= $loc; ?></loc>
             <lastmod><?= $post->updated_at->tz('UTC')->toAtomString(); ?></lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>
@@ -15,5 +14,6 @@
                 </image:loc>
             </image:image>
         </url>
+        @endif
     @endforeach
 </urlset>

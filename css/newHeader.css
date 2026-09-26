@@ -1,0 +1,720 @@
+
+body {
+    background-color: #fbfbfb;
+    width: 100%;
+    float: left;
+    position: relative;
+    background-image: url('/img/pattern-body.svg');
+    background-repeat: repeat-y;
+    background-size: 100%;
+    background-attachment: fixed;
+}
+
+
+.header{
+    float: left;
+    width: 100%;
+    position: fixed;
+    left: 0px;
+    top: 0px;
+    z-index: 99999;
+}
+
+.header.scrolling{
+    background-color: #fbfbfb;
+    background-image: url(/img/pattern-body.svg);
+    background-repeat: repeat-y;
+    background-size: 100%;
+}
+.header.scrolling .main_menu {
+    -webkit-box-shadow: 0px 7px 8px -5px rgba(9, 4, 0, 0.5);
+    box-shadow: 0px 7px 8px -5px rgba(9, 4, 0, 0.5);
+}
+
+.navbar-brand{
+    position: relative;
+}
+.navbar-brand.mob{
+    display: none;
+    width: 155px;
+}
+.navbar-brand.mob img{
+    width: 100%;
+    z-index: 999;
+    position: relative;
+    top: 1px;
+}
+.header .navbar {
+    background-color: transparent;
+    direction: rtl;
+    padding: 0px;
+}
+.header .navbar .sub{
+    width: 425px;
+    background-color: #f7f7f7;
+    border-radius: 0px 0px 0px 50px;
+    padding-left: 50px;
+    padding: 5px 15px 5px 25px;
+    -webkit-box-shadow: -4px 0px 5px -3px rgba(166,166,166,1);
+    -moz-box-shadow: -4px 0px 5px -3px rgba(166,166,166,1);
+    box-shadow: -4px 0px 5px -3px rgba(166,166,166,1);
+}
+.navbar-brand.full{
+    width: 155px;
+    padding: 0px;
+    margin: 0px;
+    position: relative;
+    top: 7px;
+    left: 17px;
+    z-index: 99;
+}
+.navbar-brand.full img{
+    width: 100%;
+    z-index: 999;
+    position: relative;
+}
+.main_menu{
+    float: right;
+    width: calc(100% - 90px);
+    height: 56px;
+    position: relative;
+    border-radius: 50px 0px 0px 50px;
+    background-image: linear-gradient(to right, #0b7f7f 0,#008b8c 100%);
+}
+/*.navbar-brand:after{
+    content: "";
+    position: absolute;
+    left: -2px;
+    top: 2px;
+    width: 70px;
+    height: 70px;
+    background-color: #0b7f7f;
+    border-radius: 100%;
+    z-index: 9;
+}
+.navbar-brand.mob:after {
+    left: -2px;
+    top: 8px;
+    width: 64px;
+    height: 64px;
+    z-index: 9;
+}*/
+.main_menu .links{
+    float: right;
+    padding: 0px 15px;
+    margin: 0px;
+    position: relative;
+    top: 0px;
+    height: 100%;
+}
+.main_menu .links li{
+    float: right;
+    list-style: none;
+    height: 100%;
+}
+.main_menu .links li a{
+    padding: 0px 20px;
+    font-size: 15px;
+    color: #f7f7f7;
+    height: 100%;
+    display: block;
+    position: relative;
+}
+.main_menu .links li a:after{
+    content: "";
+    position: absolute;
+    bottom: 0px;
+    left: 0px;
+    width: 100%;
+    height: 5px;
+    background-color: #f7f7f7;
+    border-radius: 10px 10px 0px 0px;
+    display: none;
+}
+.main_menu .links li .icon{
+    width: 40px;
+    height: 40px;
+    background-image: url(/img/links-icons.svg);
+    background-repeat: no-repeat;
+    background-size: 540px;
+    position: relative;
+    top: 8px;
+}
+.main_menu .links li .icon.photos{
+    background-position: -230px 0px;
+}
+.main_menu .links li .icon.information{
+    background-position: -185px 0px;
+}
+.main_menu .links li .icon.location{
+    background-position: -140px 0px;
+}
+.main_menu .links li .icon.prices{
+    background-position: -92px 0px;
+}
+.main_menu .links li .icon.video{
+    background-position: -49px 0px;
+}
+.main_menu .links li .icon.contact{
+    background-position: -3px 0px;
+}
+.main_menu .links li a:hover:after,
+.main_menu .links li a.active:after{
+    /*    color: #616161;
+        background-color: #f7f7f7;
+        text-decoration: none;*/
+    display: block;
+}
+
+
+
+
+*,
+*:before,
+*:after {
+    box-sizing: border-box;
+}
+
+.sosial_media_links {
+    float: left;
+    margin-left: 0px;
+    margin-right: auto;
+}
+.sosial_media_links a{
+    float: left;
+    margin: 0px 0px 0px 5px;
+}
+.sosial_media_links a .icon{
+    float: left;
+    background-image: url(/img/sosial-media-icon2.svg);
+    background-repeat: no-repeat;
+    background-size: 200px;
+}
+.sosial_media_links a.youtube .icon{
+    background-position: 0px 3px;
+}
+.sosial_media_links a.twitter .icon{
+    background-position: -42px 3px;
+}
+.sosial_media_links a.facebook .icon{
+    background-position: -84px 3px;
+}
+.sosial_media_links a.whatsapp .icon{
+    background-position: -142px 2px;
+}
+
+.sosial_media_links button,
+.sosial_media_links [role="button"] {
+    -webkit-appearance: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    display: -webkit-box;
+    display: flex;
+    -webkit-box-align: center;
+    align-items: center;
+    -webkit-box-pack: center;
+    justify-content: center;
+    outline: none;
+    cursor: pointer;
+    width: 30px;
+    height: 30px;
+    background-image: -webkit-gradient(linear, left bottom, left top, from(#D8D9DB), color-stop(80%, #fff), to(#FDFDFD));
+    background-image: linear-gradient(to top, #D8D9DB 0%, #fff 80%, #FDFDFD 100%);
+    border-radius: 50%;
+    border: 1px solid #8F9092;
+    box-shadow: 0 0px 10px 9px #FCFCFC, 0 1px 0px #D6D7D9, 0 -2px 4px #CECFD1, 0 -2px 4px #FEFEFE, inset 0 0 3px 0 #CECFD1;
+    -webkit-transition: all 0.2s ease;
+    transition: all 0.2s ease;
+    font-family: "Source Sans Pro", sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: #606060;
+    text-shadow: 0 1px #fff;
+}
+.sosial_media_links button::-moz-focus-inner,
+.sosial_media_links [role="button"]::-moz-focus-inner {
+    border: 0;
+}
+.sosial_media_links button > *,
+.sosial_media_links [role="button"] > * {
+    -webkit-transition: -webkit-transform 0.2s ease;
+    transition: -webkit-transform 0.2s ease;
+    transition: transform 0.2s ease;
+    transition: transform 0.2s ease, -webkit-transform 0.2s ease;
+}
+.sosial_media_links button:hover:not([disabled]),
+.sosial_media_links [role="button"]:hover:not([disabled]) {
+    box-shadow: 0 2px 2px 1px #FCFCFC, 0 3px 4px #D6D7D9, 0 -2px 6px #CECFD1, 0 -6px 4px #FEFEFE, inset 0 0 3px 3px #CECFD1;
+}
+.sosial_media_links button:hover:not([disabled]) > *,
+.sosial_media_links [role="button"]:hover:not([disabled]) > * {
+    -webkit-transform: scale(0.975);
+    transform: scale(0.975);
+}
+.sosial_media_links button:focus:not(:active),
+.sosial_media_links [role="button"]:focus:not(:active) {
+    -webkit-animation: active 0.9s alternate infinite;
+    animation: active 0.9s alternate infinite;
+    outline: none;
+}
+.sosial_media_links button:active:not([disabled]),
+.sosial_media_links [role="button"]:active:not([disabled]) {
+    box-shadow: 0 4px 3px 1px #FCFCFC, 0 6px 8px #D6D7D9, 0 -4px 4px #CECFD1, 0 -6px 4px #FEFEFE, inset 0 0 5px 3px #999, inset 0 0 30px #aaa;
+}
+.sosial_media_links button:active:not([disabled]) > *,
+.sosial_media_links [role="button"]:active:not([disabled]) > * {
+    -webkit-transform: scale(0.95);
+    transform: scale(0.95);
+}
+.all_select_sec{
+    margin-right: 0px;
+    margin-left: auto;
+}
+.sosial_media_links a span{
+    float: left;
+    direction: ltr;
+    color: #616161;
+    font-weight: bold;
+    margin-left: 5px;
+    font-size: 17px;
+    line-height: 25px;
+    position: relative;
+    top: 2px;
+}
+
+.bootstrap-select.open .dropdown-menu{
+    display: block;
+}
+
+.bootstrap-select.language .dropdown-menu.inner{
+    overflow: hidden !important;
+}
+.bootstrap-select .dropdown-menu li a{
+    float: left;
+    width: 100%;
+}
+.bootstrap-select .flag_icon{
+    float: left;
+    margin-right: 5px;
+    width: 23px;
+    height: 17px;
+    border-radius: 2px;
+}
+.bootstrap-select .dropdown-menu .flag_icon {
+    position: relative;
+    top: 2px;
+}
+.bootstrap-select .flag_icon{
+    background-image: url(/img/flags-new.svg);
+    background-repeat: no-repeat;
+    background-size: 32px;
+}
+.bootstrap-select .flag_icon.USD,
+.bootstrap-select .flag_icon.english{
+    background-position: -2px -23px;
+}
+.bootstrap-select .flag_icon.francais{
+    background-position: -7px -74px;
+}
+.bootstrap-select .flag_icon.SAR,
+.bootstrap-select .flag_icon.arabic{
+    background-position: -5px -62px;
+}
+.bootstrap-select .flag_icon.TRY{
+    background-position: -4px -3px;
+}
+.bootstrap-select .flag_icon.EUR{
+    background-position: -4px -42px;
+}
+.bootstrap-select .flag_icon.GBP{
+    background-position: -4px -80px;
+}
+.bootstrap-select .flag_icon.IQD{
+    background-position: -5px -99px;
+}
+.bootstrap-select .flag_icon.AED{
+    background-position: -5px -117px;
+}
+.bootstrap-select .flag_icon.KWD{
+    background-position: -5px -136px;
+}
+.bootstrap-select .flag_icon.OMR{
+    background-position: -2px -154px;
+}
+.bootstrap-select .flag_icon.SYP{
+    background-position: -5px -172px;
+}
+.bootstrap-select .flag_icon.QAR{
+    background-position: -5px -191px;
+}
+.bootstrap-select .flag_icon.BHD{
+    background-position: -5px -209px;
+}
+.bootstrap-select .flag_icon.JOD{
+    background-position: -3px -228px;
+}
+.bootstrap-select .flag_icon.DZD{
+    background-position: -3px -245px;
+}
+.bootstrap-select .flag_icon.YER{
+    background-position: -3px -264px;
+}
+
+.bootstrap-select.btn-group .dropdown-menu li a span.text {
+    position: relative;
+    top: 0px;
+    border-left: 1px solid #bebebe;
+    padding-left: 5px;
+}
+.bootstrap-select.btn-group .dropdown-menu li a.arabic span.text {
+    top: -1px;
+}
+
+
+
+
+
+
+.bootstrap-select:not([class*=col-]):not([class*=form-control]):not(.input-group-btn) {
+    width: 90px;
+}
+.bootstrap-select .dropdown-toggle{
+    background-color: #616161;
+    padding: 0px 5px;
+    color: #ffffff;
+    height: 30px;
+    font-size: 14px;
+    border: none;
+}
+.bootstrap-select.btn-group .dropdown-toggle .filter-option {
+    padding-top: 4px;
+    height: 100%;
+}
+.bootstrap-select.btn-group .dropdown-toggle .filter-option .flag_icon{
+    position: relative;
+    top: 3px;
+}
+.currency .dropdown-toggle .caret::after ,
+.header .dropdown-toggle .caret::after {
+    content: "\f107";
+}
+.currency .dropdown-toggle::after ,
+.header .dropdown-toggle::after {
+    display: none;
+}
+.bootstrap-select.btn-group .dropdown-toggle .caret {
+    display: inline-block;
+    font: normal normal normal 14px/1 FontAwesome;
+    font-size: inherit;
+    text-rendering: auto;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    top: 9px;
+}
+.bootstrap-select .dropdown-toggle:focus {
+    outline: none!important;
+    outline-offset: 0px;
+    box-shadow: none;
+    border: none;
+}
+
+.bootstrap-select.btn-group .dropdown-menu {
+    padding: 0px;
+    max-height: 250px !important;
+    direction: ltr;
+}
+.bootstrap-select.btn-group .dropdown-menu ul li{
+    width: 100%;
+    float: left;
+    border-bottom: 1px solid #cccccc;
+}
+.bootstrap-select.btn-group .dropdown-menu ul li a{
+    padding: 3px;
+    font-size: 14px;
+    color: #555555;
+    border: 0px !important;
+    outline: none !important;
+}
+.bootstrap-select.btn-group .dropdown-menu ul li a:hover{
+    background-color: #cccccc;
+}
+.bootstrap-select.btn-group .dropdown-menu ul li:last-child{
+    border-bottom: 0px;
+}
+
+.bootstrap-select.btn-group .dropdown-menu::-webkit-scrollbar,
+.type-scroll::-webkit-scrollbar {
+    background: transparent;
+    width: 5px;
+    height: 5px;
+}
+.bootstrap-select.btn-group .dropdown-menu::-webkit-scrollbar-thumb,
+.type-scroll::-webkit-scrollbar-thumb {
+    background-color: #888;
+}
+.bootstrap-select.btn-group .dropdown-menu::-webkit-scrollbar-thumb:hover ,
+.type-scroll::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(0, 0, 0, 0.3);
+}
+.area-services-modal {
+    padding-top: 15px;
+}
+.area-services-modal i.fa-close {
+    top: 23px;
+}
+.area-services-modal .int-content h2 {
+    text-align: right !important;
+}
+
+
+@media (max-width: 812px){
+    .navbar-expand-sm .navbar-collapse {
+        display: block!important;
+    }
+
+    .navbar-brand.mob{
+        display: block;
+        float: left;
+        width: 155px;
+        margin: 0px;
+        position: relative;
+        top: -3px;
+        left: 15px;
+    }
+    .navbar-brand.full{
+        display: none;
+    }
+    .header .navbar .sub {
+        width: calc(100% - 15px);
+        background-color: #0b7f7f;
+        border-radius: 50px 0px 0px 50px;
+        padding: 0px 0px 0px 0px;
+        height: 46px;
+        margin-top: 16px;
+    }
+    .main_menu {
+        width: calc(100% - 0px);
+        height: 48px;
+        position: relative;
+        border-radius: 0px;
+        background-image: none;
+        background-color: #fffcf9;
+        background-image: linear-gradient(to top, #fffcf9 0,#ffffff 100%);
+    }
+    .sosial_media_links a span{
+        display: none;
+    }
+
+    .header {
+        background-image: linear-gradient(to top, #ffffff 0, #ffffff 50% ,#eae6e1 100%);
+        -webkit-box-shadow: 4px 2px 8px 0px rgba(171,171,171,0.4);
+        -moz-box-shadow: 4px 2px 8px 0px rgba(171,171,171,0.4);
+        box-shadow: 4px 2px 8px 0px rgba(171,171,171,0.4);
+    }
+
+    .navbar-brand.mob:after {
+        left: -3px;
+        top: 4px;
+        width: 58px;
+        height: 58px;
+        z-index: 9;
+    }
+    .all_select_sec {
+        float: right;
+        width: auto;
+        position: relative;
+        top: 9px;
+        right: 10px;
+    }
+    .sosial_media_links {
+        float: right;
+        margin-left: 0px;
+        margin-right: 24px;
+        position: relative;
+        top: 8px;
+    }
+    .header .bootstrap-select .dropdown-toggle {
+        background-color: #ffffff;
+        color: #616161;
+        height: 26px;
+        font-size: 13px;
+    }
+    .header .bootstrap-select.btn-group .dropdown-toggle .filter-option {
+        padding-top: 4px;
+    }
+    .header .bootstrap-select.btn-group .dropdown-toggle .caret {
+        top: 9px;
+        right: 6px;
+    }
+    .header .bootstrap-select.btn-group .dropdown-toggle .filter-option .flag_icon {
+        position: relative;
+        top: 0px;
+    }
+    .header .bootstrap-select:not([class*=col-]):not([class*=form-control]):not(.input-group-btn) {
+        width: 80px;
+    }
+    .header .bootstrap-select .flag_icon {
+        width: 23px;
+        height: 18px;
+        border-radius: 2px;
+    }
+    .header .bootstrap-select .dropdown-menu .flag_icon {
+        width: 23px;
+    }
+    /*    .header .bootstrap-select .flag_icon.TRY {
+            background-position: -2px -2px;
+        }
+        .header .bootstrap-select .flag_icon.USD, .header .bootstrap-select .flag_icon.english {
+            background-position: -6px -89px;
+        }
+        .header .bootstrap-select .flag_icon.EUR {
+            background-position: -6px -119px;
+        }
+        .bootstrap-select .flag_icon.GBP {
+            background-position: -6px -150px;
+        }
+        .header .bootstrap-select .flag_icon.SAR, .header .bootstrap-select .flag_icon.arabic {
+            background-position: -5px -33px;
+        }
+        .header .bootstrap-select .flag_icon.IQD {
+            background-position: -6px -182px;
+        }
+        .header .bootstrap-select .flag_icon.AED {
+            background-position: -6px -218px;
+        }
+        .header .bootstrap-select .flag_icon.KWD {
+            background-position: -6px -251px;
+        }
+        .header .bootstrap-select .flag_icon.OMR {
+            background-position: -6px -288px;
+        }
+        .header .bootstrap-select .flag_icon.SYP {
+            background-position: -6px -324px;
+        }
+        .header .bootstrap-select .flag_icon.QAR {
+            background-position: -6px -358px;
+        }
+        .header .bootstrap-select .flag_icon.BHD {
+            background-position: -6px -392px;
+        }
+        .header .bootstrap-select .flag_icon.JOD {
+            background-position: -6px -426px;
+        }
+        .header .bootstrap-select .flag_icon.DZD {
+            background-position: -6px -460px;
+        }
+        .header .bootstrap-select .flag_icon.YER {
+            background-position: -6px -492px;
+        }*/
+
+
+    .header .bootstrap-select.btn-group .dropdown-menu li a span.text {
+        top: 0px;
+    }
+
+
+
+    .sosial_media_links a {
+        background-color: #00b04c;
+        color: #ffffff;
+        border-radius: 100%;
+    }
+    .sosial_media_links button, .sosial_media_links [role="button"]{
+        box-shadow: none;
+        border: 0px;
+    }
+    .sosial_media_links a.whatsapp .icon {
+        background-position: -199px 1px;
+        background-size: 230px;
+    }
+
+    .all_contents{
+        float: left;
+        width: 100%;
+        display: block;
+    }
+    .fixed-form-btn:before {
+        content: "";
+        width: 35px;
+        height: 35px;
+        border-radius: 50%;
+        border: 2px solid #5bbb5c ;
+        color: #5bbb5c;
+        position: absolute;
+        top: 12px;
+        left: 11px;
+        animation-name: test;
+        animation-duration: 1.5s;
+        animation-iteration-count: infinite;
+        animation-timing-function: ease-in-out
+    }
+    .sosial_media_links a .icon:after {
+        content: "";
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        border: 2px solid #5bbb5c;
+        color: #5bbb5c;
+        display: inline-block;
+        position: absolute;
+        top: 0px;
+        left: 5px;
+        animation-name: test;
+        animation-duration: 1.5s;
+        animation-delay: .65s;
+        animation-iteration-count: infinite;
+        animation-timing-function: ease-in-out;
+    }
+
+    @keyframes test {
+        from {
+            transform: scale(1);
+            border: 0.5px solid rgba(0; 176, 76, 1) ;
+        }
+        to {
+            transform: scale(2);
+            border: 0.5px solid rgba(0, 176, 76, 0) ;
+        }
+    }
+    .main_menu .links {
+        width: 100%;
+    }
+    .main_menu .links li {
+        width: 16.6666%;
+    }
+    .main_menu .links li a{
+        padding: 0px 5px;
+    }
+    .main_menu .links li a:after {
+        background-color: #0b7f7f;
+        height: 4px;
+    }
+    .main_menu .links li .icon {
+        width: 34px;
+        height: 34px;
+        margin: auto;
+        background-size: 442px;
+    }
+    .main_menu .links li .icon.photos {
+        background-position: -407px 0px;
+    }
+    .main_menu .links li .icon.information {
+        background-position: -369px 0px;
+    }
+    .main_menu .links li .icon.location{
+        background-position: -334px 0px;
+    }
+    .main_menu .links li .icon.prices{
+        background-position: -296px 0px;
+    }
+    .main_menu .links li .icon.video{
+        background-position: -260px 0px;
+    }
+    .main_menu .links li .icon.contact{
+        background-position: -223px 0px;
+    }
+
+
+}

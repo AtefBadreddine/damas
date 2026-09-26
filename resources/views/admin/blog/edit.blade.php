@@ -1,4 +1,4 @@
-@extends('admin.layouts.form', ["app_title" => "Add a new post"])
+@extends('admin.layouts.form', ["app_title" => isset($postType) ? $postType->label() : "Add a new post"])
 @section('main_form')
 
 
@@ -52,6 +52,14 @@
                         <div class="col-md-2">
                             <div class="form-group">
                                 <label class="enabled-section"><input type="checkbox" id="published" name="published" <?= $row->published == 1 ? 'checked' : ''; ?>> Enabled</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-md-offset-4">
+                            <div class="form-group">
+                                <div class="input-group ltr">
+                                    <span class="input-group-addon">Old slug</span>
+                                    <?= Form::text("old_slug", $row->old_slug, ["class" => "form-control input-sm", "placeholder" => "Old slug (301 to current URL)"]); ?>
+                                </div>
                             </div>
                         </div>
 
@@ -126,12 +134,6 @@
                                     <?= Form::select("lang", ["all" => "All", "ar" => "Arabic", "en" => "English", "fa" => "Persian"], $row->lang, ["class" => "form-control select2me"]); ?>
                                 </div>
                             </div>
-                            <div class="col-md-2">
-                                <div class="form-group">
-                                    <label>Post Type</label>
-                                    <?= Form::select("post_type", ["posts" => "Post", "news" => "News", "videos" => "Video"], $row->post_type, ["class" => "form-control select2me"]); ?>
-                                </div>
-                            </div>
 
 
                             <div class="col-md-4">
@@ -174,7 +176,7 @@
 
                             <div class="col-md-4">
                                 <div class="form-group" style="padding:24px 14px">
-                                    <label class="enabled-section"><input type="checkbox" id="prevent_archiving_in_blog" name="prevent_archiving_in_blog" <?= $row->prevent_archiving_in_blog == 1 ? 'checked' : ''; ?>> Prevent archiving in <?= ucfirst($type) ?> </label>
+                                    <label class="enabled-section"><input type="checkbox" id="prevent_archiving_in_blog" name="prevent_archiving_in_blog" <?= $row->prevent_archiving_in_blog == 1 ? 'checked' : ''; ?>> Prevent archiving in <?= isset($postType) ? $postType->label() : ucfirst($type) ?> </label>
                                 </div>
                             </div>
 

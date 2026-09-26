@@ -35,7 +35,8 @@ class Kernel extends HttpKernel
         'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
 		'checkpermission' => \App\Http\Middleware\CheckPermission::class,
         'localize' => \Mcamara\LaravelLocalization\Middleware\LaravelLocalizationRoutes::class,
-		'exchange' => \App\Http\Middleware\Exchange::class
+		'exchange' => \App\Http\Middleware\Exchange::class,
+		'localePrefix' => \App\Http\Middleware\RedirectToLocalePrefix::class
 		//'localizationRedirect' => \Mcamara\LaravelLocalization\Middleware\LaravelLocalizationRedirectFilter::class,
 		//'localeSessionRedirect' => \Mcamara\LaravelLocalization\Middleware\LocaleSessionRedirect::class,
         //'localeViewPath' => \Mcamara\LaravelLocalization\Middleware\LaravelLocalizationViewPath::class

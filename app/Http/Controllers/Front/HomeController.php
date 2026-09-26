@@ -119,19 +119,15 @@ class HomeController extends BaseController
 		}
 		
 		
-		if(in_array($slug,['investment','legal','living_turkey','privacy','terms'])){
-			if($slug == 'investment'){
-				$slug = 'investment-turkey-istanbul';
-			}elseif($slug == 'legal'){
-				$slug = 'legal-affairs-turkey';
-			}elseif($slug == 'living_turkey'){
-				$slug = 'living-turkey-real-estate-ownership';
-			}elseif($slug == 'privacy'){
-				$slug = 'privacy-policy';
-			}elseif($slug == 'terms'){
-				$slug = 'terms-of-use';
-			}
-			return Redirect::to(route("front.index")."/". $slug . ($get==''?'':'?' . $get), 301 );
+		$pageRoutes = [
+			'investment' => 'front.investment',
+			'legal' => 'front.legal',
+			'living_turkey' => 'front.living_turkey',
+			'privacy' => 'front.privacy',
+			'terms' => 'front.terms',
+		];
+		if(isset($pageRoutes[$slug])){
+			return Redirect::to(route($pageRoutes[$slug]) . ($get==''?'':'?' . $get), 301 );
 		}
 		
 		$link = \App\Models\RedirectShort::where('slug',$slug)->first();
@@ -357,75 +353,16 @@ class HomeController extends BaseController
     */
     public function project_show($slug)
     {
-        
-		
-		$project = Helper::query("Project", "where", ["field" => "old_slug", "value" => $slug])->first();
-		if ( !$project )
-			$project = Helper::query("Project", "where", ["field" => "slug", "value" => $slug])->first();
-        if ( !$project or !$project->city ) abort(404);
+		$project = Helper::query("Project", "where", ["field" => "old_slug", "value" => $slug])->orWhere("slug", $slug)->first();
+        if ( !$project ) abort(404);
 
 		$geoUrl = $project->geoUrl();
 		if ( $geoUrl ) {
 			$query = request()->getQueryString();
 			return Redirect::to($geoUrl . ($query ? '?' . $query : ''), 301);
 		}
-		
-		
-		
-		
-		/*if ( $project->sold=='100' )
-			return Redirect::to(route("front.search")."/property-for-sale/". $project->city->slug, 301 );*/
 
-            
-            if(strlen(request()->segment(1))==2)//lang en fr pe ru
-                $country = in_array(request()->segment(2), ['oman','syria'])?request()->segment(2) : 'turkey';
-            else
-                $country = in_array(request()->segment(1), ['oman','syria'])?request()->segment(1) : 'turkey';
-	
-			
-			//$country = Helper::container_array(\Route::getCurrentRoute()->getPath(), ['oman','syria'])?\Route::getCurrentRoute()->getPath():'turkey';
-			
-			if($project->city->country!=$country){
-			    //echo $project->city->country."!=".$country;
-			    return Redirect::to(route("front.index"). ($project->city->country=='turkey'?'':'/'.$project->city->country) ."/projects/". $project->slug , 301 );
-			    //return Redirect::to(route("front.index"). ($country=='turkey'?'/oman':'') ."/projects/". $project->slug , 301 );
-			}
-
-			
-			
-			
-			
-			
-
-        if ( isset($_SERVER["HTTP_REFERER"]) ) {
-            $project->views += 1; $project->save();
-        }
-		$lang = (\LaravelLocalization::getCurrentLocale()=='pe'?'fa':\LaravelLocalization::getCurrentLocale());
-		$video_code = '';
-		$video_code2 = '';
-		$videos = DB::select("SELECT dms_project_video.`project_id`, dms_project_video.`video_id`,dms_videos.link, dms_videos.lang,updated_at
-FROM `dms_project_video`
-left JOIN dms_videos on dms_videos.id=dms_project_video.video_id
-WHERE dms_project_video.`project_id`=? and dms_videos.lang like ?
-order by updated_at desc
-limit 1",[$project->id,'%'. $lang .'%']);
-
-	if(isset($videos[0])){
-		$link_video = $videos[0]->link;
-		parse_str(parse_url($link_video, PHP_URL_QUERY), $array_of_vars);
-        $video_code = @$array_of_vars['v'];
-	}
-	
-	
-	$link_video2 = @$project->region->getLinkvideo();
-	if($link_video2!=''){
-		parse_str(parse_url($link_video2, PHP_URL_QUERY), $array_of_vars);
-		$video_code2 = @$array_of_vars['v'];
-	}
-	
-		
-		
-        return view("front.project_show", compact("project","video_code","video_code2"));
+		abort(404);
     }
     /**
     * preview pdf
@@ -454,21 +391,8 @@ limit 1",[$project->id,'%'. $lang .'%']);
     */
     public function project_data(Request $request,$id)
     {
-		//$id = 'D-'.$id;
-		//echo $id;
-		//exit;
-		
-		
-		
-		if(strlen(request()->segment(1))==2)//lang en fr pe ru
-            $country = in_array(request()->segment(2), ['oman','syria'])?request()->segment(2) : 'turkey';
-        else
-		    $country = in_array(request()->segment(1), ['oman','syria'])?request()->segment(1) : 'turkey';
-		//$country = Helper::container_array(\Route::getCurrentRoute()->getPath(), ['oman','syria'])?\Route::getCurrentRoute()->getPath():'turkey';
-			
-		
-		
-		
+		$country = $this->legacyRouteValue($request, 'country') ?: 'turkey';
+
 		if(strpos(URL::current(), '/media/') !== false /*&& !isset($_GET['abc1qa445zs45zde8defr45rfr5'])*/){
 			
 			if((strpos($request->headers->get('referer'), 'crm.damas.net/app') !== false )){
@@ -1058,13 +982,20 @@ limit 1",[$project->id,'%'. $lang .'%']);
 		$__city = $city;
 		$__var1 = $var1;
 		$__var2 = $var2;
-		
+
 		$current_lang = (\LaravelLocalization::getCurrentLocale()=='pe'?'fa':\LaravelLocalization::getCurrentLocale());
 		
 
 		if($request->get("amp")=='1'){
 				$url = route("front.search")."/".($request->get("project_type")==''?'property-for-sale':$request->get("project_type"))."/".($request->get("city")==''?'turkey':$request->get("city")).($request->get("project_category")==''?'':"/".$request->get("project_category"));
 				return Redirect::to($url);
+		}
+
+		if ($request->isMethod('get') && !$request->ajax() && !isset($_GET['ajax'])) {
+			$geoUrl = $this->legacySearchGeoUrl($request, $type, $city, $var1, $var2);
+			if ($geoUrl) {
+				return Redirect::to($geoUrl, 301);
+			}
 		}
 		
 		
@@ -1819,7 +1750,8 @@ limit 1",[$project->id,'%'. $lang .'%']);
 			
 			$req_url =  strtok($url, "?");
 			//$req_url = strtok(\LaravelLocalization::getLocalizedURL("ar"), "?");
-			$req_url = str_replace(['/ru','/fa','/pe','/fr','/en','newdemo.'],'',$req_url);
+			$req_url = str_replace('newdemo.','',$req_url);
+			$req_url = preg_replace('#(https?://[^/]+)(?:/(?:ru|fa|pe|fr|en|ar))(?=/|$)#', '$1', $req_url, 1);
 			/*echo $req_url;
 			exit;*/
             $page_seo = Helper::query("PageSearch", "where", ["field" => "link", "value" => $req_url])->first();				
@@ -2124,6 +2056,92 @@ limit 1",[$project->id,'%'. $lang .'%']);
 		}
 		
         return view("front.search", compact("projects", "inputs", "allprojects", "paginate_number"/*,"jsonprojects"*/,"q_tags","__type","__city","__var1","__var2","search_noindex"));
+    }
+
+    /**
+     * Map a legacy search URL to the geo listing:
+     * /{type}/{city}/{category|district}/{district} -> /{country}/{city}/{district}?type=&category=
+     * Returns null when the URL can't be resolved, so search() keeps its 404 handling.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @param string|null $type
+     * @param string|null $citySlug
+     * @param string|null $var1
+     * @param string|null $var2
+     * @return string|null
+     */
+    protected function legacySearchGeoUrl(Request $request, $type, $citySlug, $var1, $var2)
+    {
+        $var1 = $var1 ? array_values(array_filter(explode(',', $var1))) : array();
+        $var2 = $var2 ? array_values(array_filter(explode(',', $var2))) : array();
+
+        $categories = array();
+        $regionSlugs = array();
+        if ($var1) {
+            if (\App\Models\ProjectCategory::whereIn('slug', $var1)->count() > 0) {
+                $categories = $var1;
+            } elseif (\App\Models\Region::whereIn('slug', $var1)->count() > 0) {
+                $regionSlugs = $var1;
+            } else {
+                return null;
+            }
+        }
+        if ($var2) {
+            $regionSlugs = $var2;
+        }
+
+        $params = array();
+        if ($type && $type !== 'property-for-sale') {
+            if (!\App\Models\ProjectType::where('slug', $type)->first()) {
+                return null;
+            }
+            $params['type'] = $type;
+        }
+        if ($categories) {
+            $params['category'] = implode(',', $categories);
+        }
+		
+        $country = $citySlug ? \App\Models\Country::findByCode($citySlug) : null;
+        $cityRow = null;
+        if (!$country) {
+            $cityRow = $citySlug ? \App\Models\City::where('slug', $citySlug)->first() : null;
+            if (!$cityRow || !$cityRow->listingUrl()) {
+                return null;
+            }
+        }
+
+        $regions = array();
+        if ($regionSlugs) {
+            $regionQuery = \App\Models\Region::whereIn('slug', $regionSlugs);
+            if ($cityRow) {
+                $regionQuery->where('city_id', $cityRow->id);
+            }
+            $regions = $regionQuery->get()->all();
+            if (!$cityRow && $regions) {
+                $cityRow = $regions[0]->city;
+                $regions = array_values(array_filter($regions, function ($r) use ($cityRow) {
+                    return $r->city_id == $cityRow->id;
+                }));
+            }
+        }
+
+        if (count($regions) === 1 && $regions[0]->listingUrl()) {
+            $url = $regions[0]->listingUrl();
+        } elseif ($cityRow && $cityRow->listingUrl()) {
+            $url = $cityRow->listingUrl();
+            if (count($regions) > 1) {
+                $params['district'] = implode(',', array_map(function ($r) {
+                    return $r->slug;
+                }, $regions));
+            }
+        } elseif ($country) {
+            $url = $country->listingUrl();
+        } else {
+            return null;
+        }
+
+        $query = array_merge($request->except(array('ajax', 'amp', 'page')), $params);
+        return $url . ($query ? '?' . str_replace('%2C', ',', http_build_query($query)) : '');
     }
     
     /**
@@ -4442,166 +4460,93 @@ limit 1",[$project->id,'%'. $lang .'%']);
     */
     public function blog_index(Request $request)
     {
-		//$country = Helper::container_array(\Route::getCurrentRoute()->getPath(), ['oman','syria'])?\Route::getCurrentRoute()->getPath():'turkey';
-		
-		
-		if(strlen(request()->segment(1))==2)//lang en fr pe ru
-            $country = in_array(request()->segment(2), ['oman','syria'])?request()->segment(2) : 'turkey';
-        else
-		    $country = in_array(request()->segment(1), ['oman','syria'])?request()->segment(1) : 'turkey';
-		
-		/*echo $country;
-		exit;*/
-		
-		
-		
-		
-		
-		$type = Helper::container_array(\Route::currentRouteName(), ['news'])?'news':'blog';//.post
-		$curent_lang = (\LaravelLocalization::getCurrentLocale()=='pe'?'fa':\LaravelLocalization::getCurrentLocale());
-		//$q = Post::where('published',1)->whereIn('lang',['all',$curent_lang]);
-		
-		$title = 'title_' . $curent_lang;
-		$content = 'content_' . $curent_lang;
-		
-		$q = Post::where('published',1)->where('country',$country)->where('type',$type)->where($title,'!=','');
-		
-		
-		
-		if(isset($_GET['search'])){
-			$q->where("$content",'like','%'.$_GET['search'].'%');
-		}
-		
-		$sorting = $_GET['sort']??'recent';
+		$postType = $this->legacyPostType($request);
 
-		switch ($sorting)
-        {
-            case "az":
-                $q->orderBy("$title","asc");
-                break;
-			case "za":
-                $q->orderBy("$title","desc");
-                break;
-            case "oldest":
-				$q->orderBy("created_at","asc");
-                break;
-            default:
-				$q->orderBy("placement","asc");
+		$query = $request->getQueryString();
+		$suffix = $query ? '?' . $query : '';
+
+		$countrySlug = $this->legacyCountrySlug($request);
+		if ($countrySlug) {
+			return Redirect::to(route($postType->frontCountryRoute(), $countrySlug) . $suffix, 301);
 		}
-		$posts = $q->paginate(9);
-		
-		$posts->appends(['sort' => $sorting]);
-		
-		if(isset($_GET['search']))
-		$posts->appends(['search' => $_GET['search']]);
-		
-		
-		if($request->ajax()){
-			$ajax = true;
-			return view("front.blog.partials.list_posts",compact('posts','ajax','type'));
-        }
-		$is_category_page = false;
-		$categories = PostCategory::where('type',$type)->where('country',$country)->orderBy("placement","asc")->get();
-		$hide_whatsapp = false;
-		return view("front.blog.index",compact('posts','is_category_page','categories','type','hide_whatsapp'));
+
+		return Redirect::to(route($postType->frontIndexRoute()) . $suffix, 301);
+    }
+
+    /**
+     * Route value by name: URL parameter first, then the route action (see routes.php legacy groups).
+     *
+     * @param Request $request
+     * @param string $key
+     * @return string|null
+     */
+    protected function legacyRouteValue(Request $request, $key)
+    {
+		$route = $request->route();
+		if (!$route) {
+			return null;
+		}
+
+		$value = $route->parameter($key);
+		if ($value === null) {
+			$action = $route->getAction();
+			$value = isset($action[$key]) ? $action[$key] : null;
+		}
+		return $value;
+    }
+
+    /**
+     * Post type from the legacy route's `type` (blog|news).
+     *
+     * @param Request $request
+     * @return \App\Enums\PostType
+     */
+    protected function legacyPostType(Request $request)
+    {
+		return \App\Enums\PostType::tryFrom((string) $this->legacyRouteValue($request, 'type')) ?: \App\Enums\PostType::BLOG;
+    }
+
+    /**
+     * Country URL slug from the legacy route's `country` (code or slug), or null when absent.
+     *
+     * @param Request $request
+     * @return string|null
+     */
+    protected function legacyCountrySlug(Request $request)
+    {
+		$country = $this->legacyRouteValue($request, 'country');
+		if (!$country) {
+			return null;
+		}
+
+		$row = \App\Models\Country::findBySlug($country) ?: \App\Models\Country::findByCode($country);
+		return $row ? $row->slug : null;
     }
     /**
     * show blog category
+    * Old /blog/category/{slug} (and /oman|/syria variants) → /{country}/guides?category={slug}.
     *
     * @param string $slug
     * @return void
     */
-    public function blog_show_category(Request $request,$slug,$rss='')
+    public function blog_show_category(Request $request, $slug)
     {
-        //$country = Helper::container_array(\Route::getCurrentRoute()->getPath(), ['oman','syria'])?\Route::getCurrentRoute()->getPath():'turkey';
-        
-        
-        if(strlen(request()->segment(1))==2)//lang en fr pe ru
-            $country = in_array(request()->segment(2), ['oman','syria'])?request()->segment(2) : 'turkey';
-        else
-            $country = in_array(request()->segment(1), ['oman','syria'])?request()->segment(1) : 'turkey';
-        
-		$type = Helper::container_array(\Route::currentRouteName(), ['news'])?'news':'blog';//.post
-		
-        $curent_lang = (\LaravelLocalization::getCurrentLocale()=='pe'?'fa':\LaravelLocalization::getCurrentLocale());
-		$category = Helper::query("PostCategory", "where", ["field" => "slug", "value" => $slug])->first();
-        if ( !$category ) abort(404);
-		
-		
-		
-			
-			if($category->country!=$country){
-			    //echo $project->city->country."!=".$country;
-			    
-			    return Redirect::to(route("front.index"). ($category->country=='turkey'?'':'/'.$category->country) ."/blog/category/". $category->slug , 301 );
-			    //return Redirect::to(route("front.index"). ($country=='turkey'?'/oman':'') ."/blog/category/". $category->slug , 301 );
-			}
-		
-		
-		$title = 'title_' . $curent_lang;
-		
-		
-		$title = 'title_' . $curent_lang;
-		$content = 'content_' . $curent_lang;
-		
-		$q = $category->posts()->where('published',1)->where('country',$country)->where($title,'!=','');
-		
-		
-		$categories = PostCategory::where('type',$type)->where('country',$country)->orderBy("placement","asc")->get();
-		
-		 
-		
-		
-		$sorting = $_GET['sort']??'recent';
-
-		switch ($sorting)
-        {
-            case "az":
-                $q->orderBy("$title","asc");
-                break;
-			case "za":
-                $q->orderBy("$title","desc");
-                break;
-            case "oldest":
-				$q->orderBy("created_at","asc");
-                break;
-            default:
-				$q->orderBy("placement","asc");
-		}
-		$posts = $q->with('photoCard')->paginate(9);
-		
-		//dd($posts);
-		
-		$posts->appends(['sort' => $sorting]);
-		
-		
-        /*$posts = $category->posts()
-            ->where("published", 1)
-			->where('title_'.$current_lang,'!=','')
-            //->whereIn("lang", ["all", $current_lang])
-            ->orderBy('placement', 'ASC')
-			->with('photoCard')
-			->with('projects')
-            ->get();
-			*/
-
-		if($request->ajax()){
-			$ajax = true;
-			return view("front.blog.partials.list_posts",compact('posts','ajax','type'));
+        $category = Helper::query('PostCategory', 'where', ['field' => 'slug', 'value' => $slug])->first();
+        if (!$category) {
+            abort(404);
         }
-		//$categories = PostCategory::where('type',$type)->orderBy("placement","asc")->get();
-		$is_category_page = true;
-		if($rss=='rss'){
-			return response()->view("rss.rss_categorys",compact('posts','category'))->header('Content-Type', 'text/xml');
-		}
-		
-		$hide_whatsapp = false;
-		if(in_array($category->id,[3,4,5,6])){
-			$hide_whatsapp = true;
-		}
-		
-		return view("front.blog.index",compact('posts','categories','slug','is_category_page','category','type','hide_whatsapp'));
-        //return view("front.blog.category", compact("category", "blog_section", "posts", "slug"));
+
+        $countrySlug = $category->getCountrySlug() ?: $this->legacyCountrySlug($request);
+        if (!$countrySlug) {
+            $country = \App\Models\Country::findByCode('turkey');
+            $countrySlug = $country ? $country->slug : 'turkiye';
+        }
+
+        parse_str($request->getQueryString() ?: '', $query);
+        $query['category'] = $category->slug;
+
+        $url = route($this->legacyPostType($request)->frontCountryRoute(), $countrySlug) . '?' . http_build_query($query);
+        return Redirect::to($url, 301);
     }
     /**
     * show blogpost
@@ -4609,219 +4554,21 @@ limit 1",[$project->id,'%'. $lang .'%']);
     * @param string $slug
     * @return void
     */
-    public function blog_show_post($slug)
+    public function blog_show_post(Request $request, $slug)
     {
-	//$country = Helper::container_array(\Route::getCurrentRoute()->getPath(), ['oman','syria'])?\Route::getCurrentRoute()->getPath():'turkey';
-	
-	if(strlen(request()->segment(1))==2)//lang en fr pe ru
-        $country = in_array(request()->segment(2), ['oman','syria'])?request()->segment(2) : 'turkey';
-    else
-	    $country = in_array(request()->segment(1), ['oman','syria'])?request()->segment(1) : 'turkey';
-	
-	
-	
-	
-		
-	$type = Helper::container_array(\Route::currentRouteName(), ['news'])?'news':'blog';//.post
-	$post = Post::where("slug", $slug)->where("type", $type)->with('projects')->first();//->where('country',$country)
-	if ( !$post ) abort(404);
+		$type = $this->legacyPostType($request)->value;
+		$post = Post::where("slug", $slug)->where("type", $type)->first();
+		if ( !$post ) $post = Post::where("slug", $slug)->first();
+		if ( !$post ) $post = Post::where("old_slug", $slug)->first();
+		if ( !$post ) abort(404);
 
-	$geoUrl = $post->geoUrl();
-	if ( $geoUrl ) {
-		$query = request()->getQueryString();
-		return Redirect::to($geoUrl . ($query ? '?' . $query : ''), 301);
-	}
-	
-	
-	
-	if($post->country!=$country){
-			    //echo $project->city->country."!=".$country;
-			    return Redirect::to(route("front.index"). ($post->country=='turkey'?'':'/'.$post->country) ."/blog/". $post->slug , 301 );
-			}
-	
-	
-	
-	$ajax_projects_url = '';
-	
-	if($post->with_projects_blog==true){
-		
-		//$url = "https://damas.net/property-for-sale/istanbul/near-shopping-malls/basaksehir";
-		$url = $post->projects_url;
-		
-		$t = explode('.com/',$url);
-		$t = explode('/',$t[1]);
-		$project_type = (isset($t[0])?$t[0]:'property-for-sale');
-		$city = (isset($t[1])?$t[1]:'turkey');
-		
-		
-		
-		
-		
-		$regions = [];
-		$project_categories = [];
-		
-			$var1 = (isset($t[2])?$t[2]:null);
-			$var2 = (isset($t[3])?$t[3]:null);
-			
-			$var1 = $var1 ? explode(",", $var1) : [];
-            $var2 = $var2 ? explode(",", $var2) : [];
-            
-			
-            $q_regions = [];
-            $q_tags = Helper::query("ProjectCategory", "whereIn", ["field" => "slug", "value" => $var1])->get();
-            if ( count($q_tags) > 0 ) {
-					$project_categories =  $var1;
-            } else {
-                $q_regions = Helper::query("Region", "whereIn", ["field" => "slug", "value" => $var1])->get();
-                if ( count($q_regions) > 0 ) {
-					$regions =$var1;
-                }
-            }
-            if ( $var2 ) {
-                $q_regions = Helper::query("Region", "whereIn", ["field" => "slug", "value" => $var2])->get();
-                $regions = $var2;
-            }
-		
-		
-		$str_regions = '';
-		foreach($regions as $reg)
-			$str_regions = $str_regions.'&regions[]='.$reg ;
-
-		$str_project_categories = '';
-		foreach($project_categories as $pcat)
-			$str_project_categories = $str_project_categories.'&project_categories[]='.$pcat ;
-		
-		
-		$ajax_projects_url = '/property-for-sale/turkey?city='.$city.$str_regions.'&project_type='.$project_type.'&rooms='.$str_project_categories.'&ajax=1&curr=USD&price_fields=0';
-		$ajax_projects_url = \LaravelLocalization::localizeUrl($ajax_projects_url);
-		
-		//page=1&city=istanbul&regions[]=basaksehir&project_type=&rooms=&project_categories[]=near-shopping-malls&ajax=1&map=none&curr=USD&price_fields=0
-		
-	}
-		
-		
-		
-		
-		
-		
-		
-		
-        
-		$post_id = $post->id;
-			// track google visitor
-			$src = '';
-			$cookie_reffer = Cookie::get('reffer');
-			$coourl = parse_url($cookie_reffer);
-			if ( ($cookie_reffer != str_replace('gclid=', '', $cookie_reffer)) ){
-				$src = "Adwords";
-			} else {
-				$src = @$coourl['host'] ? $coourl['host'] : (@$coourl['path'] ? $coourl['path'] : 'دخول مباشر');
-			}
-			
-			if(($src!='' and strpos(strtolower($src), 'google') !== false) or (strpos(strtolower(\URL::previous()), 'google') !== false)){
-				
-
-				$vrow = \App\Models\Googlevisit::where("visit_date",DB::raw("date(now())"))->where('post_id',$post_id)->first();
-				
-				$arrids=[];
-				foreach($post->categories()->lists('id') as $iid)
-					$arrids[]=$iid;
-				
-				$cat_ids = ','.implode(',',$arrids).',';
-				if($vrow==false){
-					DB::insert("INSERT INTO `dms_googlevisits`(`post_id`, `visit_date`, `visit_count`,cat_ids) VALUES (?,date(NOW()),1,?)",[$post_id,$cat_ids]);
-				}else{
-					DB::update("UPDATE `dms_googlevisits` SET visit_count=visit_count+1,cat_ids=? WHERE `id`=?",[$cat_ids,$vrow->id]);
-				}	
-			}
-			//End track google visit
-			
-			
-			
-		
-		$faqs = \App\Models\Faq::where("str_posts",'like', '%,'.$post->id.',%')->get();
-		
-
-        //$projects = $post->projects->with('cardphoto')->with('flavors');
-		
-// 		if($post->published==false){
-// 			if((int) $post->redirect_post_id != 0){
-// 				$post = Post::where("id", $post->redirect_post_id)->first();
-// 				return Redirect::to(route("front.blog.post", $post->slug), 301);
-// 			}else
-// 				abort(404);
-// 		}
-		
-		$link_lang = '';
-		
-        $current_lang = (\LaravelLocalization::getCurrentLocale()=='pe'?'fa':\LaravelLocalization::getCurrentLocale());
-		
-		$title = 'title_'.$current_lang;
-
-
-
-		if(trim($post->$title)=='' /*$current_lang!='ar'*/){
-			/*if(isset($post->categories[0]))
-				return Redirect::to(route("front.blog.category", $post->categories[0]->slug), 302);
-			else*/
-				abort(404);
+		$geoUrl = $post->geoUrl();
+		if ( $geoUrl ) {
+			$query = $request->getQueryString();
+			return Redirect::to($geoUrl . ($query ? '?' . $query : ''), 301);
 		}
-		
-		$availables_langs = [];
-		if(trim($post->title_en)!='')
-			$availables_langs[] = 'en';
-		if(trim($post->title_fr)!='')
-			$availables_langs[] = 'fr';
-		if(trim($post->title_ru)!='')
-			$availables_langs[] = 'ru';
-		if(trim($post->title_fa)!='')
-			$availables_langs[] = 'pe';
-		if(trim($post->title_ar)!='')
-			$availables_langs[] = 'ar';
 
-		/*if($post->lang!=$current_lang and $post->lang!='all'){
-			return Redirect::to(( $post->lang=='en'?'en/':'' ) . 'blog/'.$slug, 301);
-		}elseif($post->lang!='all'){
-			$link_lang = 'https://www.damas.net/'.( $current_lang=='en'?'':'en/' ); //route("front.index",[]);
-		}*/
-		//$posts = Post::query()->whereIn('lang',array($current_lang,'all'))->where("published", 1)->orderBy('id','desc')->get();
-		
-		if ( isset($_SERVER["HTTP_REFERER"]) ) {
-            $post->views += 1; $post->save();
-        }
-		
-		$categories = PostCategory::where('type',$type)->where('country',$country)->orderBy("placement","asc")->get();
-		
-		
-		
-		
-		
-		
-		
-		
-		$lang = (\LaravelLocalization::getCurrentLocale()=='pe'?'fa':\LaravelLocalization::getCurrentLocale());
-		$video_code = '';
-		$videos = DB::select("SELECT dms_post_video.`post_id`, dms_post_video.`video_id`,dms_videos.link, dms_videos.lang,updated_at
-		FROM `dms_post_video`
-		left JOIN dms_videos on dms_videos.id=dms_post_video.video_id
-		WHERE dms_post_video.`post_id`=? and dms_videos.lang like ?
-		order by updated_at desc
-		limit 1",[$post->id,'%'. $lang .'%']);
-
-		if(isset($videos[0])){
-			$link_video = $videos[0]->link;
-			parse_str(parse_url($link_video, PHP_URL_QUERY), $array_of_vars);
-			$video_code = @$array_of_vars['v'];
-		}
-		
-		$hide_whatsapp = false;
-		if(isset($post->categories[0])){
-			if(in_array($post->categories[0]->id,[3,4,5,6])){
-				$hide_whatsapp = true;
-			}
-		}
-		
-        return view("front.blog.show", compact("post","ajax_projects_url","link_lang","categories","video_code","faqs","availables_langs",'type','hide_whatsapp'));
+		abort(404);
     }
 	/**
     * show ajaxposts
@@ -4910,8 +4657,24 @@ limit 1",[$project->id,'%'. $lang .'%']);
 		
 
 		$current_lang = (\LaravelLocalization::getCurrentLocale()=='pe'?'fa':\LaravelLocalization::getCurrentLocale());
-		
-        if ( $slug and !in_array($slug, ["projects","links", "posts", "news"]) ) abort(404);
+
+        if ( $slug == "posts" ) {
+            return Redirect::to(route("sitemap", "guides"), 301);
+        }
+
+        $postSitemaps = array(
+            "guides" => \App\Enums\PostType::BLOG,
+            "developers" => \App\Enums\PostType::DEVELOPER,
+            "reports" => \App\Enums\PostType::REPORT,
+            "news" => \App\Enums\PostType::NEWS,
+        );
+
+        if ( $slug and !in_array($slug, array_merge(["projects", "links"], array_keys($postSitemaps))) ) abort(404);
+
+        if ( isset($postSitemaps[$slug]) ) {
+            $posts = Post::query()->ofPostType($postSitemaps[$slug])->where('title_'.$current_lang,'!=','')->where('content_'.$current_lang,'!=','')->where("published", 1)->where("prevent_archiving_in_blog", false)->where("redirect_post_id",'0')->with(array('photoCard', 'countryRel'))->orderBy('id','desc')->get();
+            return response()->view("sitemap.posts", ["posts"  => $posts])->header('Content-Type', 'text/xml');
+        }
 		
         if ( $slug == "projects" ) {
 			
@@ -4922,16 +4685,6 @@ limit 1",[$project->id,'%'. $lang .'%']);
 				$projects = array();
 				return response()->view("sitemap.projects", ["projects"  => $projects])->header('Content-Type', 'text/xml');
 			}*/
-        } elseif ( $slug == "posts" ) {
-            //$posts = Helper::query("Post", "orderBy", ["field" => "id", "value" => "DESC"])->where("published", 1)->where("lang",$current_lang )->get();
-			$posts = Post::query()->where('type','blog')->where('title_'.$current_lang,'!=','')->where('content_'.$current_lang,'!=','')->where("published", 1)->where("prevent_archiving_in_blog", false)->where("redirect_post_id",'0')->orderBy('id','desc')->get();
-            //exit;
-			return response()->view("sitemap.posts", ["posts"  => $posts])->header('Content-Type', 'text/xml');
-        } elseif ( $slug == "news" ) {
-            //$posts = Helper::query("Post", "orderBy", ["field" => "id", "value" => "DESC"])->where("published", 1)->where("lang",$current_lang )->get();
-			$posts = Post::query()->where('type','news')->where('title_'.$current_lang,'!=','')->where('content_'.$current_lang,'!=','')->where("published", 1)->where("prevent_archiving_in_blog", false)->where("redirect_post_id",'0')->orderBy('id','desc')->get();
-            //exit;
-			return response()->view("sitemap.news", ["posts"  => $posts])->header('Content-Type', 'text/xml');
         } elseif ( $slug == "links" ) {
 			//exit('ff');
             //$posts = Helper::query("Post", "orderBy", ["field" => "id", "value" => "DESC"])->where("published", 1)->where("lang",$current_lang )->get();
@@ -4949,40 +4702,91 @@ limit 1",[$project->id,'%'. $lang .'%']);
     *
     * @return void
     */
-    public function rss(Request $request,$slug='')
+    public function rss(Request $request, $slug = '')
     {
-		$limit = 5000;
-		if ( $request->ajax() ) {
-			$limit=1;
-		}
-		$current_lang = (\LaravelLocalization::getCurrentLocale()=='pe'?'fa':\LaravelLocalization::getCurrentLocale());
-		
-		$projects = [];
-		$posts = [];
-		if($slug=='' or $slug=='projects')
-        $projects = Helper::query("Project", "orderBy", ["field" => "created_at", "value" => "DESC"])
-            ->where("published", 1)
-            ->select(  "id","name_$current_lang AS title", "slug", "seo_description_$current_lang AS description", "created_at")
-			->limit($limit)
-            ->get();
+        $limit = 5000;
+        if ($request->ajax()) {
+            $limit = 1;
+        }
+        $current_lang = (\LaravelLocalization::getCurrentLocale() == 'pe' ? 'fa' : \LaravelLocalization::getCurrentLocale());
 
-		if($slug=='')
-			$posts = Post::query()->select( "id","title_$current_lang AS title", "slug", "type", "seo_description_$current_lang AS description", "created_at")->where('title_'.$current_lang,'!=','')->where("published", 1)->orderBy('created_at','desc')->limit($limit)->get();
-		elseif($slug=='news' or $slug=='blog')
-			$posts = Post::query()->select( "id","title_$current_lang AS title", "slug", "type", "seo_description_$current_lang AS description", "created_at")->where('title_'.$current_lang,'!=','')->where("published", 1)->where("type", $slug)->orderBy('created_at','desc')->limit($limit)->get();
+        $rssSlugToPostType = array(
+            'blog' => 'blog',
+            'news' => 'news',
+            'developers' => 'developer',
+            'reports' => 'report',
+        );
+        if ($slug !== '' && $slug !== 'projects' && !isset($rssSlugToPostType[$slug])) {
+            abort(404);
+        }
 
-		$data = array();
-		foreach($projects as $p)
-		$data[strtotime($p->created_at)]=$p;
-		
-		foreach($posts as $p)
-		$data[strtotime($p->created_at)]=$p;
-		krsort($data);
-		
-        return response()->view("rss.index", [
-            "infos" =>  Helper::get_params(),
-            "rows"  =>  $data,
-        ])->header('Content-Type', 'text/xml');
+        $projects = array();
+        $posts = array();
+        if ($slug === '' || $slug === 'projects') {
+            $projects = Helper::query('Project', 'orderBy', array('field' => 'created_at', 'value' => 'DESC'))
+                ->where('published', 1)
+                ->select('id', "name_$current_lang AS title", 'slug', "seo_description_$current_lang AS description", 'created_at')
+                ->limit($limit)
+                ->get();
+        }
+
+        $postSelect = array(
+            'id',
+            "title_$current_lang AS title",
+            'slug',
+            'post_type',
+            'country',
+            'country_id',
+            "seo_description_$current_lang AS description",
+            'created_at',
+        );
+
+        if ($slug === '') {
+            $posts = Post::query()
+                ->select($postSelect)
+                ->where('title_' . $current_lang, '!=', '')
+                ->where('published', 1)
+                ->orderBy('created_at', 'desc')
+                ->limit($limit)
+                ->get();
+        } elseif (isset($rssSlugToPostType[$slug])) {
+            $posts = Post::query()
+                ->select($postSelect)
+                ->where('title_' . $current_lang, '!=', '')
+                ->where('published', 1)
+                ->ofPostType($rssSlugToPostType[$slug])
+                ->orderBy('created_at', 'desc')
+                ->limit($limit)
+                ->get();
+        }
+
+        $data = array();
+        foreach ($projects as $p) {
+            $data[strtotime($p->created_at)] = $p;
+        }
+        foreach ($posts as $p) {
+            $data[strtotime($p->created_at)] = $p;
+        }
+        krsort($data);
+
+        $channelTitle = null;
+        if ($slug === 'blog') {
+            $channelTitle = trans('front.guides');
+        } elseif ($slug === 'news') {
+            $channelTitle = trans('front.news');
+        } elseif ($slug === 'developers') {
+            $channelTitle = trans('front.developer');
+        } elseif ($slug === 'reports') {
+            $channelTitle = trans('front.report');
+        } elseif ($slug === 'projects') {
+            $channelTitle = trans('front.projects');
+        }
+
+        return response()->view('rss.index', array(
+            'infos' => Helper::get_params(),
+            'rows' => $data,
+            'channelTitle' => $channelTitle,
+        ))->header('Content-Type', 'text/xml');
     }
     /**
     * rss_notifs
@@ -6123,8 +5927,10 @@ limit 1",[$project->id,'%'. $lang .'%']);
 				$send_post = false;
 				$p = Helper::query("Project", "where", ["field" => "id", "value" => $pr->id])->first();
 					$img = 'https://www.damas.net/'.$p->projectPhotos[0]->path;
+				$notifPath = parse_url($p->frontUrl(), PHP_URL_PATH);
+				$notifPath = preg_replace('#^/(en|fr|pe|ru|ar)(/|$)#', '/', $notifPath);
 				if($p->send_notif_ar==false ){//عربي
-					$url = 'https://www.damas.net/projects/'.$p->slug;
+					$url = 'https://www.damas.net'.$notifPath;
 					Helper::sendOnesignalNotification($app_id_damasnet,$auth_key_damasnet,$p->seo_title_ar,$p->seo_description_ar,$img,$url);
 					Helper::sendOnesignalNotification($app_id_damasturk,$auth_key_damasturk,$p->seo_title_ar,$p->seo_description_ar,$img,$url);
 					Helper::sendOnesignalNotification($app_id_damasturk_no_w,$auth_key_damasturk_no_w,$p->seo_title_ar,$p->seo_description_ar,$img,$url);
@@ -6133,7 +5939,7 @@ limit 1",[$project->id,'%'. $lang .'%']);
 				}
 				if($p->send_notif_en==false  and $send_post==false){
 					
-					$url = 'https://www.damas.net/en/projects/'.$p->slug;
+					$url = 'https://www.damas.net/en'.$notifPath;
 					Helper::sendOnesignalNotification($app_id_damasnet,$auth_key_damasnet,$p->seo_title_en,$p->seo_description_en,$img,$url);
 					Helper::sendOnesignalNotification($app_id_damasturk,$auth_key_damasturk,$p->seo_title_en,$p->seo_description_en,$img,$url);
 					Helper::sendOnesignalNotification($app_id_damasturk_no_w,$auth_key_damasturk_no_w,$p->seo_title_en,$p->seo_description_en,$img,$url);
@@ -6141,7 +5947,7 @@ limit 1",[$project->id,'%'. $lang .'%']);
 				}
 				if($p->send_notif_fr==false  and $send_post==false){
 					
-					$url = 'https://www.damas.net/fr/projects/'.$p->slug;
+					$url = 'https://www.damas.net/fr'.$notifPath;
 					Helper::sendOnesignalNotification($app_id_damasnet,$auth_key_damasnet,$p->seo_title_fr,$p->seo_description_fr,$img,$url);
 					Helper::sendOnesignalNotification($app_id_damasturk,$auth_key_damasturk,$p->seo_title_fr,$p->seo_description_fr,$img,$url);
 					Helper::sendOnesignalNotification($app_id_damasturk_no_w,$auth_key_damasturk_no_w,$p->seo_title_fr,$p->seo_description_fr,$img,$url);
@@ -6247,7 +6053,8 @@ limit 1",[$project->id,'%'. $lang .'%']);
 		$url = '';
 		$posts = DB::table('posts')->select('title_en','slug','title_ar','title_ru','title_fr','title_fa','seo_keywords_ar','seo_keywords_en','seo_keywords_ru','seo_keywords_fr','seo_keywords_fa')->orderBy('seo_keywords_ar')->get();
 		foreach($posts as $p){
-			$url = route("front.blog.post", $p->slug);
+			$post = Post::where('slug', $p->slug)->first();
+			$url = $post ? $post->frontUrl() : route('front.blog.post', $p->slug);
 			if(Helper::trimm($p->seo_keywords_ar) != ''){
 				$t = explode(',',$p->seo_keywords_ar);
 				foreach($t as $e)
@@ -6290,7 +6097,8 @@ limit 1",[$project->id,'%'. $lang .'%']);
 		$url = '';
 		$projects = DB::table('projects')->select(/*'title_en','title_ar','name_en','name_ar',*/'slug','seo_keywords_ar','seo_keywords_en','seo_keywords_ru','seo_keywords_fr','seo_keywords_fa')->orderBy('seo_keywords_ar')->get();
 		foreach($projects as $p){
-			$url = route('front.project', $p->slug);
+			$project = \App\Models\Project::where('slug', $p->slug)->first();
+			$url = $project ? $project->frontUrl() : route('front.project', $p->slug);
 			if(Helper::trimm($p->seo_keywords_ar) != ''){
 				$t = explode(',',$p->seo_keywords_ar);
 				foreach($t as $e)

@@ -17,17 +17,17 @@
     </aside>
     <h4 class="colored"><?= $post->getTitle(); ?></h4>
     <p><?= Helper::str_limit($post->getContent()); ?></p>
-    <p><a href="<?= route("front.blog.post", $post->slug); ?>"> قراءة المزيد </a></p>
+    <p><a href="<?= $post->frontUrl(); ?>"> قراءة المزيد </a></p>
 </div>
 @else
 <div class="media my-media">
     <div class="media-left">
-        <a href="<?= route("front.blog.post", $post->slug); ?>">
+        <a href="<?= $post->frontUrl(); ?>">
             <amp-img src="<?= Helper::media_url($post->photoCard); ?>" width="100" height="100" alt="{{ $post->getTitle() }}"></amp-img>
         </a>
     </div>
     <div class="media-body">
-        <h4 class="media-heading colored"><a href="<?= route("front.blog.post", $post->slug); ?>"><?= $post->getTitle(); ?></a></h4>
+        <h4 class="media-heading colored"><a href="<?= $post->frontUrl(); ?>"><?= $post->getTitle(); ?></a></h4>
     </div>
 </div>
 @endif

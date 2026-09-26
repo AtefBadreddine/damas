@@ -4,7 +4,7 @@
 
                                 <!-- image Project -->
                                 <div class="int_cont image show">
-                                    <a href="/projects/ds268"><img class="lazy" data-src="<?= asset("/img/01.jpg"); ?>" alt="damasturk"/></a>
+                                    <a href="<?= route('front.project.show', array('country' => 'turkiye', 'city' => 'istanbul', 'region' => 'mahmutbey', 'project' => 'apartments-for-sale-istanbul-mahmutbey-near-merto-2')) ?>"><img class="lazy" data-src="<?= asset("/img/01.jpg"); ?>" alt="damasturk"/></a>
                                 </div>
 
                                 <!-- map Project -->

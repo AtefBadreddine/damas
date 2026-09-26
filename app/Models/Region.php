@@ -142,9 +142,30 @@ class Region extends BaseModel
 		"faq_category_id",
 		
     ];
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::deleting(function ($region) {
+            if ($region->districtContent) {
+                $region->districtContent->delete();
+            }
+        });
+    }
 	public function city()
     {
 		return $this->belongsTo("App\Models\City", "city_id");
+    }
+
+    /**
+     * Translated title/content (ar + en). Districts are stored as regions.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function districtContent()
+    {
+        return $this->hasOne("App\Models\DistrictContent", "region_id");
     }
 	public function getPost()
     {
@@ -322,4 +343,28 @@ class Region extends BaseModel
 	
 	
 	
+
+    /**
+     * District listing URL: /{locale}/{country}/{city}/{region}/
+     *
+     * @param bool $absolute
+     * @return string|null
+     */
+    public function listingUrl($absolute = true)
+    {
+        $city = $this->city;
+        if (!$city || !$city->slug || !$this->slug) {
+            return null;
+        }
+        $countrySlug = $city->getCountrySlug();
+        if (!$countrySlug) {
+            return null;
+        }
+
+        return route('front.location.region', array(
+            'country' => $countrySlug,
+            'city' => $city->slug,
+            'region' => $this->slug,
+        ), $absolute);
+    }
 }

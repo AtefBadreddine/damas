@@ -285,10 +285,10 @@ $proj_cats = Helper::query('ProjectCategory', "where", ["field" => "hide_search_
                     <div class="share_content sec">
                         <p><?= trans("front.share"); ?>:</p>
                         <ul>
-                            <li><a rel="nofollow" href="https://facebook.com/sharer.php?u=<?= urlencode(route('front.blog.post', [$post->slug])) ?>"><i class="fa fa-facebook-f"></i></a></li>
-                            <li><a rel="nofollow" href="https://twitter.com/intent/tweet?url=<?= urlencode(route('front.blog.post', [$post->slug])) ?>&amp;text=<?= $post->getTitle() ?>&amp;via=damasturk"><i class="fa fa-twitter"></i></a></li>
-                            <li><a rel="nofollow" href="https://api.whatsapp.com/send?text=<?= (route('front.blog.post', [$post->slug])) ?>"><i class="fa fa-whatsapp"></i></a></li>
-                            <li><a rel="nofollow" href="https://www.linkedin.com/sharing/share-offsite/?url=<?= urlencode(route('front.blog.post', [$post->slug])) ?>"><i class="fa fa-linkedin"></i></a></li>
+                            <li><a rel="nofollow" href="https://facebook.com/sharer.php?u=<?= urlencode($post->frontUrl()) ?>"><i class="fa fa-facebook-f"></i></a></li>
+                            <li><a rel="nofollow" href="https://twitter.com/intent/tweet?url=<?= urlencode($post->frontUrl()) ?>&amp;text=<?= $post->getTitle() ?>&amp;via=damasturk"><i class="fa fa-twitter"></i></a></li>
+                            <li><a rel="nofollow" href="https://api.whatsapp.com/send?text=<?= ($post->frontUrl()) ?>"><i class="fa fa-whatsapp"></i></a></li>
+                            <li><a rel="nofollow" href="https://www.linkedin.com/sharing/share-offsite/?url=<?= urlencode($post->frontUrl()) ?>"><i class="fa fa-linkedin"></i></a></li>
                             <li><a rel="nofollow"><i class="fa fa-envelope"></i></a></li>
                         </ul>
                     </div>

@@ -24,13 +24,13 @@
         <aside class="col-md-6 col-sm-6 col-12">
             <div class="0" data-wow-duration="1s" data-wow-offset="200" style="height: 322px;">
                 <aside class="news-item">
-                    <a href="<?= route("front.blog.post", $post->slug); ?>">
+                    <a href="<?= $post->frontUrl(); ?>">
                         <img src="<?= Helper::get_thumbnail($post->photoCard, $w, $h); ?>" alt="<?= $post->getTitle(); ?>" class="img-responsive" style="width:100%"/>
                     </a>
                 </aside>
                 <div class="row">
                     <div class="col-md-12 col-xs-12">
-                        <h2 class="colored"><a href="<?= route("front.blog.post", $post->slug); ?>"><?= $post->getTitle(); ?></a></h2>
+                        <h2 class="colored"><a href="<?= $post->frontUrl(); ?>"><?= $post->getTitle(); ?></a></h2>
                     </div>
                 </div>
                 <p class="clearfix"><?= Helper::str_limit($post->getContent()); ?></p>
@@ -39,12 +39,12 @@
             @elseif($k==1)
             <div class="media my-media col-12 wow fadeIn" data-wow-duration="1s" data-wow-offset="200">
                 <div class="media-left">
-                    <a href="<?= route("front.blog.post", $post->slug); ?>">
+                    <a href="<?= $post->frontUrl(); ?>">
                         <img class="media-object" src="<?= Helper::get_thumbnail($post->photoCard, 100, 100, true); ?>" alt="<?= $post->getTitle(); ?>">
                     </a>
                 </div>
                 <div class="media-body">
-                    <div class="media-heading colored"><a href="<?= route("front.blog.post", $post->slug); ?>"><?= $post->getTitle(); ?></a></div>
+                    <div class="media-heading colored"><a href="<?= $post->frontUrl(); ?>"><?= $post->getTitle(); ?></a></div>
                 </div>
             </div>
         </aside>
@@ -52,12 +52,12 @@
             @else
             <div class="media my-media col-12 wow fadeIn" data-wow-duration="1s" data-wow-offset="200">
                 <div class="media-left">
-                    <a href="<?= route("front.blog.post", $post->slug); ?>">
+                    <a href="<?= $post->frontUrl(); ?>">
                         <img class="media-object" src="<?= Helper::get_thumbnail($post->photoCard, 100, 100, true); ?>" alt="<?= $post->getTitle(); ?>">
                     </a>
                 </div>
                 <div class="media-body">
-                    <div class="media-heading colored"><a href="<?= route("front.blog.post", $post->slug); ?>"><?= $post->getTitle(); ?></a></div>
+                    <div class="media-heading colored"><a href="<?= $post->frontUrl(); ?>"><?= $post->getTitle(); ?></a></div>
                 </div>
             </div>
             @endif

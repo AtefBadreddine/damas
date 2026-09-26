@@ -277,4 +277,45 @@ class Page extends BaseModel
 		}
 		return '';
     }
+
+    /**
+     * Public URL for static CMS pages (search results, admin previews, etc.).
+     *
+     * @param bool $absolute
+     * @return string
+     */
+    public function frontUrl($absolute = true)
+    {
+        $routeBySlug = array(
+            'privacy' => 'front.privacy',
+            'terms' => 'front.terms',
+            'about-us' => 'front.aboutus',
+            'resale' => 'front.resale',
+            'turkish-nationality' => 'front.turkish_nationality',
+            'turkey-territories' => 'front.turkey_territories',
+            'turkey_guide' => 'front.turkey_guide',
+            'turkish-citizenship' => 'front.turkish_citizenship',
+            'investment' => 'front.investment',
+            'legal' => 'front.legal',
+            'faq' => 'front.faq',
+            'living_turkey' => 'front.living_turkey',
+            'jobs' => 'front.land_vacancies',
+            'vacancies' => 'front.vacancies',
+            'offers' => 'front.offers',
+            '360' => 'front.view_360',
+        );
+
+        if (isset($routeBySlug[$this->slug])) {
+            return route($routeBySlug[$this->slug], array(), $absolute);
+        }
+
+        if ($this->post_id) {
+            $post = Post::find($this->post_id);
+            if ($post) {
+                return $post->frontUrl($absolute);
+            }
+        }
+
+        return route('front.index', array(), $absolute);
+    }
 }

@@ -38,6 +38,102 @@ if (!function_exists('localized_route')) {
     }
 }
 
+if (!function_exists('localized_url')) {
+    /**
+     * LaravelLocalization::getLocalizedURL() that keeps the default locale in the URL
+     * on locale-required routes (/en/guides -> /ar/guides, not /guides).
+     */
+    function localized_url($locale)
+    {
+        $url = LaravelLocalization::getLocalizedURL($locale);
+
+        $route = Route::current();
+        $action = $route ? $route->getAction() : [];
+        if (empty($action['locale_required']) || $locale !== LaravelLocalization::getDefaultLocale()) {
+            return $url;
+        }
+
+        $root = request()->root();
+        return $root . '/' . $locale . '/' . ltrim(substr($url, strlen($root)), '/');
+    }
+}
+
+if (!function_exists('seo_url')) {
+    /**
+     * Canonical/hreflang URL: localized path without query string, except ?page=N when N > 1.
+     */
+    function seo_url($locale = null)
+    {
+        $locale = $locale ?: LaravelLocalization::getCurrentLocale();
+        $url = strtok(localized_url($locale), '?');
+        $url = str_replace('/public/', '/', $url);
+
+        $page = (int) request()->get('page');
+
+        return $page > 1 ? $url . '?page=' . $page : $url;
+    }
+}
+
+if (!function_exists('front_link')) {
+    /**
+     * Prepend /ar to stored unprefixed page URLs when the current locale is Arabic.
+     * Leaves endpoints, already-prefixed paths, home, and external URLs unchanged.
+     */
+    function front_link($url)
+    {
+        if ($url === null || $url === '' || $url === '#') {
+            return $url;
+        }
+
+        $url = str_replace(array('https://www.damas.net', 'http://www.damas.net', 'https://damas.net', 'http://damas.net'), '', $url);
+
+        if (preg_match('#^(https?:)?//#', $url) || strpos($url, 'mailto:') === 0 || strpos($url, 'tel:') === 0 || strpos($url, 'javascript:') === 0) {
+            return $url;
+        }
+
+        if (LaravelLocalization::getCurrentLocale() !== LaravelLocalization::getDefaultLocale()) {
+            return $url;
+        }
+
+        $parts = parse_url($url);
+        $path = isset($parts['path']) ? $parts['path'] : '';
+        if ($path === '' || $path === '/') {
+            return $url;
+        }
+
+        $first = explode('/', ltrim($path, '/'));
+        $first = $first[0];
+
+        $locales = LaravelLocalization::getSupportedLanguagesKeys();
+        if (in_array($first, $locales)) {
+            return $url;
+        }
+
+        $skip = array(
+            'ajax', 'ajax_projects_info', 'ajax_group_projects', 'ajaxposts', 'ajax_statics',
+            'callus', 'callus2', 'callmeModalAjax', 'callvac', 'call_us_landing_tourism',
+            'loadmore', 'newsletter', 'likeitem', 'like_video', 'confirmation',
+            'preview_pdf', 'testphp', 'cron_tiny_picture', 'sitemap_xml', 'rss', 'rss_notifs',
+            'whatsapp_share', 'ratesexchange-try', 'currency', 'filter_rooms',
+            'login', 'logout', 'register', 'password', 'damas-administrator',
+            'amp', 'oman', 'syria', 'webhooks',
+        );
+        if (in_array($first, $skip) || strpos($first, 'cron_') === 0) {
+            return $url;
+        }
+
+        $new = '/' . LaravelLocalization::getDefaultLocale() . '/' . ltrim($path, '/');
+        if (!empty($parts['query'])) {
+            $new .= '?' . $parts['query'];
+        }
+        if (!empty($parts['fragment'])) {
+            $new .= '#' . $parts['fragment'];
+        }
+
+        return $new;
+    }
+}
+
 class Helper
 {
     public static $params=array();
@@ -1202,7 +1298,7 @@ class Helper
                 break;
             case 'post':
                 $row = Helper::query("Post", "find", ["id" => $link_value]);
-                $link = url("/blog/$row->slug");
+                $link = $row->frontUrl();
                 break;
             case 'category':
                 $row = Helper::query("ProjectCategory", "find", ["id" => $link_value]);
@@ -1267,7 +1363,7 @@ class Helper
 					<?php } ?>
 					
 					
-                    <p class="text-center"><a href="<?= route("front.project", $p->slug); ?>" class="btn btn-default btn-xs" target="_blank"><?= trans("front.read more"); ?></a></p>
+                    <p class="text-center"><a href="<?= $p->frontUrl(); ?>" class="btn btn-default btn-xs" target="_blank"><?= trans("front.read more"); ?></a></p>
                 </div>
             <?php
 			//}
@@ -1335,12 +1431,12 @@ class Helper
 						<?php } ?>
 					<?php } ?>
 					
-                    <p class="text-center"><a href="<?= route("front.project", $p->slug); ?>" class="btn btn-default btn-xs" target="_blank"><?= trans("front.read more"); ?></a></p>
+                    <p class="text-center"><a href="<?= $p->frontUrl(); ?>" class="btn btn-default btn-xs" target="_blank"><?= trans("front.read more"); ?></a></p>
                 </div>
             <?php
 			*/
 			//}
-            $content = '<div class="window_map_info num"><a href="'.route("front.project", $p->slug).'"><img src="'. (Helper::get_thumbnail($p->cardphoto, 360, 196)) .'"/></a><h3>'. $p->getIntroCard() .'</h3><strong>'. ( Helper::decimal_format(@$falvor->price, $p->is_price_usd) . ' ' . Helper::curr_format()) .'</strong></div>';
+            $content = '<div class="window_map_info num"><a href="'.$p->frontUrl().'"><img src="'. (Helper::get_thumbnail($p->cardphoto, 360, 196)) .'"/></a><h3>'. $p->getIntroCard() .'</h3><strong>'. ( Helper::decimal_format(@$falvor->price, $p->is_price_usd) . ' ' . Helper::curr_format()) .'</strong></div>';
 
         return trim(preg_replace('/\s+/', ' ', $content));
     }
@@ -2464,7 +2560,7 @@ curl_close($ch);
 				if ( $item['parent_id'] == 0 ) {
 					$content.='<li class="parent_menu">
 				<div class="drop"  >
-					  <a href="'. str_replace('https://www.damas.net','',$item[$index_link]).'" class="pd0">
+					  <a href="'. front_link($item[$index_link]).'" class="pd0">
 					  <i class="fa fa-angle-down"></i>
 					  <span>'.$item["title_$lang"].'</span>
 					  </a>
@@ -2474,7 +2570,7 @@ curl_close($ch);
 				
 					foreach($items as $subm) {
 						if ( $subm['parent_id'] == $item['id'] ) {
-					$content.='<li><a href="'. str_replace('https://www.damas.net','',$subm[$index_link]) .'">'.$subm["title_$lang"].'</a></li>';
+					$content.='<li><a href="'. front_link($subm[$index_link]) .'">'.$subm["title_$lang"].'</a></li>';
 					}
 					}
 					
@@ -2498,7 +2594,7 @@ curl_close($ch);
                 ob_start();
                 ?>
                     <li class="list-group-item">
-					<a href="<?= $item[$index_link] ?>">
+					<a href="<?= front_link($item[$index_link]) ?>">
                         <?= $item["title_$lang"]; ?>
                         </a>
                     
@@ -2542,11 +2638,11 @@ curl_close($ch);
 			foreach($items as $item) {
 				if ( $item['parent_id'] == 0 ) {
 					$content.='<li class="list">
-				<a href="'.$item[$index_link].'">'.$item["title_$lang"].'</a>
+				<a href="'.front_link($item[$index_link]).'">'.$item["title_$lang"].'</a>
 				<ul class="items">';
 					foreach($items as $subm) {
 						if ( $subm['parent_id'] == $item['id'] ) {
-					$content.='<li><a href="'.$subm[$index_link].'">'.$subm["title_$lang"].'</a></li>';
+					$content.='<li><a href="'.front_link($subm[$index_link]).'">'.$subm["title_$lang"].'</a></li>';
 					}
 					}
 					$content .="</ul></li>";
@@ -2594,7 +2690,7 @@ curl_close($ch);
             if ( $item['parent_id'] == $parent ) {
                 $content .= "<h4>".$item["title_$lang"]."</h4>";
                 $submenu = self::menu_tree_front($item['id'], ($level+1), $items, "list-inline", null);
-                if ( $item['link'] != '#' ) $content .= '<li><a href="'.$item['link'].'">'.'</a>';
+                if ( $item['link'] != '#' ) $content .= '<li><a href="'.front_link($item['link']).'">'.'</a>';
                 if ( $submenu != '<ul class="list-inline"></ul>' ) $content .= $submenu;
                 $content ."</li>";
             }
@@ -3413,7 +3509,7 @@ $cardphoto = @$project->cardphoto;
 $project_min_price = Helper::decimal_format(@$flavor->price, $project->is_price_usd);
 
 			
-$data['url'] = route('front.project', $project->slug);
+$data['url'] = $project->frontUrl();
 
 $iw = 360;
 $ih = 280;
@@ -3513,7 +3609,7 @@ return $data;
 		
 		
 		$url = str_replace(['www-damas-net.cdn.ampproject.org/v/s/','/amp','https://','www.'],'',$url);
-		$url = str_replace(['/en/','/fr/','/fa/','/pe/','/ru/'],'/',$url);
+		$url = str_replace(['/ar/','/en/','/fr/','/fa/','/pe/','/ru/'],'/',$url);
 		$n = explode(':', $url);
 		$url = trim($n[0]);
 		
@@ -3524,7 +3620,23 @@ return $data;
 			$lang = 'en';
 		
 		$ret = '';
-		if (strpos($url, '/projects/') !== false) {
+		if (preg_match('#/(turkiye|oman|emirates|syria)/(buying-guide|guides)/([^/\?]+)#', $url, $m) || preg_match('#/(turkiye|oman|emirates|syria)/news/([^/\?]+)#', $url, $m)) {
+			if($camp==true)
+				return 'Blog';
+			$post = \App\Models\Post::where("slug", isset($m[3]) ? $m[3] : $m[2])->first();
+			if($post!=false)
+				foreach ($post->categories()->lists('name_'. $lang) as $cat) {
+					$ret = $cat;
+					break;
+				}
+		} elseif (preg_match('#/(turkiye|oman|emirates|syria)/([^/]+)/([^/]+)/([^/\?]+)#', $url, $m)) {
+			if($camp==true)
+				return 'Project';
+			$arr = DB::select("SELECT `name_".$lang."` as 'name' FROM `dms_projects` WHERE slug=?",[$m[4]]);
+				if(isset($arr[0])){
+					$ret = $arr[0]->name;
+				}
+		} elseif (strpos($url, '/projects/') !== false) {
 			if($camp==true)
 				return 'Project';
 			

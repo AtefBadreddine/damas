@@ -3,26 +3,79 @@
 //$is_mobile = Helper::get_device() != 'full' ? true : false;
 $is_mobile = false;
 
+$filterCountries = \App\Models\Country::orderBy('id')->get();
+$filterCountryByCode = array();
+foreach ($filterCountries as $fc) {
+    $filterCountryByCode[$fc->code] = $fc;
+}
+
+$filterCountry = isset($locationCountry) && $locationCountry ? $locationCountry : null;
+if (!$filterCountry && !empty($inputs['city_row'])) {
+    $filterCityRow = $inputs['city_row'];
+    if ($filterCityRow instanceof \App\Models\Country) {
+        $filterCountry = $filterCityRow;
+    } elseif (isset($filterCountryByCode[$filterCityRow->slug])) {
+        $filterCountry = $filterCountryByCode[$filterCityRow->slug];
+    } else {
+        $filterCountry = $filterCityRow->countryRel ?: (isset($filterCountryByCode[$filterCityRow->country]) ? $filterCountryByCode[$filterCityRow->country] : null);
+    }
+}
+
+// Cities whose slug is a country code ("turkey") are "all cities" rows; the country select replaces them.
+$filterCities = array();
+foreach ($citys as $fcity) {
+    if (isset($filterCountryByCode[$fcity->slug])) {
+        continue;
+    }
+    $fcCountryId = $fcity->country_id ?: (isset($filterCountryByCode[$fcity->country]) ? $filterCountryByCode[$fcity->country]->id : null);
+    if (!$fcCountryId) {
+        continue;
+    }
+    $filterCities[] = array(
+        'slug' => $fcity->slug,
+        'name' => $fcity->getName(),
+        'country' => (int) $fcCountryId,
+        'url' => $fcity->listingUrl(),
+    );
+}
+$filterCountryUrls = array();
+foreach ($filterCountries as $fc) {
+    $filterCountryUrls[$fc->id] = $fc->listingUrl();
+}
+
 ?>
 <p class="top_title jazzira_font_bold"><?= trans("front.advanced search"); ?>
     <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 220.6 239.5" xml:space="preserve"><g> <path class="st0" d="M110.2,0.5c31.7,0,63.3,0,95,0c6.1,0,10.8,2.3,13.6,7.6c2.6,4.9,2.5,10.2-1,14.6c-1.9,2.3-4.9,3.8-7.4,5.6 c-2.5,1.7-5.6,2.8-7.5,5c-22,26.7-43.9,53.6-65.7,80.6c-1.7,2.1-2.8,5.3-2.8,8c-0.2,28.3-0.2,56.5,0,84.8c0,4.6-1.6,7.4-5.4,9.7 c-11.5,7.1-22.7,14.6-34.2,21.6c-2.2,1.4-6.1,2.2-8.1,1.1c-1.9-1-3.4-4.8-3.4-7.4c-0.2-19.7,0-39.3,0-59c0-17.6,0-35.3-0.3-52.9 c0-2-0.9-4.3-2.1-5.8C58.5,86.3,36,58.7,13.4,31.1c-1.1-1.3-2.7-2.4-4.3-3.2c-7-3.3-10.3-9.5-8.7-16.7C1.8,5,7.5,0.5,14.8,0.5 C46.6,0.4,78.4,0.5,110.2,0.5z M195.9,29.4c-58.3,0-115.7,0-173.4,0c0.3,0.8,0.4,1.1,0.6,1.3C44.4,56.8,65.6,82.9,87,108.9 c1.1,1.4,3.6,2.3,5.5,2.3c8.5,0.2,17.1-0.5,25.5,0.3c8.2,0.8,13.3-2.2,18.3-8.6C155.6,78.3,175.6,54.3,195.9,29.4z M91.1,119.2 c0,37.5,0,74.3,0,112c11.8-7.5,22.8-14.4,33.6-21.5c1.2-0.8,1.9-3,1.9-4.6c0.2-8.3,0.1-16.7,0.1-25c0.1-14.1,0.2-28.2,0.3-42.3 c0-6.1,0-12.2,0-18.6C114.6,119.2,103,119.2,91.1,119.2z M110.2,8.2c-30.7,0-61.3,0-92,0c-7.5,0-10.8,2.1-10.6,6.7 c0.1,4.4,3.4,6.4,10.6,6.4c61.3,0,122.6,0,183.9,0c2,0,4.5,0.4,5.8-0.6c2-1.5,4.6-4.3,4.4-6.2c-0.3-2.3-3.1-4.4-5.3-6.1 c-0.9-0.7-2.9-0.2-4.4-0.2C171.9,8.2,141.1,8.2,110.2,8.2z"/> </g> </svg>
 </p>
 
 
-<span class="cleared_filter"><a href="<?= route("front.search", ["property-for-sale", "turkey"]) ?>"><?= trans("front.cleared"); ?></a></span>
+<span class="cleared_filter"><a href="<?= isset($locationAreaUrl) ? $locationAreaUrl : route("front.search", ["property-for-sale", "turkey"]) ?>"><?= trans("front.cleared"); ?></a></span>
 
 
-<?= Form::open(["id" => "form-search"]); ?>
+<?= Form::open(isset($filterFormUrl) ? ["id" => "form-search", "url" => $filterFormUrl, "method" => "GET"] : ["id" => "form-search"]); ?>
 
 <div class="loader_sec"></div>
 
 <div class="form-group">
     <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 24.33 23.69" xml:space="preserve"><g> <path class="st0" d="M12.14,13.49c-1.08-1.21-2.16-2.38-3.19-3.58C8.46,9.33,7.98,8.71,7.6,8.04c-1.66-2.92-0.39-6.51,2.68-7.69 c3.15-1.21,6.62,0.84,7.11,4.18c0.15,1.06-0.05,2.04-0.53,2.98c-0.42,0.82-0.96,1.55-1.55,2.25c-0.98,1.17-1.97,2.34-2.96,3.51 C12.3,13.33,12.24,13.39,12.14,13.49z M12.17,2.78C10.72,2.79,9.54,3.97,9.55,5.4c0.01,1.44,1.19,2.61,2.63,2.61 c1.42,0,2.59-1.19,2.59-2.62C14.77,3.96,13.58,2.78,12.17,2.78z"></path> <path class="st0" d="M7.47,9.32c-0.97,0-1.88,0-2.84,0c0.07,0.1,0.1,0.16,0.14,0.21c2.33,2.9,4.66,5.8,6.99,8.71 c0.16,0.19,0.27,0.23,0.5,0.13c1.86-0.75,3.72-1.49,5.58-2.23c0.08-0.03,0.15-0.07,0.25-0.11c-1.35-1.2-2.68-2.38-4.03-3.58 c0.1-0.12,0.19-0.23,0.29-0.36c1.4,1.24,2.79,2.48,4.18,3.72c1.5-1.16,2.99-2.32,4.52-3.5c-2.11-1.07-4.19-2.13-6.28-3.2 c0.16-0.26,0.31-0.49,0.47-0.75c0.17,0.09,0.35,0.17,0.52,0.26c2.06,1.05,4.11,2.09,6.17,3.14c0.5,0.26,0.53,0.58,0.08,0.93 c-1.66,1.29-3.32,2.58-4.99,3.86c-0.12,0.09-0.26,0.17-0.4,0.23c-1.99,0.8-3.98,1.58-5.96,2.39c-0.17,0.07-0.34,0.2-0.46,0.34 c-1.06,1.29-2.11,2.58-3.17,3.88c-0.35,0.42-0.62,0.41-0.93-0.04c-2.66-3.91-5.31-7.81-7.97-11.72c-0.22-0.33-0.18-0.54,0.15-0.77 c1.1-0.76,2.21-1.51,3.32-2.26c0.12-0.08,0.28-0.13,0.43-0.14c0.9-0.03,1.79-0.03,2.69-0.06c0.15,0,0.24,0.05,0.31,0.18 C7.15,8.8,7.29,9.02,7.47,9.32z M11.62,18.8c-2.53-3.15-5.05-6.29-7.58-9.44c-1,0.68-1.98,1.35-2.98,2.04 c2.52,3.71,5.02,7.39,7.55,11.1C9.63,21.25,10.62,20.03,11.62,18.8z"></path> </g> </svg>
 
+    <select name="country" id="filter_country" class="<?= $is_mobile?'':'selectpicker' ?> form-control" title="<?= trans("front.country"); ?>">
+        <option value=""><?= trans("front.country"); ?></option>
+        @foreach($filterCountries as $fc)
+        <option value="<?= $fc->id ?>" <?= $filterCountry && $filterCountry->id == $fc->id ? 'selected' : ''; ?>><?= $fc->getTitle(); ?></option>
+        @endforeach
+    </select>
+</div>
+
+<div class="form-group">
+    <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 24.33 23.69" xml:space="preserve"><g> <path class="st0" d="M12.14,13.49c-1.08-1.21-2.16-2.38-3.19-3.58C8.46,9.33,7.98,8.71,7.6,8.04c-1.66-2.92-0.39-6.51,2.68-7.69 c3.15-1.21,6.62,0.84,7.11,4.18c0.15,1.06-0.05,2.04-0.53,2.98c-0.42,0.82-0.96,1.55-1.55,2.25c-0.98,1.17-1.970,2.34-2.96,3.51 C12.3,13.33,12.24,13.39,12.14,13.49z M12.17,2.78C10.72,2.79,9.54,3.97,9.55,5.4c0.01,1.44,1.19,2.61,2.63,2.61 c1.42,0,2.59-1.19,2.59-2.62C14.77,3.96,13.58,2.78,12.17,2.78z"></path> <path class="st0" d="M7.47,9.32c-0.97,0-1.88,0-2.84,0c0.07,0.1,0.1,0.16,0.14,0.21c2.33,2.9,4.66,5.8,6.99,8.71 c0.16,0.19,0.27,0.23,0.5,0.13c1.86-0.75,3.72-1.49,5.58-2.23c0.08-0.03,0.15-0.07,0.25-0.11c-1.35-1.2-2.68-2.38-4.03-3.58 c0.1-0.12,0.19-0.23,0.29-0.36c1.4,1.24,2.79,2.48,4.18,3.72c1.5-1.16,2.99-2.32,4.52-3.5c-2.11-1.07-4.19-2.13-6.28-3.2 c0.16-0.26,0.31-0.49,0.47-0.75c0.17,0.09,0.35,0.17,0.52,0.26c2.060,1.05,4.11,2.09,6.17,3.14c0.5,0.26,0.53,0.58,0.08,0.93 c-1.66,1.29-3.32,2.58-4.99,3.86c-0.12,0.09-0.26,0.17-0.4,0.23c-1.99,0.8-3.98,1.58-5.96,2.39c-0.17,0.07-0.34,0.2-0.46,0.34 c-1.06,1.29-2.11,2.58-3.17,3.88c-0.35,0.42-0.62,0.41-0.93-0.04c-2.66-3.91-5.31-7.81-7.97-11.72c-0.22-0.33-0.18-0.54,0.15-0.77 c1.1-0.76,2.21-1.51,3.32-2.26c0.12-0.08,0.28-0.13,0.43-0.14c0.9-0.03,1.79-0.03,2.69-0.06c0.15,0,0.24,0.05,0.31,0.18 C7.15,8.8,7.29,9.02,7.47,9.32z M11.62,18.8c-2.53-3.15-5.05-6.29-7.58-9.44c-1,0.68-1.98,1.35-2.98,2.04 c2.52,3.71,5.02,7.39,7.55,11.1C9.63,21.25,10.62,20.03,11.62,18.8z"></path> </g> </svg>
+
     <select name="city" class="<?= $is_mobile?'':'selectpicker' ?> form-control input_seacrh" title="<?= trans("front.city"); ?>">
         <option value=""><?= trans("front.city"); ?></option>   <!---->
-        @foreach($citys as $city)
-        <option value="<?= $city->slug; ?>" <?= @$inputs["city"] == $city->slug ? 'selected' : ''; ?>><?= $city->getName(); ?></option>
+        @foreach($filterCities as $fcity)
+        @if(!$filterCountry || $fcity['country'] == $filterCountry->id)
+        <option value="<?= $fcity['slug']; ?>" <?= @$inputs["city"] == $fcity['slug'] ? 'selected' : ''; ?>><?= $fcity['name']; ?></option>
+        @endif
         @endforeach
     </select>
 </div>
@@ -107,3 +160,43 @@ $is_mobile = false;
 
 
 <?= Form::close(); ?>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    var $ = window.jQuery;
+    var filterCities = <?= json_encode($filterCities, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_HEX_TAG) ?>;
+    var filterCountryUrls = <?= json_encode($filterCountryUrls, JSON_UNESCAPED_SLASHES | JSON_HEX_TAG) ?>;
+    var cityPlaceholder = <?= json_encode(trans("front.city"), JSON_UNESCAPED_UNICODE | JSON_HEX_TAG) ?>;
+
+    function refreshPickers($selects) {
+        if ($.fn.selectpicker) {
+            $selects.selectpicker('refresh');
+        }
+    }
+
+    function clearDistricts() {
+        var $regions = $('#selectregions');
+        $regions.children('option').not(':first').remove();
+        refreshPickers($regions);
+    }
+
+    $(document).on('change', '#filter_country', function () {
+        var countryId = parseInt($(this).val(), 10);
+        var $city = $('#form-search select[name=city]');
+        $city.empty().append($('<option value=""></option>').text(cityPlaceholder));
+        $.each(filterCities, function (i, c) {
+            if (!countryId || c.country === countryId) {
+                $city.append($('<option></option>').val(c.slug).text(c.name));
+            }
+        });
+        refreshPickers($city);
+        clearDistricts();
+
+        if (countryId && filterCountryUrls[countryId]) {
+            window.location.href = filterCountryUrls[countryId];
+        }
+    });
+
+    $(document).on('change', '#form-search select[name=city]', clearDistricts);
+});
+</script>

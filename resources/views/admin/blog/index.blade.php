@@ -1,4 +1,4 @@
-@extends('admin.layouts.app', ["app_title" => "Posts"])
+@extends('admin.layouts.app', ["app_title" => isset($postType) ? $postType->label() : "Posts"])
 @section('main_content')
     <?php $get_params = "&search=".Input::get("search"); ?>
     
@@ -38,7 +38,7 @@
             "likes" =>  "Likes",
             "views" =>  "Views",
             "user_name"  =>  "User",
-            "prevent_archiving_in_blog"  =>  "archiving in ". ucfirst($type),
+            "prevent_archiving_in_blog"  =>  "archiving in ". (isset($postType) ? $postType->label() : ucfirst($type)),
         ];
 	}
     ?>

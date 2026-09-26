@@ -1,11 +1,5 @@
 <?php echo '<?xml version="1.0" encoding="UTF-8"?>'; ?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">
-    <?php
-    
-    $om_cities_ids = Helper::query("City", "where", ["field" => "country", "value" => 'oman'])->lists("id")->toArray();
-    $sy_cities_ids = Helper::query("City", "where", ["field" => "country", "value" => 'syria'])->lists("id")->toArray();
-
-    ?>
     @foreach ($projects as $project)
         <?php
             $img = Helper::media_url($project->cardPhoto);
@@ -15,7 +9,7 @@
             $video_code = @$array_of_vars['v'];
         ?>
         <url>
-            <loc><?= route("front.project". (in_array($project->city_id,$om_cities_ids)?'.oman':(in_array($project->city_id,$sy_cities_ids)?'.syria':'')), $project->slug); ?></loc>
+            <loc><?= $project->frontUrl(); ?></loc>
             <lastmod><?= $project->updated_at->tz('UTC')->toAtomString(); ?></lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.9</priority>

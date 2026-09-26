@@ -24,18 +24,18 @@
             <aside class=" col-md-6 col-sm-6 col-xs-12 pr5 pl5">
                 <div class="global-new-item topr wow fadeIn" data-wow-duration="1s" data-wow-offset="200">
                     <aside class="news-item" style="margin-bottom:20px">
-                        <a href="<?= route("front.blog.post", $post->slug); ?>">
+                        <a href="<?= $post->frontUrl(); ?>">
                             <img src="<?= Helper::get_thumbnail($post->photoCard, $w, $h ); ?>" alt="<?= $post->getTitle(); ?>" class="img-responsive">
                         </a>
                     </aside>
-                    <h2 class="colored"><a href="<?= route("front.blog.post", $post->slug); ?>"><?= $post->getTitle(); ?></a></h2>
+                    <h2 class="colored"><a href="<?= $post->frontUrl(); ?>"><?= $post->getTitle(); ?></a></h2>
                 </div>
             </aside>
         <?php else: ?>
             <aside class=" col-md-6 col-sm-6 col-12  pr5 pl5" style="overflow: hidden">
                 <div class="global-new-item btmr row wow fadeIn" data-wow-duration="1s" data-wow-offset="200" style="margin: 10px 0px 0px; padding: 0px;">
                     <aside class="news-item col-md-5 col-sm-5 col-12" style="">
-                        <a href="<?= route("front.blog.post", $post->slug); ?>">
+                        <a href="<?= $post->frontUrl(); ?>">
 						<?php
 				$w=178;
 				$h=150;
@@ -48,7 +48,7 @@
                         </a>
                     </aside>
                     <aside class=" col-md-7 col-sm-7 col-12">
-                        <div class="colored"><a href="<?= route("front.blog.post", $post->slug); ?>"><?= $post->getTitle(); ?></a></div>
+                        <div class="colored"><a href="<?= $post->frontUrl(); ?>"><?= $post->getTitle(); ?></a></div>
                         <p><?= Helper::str_limit($post->getContent(), 50); ?></p>
                     </aside>
                 </div>

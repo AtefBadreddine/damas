@@ -38,7 +38,7 @@
                         <div class="sec shadow_type">
                             <!-- image -->
                             <div class="image_cont">
-                                <a href="<?= route("front.".$type.".post", $p->slug) ?>"><img class="lazy" loading="lazy"
+                                <a href="<?= $p->frontUrl() ?>"><img class="lazy" loading="lazy"
                                 src="<?= Helper::get_thumbnail($p->photoCard, 288, 177, true); ?>" alt="damasturk"/><span class="date num"><?= date_format($p->created_at, "d/m/Y"); ?></span></a>
                             </div>
                             <div class="text">
@@ -57,7 +57,7 @@
                                 <p>
                                     {{ Helper::str_limit($p->getContent()) }}
                                 </p>
-                                <a class="more" href="<?= route("front.".$type.".post", $p->slug); ?>">اقرأ المزيد</a>
+                                <a class="more" href="<?= $p->frontUrl(); ?>">اقرأ المزيد</a>
                             </div>
                         </div>
                     </li>

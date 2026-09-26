@@ -17,6 +17,7 @@ class CacheGetPages
 
     // استثناء مسارات معينة: الأدمن، الكرون، ratesexchange
     if (
+        $request->is('damas-administrator') || 
         $request->is('damas-administrator/*') || 
         $request->is('cron_*') || 
         $request->is('currency*') || 
@@ -61,21 +62,13 @@ class CacheGetPages
     // نخزن إذا كان الرد HTML أو JSON مع الحالة المناسبة
     $contentType = $response->headers->get('Content-Type');
     if (
-        in_array($response->getStatusCode(), [200, 404]) &&
+        $response->getStatusCode() == 200 &&
         (
             str_contains($contentType, 'text/html') ||
             str_contains($contentType, 'application/json')
         )
     ) {
-        // تخزين المحتوى
-        
-        
-        if(in_array($response->getStatusCode(), [200])){
-            Cache::put($key, $response->getContent(), Carbon::now()->addMinutes(60*24*30));
-        }else {//404
-            Cache::put($key, $response->getContent(), Carbon::now()->addMinutes(60*24*30));
-        }
-        
+        Cache::put($key, $response->getContent(), Carbon::now()->addMinutes(60*24*30));
 
         // زيادة عداد MISS
         Cache::increment('cache_misses');

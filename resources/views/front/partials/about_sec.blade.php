@@ -11,7 +11,7 @@
                 <li class="title"><h3><?= trans("front.Our partners"); ?></h3></li>
                 <li> <a><img style="width: 100% !important;top:3px;" class="" loading="lazy" title="damasturk" alt="damasturk" src="https://www.aladrak.com/uploads/company/thumb-170723054928Aladrak.png"/></a> </li> 
                 <li> <a href=""><img style="margin-top: 15% !important;width: 100% !important;height: 10px !important;object-fit:cover !important" class="sinpas" title="damasturk" loading="lazy" alt="damasturk" src="https://marketingtochina.com/wp-content/uploads/2019/08/DamacProperties.png"/></a> </li>
-                <li> <a href="{{ route('front.blog.post', 'avrupa-konutlari') }}" target="_blank"><img style="bottom:6px;right:2px;" width="60" height="42" loading="lazy" title="damasturk" alt="damasturk" src="{{ asset('img/avrupakonutlari-logo.svg') }}"/></a> </li>
+                <li> <a href="{{ route('front.blog.post.show', ['country' => 'turkiye', 'post' => 'avrupa-konutlari']) }}" target="_blank"><img style="bottom:6px;right:2px;" width="60" height="42" loading="lazy" title="damasturk" alt="damasturk" src="{{ asset('img/avrupakonutlari-logo.svg') }}"/></a> </li>
             </ul> 
         </div>
     </div>

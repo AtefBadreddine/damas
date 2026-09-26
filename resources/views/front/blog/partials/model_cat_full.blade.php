@@ -18,7 +18,7 @@
 <a href="#" class="likeCardItem" data-url="<?= route("front.likeitem"); ?>" 
 data-typ="post" data-code="<?= $post->id; ?>">
 <i class="fa fa-<?= in_array($post->id, session()->get("likedposts.ids", [])) ? 'heart' : 'heart-o'; ?>"></i></a>
-<span class="pull-right social shareBtnsFloating" data-url="<?= route('front.blog.post', $post->slug); ?>" data-text="<?= $post->getTitle(); ?>">
+<span class="pull-right social shareBtnsFloating" data-url="<?= $post->frontUrl(); ?>" data-text="<?= $post->getTitle(); ?>">
 <a href="#" class="btnshare" data-network="facebook"><i class="fa fa-facebook"></i></a>
 <a href="#" class="btnshare" data-network="whatsapp"><i class="fa fa-whatsapp"></i></a>
 </span>
@@ -26,16 +26,16 @@ data-typ="post" data-code="<?= $post->id; ?>">
 
 
 
-						<a href="<?= route("front.blog.post", $post->slug); ?>" class="hrefpic">
+						<a href="<?= $post->frontUrl(); ?>" class="hrefpic">
 						<img class="lazyimg img-responsive" src="<?= $emptypic ?>" data-src="<?= Helper::get_thumbnail($post->photoCard, $w, $h); ?>" alt="<?= $post->getTitle(); ?>">
 						</a>
 					</div>
 					<div class="col-6 parag">
-						<h2 class="colored"><a href="<?= route("front.blog.post", $post->slug); ?>"><?= $post->getTitle(); ?></a></h2>	
+						<h2 class="colored"><a href="<?= $post->frontUrl(); ?>"><?= $post->getTitle(); ?></a></h2>	
 						<p>
 						<?= Helper::str_limit($post->getContent(),(LaravelLocalization::getCurrentLocale()=='en'?140:200)); ?>
 						</p>
-						<div class="continue-reading"><a target="_blank" href="<?= route("front.blog.post", $post->slug); ?>">{{ trans('front.continue reading')}}</a></div>
+						<div class="continue-reading"><a target="_blank" href="<?= $post->frontUrl(); ?>">{{ trans('front.continue reading')}}</a></div>
 					</div>
                 </aside>
             </div>

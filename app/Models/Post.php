@@ -16,6 +16,7 @@ class Post extends BaseModel
         "title_ru",
         "title_fa",
         "slug",
+        "old_slug",
         "media_id",
         "content_ar",
         "content_en",
@@ -65,6 +66,19 @@ class Post extends BaseModel
 
 		
     ];
+
+    /**
+     * Filter posts by PostType enum or string value.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param \App\Enums\PostType|string $postType
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeOfPostType($query, $postType)
+    {
+        $value = $postType instanceof \App\Enums\PostType ? $postType->value : $postType;
+        return $query->where('post_type', $value);
+    }
     
     /**
      * Searchable rules.
@@ -116,28 +130,58 @@ class Post extends BaseModel
     }
 
     /**
-     * Canonical geo URL: /{locale}/{country}/buying-guide/{post}
-     * buying-guide is a fixed path segment, not a post category.
-     * Returns null for news or when country is missing so callers can skip the 301.
+     * post_type as enum; legacy rows without it fall back to the blog/news `type`.
+     *
+     * @return \App\Enums\PostType
+     */
+    public function postTypeEnum()
+    {
+        $postType = \App\Enums\PostType::tryFrom((string) $this->post_type);
+        if ($postType) {
+            return $postType;
+        }
+        return ($this->type == 'news') ? \App\Enums\PostType::NEWS : \App\Enums\PostType::BLOG;
+    }
+
+    /**
+     * Canonical geo URL by post_type:
+     * /{locale}/{country}/guides|developers|reports|news/{post}
+     * These are fixed path segments, not post categories.
+     * Returns null when country is missing so callers can skip the 301.
      *
      * @param bool $absolute
      * @return string|null
      */
     public function geoUrl($absolute = true)
     {
-        if ($this->type == 'news') {
-            return null;
-        }
-
         $countrySlug = $this->getCountrySlug();
         if (!$countrySlug) {
             return null;
         }
 
-        return route('front.blog.post.show', array(
+        $routeName = $this->postTypeEnum()->frontShowRoute();
+
+        return route($routeName, array(
             'country' => $countrySlug,
             'post' => $this->slug,
         ), $absolute);
+    }
+
+    /**
+     * Public post URL for menus, cards, and shares.
+     * Prefers the geo path; falls back to the legacy /blog/{slug} or /news/{slug} 301.
+     *
+     * @param bool $absolute
+     * @return string
+     */
+    public function frontUrl($absolute = true)
+    {
+        $url = $this->geoUrl($absolute);
+        if ($url) {
+            return $url;
+        }
+        $routeName = ($this->type == 'news') ? 'front.news.post' : 'front.blog.post';
+        return route($routeName, $this->slug, $absolute);
     }
     
     /**

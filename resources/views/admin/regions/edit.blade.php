@@ -130,6 +130,8 @@
 
 </fieldset>
 
+@include('admin.layouts.geo_content_tabs')
+
 <fieldset>
     <legend>
 	Overview & Details
@@ -580,6 +582,5 @@
 </fieldset>
 
 
-@include("admin.layouts.tinymce_js")
 @include('admin.layouts.media_input_js')
 @endsection

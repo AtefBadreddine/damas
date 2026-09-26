@@ -12,7 +12,7 @@ $cardphoto = $post->photoCard;
 
 		<!-- image Project -->
 		<div class="int_cont image">
-			<a href="<?= localized_route('front.blog.post', $post->slug); ?>">
+			<a href="<?= $post->frontUrl(); ?>">
 			<?php
 
 
@@ -44,7 +44,7 @@ $ihm=360;
 	<div class="features_sec text_font">
 		<p>
 			
-<a href="<?= localized_route('front.blog.post', $post->slug); ?>"><?= $post->getTitle(); ?></a>
+<a href="<?= $post->frontUrl(); ?>"><?= $post->getTitle(); ?></a>
 		</p>
 		<ul>
 			<li>
@@ -73,7 +73,7 @@ $ihm=360;
 data-typ="post" data-code="<?= $post->id; ?>">
 <i class="fa fa-<?= in_array($post->id, session()->get("likedposts.ids", [])) ? 'heart' : 'heart-o'; ?>"></i></a>
 
-<span class="pull-right social shareBtnsFloating" data-url="<?= route('front.blog.post', $post->slug); ?>" data-text="<?= $post->getTitle(); ?>">
+<span class="pull-right social shareBtnsFloating" data-url="<?= $post->frontUrl(); ?>" data-text="<?= $post->getTitle(); ?>">
 <a href="#" class="btnshare" data-network="facebook"><i class="fa fa-facebook"></i></a>
 <a href="#" class="btnshare" data-network="whatsapp"><i class="fa fa-whatsapp"></i></a>
 </span>
@@ -81,7 +81,7 @@ data-typ="post" data-code="<?= $post->id; ?>">
 </div>
 <div class="contain" id="container">
 <div class="image-project">
-<a href="<?= route('front.blog.post', $post->slug); ?>" <?= $open_blank == true ? 'target="_blank"' : ''; ?>>
+<a href="<?= $post->frontUrl(); ?>" <?= $open_blank == true ? 'target="_blank"' : ''; ?>>
 
 <?php
 $iw=360;
@@ -109,7 +109,7 @@ $ih=360;
 
 <div style="clear:both"></div>
 <div class="about-project">
-<a href="<?= route('front.blog.post', $post->slug); ?>"><?= $post->getTitle(); ?></a>
+<a href="<?= $post->frontUrl(); ?>"><?= $post->getTitle(); ?></a>
 </div>
 <div style="clear:both"></div>
 

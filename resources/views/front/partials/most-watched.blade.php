@@ -21,7 +21,7 @@ if(Helper::get_device()=='full')
 							$ci++;
 							if($ci==0|| $ci==3 || $ci==6)
 							echo '<div class="item">';	?>
-							<div class="items" onclick="location.href='<?= route('front.project', $p->slug); ?>'">
+							<div class="items" onclick="location.href='<?= $p->frontUrl(); ?>'">
                                 
 								{!! Helper::get_pic(Helper::get_thumbnail($p->cardphoto, 180, 140),'photo '.(!isset($ajax)?'lazyimg':''),'','',$p->cardphoto->getTitle()) !!}
                                 <div class="info">

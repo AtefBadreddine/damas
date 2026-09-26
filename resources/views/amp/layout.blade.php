@@ -1,6 +1,8 @@
 <?php
 $current_lang = LaravelLocalization::getCurrentLocale();
 $style_lang = in_array($current_lang,['en','fr'])?'en':'ar';
+
+$projectsUrl = route('front.projects');
 ?>
 <!DOCTYPE html>
 <html amp lang="<?= $current_lang; ?>" dir="<?= $style_lang == "ar" ? "rtl" : "ltr"; ?>">
@@ -84,7 +86,7 @@ $style_lang = in_array($current_lang,['en','fr'])?'en':'ar';
                         <a class="pull-right amp-whatsapp-icon" href="{{ Helper::whatsapp_share($infos->tel_1,$infos->whatsapp_share) }}?icon=1">
                             <span class="flaticon-app"></span>
                         </a>
-                        <a class="pull-right" href="<?= route("front.search") . "/property-for-sale/turkey"; ?>">
+                        <a class="pull-right" href="<?= $projectsUrl; ?>">
                             <amp-img src="<?= asset('img/home_search.png') ?>" width="30" height="30" alt='home_search'></amp-img>
                         </a>
                         <!--<a class="pull-right" href="">
@@ -228,11 +230,11 @@ $style_lang = in_array($current_lang,['en','fr'])?'en':'ar';
                         <?php if ($viewed_post == $pst->id) continue; ?>
                         <div class="media">
                             <?php /* <div class="media-left">
-                              <a href="<?= route("front.blog.post", $pst->slug); ?>">
+                              <a href="<?= $pst->frontUrl(); ?>">
                               <amp-img src="<?= Helper::get_thumbnail($pst->photoCard, 64, 64); ?>" width="64" height="64" layout="responsive"></amp-img>
                               </a>
                               </div> */ ?>
-                            <div class="media-body"><a href="<?= route("front.blog.post", $pst->slug); ?>"><?= $pst->getTitle(); ?></a></div>
+                            <div class="media-body"><a href="<?= $pst->frontUrl(); ?>"><?= $pst->getTitle(); ?></a></div>
                         </div>
                         @endforeach
                     </div>

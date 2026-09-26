@@ -9,20 +9,20 @@ $infos = Helper::get_params();
 if ($type == 'news')
     $params = Helper::query("BlogParam", "find", ["id" => 2]);
 else{
-    $country = Helper::container_array(\Route::getCurrentRoute()->getPath(), ['oman'])?'oman':'turkey';
-    
-    if($country=='turkey')
-        $params = Helper::query("BlogParam", "find", ["id" => 1]);
-    else
+    $country = isset($countryCode) ? $countryCode : 'turkey';
+    if ($country == 'oman')
         $params = Helper::query("BlogParam", "find", ["id" => 3]);
-    
+    elseif ($country == 'syria')
+        $params = Helper::query("BlogParam", "find", ["id" => 4]);
+    else
+        $params = Helper::query("BlogParam", "find", ["id" => 1]);
 }
 $is_mobile = Helper::get_device() != 'full' ? true : false;
 /* $arr_prices = [
   "50000-100000" => Helper::usd_to_format("50K $") . "-" . Helper::usd_to_format("100K $"), "100000-150000" => Helper::usd_to_format("100K $") . "-" . Helper::usd_to_format("150K $"), "150000-250000" => Helper::usd_to_format("150K $") . "-" . Helper::usd_to_format("250K $"), "250000-400000" => Helper::usd_to_format("250K $") . "-" . Helper::usd_to_format("400K $"), "400000-600000" => Helper::usd_to_format("400K $") . "-" . Helper::usd_to_format("600K $"), "600000-1000000" => Helper::usd_to_format("600K $") . "-" . Helper::usd_to_format("1M $"), "1000000-2000000" => Helper::usd_to_format("1M $") . "-" . Helper::usd_to_format("2M $"), "2000000-+" => '+' . Helper::usd_to_format("2M $")
   ]; */
 $right = ($style_lang == 'ar' ? 'right' : 'left');
-//$all_project_types = Helper::query('ProjectType', 'all');
+$all_project_types = Helper::query('ProjectType', 'all');
 //$emptypic = '/img/0.png';
 //$emptypic = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
 //$proj_cats = Helper::query('ProjectCategory', "where", ["field" => "hide_search_page", "value" => false])->get();
@@ -48,10 +48,6 @@ $right = ($style_lang == 'ar' ? 'right' : 'left');
 <?php } ?>
 
 
-
-@if($is_category_page==true)
-<link rel="alternate" type="application/rss+xml" href="<?= Request::url() . '/rss' ?>" title="<?= $category->getSeoTitle() ?>"/>
-@endif
 
 @endsection
 
@@ -91,7 +87,7 @@ $right = ($style_lang == 'ar' ? 'right' : 'left');
                 <div class="type_full">
                     <?php //if (Helper::get_device() == 'full') { ?>
                         <h1 class="jazzira_font_bold">
-                            <?= trans("front.blog"); ?> <span class="num blog-title-span" display:"inline !important">({{ $posts->total() }})</span> 
+                            <?= trans("front.".$type); ?> <span class="num blog-title-span" display:"inline !important">({{ $posts->total() }})</span> 
                         </h1>
                         <!--<p><span><?= trans("front.search results"); ?></span> </p>-->
                     <?php //} ?>
@@ -119,7 +115,7 @@ $right = ($style_lang == 'ar' ? 'right' : 'left');
                             if (isset($slug) and $slug == $cat->slug) {
                                 ?>
                                 <li class="active">
-                                    <a href="<?= route("front." . $type . ".category", $cat->slug) ?>"><?= $cat->getName() ?></a>
+                                    <a href="<?= $cat->listingUrl() ?>"><?= $cat->getName() ?></a>
                                 </li>
                                 <?php
                             }
@@ -133,7 +129,7 @@ $right = ($style_lang == 'ar' ? 'right' : 'left');
                             } else {
                                 ?>
                                 <li>
-                                    <a href="<?= route("front." . $type . ".category", $cat->slug) ?>"><?= $cat->getName() ?></a>
+                                    <a href="<?= $cat->listingUrl() ?>"><?= $cat->getName() ?></a>
                                 </li>
                                 <?php
                             }
@@ -424,7 +420,7 @@ $right = ($style_lang == 'ar' ? 'right' : 'left');
     "itemListElement":[
 
     {"@type":"ListItem","position":1,"name":"{{ trans('front.home') }}","item":"{{ route('front.index') }}"},
-    {"@type":"ListItem","position":2,"name":"{{ trans("front.".$type) }}","item":"{{ route("front.".$type) }}"}
+    {"@type":"ListItem","position":2,"name":"{{ trans("front.".$type) }}","item":"{{ isset($listingUrl) ? $listingUrl : route($type == 'news' ? 'front.news' : ($type == 'developer' ? 'front.developer.index' : ($type == 'report' ? 'front.report.index' : 'front.blog.index'))) }}"}
 
     ]}
 </script>
@@ -440,26 +436,26 @@ $right = ($style_lang == 'ar' ? 'right' : 'left');
     <?php if (in_array($category->id, [1, 7])) {//investment; economic affaire  ?>
         {"@type":"ListItem","position":2,"name":"{{ trans('front.turkey guide') }}","item":"{{ route('front.turkey_guide') }}"},
         {"@type":"ListItem","position":3,"name":"{{ trans('front.turkey investment') }}","item":"{{ route('front.investment') }}"},
-        {"@type":"ListItem","position":4,"name":"{{ @$category->getName() }}","item":"{{ route("front.".$type.".category", @$category->slug) }}"}
+        {"@type":"ListItem","position":4,"name":"{{ @$category->getName() }}","item":"{{ $category->listingUrl() }}"}
     <?php } elseif (in_array($category->id, [4])) {//Daily living in Turkey  ?>
         {"@type":"ListItem","position":2,"name":"{{ trans('front.turkey guide') }}","item":"{{ route('front.turkey_guide') }}"},
         {"@type":"ListItem","position":3,"name":"{{ trans('front.living turkey') }}","item":"{{ route('front.living_turkey') }}"},
-        {"@type":"ListItem","position":4,"name":"{{ @$category->getName() }}","item":"{{ route("front.".$type.".category", @$category->slug) }}"}
+        {"@type":"ListItem","position":4,"name":"{{ @$category->getName() }}","item":"{{ $category->listingUrl() }}"}
     <?php } elseif (in_array($category->id, [6, 3])) {//turksih district ; monument tourism turkey   ?>
         {"@type":"ListItem","position":2,"name":"{{ trans('front.turkey guide') }}","item":"{{ route('front.turkey_guide') }}"},
         {"@type":"ListItem","position":3,"name":"{{ trans('front.istanbul districts') }}","item":"{{ route('front.districts','istanbul') }}"},
-        {"@type":"ListItem","position":4,"name":"{{ @$category->getName() }}","item":"{{ route("front.".$type.".category", @$category->slug) }}"}
+        {"@type":"ListItem","position":4,"name":"{{ @$category->getName() }}","item":"{{ $category->listingUrl() }}"}
     <?php } elseif (in_array($category->id, [8])) {//turkish citizenship  ?>
         {"@type":"ListItem","position":2,"name":"{{ trans('front.turkey guide') }}","item":"{{ route('front.turkey_guide') }}"},
         {"@type":"ListItem","position":3,"name":"{{ trans('front.turkish citizenship') }}","item":"{{ route('front.turkish_citizenship') }}"},
-        {"@type":"ListItem","position":4,"name":"{{ @$category->getName() }}","item":"{{ route("front.".$type.".category", @$category->slug) }}"}
+        {"@type":"ListItem","position":4,"name":"{{ @$category->getName() }}","item":"{{ $category->listingUrl() }}"}
     <?php } elseif (in_array($category->id, [12])) {//taxes  ?>
         {"@type":"ListItem","position":2,"name":"{{ trans('front.turkey guide') }}","item":"{{ route('front.turkey_guide') }}"},
         {"@type":"ListItem","position":3,"name":"{{ trans('front.legal affairs turkey') }}","item":"{{ route('front.legal') }}"},
-        {"@type":"ListItem","position":4,"name":"{{ @$category->getName() }}","item":"{{ route("front.".$type.".category", @$category->slug) }}"}
+        {"@type":"ListItem","position":4,"name":"{{ @$category->getName() }}","item":"{{ $category->listingUrl() }}"}
     <?php } else { ?>
-        {"@type":"ListItem","position":2,"name":"{{ trans("front.".$type) }}","item":"{{ route("front.".$type) }}"},
-        {"@type":"ListItem","position":3,"name":"{{ @$category->getName() }}","item":"{{ route("front.".$type.".category", @$category->slug) }}"}
+        {"@type":"ListItem","position":2,"name":"{{ trans("front.".$type) }}","item":"{{ isset($listingUrl) ? $listingUrl : route($type == 'news' ? 'front.news' : ($type == 'developer' ? 'front.developer.index' : ($type == 'report' ? 'front.report.index' : 'front.blog.index'))) }}"},
+        {"@type":"ListItem","position":3,"name":"{{ @$category->getName() }}","item":"{{ $category->listingUrl() }}"}
     <?php } ?>
     ]}
 </script>

@@ -17,12 +17,11 @@
             <div class="box-footer clearfix">
 			@if(in_array(Route::currentRouteName(),['admin.redirectsearchprojects','admin.clear_cache']))
 				<button class="btn btn-primary btn_submit">Update</button>
-				<!--<button -->
-    <!--                class="btn btn-danger btn_submit"-->
-    <!--                name="clear_all"-->
-    <!--                value="1">-->
-    <!--                Clear All Cache-->
-    <!--            </button>-->
+				<button class="btn btn-danger btn_submit"
+                   name="clear_all"
+                   value="1">
+                   Clear All Cache
+               </button>
 			@else
                 @if(isset($row))
 				@if(@$row->id)

@@ -80,10 +80,29 @@ class City extends BaseModel
     {
         $lang = (LaravelLocalization::getCurrentLocale()=='pe'?'fa':LaravelLocalization::getCurrentLocale());
         $field = "h1_$lang";
-        /*if(!$this->$field)
-		return $this->linkvideo_ar;
-		*/
 		return $this->$field;
+    }
+
+    public function getAboutTitle()
+    {
+        if ($this->cityContent) {
+            $title = $this->cityContent->getTitle();
+            if ($title) {
+                return $title;
+            }
+        }
+        return parent::getAboutTitle();
+    }
+
+    public function getAbout()
+    {
+        if ($this->cityContent) {
+            $content = $this->cityContent->getContent();
+            if ($content) {
+                return $content;
+            }
+        }
+        return parent::getAbout();
     }
 	
     /**
@@ -138,7 +157,7 @@ class City extends BaseModel
 		else
 			return $this->belongsTo("App\Models\Media", "media_".$lang."_id");
     }
-    public function media_index()
+    public function indexMedia()
     {
         return $this->belongsTo("App\Models\Media", "media_index");
     }
@@ -173,6 +192,16 @@ class City extends BaseModel
     public function countryRel()
     {
         return $this->belongsTo("App\Models\Country", "country_id");
+    }
+
+    /**
+     * Translated title/content (ar + en).
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function cityContent()
+    {
+        return $this->hasOne("App\Models\CityContent", "city_id");
     }
 
     /**
@@ -220,5 +249,30 @@ class City extends BaseModel
                 }
             }
         });
+
+        static::deleting(function ($city) {
+            if ($city->cityContent) {
+                $city->cityContent->delete();
+            }
+        });
+    }
+
+    /**
+     * City listing URL: /{locale}/{country}/{city}/
+     *
+     * @param bool $absolute
+     * @return string|null
+     */
+    public function listingUrl($absolute = true)
+    {
+        $countrySlug = $this->getCountrySlug();
+        if (!$countrySlug || !$this->slug) {
+            return null;
+        }
+
+        return route('front.location.city', array(
+            'country' => $countrySlug,
+            'city' => $this->slug,
+        ), $absolute);
     }
 }

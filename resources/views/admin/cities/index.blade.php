@@ -6,6 +6,7 @@
             "id"        =>  "",
             "name_ar"   =>   "Name Arabic",
             "name_en"   =>   "Name English",
+            "country_id|Country|title_en" => "Country",
             "slug"      =>   "Slug"
         ];
     ?>

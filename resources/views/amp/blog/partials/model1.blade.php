@@ -9,7 +9,7 @@
             @foreach($posts->take(5) as $k => $post)
                 <?php $img = Helper::media_url($post->photoCard); ?>
                 <?php ob_start(); ?>
-                    <a href="<?= route("front.blog.post", $post->slug); ?>" class="<?= $k==0?'first':''; ?>">
+                    <a href="<?= $post->frontUrl(); ?>" class="<?= $k==0?'first':''; ?>">
                         <amp-img src="<?= $img; ?>" width="533" height="533" layout="responsive" alt="{{ $post->getTitle() }}"></amp-img>
                         <span class="banner"> <i class="flaticon-like"></i> </span>
                         @if($k==0)

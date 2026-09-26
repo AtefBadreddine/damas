@@ -14,7 +14,7 @@ $pos = -1; ?><?php /* ?>
                     <li>
                         <div class="sec shadow_type">
                             <div class="image_cont">
-                                <a href="<?= localized_route("front.".$type.".post", $p->slug) ?>">
+                                <a href="<?= $p->frontUrl() ?>">
 
 								<?php /*<!--
                                     fixed by  dev
@@ -43,11 +43,11 @@ $pos = -1; ?><?php /* ?>
                                         ?>
                                     </strong>
                                 </span>
-                                <h2><a href="<?= localized_route("front.".$type.".post", $p->slug); ?>">{{ $p->getTitle() }}</a></h2>
+                                <h2><a href="<?= $p->frontUrl(); ?>">{{ $p->getTitle() }}</a></h2>
                                 <p>
                                     {{ Helper::str_limit($p->getContent()) }}
                                 </p>
-                                <a class="more jazzira_font_bold" href="<?= localized_route("front.".$type.".post", $p->slug); ?>"><?= trans("front.read more"); ?></a>
+                                <a class="more jazzira_font_bold" href="<?= $p->frontUrl(); ?>"><?= trans("front.read more"); ?></a>
                             </div>
                         </div>
                     </li>

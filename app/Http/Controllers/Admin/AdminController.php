@@ -464,7 +464,7 @@ class AdminController extends BaseController
         }
         foreach ($updated_posts as $post) {
             $urls_cache = [];
-            $urls_cache[] = route('front.blog.post', [$post->slug]);
+            $urls_cache[] = $post->frontUrl();
             $urls_cache[] = route('front.blog');
             Helper::Clear_cache($urls_cache);
         }
@@ -2121,15 +2121,22 @@ exit;*/
                 "country_id" => "required|integer",
             ]);
 			$inputs = $request->all();
-			$inputs['enable_district_page'] = @$inputs["enable_district_page"] ? 1 : 0;
-            return Helper::query("City", "save", [
+			if (array_key_exists('enable_district_page', $inputs)) {
+				$inputs['enable_district_page'] = $inputs["enable_district_page"] ? 1 : 0;
+			}
+			foreach (array('about_ar', 'about_en', 'about_fr', 'about_fa', 'about_ru', 'geo_title', 'geo_content', 'geo_title_en', 'geo_content_en', 'geo_title_fr', 'geo_content_fr', 'geo_title_fa', 'geo_content_fa', 'geo_title_ru', 'geo_content_ru') as $geoField) {
+				unset($inputs[$geoField]);
+			}
+            $row = Helper::query("City", "save", [
                 "inputs"    =>  $inputs,
                 "id"        =>  $id,
-                "route"     =>  "admin.cities",
             ]);
+            $this->saveGeoContent($row, "App\\Models\\CityContent", "city_id", $request);
+            return Helper::form_redirect("admin.cities", $row, @$inputs['redirect_to_list']);
         }
         $countries = Helper::query("Country", "all");
-        return view("admin.cities.edit", compact("row", "countries"));
+        $contentRow = ($row && $row->id) ? $row->cityContent : null;
+        return view("admin.cities.edit", compact("row", "countries", "contentRow"));
     }
     
     /**
@@ -2171,13 +2178,16 @@ exit;*/
                 "slug"     => "required|alpha_dash|unique:{$row->table_name()},slug,$id",
                 "code"     => "required|alpha_dash|unique:{$row->table_name()},code,$id",
             ]);
-            return Helper::query("Country", "save", [
-                "inputs" => $request->all(),
+            $inputs = $request->all();
+            $row = Helper::query("Country", "save", [
+                "inputs" => $inputs,
                 "id"     => $id,
-                "route"  => "admin.countries",
             ]);
+            $this->saveGeoContent($row, "App\\Models\\CountryContent", "country_id", $request);
+            return Helper::form_redirect("admin.countries", $row, @$inputs['redirect_to_list']);
         }
-        return view("admin.countries.edit", compact("row"));
+        $contentRow = ($row && $row->id) ? $row->countryContent : null;
+        return view("admin.countries.edit", compact("row", "contentRow"));
     }
 
     /**
@@ -2197,6 +2207,50 @@ exit;*/
             return redirect()->back();
         }
         return Helper::query("Country", "delete", ["id" => $id]);
+    }
+
+    /**
+     * Save 1-to-1 translated title/content (ar + en) for country, city, or district.
+     *
+     * @param object $parent
+     * @param string $contentClass
+     * @param string $foreignKey
+     * @param Illuminate\Http\Request $request
+     * @return void
+     */
+    protected function saveGeoContent($parent, $contentClass, $foreignKey, Request $request)
+    {
+        if (!$parent || !$parent->id) {
+            return;
+        }
+        $content = $contentClass::firstOrNew(array($foreignKey => $parent->id));
+        $content->$foreignKey = $parent->id;
+        $map = array(
+            'title' => array('geo_title'),
+            'content' => array('geo_content', 'about_ar'),
+            'title_en' => array('geo_title_en'),
+            'content_en' => array('geo_content_en', 'about_en'),
+            'title_fr' => array('geo_title_fr'),
+            'content_fr' => array('geo_content_fr', 'about_fr'),
+            'title_fa' => array('geo_title_fa'),
+            'content_fa' => array('geo_content_fa', 'about_fa'),
+            'title_ru' => array('geo_title_ru'),
+            'content_ru' => array('geo_content_ru', 'about_ru'),
+        );
+        $fillable = $content->getFillable();
+        $posted = $request->all();
+        foreach ($map as $column => $inputNames) {
+            if (!in_array($column, $fillable)) {
+                continue;
+            }
+            foreach ($inputNames as $inputName) {
+                if (array_key_exists($inputName, $posted)) {
+                    $content->$column = $posted[$inputName];
+                    break;
+                }
+            }
+        }
+        $content->save();
     }
 	
 	
@@ -2377,7 +2431,7 @@ exit;*/
                 $anchors[] = [
                     'text' => trim($link->textContent),
                     'url' => $href,
-                    'web_url' => $post->country == 'oman' ? 'https://damas.net/oman/blog/' . $post->slug : 'https://damas.net/blog/' . $post->slug,
+                    'web_url' => $post->frontUrl(),
                     'admin_url' => url("damas-administrator/blog/{$post->id}/edit"),
                     'source_type' => '',
                     'link_type' => $link_type,
@@ -2671,12 +2725,14 @@ exit;*/
                 //"route"     =>  "admin.regions",
             ]);
 			
-			$region->syncRegionPhotos($request->get('region_photos', []));
+            $region->syncRegionPhotos($request->get('region_photos', []));
 			$region->save();
+            $this->saveGeoContent($region, "App\\Models\\DistrictContent", "region_id", $request);
 			
 			return redirect()->route("admin.regions");
         }
-        return view("admin.regions.edit", compact("row"));
+        $contentRow = ($row && $row->id) ? $row->districtContent : null;
+        return view("admin.regions.edit", compact("row", "contentRow"));
     }
     
     /**
@@ -3766,7 +3822,8 @@ foreach ( $all as $row) {
 		$arr = array();
 		if($path!=''){
         if(count($q1)>0){
-			$arr[] = route("front.blog.post", $q1[0]->slug);
+			$postRow = \App\Models\Post::where('slug', $q1[0]->slug)->first();
+			$arr[] = $postRow ? $postRow->frontUrl() : route("front.blog.post", $q1[0]->slug);
 		}
         if(count($q2)>0){
 			$arr[] = 'https://www.damas.net/'.$q2[0]->slug;
@@ -3784,7 +3841,8 @@ foreach ( $all as $row) {
 		
 		if($path_m!=''){
         if(count($q01)>0){
-			$arr[] = route("front.blog.post", $q01[0]->slug);
+			$postRow = \App\Models\Post::where('slug', $q01[0]->slug)->first();
+			$arr[] = $postRow ? $postRow->frontUrl() : route("front.blog.post", $q01[0]->slug);
 		}
         if(count($q02)>0){
 			$arr[] = 'https://www.damas.net/'.$q02[0]->slug;

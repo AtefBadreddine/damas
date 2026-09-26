@@ -17,7 +17,7 @@
                 <div class="global-new-item wow fadeIn" data-wow-duration="1s" data-wow-offset="200">
                     <aside class="news-item">
                         <amp-img src="<?= Helper::media_url($post->photoCard); ?>" width="533" height="533" layout="responsive" alt="{{ $post->getTitle() }}"></amp-img>
-                        <a href="<?= route("front.blog.post", $post->slug); ?>">
+                        <a href="<?= $post->frontUrl(); ?>">
                             <div class="layer">
                                 <ul>
                                     <li><i class="flaticon-play-button"></i></li>
@@ -25,7 +25,7 @@
                             </div>
                         </a>
                     </aside>
-                    <h4 class="colored"><a href="<?= route("front.blog.post", $post->slug); ?>"><?= $post->getTitle(); ?></a></h4>
+                    <h4 class="colored"><a href="<?= $post->frontUrl(); ?>"><?= $post->getTitle(); ?></a></h4>
                 </div>
             </aside>
             @endforeach

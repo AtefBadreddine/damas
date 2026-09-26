@@ -93,7 +93,7 @@ class Job extends BaseModel
 		else
 			return $this->belongsTo("App\Models\Media", "media_".$lang."_id");
     }
-    public function media_index()
+    public function indexMedia()
     {
         return $this->belongsTo("App\Models\Media", "media_index");
     }

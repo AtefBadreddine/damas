@@ -13,22 +13,22 @@
     <div class="section-brands">
         <ul>
             <li>
-                <a href="/blog/emlak-konut" target="_blank"><img class="<?= isset($is_search_p)?'lazyimg':'' ?>" <?= isset($is_search_p)?'data-':'' ?>src="{{ asset('img/emlakkonut-logo.svg') }}" title="logo"></a>
+                <a href="<?= route('front.blog.post.show', array('country' => 'turkiye', 'post' => 'emlak-konut')) ?>" target="_blank"><img class="<?= isset($is_search_p)?'lazyimg':'' ?>" <?= isset($is_search_p)?'data-':'' ?>src="{{ asset('img/emlakkonut-logo.svg') }}" title="logo"></a>
             </li>
             <li>
-                <a href="/blog/sinbas"><img class=" sinpas <?= isset($is_search_p)?'lazyimg':'' ?>" <?= isset($is_search_p)?'data-':'' ?>src="{{ asset('img/sinpas-logo.png') }}" title="logo"></a>
+                <a href="<?= route('front.blog.post.show', array('country' => 'turkiye', 'post' => 'sinbas')) ?>"><img class=" sinpas <?= isset($is_search_p)?'lazyimg':'' ?>" <?= isset($is_search_p)?'data-':'' ?>src="{{ asset('img/sinpas-logo.png') }}" title="logo"></a>
             </li>
             <li>
-                <a class="agaoglu" href="/blog/aga-oglu" target="_blank"><img class="<?= isset($is_search_p)?'lazyimg':'' ?>" <?= isset($is_search_p)?'data-':'' ?>src="{{ asset('img/agaoglu-logo.svg') }}" title="logo"></a>
+                <a class="agaoglu" href="<?= route('front.blog.post.show', array('country' => 'turkiye', 'post' => 'aga-oglu')) ?>" target="_blank"><img class="<?= isset($is_search_p)?'lazyimg':'' ?>" <?= isset($is_search_p)?'data-':'' ?>src="{{ asset('img/agaoglu-logo.svg') }}" title="logo"></a>
             </li>
             <li>
-                <a href="/blog/kelesoglu"><img class=" kalesh <?= isset($is_search_p)?'lazyimg':'' ?>" <?= isset($is_search_p)?'data-':'' ?>src="{{ asset('img/kelesoglu-logo.png') }}" title="logo"></a>
+                <a href="<?= route('front.blog.post.show', array('country' => 'turkiye', 'post' => 'kelesoglu')) ?>"><img class=" kalesh <?= isset($is_search_p)?'lazyimg':'' ?>" <?= isset($is_search_p)?'data-':'' ?>src="{{ asset('img/kelesoglu-logo.png') }}" title="logo"></a>
             </li>
             <li>
-                <a href="/blog/avrupa-konutlari" target="_blank"><img class="<?= isset($is_search_p)?'lazyimg':'' ?>" <?= isset($is_search_p)?'data-':'' ?>src="{{ asset('img/avrupakonutlari-logo.svg') }}" title="logo"></a>
+                <a href="<?= route('front.blog.post.show', array('country' => 'turkiye', 'post' => 'avrupa-konutlari')) ?>" target="_blank"><img class="<?= isset($is_search_p)?'lazyimg':'' ?>" <?= isset($is_search_p)?'data-':'' ?>src="{{ asset('img/avrupakonutlari-logo.svg') }}" title="logo"></a>
             </li>
             <li>
-                <a href="/blog/nef" target="_blank"><img class=" nef <?= isset($is_search_p)?'lazyimg':'' ?>" <?= isset($is_search_p)?'data-':'' ?>src="{{ asset('img/nef-logo.png') }}" title="logo"></a>
+                <a href="<?= route('front.blog.post.show', array('country' => 'turkiye', 'post' => 'nef')) ?>" target="_blank"><img class=" nef <?= isset($is_search_p)?'lazyimg':'' ?>" <?= isset($is_search_p)?'data-':'' ?>src="{{ asset('img/nef-logo.png') }}" title="logo"></a>
             </li>
         </ul>
     </div>

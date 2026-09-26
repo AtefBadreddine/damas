@@ -106,13 +106,13 @@ $infos = Helper::get_params();
                         ?>
                         <div class="media sec">
                             <div class="media-left">
-                                <a href="<?= route('front.project', $p->slug); ?>" target="_blank">
+                                <a href="<?= $p->frontUrl(); ?>" target="_blank">
                                     <img class="media-object" src="<?= Helper::get_thumbnail($cardphoto, 75, 75); ?>" alt="<?= $p->getName(); ?>">
                                 </a>
                             </div>
                             <div class="search-info">
                                 <h4 class="jazzira_font_bold">
-                                    <a href="<?= route('front.project', $p->slug); ?>" target="_blank"><?php
+                                    <a href="<?= $p->frontUrl(); ?>" target="_blank"><?php
                                         //if(strlen($p->getName())>11)
                                         //echo $p->getName();
                                         ?>
@@ -121,7 +121,7 @@ $infos = Helper::get_params();
 
                                     </a>
                                 </h4>
-                                <a class="num" href="<?= route('front.project', $p->slug); ?>" target="_blank"><?= route('front.project', $p->slug); ?></a>
+                                <a class="num" href="<?= $p->frontUrl(); ?>" target="_blank"><?= $p->frontUrl(); ?></a>
                                 <p class="jazzira_font"><?= $p->getIntroCard(); ?></p>
                             </div>
                         </div>
@@ -132,13 +132,13 @@ $infos = Helper::get_params();
                         ?>
                         <div class="media sec">
                             <div class="media-left">
-                                <a href="<?= route('front.'.$type.'.post', $p->slug); ?>" target="_blank">
+                                <a href="<?= $p->frontUrl(); ?>" target="_blank">
                                     <img class="media-object" src="<?= Helper::get_thumbnail($cardphoto, 75, 75); ?>" alt="<?= $p->getTitle(); ?>">
                                 </a>
                             </div>
                             <div class="search-info">
-                                <h4 class="jazzira_font_bold"><a href="<?= route('front.'.$type.'.post', $p->slug); ?>" target="_blank"><?= $p->getTitle(); ?></a></h4>
-                                <a class="num" href="<?= route('front.'.$type.'.post', $p->slug); ?>" target="_blank"><?= route('front.'.$type.'.post', $p->slug); ?></a>
+                                <h4 class="jazzira_font_bold"><a href="<?= $p->frontUrl(); ?>" target="_blank"><?= $p->getTitle(); ?></a></h4>
+                                <a class="num" href="<?= $p->frontUrl(); ?>" target="_blank"><?= $p->frontUrl(); ?></a>
                                 <p class="jazzira_font"><?= Helper::str_limit($p->getContent(), 300); ?></p>
                             </div>
                         </div>
@@ -148,13 +148,13 @@ $infos = Helper::get_params();
                         ?>
                         <div class="media sec">
                             <div class="media-left">
-                                <a href="<?= str_replace('blog/', '', route('front.blog.post', $p->slug)); ?>" target="_blank">
+                                <a href="<?= $p->frontUrl(); ?>" target="_blank">
                                     <img class="media-object" src="<?= Helper::get_thumbnail($cardphoto, 75, 75); ?>" alt="<?= $p->getTitle(); ?>">
                                 </a>
                             </div>
                             <div class="search-info">
-                                <h4 class="jazzira_font_bold"><a href="<?= str_replace('blog/', '', route('front.blog.post', $p->slug)); ?>" target="_blank"><?= $p->getTitle(); ?></a></h4>
-                                <a class="num" href="<?= str_replace('blog/', '', route('front.blog.post', $p->slug)); ?>" target="_blank"><?= str_replace('blog/', '', route('front.blog.post', $p->slug)); ?></a>
+                                <h4 class="jazzira_font_bold"><a href="<?= $p->frontUrl(); ?>" target="_blank"><?= $p->getTitle(); ?></a></h4>
+                                <a class="num" href="<?= $p->frontUrl(); ?>" target="_blank"><?= $p->frontUrl(); ?></a>
                                 <p class="jazzira_font"><?= Helper::str_limit($p->getContent(), 300); ?></p>
                             </div>
                         </div>

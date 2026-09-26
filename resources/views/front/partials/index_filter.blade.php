@@ -1,21 +1,67 @@
+<?php
+$homeCountries = \App\Models\Country::orderBy('id')->get();
+$homeCountryByCode = array();
+$homeCountryUrls = array();
+foreach ($homeCountries as $hc) {
+    $homeCountryByCode[$hc->code] = $hc;
+    $homeCountryUrls[$hc->id] = $hc->listingUrl();
+}
+$homeDefaultCountry = isset($homeCountryByCode['turkey']) ? $homeCountryByCode['turkey'] : $homeCountries->first();
+$homeDefaultCountryId = $homeDefaultCountry ? (int) $homeDefaultCountry->id : 0;
 
+// Cities whose slug is a country code ("turkey") are "all cities" rows; the country select replaces them.
+$homeCities = array();
+$homeCityCountry = array();
+foreach ($citys as $hcity) {
+    if (isset($homeCountryByCode[$hcity->slug])) {
+        continue;
+    }
+    $hcCountryId = $hcity->country_id ?: (isset($homeCountryByCode[$hcity->country]) ? $homeCountryByCode[$hcity->country]->id : null);
+    if (!$hcCountryId || !$hcity->listingUrl()) {
+        continue;
+    }
+    $homeCityCountry[$hcity->id] = (int) $hcCountryId;
+    $homeCities[] = array('id' => (int) $hcity->id, 'slug' => $hcity->slug, 'name' => $hcity->getName(), 'country' => (int) $hcCountryId, 'url' => $hcity->listingUrl());
+}
+
+$homeRegions = array();
+foreach ($all_regions as $hr) {
+    if (!isset($homeCityCountry[$hr->city_id]) || !$hr->listingUrl()) {
+        continue;
+    }
+    $homeRegions[] = array('slug' => $hr->slug, 'name' => $hr->getName(), 'city' => (int) $hr->city_id, 'country' => $homeCityCountry[$hr->city_id], 'url' => $hr->listingUrl());
+}
+?>
 <?= Form::open(["id" => "form-search"]); ?>
 
-<div class="form-group">
+<div class="form-group country_group">
     <svg version="1.1" id="Layer_1"  x="0px" y="0px" viewBox="0 0 24.33 23.69" xml:space="preserve"><g> <path class="st0" d="M12.14,13.49c-1.08-1.21-2.16-2.38-3.19-3.58C8.46,9.33,7.98,8.71,7.6,8.04c-1.66-2.92-0.39-6.51,2.68-7.69 c3.15-1.21,6.62,0.84,7.11,4.18c0.15,1.06-0.05,2.04-0.53,2.98c-0.42,0.82-0.96,1.55-1.55,2.25c-0.98,1.17-1.97,2.34-2.96,3.51 C12.3,13.33,12.24,13.39,12.14,13.49z M12.17,2.78C10.72,2.79,9.54,3.97,9.55,5.4c0.01,1.44,1.19,2.61,2.63,2.61 c1.42,0,2.59-1.19,2.59-2.62C14.77,3.96,13.58,2.78,12.17,2.78z"></path> <path class="st0" d="M7.47,9.32c-0.97,0-1.88,0-2.84,0c0.07,0.1,0.1,0.16,0.14,0.21c2.33,2.9,4.66,5.8,6.99,8.71 c0.16,0.19,0.27,0.23,0.5,0.13c1.86-0.75,3.72-1.49,5.58-2.23c0.08-0.03,0.15-0.07,0.25-0.11c-1.35-1.2-2.68-2.38-4.03-3.58 c0.1-0.12,0.19-0.23,0.29-0.36c1.4,1.24,2.79,2.48,4.18,3.72c1.5-1.16,2.99-2.32,4.52-3.5c-2.11-1.07-4.19-2.13-6.28-3.2 c0.16-0.26,0.31-0.49,0.47-0.75c0.17,0.09,0.35,0.17,0.52,0.26c2.06,1.05,4.11,2.09,6.17,3.14c0.5,0.26,0.53,0.58,0.08,0.93 c-1.66,1.29-3.32,2.58-4.99,3.86c-0.12,0.09-0.26,0.17-0.4,0.23c-1.99,0.8-3.98,1.58-5.96,2.39c-0.17,0.07-0.34,0.2-0.46,0.34 c-1.06,1.29-2.11,2.58-3.17,3.88c-0.35,0.42-0.62,0.41-0.93-0.04c-2.66-3.91-5.31-7.81-7.97-11.72c-0.22-0.33-0.18-0.54,0.15-0.77 c1.1-0.76,2.21-1.51,3.32-2.26c0.12-0.08,0.28-0.13,0.43-0.14c0.9-0.03,1.79-0.03,2.69-0.06c0.15,0,0.24,0.05,0.31,0.18 C7.15,8.8,7.29,9.02,7.47,9.32z M11.62,18.8c-2.53-3.15-5.05-6.29-7.58-9.44c-1,0.68-1.98,1.35-2.98,2.04 c2.52,3.71,5.02,7.39,7.55,11.1C9.63,21.25,10.62,20.03,11.62,18.8z"></path> </g> </svg>
-    <select class="selectpicker form-control" name="city">
-        <!--<option value="">المدينة</option>-->
-        @foreach($citys as $city)
-        <option value="<?= $city->slug; ?>" data-city="<?= $city->id; ?>"><?= $city->getName(); ?></option>
+    <select class="selectpicker form-control" name="country">
+        @foreach($homeCountries as $hc)
+        <option value="<?= $hc->id; ?>" <?= $hc->id == $homeDefaultCountryId ? 'selected' : ''; ?>><?= $hc->getTitle(); ?></option>
         @endforeach
     </select>
 </div>
-<div class="form-group">
+
+<div class="form-group city_group">
+    <svg version="1.1" id="Layer_1"  x="0px" y="0px" viewBox="0 0 24.33 23.69" xml:space="preserve"><g> <path class="st0" d="M12.14,13.49c-1.08-1.21-2.16-2.38-3.19-3.58C8.46,9.33,7.98,8.71,7.6,8.04c-1.66-2.92-0.39-6.51,2.68-7.69 c3.15-1.21,6.62,0.84,7.11,4.18c0.15,1.06-0.05,2.04-0.53,2.98c-0.42,0.82-0.96,1.55-1.55,2.25c-0.98,1.17-1.97,2.34-2.96,3.51 C12.3,13.33,12.24,13.39,12.14,13.49z M12.17,2.78C10.72,2.79,9.54,3.97,9.55,5.4c0.01,1.44,1.19,2.61,2.63,2.61 c1.42,0,2.59-1.19,2.59-2.62C14.77,3.96,13.58,2.78,12.17,2.78z"></path> <path class="st0" d="M7.47,9.32c-0.97,0-1.88,0-2.84,0c0.07,0.1,0.1,0.16,0.14,0.21c2.33,2.9,4.66,5.8,6.99,8.71 c0.16,0.19,0.27,0.23,0.5,0.13c1.86-0.75,3.72-1.49,5.58-2.23c0.08-0.03,0.15-0.07,0.25-0.11c-1.35-1.2-2.68-2.38-4.03-3.58 c0.1-0.12,0.19-0.23,0.29-0.36c1.4,1.24,2.79,2.48,4.18,3.72c1.5-1.16,2.99-2.32,4.52-3.5c-2.11-1.07-4.19-2.13-6.28-3.2 c0.16-0.26,0.31-0.49,0.47-0.75c0.17,0.09,0.35,0.17,0.52,0.26c2.06,1.05,4.11,2.09,6.17,3.14c0.5,0.26,0.53,0.58,0.08,0.93 c-1.66,1.29-3.32,2.58-4.99,3.86c-0.12,0.09-0.26,0.17-0.4,0.23c-1.99,0.8-3.98,1.58-5.96,2.39c-0.17,0.07-0.34,0.2-0.46,0.34 c-1.06,1.29-2.11,2.58-3.17,3.88c-0.35,0.42-0.62,0.41-0.93-0.04c-2.66-3.91-5.31-7.81-7.97-11.72c-0.22-0.33-0.18-0.54,0.15-0.77 c1.1-0.76,2.21-1.51,3.32-2.26c0.12-0.08,0.28-0.13,0.43-0.14c0.9-0.03,1.79-0.03,2.69-0.06c0.15,0,0.24,0.05,0.31,0.18 C7.15,8.8,7.29,9.02,7.47,9.32z M11.62,18.8c-2.53-3.15-5.05-6.29-7.58-9.44c-1,0.68-1.98,1.35-2.98,2.04 c2.52,3.71,5.02,7.39,7.55,11.1C9.63,21.25,10.62,20.03,11.62,18.8z"></path> </g> </svg>
+    <select class="selectpicker form-control" name="city">
+        <option value="" selected><?= trans("front.city"); ?></option>
+        @foreach($homeCities as $hcity)
+        @if($hcity['country'] == $homeDefaultCountryId)
+        <option value="<?= $hcity['slug']; ?>"><?= $hcity['name']; ?></option>
+        @endif
+        @endforeach
+    </select>
+</div>
+<div class="form-group region_group">
     <svg version="1.1" id="Layer_1"  x="0px" y="0px" viewBox="0 0 46.18 61.05" xml:space="preserve"><g> <path class="st0" d="M23.09,0C10.36,0,0,10.36,0,23.09c0,5.25,3.62,12.93,10.76,22.83C15.92,53.07,21,58.72,21.21,58.96l1.88,2.08 l1.88-2.08c0.21-0.24,5.29-5.89,10.45-13.04c7.14-9.89,10.76-17.58,10.76-22.83C46.18,10.36,35.82,0,23.09,0L23.09,0z M23.09,53.43 C16.73,46,5.06,30.76,5.06,23.09c0-9.94,8.09-18.03,18.03-18.03s18.03,8.09,18.03,18.03C41.13,30.76,29.45,46,23.09,53.43 L23.09,53.43z M23.09,53.43"></path> <path class="st0" d="M31.47,23.09c0,4.63-3.75,8.38-8.38,8.38s-8.38-3.75-8.38-8.38s3.75-8.38,8.38-8.38S31.47,18.47,31.47,23.09 L31.47,23.09z M31.47,23.09"></path> </g> </svg>
     <select class="selectpicker form-control" name="region">
-        <option value=""><?= trans("front.all regions"); ?></option>
-        @foreach($all_regions as $r)
-        <option value="<?= $r->slug; ?>"  data-city="<?= $r->city_id; ?>" class="hidden"><?= $r->getName(); ?></option>
+        <option value="" selected><?= trans("front.all regions"); ?></option>
+        @foreach($homeRegions as $hr)
+        @if($hr['country'] == $homeDefaultCountryId)
+        <option value="<?= $hr['slug']; ?>"><?= $hr['name']; ?></option>
+        @endif
         @endforeach
     </select>
 </div>
@@ -45,7 +91,7 @@
     </select>
 </div>
 
-<div class="form-group">
+<div class="form-group features_group">
     <svg version="1.1" id="Layer_1"  x="0px" y="0px" viewBox="0 0 18.73 14.27" xml:space="preserve"><g> <path class="st0" d="M16.32,12.59c0-0.3-0.29-0.54-0.65-0.54H2.91c-0.36,0-0.65,0.24-0.65,0.54v1.15c0,0.3,0.29,0.54,0.65,0.54 h12.76c0.36,0,0.65-0.24,0.65-0.54V12.59z M16.32,12.59"></path> <path class="st0" d="M18.4,0.14c-0.25-0.12-0.56-0.09-0.76,0.07l-4.47,3.49l-3.3-3.49C9.75,0.09,9.56,0,9.36,0h0 c-0.2,0-0.39,0.09-0.51,0.22l-3.3,3.52l-4.47-3.5C0.88,0.08,0.58,0.05,0.33,0.17C0.08,0.28-0.05,0.52,0.01,0.75l2.49,9.58 c0.06,0.25,0.33,0.42,0.63,0.42h12.45c0.3,0,0.57-0.18,0.63-0.42l2.49-9.61C18.78,0.5,18.65,0.26,18.4,0.14L18.4,0.14z M18.4,0.14"></path> </g> </svg>
     <select class="selectpicker form-control pattern" name="project_category">
         <option value=""><?= trans("front.special advantages"); ?></option>
@@ -55,7 +101,7 @@
     </select>
 </div>
 
-<div class="form-group">
+<div class="form-group budget_group">
     <div class="budget">
         <div id="budgetMenu">
             <div class="range-slider"> <span class="rangeValues num"></span>
@@ -74,3 +120,13 @@
                         </div>
 
                         <?= Form::close(); ?>
+
+<script>
+window.homeFilterData = {
+    cities: <?= json_encode($homeCities, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_HEX_TAG) ?>,
+    regions: <?= json_encode($homeRegions, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_HEX_TAG) ?>,
+    countryUrls: <?= json_encode($homeCountryUrls, JSON_UNESCAPED_SLASHES | JSON_HEX_TAG) ?>,
+    cityLabel: <?= json_encode(trans("front.city"), JSON_UNESCAPED_UNICODE | JSON_HEX_TAG) ?>,
+    regionLabel: <?= json_encode(trans("front.all regions"), JSON_UNESCAPED_UNICODE | JSON_HEX_TAG) ?>
+};
+</script>

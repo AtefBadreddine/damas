@@ -56,7 +56,7 @@ class ProjectController extends BaseController
         $row = Helper::query("Project", "find", ['id' => $id]);
         if ( $request->isMethod('post') ) {
             $this->validate($request, [
-                /*"name_ar"  =>  "required",*/
+                "name_ar"  =>  "required",
                 "name_en"  =>  "required",
                 "project_link"  =>  "required",
                 "companies"  =>  "required",
@@ -66,8 +66,10 @@ class ProjectController extends BaseController
                 /*"latitude"     =>  "unique:{$row->table_name()},latitude,$id",
                 "longitude"     =>  "unique:{$row->table_name()},longitude,$id",*/
                 "city_id"  =>  "required",
+                "old_slug"  =>  "different:slug",
             ]);
             $inputs = $request->all();
+            $inputs["old_slug"] = trim((string) @$inputs["old_slug"]) ?: null;
 			
 			/*echo '<pre>';
 			print_r($inputs);
@@ -103,9 +105,11 @@ class ProjectController extends BaseController
             $title_en = @$inputs["title_en"];
             $inputs["similar_projects"] = $similar_projects?implode(",", $similar_projects):"";
             
+			/* Auto-generated Arabic name from English name + city (disabled — use name_ar from form)
 			$c = Helper::query("City", "find", ['id' => $inputs["city_id"]]);
 			$inputs["name_ar"] = 'مجمع '.$inputs["name_en"].' في '. @$c->getName();
-			
+			*/
+
 			if ( !$id ) {
                 $inputs["user_id"] = $request->user()->id;
                 $inputs["user_name"] = $request->user()->username;
@@ -116,7 +120,7 @@ class ProjectController extends BaseController
                 "id"        =>  $id,
             ]);
             // types
-            //$saved_project->syncTypes($request->get('projecttype_id', []));
+            $saved_project->syncTypes($request->get('projecttype_id', []));
             // companies
             $saved_project->syncCompanies($request->get('companies', []));
             // categoriess
@@ -394,12 +398,25 @@ class ProjectController extends BaseController
             //@Helper::update_youtube_video_statistcis();
             
 			
-			Helper::Clear_cache([route('front.project',[$saved_project->slug])]);
+			Helper::Clear_cache([$saved_project->frontUrl()]);
 			
 			
             return Helper::form_redirect("admin.projects", $saved_project, $request->get('redirect_to_list', null));
         }
-        return view("admin.projects.edit", compact("row"));
+        $countries = Helper::query("Country", "all");
+        $initialCountryId = '';
+        if ($row->city_id) {
+            $projectCity = Helper::query("City", "find", ['id' => $row->city_id]);
+            if ($projectCity) {
+                $initialCountryId = $projectCity->country_id;
+                if (!$initialCountryId && $projectCity->country) {
+                    $countryRow = \App\Models\Country::findByCode($projectCity->country);
+                    $initialCountryId = $countryRow ? $countryRow->id : '';
+                }
+            }
+        }
+
+        return view("admin.projects.edit", compact("row", "countries", "initialCountryId"));
     }
     
     /**

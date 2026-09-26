@@ -32,7 +32,7 @@ $style_lang = in_array($current_lang,['en','fr'])?'en':'ar';
 								$img = Helper::get_thumbnail_full($cardphoto, $w, $h);
 						?>
                             <div class="carousel-item item<?= $k==0 ? " active" : ""; ?>">
-                                <a href="<?= route("front.blog.post", $post->slug); ?>">
+                                <a href="<?= $post->frontUrl(); ?>">
 								@if($cardphoto)
                                     <img src="<?= $img; ?>" class="img-responsive" alt="<?= $cardphoto->getDescription(); ?>">
                                     @endif
@@ -77,7 +77,7 @@ $style_lang = in_array($current_lang,['en','fr'])?'en':'ar';
     {
       "@type":"ListItem",
       "position":{{$k+1}},
-      "url":"<?= route("front.blog.post", $post->slug); ?>"
+      "url":"<?= $post->frontUrl(); ?>"
     }
 	@if($k+1!=5)
 	{{ ',' }}

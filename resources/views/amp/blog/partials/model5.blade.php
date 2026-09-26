@@ -19,19 +19,19 @@
                 <aside class="news-item">
                     <amp-img src="<?= Helper::media_url($post->photoCard); ?>" width="533" height="533" layout="responsive" alt="{{ $post->getTitle() }}"></amp-img>
                 </aside>
-                <h4 class="colored"><a href="<?= route("front.blog.post", $post->slug); ?>"><?= $post->getTitle(); ?></a></h4>
+                <h4 class="colored"><a href="<?= $post->frontUrl(); ?>"><?= $post->getTitle(); ?></a></h4>
             </div>
         </aside>
     <?php else: ?>
         <aside class=" col-md-6 col-sm-6 col-xs-12">
             <div class="global-new-item row">
                 <aside class="news-item">
-                    <a href="<?= route("front.blog.post", $post->slug); ?>">
+                    <a href="<?= $post->frontUrl(); ?>">
                         <amp-img src="<?= Helper::media_url($post->photoCard); ?>" width="533" height="533" layout="responsive" alt="{{ $post->getTitle() }}"></amp-img>
                     </a>
                 </aside>
                 <aside class=" col-md-6 col-sm-6 col-xs-12">
-                    <h4 class="colored"><a href="<?= route("front.blog.post", $post->slug); ?>"><?= $post->getTitle(); ?></a></h4>
+                    <h4 class="colored"><a href="<?= $post->frontUrl(); ?>"><?= $post->getTitle(); ?></a></h4>
                     <p><?= Helper::str_limit($post->getContent()); ?></p>
                 </aside>
             </div>

@@ -14,23 +14,23 @@
     @if($k==0 and Helper::get_device()!='tab')
     <div class="global-new-item wow fadeIn" data-wow-duration="1s" data-wow-offset="200">
         <aside class="news-item">
-            <a href="<?= route("front.blog.post", $post->slug); ?>">
+            <a href="<?= $post->frontUrl(); ?>">
                 <img src="<?= Helper::get_thumbnail($post->photoCard, 600, 600, true); ?>" alt="<?= $post->getTitle(); ?>" class="img-responsive">
             </a>
         </aside>
-        <div class="colored"><a href="<?= route("front.blog.post", $post->slug); ?>"><?= $post->getTitle(); ?></a></div>
+        <div class="colored"><a href="<?= $post->frontUrl(); ?>"><?= $post->getTitle(); ?></a></div>
         <p><?= Helper::str_limit($post->getContent()); ?></p>
-        <p><a href="<?= route("front.blog.post", $post->slug); ?>" class="readmoretxt"><?= trans("front.more posts"); ?></a></p>
+        <p><a href="<?= $post->frontUrl(); ?>" class="readmoretxt"><?= trans("front.more posts"); ?></a></p>
     </div>
     @else
     <div class="media my-media wow fadeIn btmro" data-wow-duration="1s" data-wow-offset="200">
         <div class="media-left">
-            <a href="<?= route("front.blog.post", $post->slug); ?>">
+            <a href="<?= $post->frontUrl(); ?>">
                 <img src="<?= Helper::get_thumbnail($post->photoCard, 100, 100, true); ?>" width="100" height="100" alt="<?= $post->getTitle(); ?>">
             </a>
         </div>
         <div class="media-body">
-            <h2 class="media-heading colored"><a href="<?= route("front.blog.post", $post->slug); ?>"><?= $post->getTitle(); ?></a></h2>
+            <h2 class="media-heading colored"><a href="<?= $post->frontUrl(); ?>"><?= $post->getTitle(); ?></a></h2>
         </div>
     </div>
     @endif

@@ -19,7 +19,7 @@ $emptypic = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABA
 
 
 //$regions = \App\Models\Region::where('id', '>', 0)->orderBy('city_id', 'asc')->get();
-$all_regions = \App\Models\Region::select('regions.*')->leftJoin('projects AS p', 'p.region_id', '=', 'regions.id')->where("p.published", 1)->where("p.sold", '!=', 100)->groupBy('regions.id')->having(DB::raw('count(dms_p.id)'), '>', 0)->orderBy(DB::raw('count(dms_p.id)'), 'desc')->get();
+$all_regions = \App\Models\Region::select('regions.*')->leftJoin('projects AS p', 'p.region_id', '=', 'regions.id')->where("p.published", 1)->where("p.sold", '!=', 100)->groupBy('regions.id')->having(DB::raw('count(dms_p.id)'), '>', 0)->orderBy(DB::raw('count(dms_p.id)'), 'desc')->with('city.countryRel')->get();
 $proj_cats = Helper::query('ProjectCategory', "where", ["field" => "hide_search_page", "value" => false])->get();
 $citys = App\Models\City::where('id', '!=', 2)->orderBy('placement', 'asc')->get();
 ?>
@@ -235,21 +235,26 @@ $citys = App\Models\City::where('id', '!=', 2)->orderBy('placement', 'asc')->get
     .search_section .form-group svg path{
         fill: #808080;
     }
-    .search_section .form-group:nth-child(3) svg{
+    .search_section .form-group.region_group svg{
         width: 13px;
         right: 17px;
     }
-    .search_section .form-group:nth-child(6) svg{
+    .search_section .form-group.features_group svg{
         width: 15px;
         right: 15px;
         top: 15px;
     }
+    .search_section .form-group.budget_group{
+        width: 66.6666%;
+        clear: both;
+    }
     .search_section .form-group.btn_sec{
-        width: auto;
+        width: 33.3333%;
         margin: 0px;
-        position: absolute;
-        bottom: -30px;
-        left: 0px;
+        padding-top: 8px;
+    }
+    .search_section .form-group.btn_sec .send_btn{
+        width: 100%;
     }
     .search_section .form-group.btn_sec .send_btn{
         background-color: #0a8181;
@@ -596,16 +601,14 @@ $citys = App\Models\City::where('id', '!=', 2)->orderBy('placement', 'asc')->get
         .search_section .form-group {
             width: 50%;
         }
-        .search_section .form-group:nth-child(6){
-            width: 100%;
-        }
-        .search_section .form-group:nth-child(7){
+        .search_section .form-group.budget_group{
             width: 100%;
             margin-top: 5px;
         }
         .search_section .form-group.btn_sec {
             width: 100%;
             margin: 0px 0px;
+            padding-top: 0px;
             position: relative;
             left: 0px;
             bottom: 0px;
@@ -781,7 +784,7 @@ echo strpos( @$_SERVER['HTTP_ACCEPT'], 'image/webp' ) !== false ?'/imgwebp/slide
                 setInterval(() => {
                     isOman = !isOman;
                     flagPhoto.style.backgroundImage = isOman ? "url('<?= asset("img/title-flag-oman.svg"); ?>')" : "url('<?= asset("img/title-flag.svg"); ?>')";
-                    flagBtn.href = isOman ? "https://damas.net/oman/blog/property-residency" : "{{ route('front.turkish_citizenship') }}";
+                    flagBtn.href = isOman ? "{{ route('front.blog.post.show', ['country' => 'oman', 'post' => 'property-residency']) }}" : "{{ route('front.turkish_citizenship') }}";
                     flagH2.innerHTML = isOman ? "<?= trans("front.Home Slider Title Full Oman"); ?>" : "<?= trans("front.Home Slider Title full") ?>";
                 }, 5000);
             })();
@@ -823,7 +826,7 @@ echo strpos( @$_SERVER['HTTP_ACCEPT'], 'image/webp' ) !== false ?'/imgwebp/slide
         setInterval(() => {
             isOman = !isOman;
             flagPhoto.style.backgroundImage = isOman ? "url('<?= asset("img/title-flag-oman.svg"); ?>')" : "url('<?= asset("img/title-flag.svg"); ?>')";
-            flagBtn.href = isOman ? "https://damas.net/oman/blog/property-residency" : "{{ route('front.turkish_citizenship') }}";
+            flagBtn.href = isOman ? "{{ route('front.blog.post.show', ['country' => 'oman', 'post' => 'property-residency']) }}" : "{{ route('front.turkish_citizenship') }}";
             flagH2.innerHTML = !isOman ? "<?= trans("front.Home Slider Title full"); ?>" : "<?= trans("front.Home Slider Title Full Oman"); ?>";
         }, 5000);
     </script>
@@ -914,7 +917,7 @@ echo strpos( @$_SERVER['HTTP_ACCEPT'], 'image/webp' ) !== false ?'/imgwebp/slide
 
                                   <!-- image Project -->
                                   <div class="int_cont image show">
-                                  <a href="/projects/ds268"><img class="lazy" data-src="<?= asset("/img/01.jpg"); ?>" alt="damasturk"/></a>
+                                  <a href="<?= route('front.project.show', array('country' => 'turkiye', 'city' => 'istanbul', 'region' => 'mahmutbey', 'project' => 'apartments-for-sale-istanbul-mahmutbey-near-merto-2')) ?>"><img class="lazy" data-src="<?= asset("/img/01.jpg"); ?>" alt="damasturk"/></a>
                                   </div>
 
                                   <!-- map Project -->
@@ -1409,58 +1412,77 @@ $json4 = Helper::ajax_statics('', 'top_city', 0, 0);
     $(document).ready(function () {
         $('.main_menu .links>li>a.home_page').addClass("active");
 
-        $('body').on("click", ".send_btn_index", function (e) {
-            var frm = $(this).closest("form");
-            var region = frm.find("select[name=region]").val();
-            var city = frm.find("select[name=city]").val();
-            var type = frm.find("select[name=project_type]").val();
-            var tag = frm.find("select[name=project_category]").val();
-            var rooms = (frm.find("select[name=rooms]").length > 0) ? frm.find("select[name=rooms]").val() : '';
-            /*var price = (frm.find("select[name=price]").length > 0) ? frm.find("select[name=price]").val() : '';*/
-            var price = frm.find(".min_budj").val() + '-' + frm.find(".max_budj").val();
+        var homeFilter = window.homeFilterData;
+        var PRICE_MIN = 50000, PRICE_MAX = 2000000;
 
-            var str = "";
-            if (rooms != '' && price != '') {
-                str = '?price=' + price + '&rooms=' + rooms;
-            } else if (rooms == '' && price != '') {
-                str = '?price=' + price;
-            } else if (rooms != '' && price == '') {
-                str = '?rooms=' + rooms;
+        function findBySlug(list, slug) {
+            for (var i = 0; i < list.length; i++) {
+                if (list[i].slug === slug) {
+                    return list[i];
+                }
             }
-            if (!city)
-                city = "istanbul";
-            if (!type)
-                type = "property-for-sale";
-            if (tag)
-                tag = "/" + tag;
-            if (region && region != '')
-                region = "/" + region;
-            window.location.href = "{{ route('front.index') }}/" + type + "/" + city + tag + region + str + '&s=1';
-            return false;
+            return null;
+        }
+
+        function fillSelect($select, placeholder, items) {
+            $select.empty().append($('<option value=""></option>').text(placeholder));
+            $.each(items, function (i, item) {
+                $select.append($('<option></option>').val(item.slug).text(item.name));
+            });
+            $select.val('');
+            $select.selectpicker('refresh');
+        }
+
+        function fillRegions(frm) {
+            var countryId = parseInt(frm.find('select[name=country]').val(), 10);
+            var city = findBySlug(homeFilter.cities, frm.find('select[name=city]').val());
+            fillSelect(frm.find('select[name=region]'), homeFilter.regionLabel, $.grep(homeFilter.regions, function (r) {
+                return city ? r.city === city.id : r.country === countryId;
+            }));
+        }
+
+        $('body').on('change', '#form-search select[name=country]', function () {
+            var frm = $(this).closest('form');
+            var countryId = parseInt($(this).val(), 10);
+            fillSelect(frm.find('select[name=city]'), homeFilter.cityLabel, $.grep(homeFilter.cities, function (c) {
+                return c.country === countryId;
+            }));
+            fillRegions(frm);
         });
 
+        $('body').on('change', '#form-search select[name=city]', function () {
+            fillRegions($(this).closest('form'));
+        });
 
+        $('body').on("click", ".send_btn_index", function (e) {
+            var frm = $(this).closest("form");
+            var region = findBySlug(homeFilter.regions, frm.find("select[name=region]").val());
+            var city = findBySlug(homeFilter.cities, frm.find("select[name=city]").val());
+            var url = region ? region.url : (city ? city.url : homeFilter.countryUrls[frm.find("select[name=country]").val()]);
 
-
-        $('#form-search select[name=city]').change(function () {
-
-            var projects_regions = Array();
-<?php
-foreach ($all_regions as $type) { ?>
-var arr = Array();arr['city'] = '<?= $type->city_id ?>';arr['slug'] = '<?= $type->slug ?>';arr['name'] = '<?= $type->getName() ?>';
-projects_regions.push(arr);
-<?php } ?>
-
-            $('#form-search select[name=region]').html('').selectpicker('refresh');
-            var city = $(this).find(':selected').data('city');
-
-            for (var i = 0; i < projects_regions.length; i++) {
-                
-                if (city == projects_regions[i].city)
-                    $('#form-search select[name=region]').append('<option value="' + projects_regions[i].slug + '" >' + projects_regions[i].name + '</option>');
+            var params = [];
+            var type = frm.find("select[name=project_type]").val();
+            if (type) {
+                params.push('type=' + encodeURIComponent(type));
             }
-            $('#form-search select[name=region]').selectpicker('refresh');
-        });});
+            var tag = frm.find("select[name=project_category]").val();
+            if (tag) {
+                params.push('category=' + encodeURIComponent(tag));
+            }
+            var rooms = frm.find("select[name=rooms]").val();
+            if (rooms) {
+                params.push('rooms=' + encodeURIComponent(rooms));
+            }
+            var min = parseInt(frm.find(".min_budj").val(), 10), max = parseInt(frm.find(".max_budj").val(), 10);
+            if (min > max) { var t = min; min = max; max = t; }
+            if (min > PRICE_MIN || max < PRICE_MAX) {
+                params.push('price=' + encodeURIComponent(min + '-' + (max >= PRICE_MAX ? '+' : max)));
+            }
+
+            window.location.href = url + (params.length ? '?' + params.join('&') : '');
+            return false;
+        });
+    });
 		
 		
 <?php /*	

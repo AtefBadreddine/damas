@@ -1,10 +1,12 @@
 <?php
 namespace App\Http\Controllers\Front;
 
+use App\Enums\PostType;
 use App\Http\Controllers\BaseController;
+use App\Models\Country;
 use App\Models\Post;
 use App\Models\PostCategory;
-use Illuminate\Support\Facades\Redirect;
+use Illuminate\Http\Request;
 use Helper;
 use DB;
 use Cookie;
@@ -12,7 +14,7 @@ use Cookie;
 class PostController extends BaseController
 {
     /**
-     * Blog page: /{locale}/{country}/buying-guide/{post}
+     * Blog page: /{locale}/{country}/guides/{post}
      *
      * @param string $country
      * @param string $post
@@ -20,17 +22,281 @@ class PostController extends BaseController
      */
     public function show($country, $post)
     {
-        $row = Post::where("slug", $post)->where("type", "blog")->with(array("projects", "categories", "countryRel"))->first();
+        return $this->showByType($country, $post, PostType::BLOG);
+    }
+
+    /**
+     * Developer page: /{locale}/{country}/developers/{post}
+     *
+     * @param string $country
+     * @param string $post
+     * @return \Illuminate\Http\Response|\Illuminate\Http\RedirectResponse
+     */
+    public function showDevelopers($country, $post)
+    {
+        return $this->showByType($country, $post, PostType::DEVELOPER);
+    }
+
+    /**
+     * Report page: /{locale}/{country}/reports/{post}
+     *
+     * @param string $country
+     * @param string $post
+     * @return \Illuminate\Http\Response|\Illuminate\Http\RedirectResponse
+     */
+    public function showReports($country, $post)
+    {
+        return $this->showByType($country, $post, PostType::REPORT);
+    }
+
+    /**
+     * Blog listing: /{locale}/guides (all countries, post type blog)
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\Response
+     */
+    public function index(Request $request)
+    {
+        return $this->indexListing($request, PostType::BLOG, null);
+    }
+
+    /**
+     * Country blog listing: /{locale}/{country}/guides
+     *
+     * @param Request $request
+     * @param string $country
+     * @return \Illuminate\Http\Response
+     */
+    public function indexCountry(Request $request, $country)
+    {
+        return $this->indexListing($request, PostType::BLOG, $country);
+    }
+
+    /**
+     * Developers listing: /{locale}/developers
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\Response
+     */
+    public function indexDevelopers(Request $request)
+    {
+        return $this->indexListing($request, PostType::DEVELOPER, null);
+    }
+
+    /**
+     * Country developers listing: /{locale}/{country}/developers
+     *
+     * @param Request $request
+     * @param string $country
+     * @return \Illuminate\Http\Response
+     */
+    public function indexDevelopersCountry(Request $request, $country)
+    {
+        return $this->indexListing($request, PostType::DEVELOPER, $country);
+    }
+
+    /**
+     * Reports listing: /{locale}/reports
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\Response
+     */
+    public function indexReports(Request $request)
+    {
+        return $this->indexListing($request, PostType::REPORT, null);
+    }
+
+    /**
+     * Country reports listing: /{locale}/{country}/reports
+     *
+     * @param Request $request
+     * @param string $country
+     * @return \Illuminate\Http\Response
+     */
+    public function indexReportsCountry(Request $request, $country)
+    {
+        return $this->indexListing($request, PostType::REPORT, $country);
+    }
+
+    /**
+     * News listing: /{locale}/news
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\Response
+     */
+    public function indexNews(Request $request)
+    {
+        return $this->indexListing($request, PostType::NEWS, null);
+    }
+
+    /**
+     * Country news listing: /{locale}/{country}/news
+     *
+     * @param Request $request
+     * @param string $country
+     * @return \Illuminate\Http\Response
+     */
+    public function indexNewsCountry(Request $request, $country)
+    {
+        return $this->indexListing($request, PostType::NEWS, $country);
+    }
+
+    /**
+     * Shared listing for /guides, /developers, /reports, /news and their country pages.
+     *
+     * @param Request $request
+     * @param PostType $postType
+     * @param string|null $countrySlug Country URL slug, or null for all countries / turkey (news)
+     * @return \Illuminate\Http\Response
+     */
+    protected function indexListing(Request $request, PostType $postType, $countrySlug = null)
+    {
+        $type = $postType->value;
+        $categoryType = $postType->categoryType();
+        $countryModel = null;
+        $countryCode = null;
+
+        if ($countrySlug) {
+            $countryModel = Country::findBySlug($countrySlug);
+            if (!$countryModel) {
+                abort(404);
+            }
+            $countryCode = $countryModel->code;
+        } elseif ($postType === PostType::NEWS) {
+            $countryCode = 'turkey';
+        }
+
+        $curent_lang = (\LaravelLocalization::getCurrentLocale() == 'pe' ? 'fa' : \LaravelLocalization::getCurrentLocale());
+        $title = 'title_' . $curent_lang;
+        $content = 'content_' . $curent_lang;
+
+        $q = Post::where('published', 1)->where($title, '!=', '');
+        $q->where('post_type', $postType->value);
+        if ($countryCode) {
+            $q->where('country', $countryCode);
+        }
+
+        $is_category_page = false;
+        $category = null;
+        $slug = null;
+        $categorySlug = $request->get('category');
+        if ($categorySlug) {
+            $categoryQuery = PostCategory::where('slug', $categorySlug)->where('type', $categoryType);
+            if ($countryCode) {
+                $categoryQuery->where('country', $countryCode);
+            }
+            $category = $categoryQuery->first();
+            if (!$category) {
+                abort(404);
+            }
+            $q->whereIn('id', function ($sub) use ($category) {
+                $sub->select('post_id')->from('post_category')->where('post_category_id', $category->id);
+            });
+            $is_category_page = true;
+            $slug = $category->slug;
+        }
+
+        if (isset($_GET['search'])) {
+            $q->where("$content", 'like', '%' . $_GET['search'] . '%');
+        }
+
+        $sorting = isset($_GET['sort']) ? $_GET['sort'] : 'recent';
+
+        switch ($sorting) {
+            case "az":
+                $q->orderBy("$title", "asc");
+                break;
+            case "za":
+                $q->orderBy("$title", "desc");
+                break;
+            case "oldest":
+                $q->orderBy("created_at", "asc");
+                break;
+            default:
+                $q->orderBy("placement", "asc");
+        }
+        $posts = $q->with(array('photoCard', 'countryRel'))->paginate(9);
+
+        $posts->appends(array('sort' => $sorting));
+
+        if (isset($_GET['search'])) {
+            $posts->appends(array('search' => $_GET['search']));
+        }
+        if ($slug) {
+            $posts->appends(array('category' => $slug));
+        }
+
+        if ($request->ajax()) {
+            $ajax = true;
+            return view("front.blog.partials.list_posts", compact('posts', 'ajax', 'type'));
+        }
+        $categoriesQuery = PostCategory::where('type', $categoryType);
+        if ($countryCode) {
+            $categoriesQuery->where('country', $countryCode);
+        }
+        $categories = $categoriesQuery->orderBy("placement", "asc")->get();
+        $hide_whatsapp = false;
+        if ($category && in_array($category->id, array(3, 4, 5, 6))) {
+            $hide_whatsapp = true;
+        }
+
+        if ($countryModel) {
+            $listingUrl = route($postType->frontCountryRoute(), $countryModel->slug);
+        } else {
+            $listingUrl = route($postType->frontIndexRoute());
+        }
+
+        return view("front.blog.index", compact('posts', 'is_category_page', 'categories', 'type', 'categoryType', 'hide_whatsapp', 'countryCode', 'listingUrl', 'slug', 'category'));
+    }
+
+    /**
+     * News page: /{locale}/{country}/news/{post}
+     *
+     * @param string $country
+     * @param string $post
+     * @return \Illuminate\Http\Response|\Illuminate\Http\RedirectResponse
+     */
+    public function showNews($country, $post)
+    {
+        return $this->showByType($country, $post, PostType::NEWS);
+    }
+
+    /**
+     * Shared show page for guides, developers, reports and news.
+     * A post reached under the wrong type or country 301s to its canonical URL.
+     *
+     * @param string $country
+     * @param string $post
+     * @param PostType $postType
+     * @return \Illuminate\Http\Response|\Illuminate\Http\RedirectResponse
+     */
+    protected function showByType($country, $post, PostType $postType)
+    {
+        $with = array("projects", "categories", "countryRel");
+        $row = Post::where("slug", $post)->ofPostType($postType)->with($with)->first();
+        if (!$row) {
+            $row = Post::where("slug", $post)->with($with)->first();
+        }
+        $isOldSlug = false;
+        if (!$row) {
+            $row = Post::where("old_slug", $post)->with($with)->first();
+            $isOldSlug = (bool) $row;
+        }
         if (!$row) {
             abort(404);
         }
 
-        $redirect = $this->redirectIfNotCanonical($row->geoUrl());
-        if ($redirect) {
-            return $redirect;
+        if ($isOldSlug || $row->postTypeEnum() !== $postType || $row->getCountrySlug() !== $country) {
+            $geoUrl = $row->geoUrl();
+            if (!$geoUrl) {
+                abort(404);
+            }
+            $query = request()->getQueryString();
+            return redirect()->to($geoUrl . ($query ? '?' . $query : ''), 301);
         }
 
-        $type = $row->type ? $row->type : 'blog';
+        $type = $postType->value;
+        $categoryType = $postType->categoryType();
         $countryCode = $row->country;
 
         $ajax_projects_url = '';
@@ -136,7 +402,7 @@ class PostController extends BaseController
             $row->save();
         }
 
-        $categories = PostCategory::where('type', $type)->where('country', $countryCode)->orderBy("placement", "asc")->get();
+        $categories = PostCategory::where('type', $categoryType)->where('country', $countryCode)->orderBy("placement", "asc")->get();
 
         $lang = $current_lang;
         $video_code = '';
@@ -161,31 +427,8 @@ class PostController extends BaseController
         }
 
         $post = $row;
+        $listingUrl = route($postType->frontCountryRoute(), $country);
 
-        return view("front.blog.show", compact("post", "ajax_projects_url", "link_lang", "categories", "video_code", "faqs", "availables_langs", 'type', 'hide_whatsapp'));
-    }
-
-    /**
-     * 301 to the canonical geo path when country/slug do not match.
-     *
-     * @param string $canonicalUrl
-     * @return \Illuminate\Http\RedirectResponse|null
-     */
-    protected function redirectIfNotCanonical($canonicalUrl)
-    {
-        if (!$canonicalUrl) {
-            return null;
-        }
-
-        $current = '/' . trim(request()->path(), '/');
-        $canonicalPath = parse_url($canonicalUrl, PHP_URL_PATH);
-        $canonicalPath = '/' . trim($canonicalPath, '/');
-
-        if (urldecode($current) !== urldecode($canonicalPath)) {
-            $query = request()->getQueryString();
-            return Redirect::to($canonicalUrl . ($query ? '?' . $query : ''), 301);
-        }
-
-        return null;
+        return view("front.blog.show", compact("post", "ajax_projects_url", "link_lang", "categories", "video_code", "faqs", "availables_langs", 'type', 'categoryType', 'hide_whatsapp', 'listingUrl'));
     }
 }

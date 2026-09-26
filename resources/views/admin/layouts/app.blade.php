@@ -198,7 +198,7 @@
 <script src="<?= asset('admin/js/bootbox.min.js'); ?>"></script>
 <script src="<?= asset('admin/js/app.js'); ?>?v=02"></script>
 <script src="<?= asset('admin/js/admin.js'); ?>?v=03"></script>
-@if( Route::currentRouteName()!='admin.projects' && Route::currentRouteName()!='admin.newsletter' && Route::currentRouteName()!='admin.blog.posts' )
+@if( Route::currentRouteName()!='admin.projects' && Route::currentRouteName()!='admin.newsletter' && !\App\Enums\PostType::isAdminList(Route::currentRouteName()) )
 <script>
     var somethingChanged = false;
     $('form input').change(function() { 

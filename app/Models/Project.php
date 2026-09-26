@@ -74,7 +74,7 @@ class Project extends BaseModel
         "send_notif_ar",
         "send_notif_en",
 		"edit_date",
-		//'title_ar',
+		'title_ar',
 		'title_en',
 		'company',
 		'payment_percent',
@@ -267,6 +267,19 @@ class Project extends BaseModel
             'region' => $region->slug,
             'project' => $this->slug,
         ), $absolute);
+    }
+
+    /**
+     * Public project URL for menus, cards, and shares.
+     * Prefers the geo path; falls back to the legacy /projects/{slug} 301.
+     *
+     * @param bool $absolute
+     * @return string
+     */
+    public function frontUrl($absolute = true)
+    {
+        $url = $this->geoUrl($absolute);
+        return $url ? $url : route('front.project', $this->slug, $absolute);
     }
     
     /**

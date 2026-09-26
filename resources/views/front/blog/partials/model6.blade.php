@@ -20,10 +20,10 @@
 					$h=148;
 				}
 				?>
-            <a href="<?= route("front.blog.post", $post->slug); ?>">
+            <a href="<?= $post->frontUrl(); ?>">
                 <img src="<?= Helper::get_thumbnail($post->photoCard, $w, $h); ?>" alt="<?= $post->getTitle(); ?>" class="img-responsive"/>
             </a>
         </aside>
-        <h2 class="colored"><a href="<?= route("front.blog.post", $post->slug); ?>"><?= $post->getTitle(); ?></a></h2>
+        <h2 class="colored"><a href="<?= $post->frontUrl(); ?>"><?= $post->getTitle(); ?></a></h2>
     </div>
 @endforeach

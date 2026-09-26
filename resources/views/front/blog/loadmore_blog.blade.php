@@ -44,7 +44,7 @@ $core_content = '';
                     $section->title_ar = $post_category->name_ar;
                 }
             } else {
-                $posts = Helper::query("Post", "where", ["field" => "post_type", "value" => $section->content_type])
+                $posts = Helper::query("Post", "where", ["field" => "post_type", "value" => \App\Enums\PostType::fromSectionContentType($section->content_type)->value])
                     ->limit($section->number_items)
                     ->where("published", 1)
                     ->whereIn("lang", ["all", $current_lang]);

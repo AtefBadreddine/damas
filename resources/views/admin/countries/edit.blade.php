@@ -26,4 +26,6 @@
     </div>
 </fieldset>
 
+@include('admin.layouts.geo_content_tabs')
+
 @endsection

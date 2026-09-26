@@ -17,7 +17,7 @@ $is_mobile = Helper::get_device() != 'full' ? true : false;
   "50000-100000" => Helper::usd_to_format("50K $") . "-" . Helper::usd_to_format("100K $"), "100000-150000" => Helper::usd_to_format("100K $") . "-" . Helper::usd_to_format("150K $"), "150000-250000" => Helper::usd_to_format("150K $") . "-" . Helper::usd_to_format("250K $"), "250000-400000" => Helper::usd_to_format("250K $") . "-" . Helper::usd_to_format("400K $"), "400000-600000" => Helper::usd_to_format("400K $") . "-" . Helper::usd_to_format("600K $"), "600000-1000000" => Helper::usd_to_format("600K $") . "-" . Helper::usd_to_format("1M $"), "1000000-2000000" => Helper::usd_to_format("1M $") . "-" . Helper::usd_to_format("2M $"), "2000000-+" => '+' . Helper::usd_to_format("2M $")
   ]; */
 $right = ($style_lang == 'ar' ? 'right' : 'left');
-//$all_project_types = Helper::query('ProjectType', 'all');
+$all_project_types = Helper::query('ProjectType', 'all');
 //$emptypic = '/img/0.png';
 $emptypic = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
 //$proj_cats = Helper::query('ProjectCategory', "where", ["field" => "hide_search_page", "value" => false])->get();
@@ -363,19 +363,24 @@ $emptypic = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABA
             </div>
 
 
+            <?php
+                $breadcrumbCountry = $post->countryRel ?: \App\Models\Country::findByCode($post->country);
+                $breadcrumbCountrySlug = $post->getCountrySlug();
+                $breadcrumbPostLabel = trim((string) $post->getTitle());
+                if ($breadcrumbPostLabel === '') {
+                    $breadcrumbPostLabel = $post->slug;
+                }
+            ?>
             <div class="scp-breadcrumb">
                 <ul class="breadcrumb">
-                    <li><a href="<?= localized_route("front.index") ?>"><i class="fa fa-home"></i></a></li>
-                    <li><a href="<?= localized_route("front." . $type) ?>"><?= trans("front." . $type); ?></a></li>
-                    <li>
-                        <a href="<?= localized_route("front." . $type . ".category", @$post->categories[0]->slug) ?>">
-                            <?php
-							if(isset($post->categories[0]))
-								echo @$post->categories[0]->getName()
-                            ?>
-                        </a>
-                    </li>
-                    <li class="active"><?= $post->getTitle(); ?></li>
+                    <li><a href="{{ route('front.index') }}"><i class="fa fa-home"></i></a></li>
+                    @if($breadcrumbCountry && $breadcrumbCountrySlug)
+                    <li><a href="{{ $breadcrumbCountry->listingUrl() }}">{{ $breadcrumbCountry->getTitle() }}</a></li>
+                    @endif
+                    @if($breadcrumbCountrySlug)
+                    <li><a href="{{ $listingUrl }}">{{ trans('front.' . $type) }}</a></li>
+                    @endif
+                    <li class="active">{{ $breadcrumbPostLabel }}</li>
                 </ul>
             </div>
 
@@ -526,7 +531,7 @@ $emptypic = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABA
                         $doc = new \DOMDocument();
 
                         $html = mb_convert_encoding($html, 'HTML-ENTITIES', 'UTF-8');
-                        @$doc->loadHTML($html);
+                        @$doc->loadHTML(trim((string) $html) !== '' ? $html : '<div></div>');
 
                         //if (Helper::get_device() == 'mob') {
                             $tags = $doc->getElementsByTagName('img');
@@ -630,10 +635,10 @@ $emptypic = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABA
                     <div class="share_content sec">
                         <p><?= trans("front.share"); ?>:</p>
                         <ul>
-                            <li><a rel="nofollow" href="https://facebook.com/sharer.php?u=<?= urlencode(route('front.' . $type . '.post', [$post->slug])) ?>"><i class="fa fa-facebook-f"></i></a></li>
-                            <li><a rel="nofollow" href="https://twitter.com/intent/tweet?url=<?= urlencode(route('front.' . $type . '.post', [$post->slug])) ?>&amp;text=<?= $post->getTitle() ?>&amp;via=damasturk"><i class="fa fa-twitter"></i></a></li>
-                            <li><a rel="nofollow" href="https://api.whatsapp.com/send?text=<?= (route('front.' . $type . '.post', [$post->slug])) ?>"><i class="fa fa-whatsapp"></i></a></li>
-                            <li><a rel="nofollow" href="https://www.linkedin.com/sharing/share-offsite/?url=<?= urlencode(route('front.' . $type . '.post', [$post->slug])) ?>"><i class="fa fa-linkedin"></i></a></li>
+                            <li><a rel="nofollow" href="https://facebook.com/sharer.php?u=<?= urlencode($post->frontUrl()) ?>"><i class="fa fa-facebook-f"></i></a></li>
+                            <li><a rel="nofollow" href="https://twitter.com/intent/tweet?url=<?= urlencode($post->frontUrl()) ?>&amp;text=<?= $post->getTitle() ?>&amp;via=damasturk"><i class="fa fa-twitter"></i></a></li>
+                            <li><a rel="nofollow" href="https://api.whatsapp.com/send?text=<?= ($post->frontUrl()) ?>"><i class="fa fa-whatsapp"></i></a></li>
+                            <li><a rel="nofollow" href="https://www.linkedin.com/sharing/share-offsite/?url=<?= urlencode($post->frontUrl()) ?>"><i class="fa fa-linkedin"></i></a></li>
                             <li><a rel="nofollow"><i class="fa fa-envelope"></i></a></li>
                         </ul>
                     </div>
@@ -787,7 +792,7 @@ $emptypic = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABA
                                 </div>
 
 
-                                <a href="{{ localized_route('front.'.$type) }}" class="more shadow_type"><?= trans("front.show more"); ?></a>
+                                <a href="{{ $listingUrl }}" class="more shadow_type"><?= trans("front.show more"); ?></a>
 
 
                             </div>
@@ -1364,11 +1369,11 @@ function display_projects(projects,append=false) {
     "@type":"<?= $type == 'news' ? 'NewsArticle' : 'Article' ?>",
     "mainEntityOfPage":{
     "@type":"WebPage",
-    "@id":"{{ route('front.'.$type.'.post', [$post->slug]) }}"
+    "@id":"{{ $post->frontUrl() }}"
     },
     "headline":"{{ htmlentities($post->getTitle())  }}",
     "articleBody":"{{ str_replace('\\', '',htmlentities(strip_tags(html_entity_decode($post->getContent()))))  }}",
-    "url":"{{ route('front.'.$type.'.post', [$post->slug]) }}",
+    "url":"{{ $post->frontUrl() }}",
     "image":{
     "@type":"ImageObject",
     "url":"{{ Helper::media_url($post->photoCard) }}",
@@ -1505,12 +1510,12 @@ if (isset($post_video2) && $post_video2 != false) {
         {"@type":"ListItem","position":3,"name":"{{ trans('front.legal affairs turkey') }}","item":"{{ route('front.legal') }}"}
     <?php } else { ?>
         
-        {"@type":"ListItem","position":2,"name":"{{ trans("front.".$type) }}","item":"{{ route("front.".$type) }}"},
-        {"@type":"ListItem","position":3,"name":"{{ @$post->categories[0]->getName() }}","item":"{{ route("front.".$type.".category", @$post->categories[0]->slug) }}"}
+        {"@type":"ListItem","position":2,"name":"{{ trans("front.".$type) }}","item":"{{ $listingUrl }}"},
+        {"@type":"ListItem","position":3,"name":"{{ @$post->categories[0]->getName() }}","item":"{{ $post->categories[0]->listingUrl() }}"}
         
     <?php } ?>
 
-    ,{"@type":"ListItem","position":4,"name":"{{ $post->getTitle() }}","item":"{{ route('front.'.$type.'.post',$post->slug) }}"}
+    ,{"@type":"ListItem","position":4,"name":"{{ $post->getTitle() }}","item":"{{ $post->frontUrl() }}"}
 
     ]}
 </script>

@@ -16,13 +16,9 @@ exit;*/
             <title><?= $row->title; ?></title>
             <description><?= preg_replace('/&(?!#?[a-z0-9]+;)/', '&amp;', $row->description); ?></description>
             @if($row->table_name() == "projects")
-                <link><?= route("front.project", $row->slug); ?></link>
+                <link><?= $row->frontUrl(); ?></link>
             @else
-                @if($row->type == "news")
-					<link><?= route("front.news.post", $row->slug); ?></link>
-				@else
-					<link><?= route("front.blog.post", $row->slug); ?></link>
-				@endif
+                <link><?= $row->frontUrl(); ?></link>
             @endif
             <pubDate><?= asset($row->created_at->tz('UTC')->toAtomString()); ?></pubDate>
 			<enclosure url="<?= asset($row->projectPhotos[0]->path) ?>" length="8000" type="image/jpeg"/>

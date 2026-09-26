@@ -193,7 +193,7 @@ controls
 @foreach($posts as $post)
 <aside class="col-md-3 col-sm-6 col-xs-12">
 <div class="item">
-<a href="<?= route("front.blog.post", $post->slug); ?>" class="first">
+<a href="<?= $post->frontUrl(); ?>" class="first">
 <amp-img src="<?= Helper::get_thumbnail($post->photoCard, 400, 400); ?>" width="400" height="400" layout="responsive"></amp-img>
 <div class="layer">
 <h3><?= $post->getTitle(); ?></h3>

@@ -125,16 +125,16 @@
                                     <div class="col-md-12">
                                         <div class="row">
 
-                                            <div class="form-group col-md-1">
+                                            <div class="form-group col-md-2">
                                                 <div class="form-group">
-                                                    <label>ID <span class="red">(*)</span></label>
-                                                    <?= Form::text("name_en", $row->name_en, ["class" => "form-control ltr"]); ?>
+                                                    <label>Name (AR) <span class="red">(*)</span></label>
+                                                    <?= Form::text("name_ar", $row->name_ar, ["class" => "form-control", "required" => "required"]); ?>
                                                 </div>
                                             </div>
                                             <div class="form-group col-md-2">
                                                 <div class="form-group">
-                                                    <label>Project Name <span class="red"></span></label>
-                                                    <?= Form::text("title_en", $row->title_en, ["class" => "form-control ltr"]); ?>
+                                                    <label>Title (AR)</label>
+                                                    <?= Form::text("title_ar", $row->title_ar, ["class" => "form-control"]); ?>
                                                 </div>
                                             </div>
                                             <div class="form-group col-md-2">
@@ -164,6 +164,15 @@
                                                     </div>
                                                 </div>
                                             </div>
+                                            <div class="form-group col-md-4">
+                                                <div class="form-group">
+                                                    <label>Old Slug</label>
+                                                    <div class="input-group ltr">
+                                                        <span class="input-group-addon">projects/</span>
+                                                        <?= Form::text("old_slug", $row->old_slug, ["class" => "form-control input-sm ltr", "placeholder" => "Old slug (301 to current URL)"]); ?>
+                                                    </div>
+                                                </div>
+                                            </div>
                                             <div class="form-group col-md-1">
                                                 <div class="form-group">
                                                     <label class="enabled-project"><input type="checkbox" name="published" <?= $row->published == 1 ? 'checked' : ''; ?>> Enabled</label>
@@ -185,23 +194,40 @@
 
 
 
-                                    <!--                                    <div class="form-group col-md-6 hidden">
-                                                                            <label>Arabic Name <span class="red">(*)</span></label>
-                                    <?= Form::text("name_ar", $row->name_ar, ["class" => "form-control"]); ?>
-                                                                        </div>-->
-
-
                                     <div class="col-md-12">
                                         <div class="row">
 
 
+                                            <?php
+                                            $countryCodeToId = array();
+                                            foreach ($countries as $countryItem) {
+                                                $countryCodeToId[$countryItem->code] = (int) $countryItem->id;
+                                            }
+                                            ?>
+                                            <div class="col-md-2">
+                                                <div class="form-group">
+                                                    <label>Country</label>
+                                                    <select id="project_filter_country" class="form-control select2me">
+                                                        <option value=""></option>
+                                                        @foreach($countries as $country)
+                                                        <option value="<?= $country->id; ?>" <?= (int) $initialCountryId === (int) $country->id ? 'selected' : ''; ?>><?= $country->title_en; ?></option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                            </div>
                                             <div class="col-md-2">
                                                 <div class="form-group">
                                                     <label>City <span class="red">(*)</span></label>
-                                                    <select name="city_id" class="form-control select2me">
+                                                    <select name="city_id" id="project_city_id" class="form-control select2me">
                                                         <option value=""></option>
                                                         @foreach(Helper::query("City", "all") as $city)
-                                                        <option value="<?= $city->id; ?>" <?= $city->id == $row->city_id ? 'selected' : ''; ?>><?= $city->name_ar; ?></option>
+                                                        <?php
+                                                        $cityCountryId = (int) $city->country_id;
+                                                        if (!$cityCountryId && !empty($city->country) && isset($countryCodeToId[$city->country])) {
+                                                            $cityCountryId = $countryCodeToId[$city->country];
+                                                        }
+                                                        ?>
+                                                        <option value="<?= $city->id; ?>" data-country-id="<?= $cityCountryId; ?>" <?= $city->id == $row->city_id ? 'selected' : ''; ?>><?= $city->name_ar; ?></option>
                                                         @endforeach
                                                     </select>
                                                 </div>
@@ -209,10 +235,10 @@
                                             <div class="col-md-2">
                                                 <div class="form-group">
                                                     <label>District</label>
-                                                    <select name="region_id" class="form-control select2me">
+                                                    <select name="region_id" id="project_region_id" class="form-control select2me">
                                                         <option value=""></option>
                                                         @foreach(Helper::query("Region", "all") as $region)
-                                                        <option value="<?= $region->id; ?>" <?= $region->id == $row->region_id ? 'selected' : ''; ?>><?= $region->name_ar; ?></option>
+                                                        <option value="<?= $region->id; ?>" data-city-id="<?= (int) $region->city_id; ?>" <?= $region->id == $row->region_id ? 'selected' : ''; ?>><?= $region->name_ar; ?></option>
                                                         @endforeach
                                                     </select>
                                                 </div>
@@ -225,7 +251,7 @@
                                                 </div>
                                             </div>
 
-                                            <div class="col-md-6">
+                                            <div class="col-md-4">
                                                 <div class="form-group">
                                                     <label>Card Intro</label>
                                                     <?= Form::text("intro_card_ar", $row->intro_card_ar, ["class" => "form-control"]); ?>
@@ -272,18 +298,21 @@
 
 
 
-                                    <?php /*
-                                      <div class="col-md-4">
-                                      <div class="form-group">
-                                      <label>Project Type</label>
-                                      <select name="projecttype_id[]" class="form-control select2me" multiple>
-                                      <option value=""></option>
-                                      @foreach(Helper::query("ProjectType", "all") as $typ)
-                                      <option value="<?= $typ->id; ?>" <?= in_array($typ->id, $row->types()->lists('project_type_id')->toArray()) ? 'selected' : ''; ?>><?= $typ->name_ar; ?></option>
-                                      @endforeach
-                                      </select>
-                                      </div>
-                                      </div> */ ?>
+                                    <div class="col-md-12">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label>Project Type</label>
+                                                    <select name="projecttype_id[]" class="form-control select2me" multiple>
+                                                        <option value=""></option>
+                                                        @foreach(Helper::query("ProjectType", "all") as $typ)
+                                                        <option value="<?= $typ->id; ?>" <?= in_array($typ->id, $row->types()->lists('project_type_id')->toArray()) ? 'selected' : ''; ?>><?= $typ->name_ar; ?></option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
 
                                     <?php /*
                                       <div class="col-md-3">
@@ -934,6 +963,18 @@
                         <div id="collapseFive" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingFive">
                             <div class="panel-body">
                                 <fieldset class="background-section">
+                                    <div class="col-md-12">
+                                        <div class="row">
+                                            <div class="form-group col-md-6">
+                                                <label>Name (EN) <span class="red">(*)</span></label>
+                                                <?= Form::text("name_en", $row->name_en, ["class" => "form-control ltr", "required" => "required"]); ?>
+                                            </div>
+                                            <div class="form-group col-md-6">
+                                                <label>Title (EN)</label>
+                                                <?= Form::text("title_en", $row->title_en, ["class" => "form-control ltr"]); ?>
+                                            </div>
+                                        </div>
+                                    </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label>Card Intro</label>
@@ -1663,6 +1704,75 @@
         var thisCont = $(this).parents(".section-video.sub");
         $(thisCont).remove();
     });
+
+    (function () {
+        var $country = $('#project_filter_country');
+        var $city = $('#project_city_id');
+        var $region = $('#project_region_id');
+
+        if (!$country.length || !$city.length || !$region.length) {
+            return;
+        }
+
+        function setOptionVisibility($select, dataAttr, parentValue, preserveValue) {
+            var current = preserveValue ? $select.val() : '';
+            $select.find('option').each(function () {
+                var $opt = $(this);
+                if (!$opt.val()) {
+                    $opt.prop('disabled', false);
+                    return;
+                }
+                var match = parentValue && String($opt.attr('data-' + dataAttr)) === String(parentValue);
+                $opt.prop('disabled', !match);
+            });
+            if (current && $select.find('option:selected').prop('disabled')) {
+                $select.val('');
+            }
+        }
+
+        function applyCountryFilter(preserveSelections) {
+            var countryId = $country.val();
+            setOptionVisibility($city, 'country-id', countryId, preserveSelections);
+            applyCityFilter(preserveSelections);
+        }
+
+        function applyCityFilter(preserveSelections) {
+            var cityId = $city.val();
+            if (!$country.val()) {
+                cityId = '';
+            }
+            setOptionVisibility($region, 'city-id', cityId, preserveSelections);
+        }
+
+        function syncSelect2($select) {
+            if (!$select.data('select2')) {
+                return;
+            }
+            $select.select2('val', $select.val());
+        }
+
+        function clearCityAndDistrict() {
+            $city.val('');
+            $region.val('');
+            syncSelect2($city);
+            syncSelect2($region);
+        }
+
+        applyCountryFilter(true);
+
+        $country.on('change', function () {
+            clearCityAndDistrict();
+            applyCountryFilter(false);
+            syncSelect2($city);
+            syncSelect2($region);
+        });
+
+        $city.on('change', function () {
+            $region.val('');
+            applyCityFilter(false);
+            syncSelect2($region);
+        });
+    })();
 
 </script>
 

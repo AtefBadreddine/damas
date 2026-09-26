@@ -52,6 +52,7 @@ class AmpController extends BaseController
     public function blog_show_post($slug)
     { //exit('rrr');
         $post = Helper::query("Post", "where", ["field" => "slug", "value" => $slug])->first();
+        if ( !$post ) $post = Helper::query("Post", "where", ["field" => "old_slug", "value" => $slug])->first();
         if ( !$post ) 
 			return Redirect::to(route("front.blog")); //abort(404);
         if ( isset($_SERVER["HTTP_REFERER"]) ) {

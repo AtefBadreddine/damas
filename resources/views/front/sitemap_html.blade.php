@@ -120,7 +120,7 @@ $infos = Helper::get_params();
                     //$html = $html.'<ul class="main-tree"><li class="tree-title"><a href="'.route("front.blog").'">'.($style_lang=='ar'?'المقالات العقارية':'Blog').'</a></li>';
                     $html = $html . '<ul class="main-tree"><li class="tree-title">' . ($style_lang == 'ar' ? 'المقالات العقارية' : 'Blog') . '</li>';
                     foreach ($blogcats as $bc) {
-                        $url = route("front.blog.category", $bc->getSlug());
+                        $url = $bc->listingUrl();
 
                         $html = $html . '<li class="tree-item"><a href="' . $url . '">' . trim($bc->getName()) . '</a></li>';
                     }

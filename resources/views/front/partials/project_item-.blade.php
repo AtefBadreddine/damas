@@ -7,7 +7,7 @@
 ?>
 <div class="alike-item">
     <span class="try">$ <?= $project_min_price = Helper::decimal_format(@$flavor->price); ?> </span>
-    <a href="<?= route('front.project', $project->slug); ?>" <?= $open_blank == true ? 'target="_blank"' : ''; ?>>
+    <a href="<?= $project->frontUrl(); ?>" <?= $open_blank == true ? 'target="_blank"' : ''; ?>>
         <img src="<?= Helper::get_thumbnail($cardphoto, 360, 280); ?>" alt="<?= $project->getDescription(); ?>" class="img-responsive">
     </a>
     <aside>
@@ -15,7 +15,7 @@
             <?= $project->name_en; ?>
             <a href="" class="likeCardItem" data-url="<?= route("front.likeitem"); ?>" data-typ="project" data-code="<?= $project->id; ?>"><i class="fa fa-heart-o pull-right"></i></a>
             <i class="flaticon-share share pull-right"></i>
-            <span class="pull-right social shareBtnsFloating" data-url="<?= route('front.project', $project->slug); ?>" data-text="<?= $project->getName(); ?>">
+            <span class="pull-right social shareBtnsFloating" data-url="<?= $project->frontUrl(); ?>" data-text="<?= $project->getName(); ?>">
                 <a href="" class="btnshare" data-network="facebook"><i class="fa fa-facebook"></i></a>
                 <a href="" class="btnshare" data-network="twitter"><i class="fa fa-twitter"></i></a>
             </span>
@@ -28,7 +28,7 @@
             <li><span class="flaticon-payment-method"></span> <small><?= trans("front.$project->payment_method"); ?></small></li>
         </ul>
         @if(!$is_mobile)
-            <a class="button text-center" href="<?= route('front.project', $project->slug); ?>" <?= $open_blank == true ? 'target="_blank"' : ''; ?>><b><?= trans("front.details"); ?></b></a>
+            <a class="button text-center" href="<?= $project->frontUrl(); ?>" <?= $open_blank == true ? 'target="_blank"' : ''; ?>><b><?= trans("front.details"); ?></b></a>
         @endif
     </aside>
 </div>

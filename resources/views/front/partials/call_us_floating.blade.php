@@ -9,12 +9,28 @@
         switch ($name_route)
         {
             case "front.index":$form_type = "Pop Up - Home";break;
-            case "front.search":$form_type = "Pop Up - Search";break;
-            case "front.project":$form_type = "Pop Up - Project";break;
+            case "front.search":
+            case "front.projects":
+            case "front.location.country":
+            case "front.location.city":
+            case "front.location.region":$form_type = "Pop Up - Search";break;
+            case "front.project":
+            case "front.project.show":$form_type = "Pop Up - Project";break;
             case "front.contactus":$form_type = "Pop Up - Contact Us";break;
             case "front.landingpage":$form_type = "Pop Up - Landing";break;
-            case "front.blog":$form_type = "Pop Up - Blog";break;
-            case "front.blog.post":$form_type = "Pop Up - Post";break;
+            case "front.blog":
+            case "front.blog.index":
+            case "front.blog.country":
+            case "front.developer.index":
+            case "front.developer.country":
+            case "front.report.index":
+            case "front.report.country":
+            case "front.news":
+            case "front.news.country":$form_type = "Pop Up - Blog";break;
+            case "front.blog.post":
+            case "front.blog.post.show":
+            case "front.news.post":
+            case "front.news.post.show":$form_type = "Pop Up - Post";break;
             case "front.blog.category":$form_type = "Pop Up - Post Category";break;
             case "front.privacy":$form_type = "Pop Up - Privacy";break;
             case "front.terms":$form_type = "Pop Up - Terms";break;

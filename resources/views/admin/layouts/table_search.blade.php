@@ -204,7 +204,7 @@ hyphens: auto;
 								?>
 								</div>
                                 @elseif($route=="admin.projects" and $key=='name_en')
-									<a href="{{ route('front.project',$row->slug) }}" target="_blank">{{ $row->$key }}</a>
+									<a href="{{ $row->frontUrl() }}" target="_blank">{{ $row->$key }}</a>
                                 @elseif($route=="admin.landingpage" and $key=='name')
 									<?php $langs = explode(',',$row->lang);
 									foreach($langs as $ln){ ?>

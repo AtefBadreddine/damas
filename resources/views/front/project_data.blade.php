@@ -178,9 +178,9 @@ $id_text = str_replace($id_num, '', $project_name_en);
                                 <span class="icon"></span> <?= trans("front.share"); ?>
                             </button>
                             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                <a class="fa fa-twitter" href="https://twitter.com/intent/tweet?url=<?= urlencode(route('front.project', [$project->slug])) ?>&amp;text=<?= urlencode(trans("front.project") . ' ' . @$project->getNameEn() . ' ' . @$project->city->getName()) ?>&amp;via=damasturk" target="_blank"></a>
-                                <a target="_blank" class="fa fa-facebook" href="https://facebook.com/sharer.php?u=<?= urlencode(route('front.project', [$project->slug])) ?>"></a>
-                                <a class="fa fa-whatsapp" href="https://api.whatsapp.com/send?text=<?= urlencode(route('front.project', [$project->slug])) ?>" target="_blank"></a>
+                                <a class="fa fa-twitter" href="https://twitter.com/intent/tweet?url=<?= urlencode($project->frontUrl()) ?>&amp;text=<?= urlencode(trans("front.project") . ' ' . @$project->getNameEn() . ' ' . @$project->city->getName()) ?>&amp;via=damasturk" target="_blank"></a>
+                                <a target="_blank" class="fa fa-facebook" href="https://facebook.com/sharer.php?u=<?= urlencode($project->frontUrl()) ?>"></a>
+                                <a class="fa fa-whatsapp" href="https://api.whatsapp.com/send?text=<?= urlencode($project->frontUrl()) ?>" target="_blank"></a>
                             </div>
                         </div>
                     </div>

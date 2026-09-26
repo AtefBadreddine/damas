@@ -10,7 +10,7 @@ $infos = Helper::get_params();
 $is_mobile = Helper::get_device() != 'full' ? true : false;
 
 $right = ($style_lang == 'ar' ? 'right' : 'left');
-//$all_project_types = Helper::query('ProjectType', 'all');
+$all_project_types = Helper::query('ProjectType', 'all');
 //$emptypic = '/img/0.png';
 $emptypic = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
 //$proj_cats = Helper::query('ProjectCategory', "where", ["field" => "hide_search_page", "value" => false])->get();

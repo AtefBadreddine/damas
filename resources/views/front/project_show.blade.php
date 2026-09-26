@@ -13,7 +13,7 @@ $is_mobile = Helper::get_device() != 'full' ? true : false;
   "50000-100000" => Helper::usd_to_format("50K $") . "-" . Helper::usd_to_format("100K $"), "100000-150000" => Helper::usd_to_format("100K $") . "-" . Helper::usd_to_format("150K $"), "150000-250000" => Helper::usd_to_format("150K $") . "-" . Helper::usd_to_format("250K $"), "250000-400000" => Helper::usd_to_format("250K $") . "-" . Helper::usd_to_format("400K $"), "400000-600000" => Helper::usd_to_format("400K $") . "-" . Helper::usd_to_format("600K $"), "600000-1000000" => Helper::usd_to_format("600K $") . "-" . Helper::usd_to_format("1M $"), "1000000-2000000" => Helper::usd_to_format("1M $") . "-" . Helper::usd_to_format("2M $"), "2000000-+" => '+' . Helper::usd_to_format("2M $")
   ]; */
 $right = ($style_lang == 'ar' ? 'right' : 'left');
-//$all_project_types = Helper::query('ProjectType', 'all');
+$all_project_types = Helper::query('ProjectType', 'all');
 //$emptypic = '/img/0.png';
 $emptypic = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
 //$proj_cats = Helper::query('ProjectCategory', "where", ["field" => "hide_search_page", "value" => false])->get();
@@ -229,18 +229,30 @@ $flavors = $project->flavors();
 				$pptype = @$project->types;
 				$ppcateg = @$project->categories;
 				?>
+            <?php
+                $breadcrumbCity = @$project->city;
+                $breadcrumbRegion = @$project->region;
+                $breadcrumbCountry = $breadcrumbCity && $breadcrumbCity->countryRel
+                    ? $breadcrumbCity->countryRel
+                    : ($breadcrumbCity ? \App\Models\Country::findByCode($breadcrumbCity->country) : null);
+                $breadcrumbProjectLabel = trim((string) $project->getName());
+                if ($breadcrumbProjectLabel === '') {
+                    $breadcrumbProjectLabel = $project->slug;
+                }
+            ?>
             <div class="scp-breadcrumb">
                 <ul class="breadcrumb">
-                    <li><a href="<?= route("front.index") ?>"><i class="fa fa-home"></i></a></li>
-                    <?php //<li><a href="{{ route("front.search", ["property-for-sale", "turkey"]) }}">{{ trans("front.Property for sale in Turkey") }}</a></li>trans('front.property for sale') .' '. ?>
-                    <li><a href="{{ route("front.search", ['property-for-sale', @$project->city->getSlug()]) }}">{{  @$project->city->getName() }}</a></li>
-					<?php if(isset($pptype[0])){ ?>
-					<li><a href="{{ route("front.search", [@$pptype[0]->getSlug(), @$project->city->getSlug()]) }}">{{ @$pptype[0]->getName() }}</a></li>
-					<?php if(isset($ppcateg[0])){ ?>
-					<li><a href="<?= route("front.search", [@$pptype[0]->getSlug(), @$project->city->getSlug(), @$ppcateg[0]->getSlug()]) ?>">{{ @$ppcateg[0]->getName() }}</a></li>
-                    <?php } } ?>
-					<?php /* <li><a href="<?= route("front.search", ["property-for-sale", @$project->city->getSlug(), @$project->region->getSlug()]) ?>">{{ @$project->region->getName() }}</a></li> */ ?>
-                    <li class="active num">{{ $project->getNameEn() }}</li>
+                    <li><a href="{{ route('front.index') }}"><i class="fa fa-home"></i></a></li>
+                    @if($breadcrumbCountry)
+                    <li><a href="{{ $breadcrumbCountry->listingUrl() }}">{{ $breadcrumbCountry->getTitle() }}</a></li>
+                    @endif
+                    @if($breadcrumbCity && $breadcrumbCity->listingUrl())
+                    <li><a href="{{ $breadcrumbCity->listingUrl() }}">{{ $breadcrumbCity->getName() }}</a></li>
+                    @endif
+                    @if($breadcrumbRegion && $breadcrumbRegion->listingUrl())
+                    <li><a href="{{ $breadcrumbRegion->listingUrl() }}">{{ $breadcrumbRegion->getName() }}</a></li>
+                    @endif
+                    <li class="active num">{{ $breadcrumbProjectLabel }}</li>
                 </ul>
             </div>
 
@@ -281,9 +293,9 @@ $flavors = $project->flavors();
                                     <span class="icon"></span> <?= trans("front.share"); ?>
                                 </button>
                                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                    <a class="fa fa-twitter" href="https://twitter.com/intent/tweet?url=<?= urlencode(route('front.project', [$project->slug])) ?>&amp;text=<?= urlencode(trans("front.project") . ' ' . @$project->getNameEn() . ' ' . @$project->city->getName()) ?>&amp;via=damasturk" target="_blank"></a>
-                                    <a target="_blank" class="fa fa-facebook" href="https://facebook.com/sharer.php?u=<?= urlencode(route('front.project', [$project->slug])) ?>"></a>
-                                    <a class="fa fa-whatsapp" href="https://api.whatsapp.com/send?text=<?= urlencode(route('front.project', [$project->slug])) ?>" target="_blank"></a>
+                                    <a class="fa fa-twitter" href="https://twitter.com/intent/tweet?url=<?= urlencode($project->frontUrl()) ?>&amp;text=<?= urlencode(trans("front.project") . ' ' . @$project->getNameEn() . ' ' . @$project->city->getName()) ?>&amp;via=damasturk" target="_blank"></a>
+                                    <a target="_blank" class="fa fa-facebook" href="https://facebook.com/sharer.php?u=<?= urlencode($project->frontUrl()) ?>"></a>
+                                    <a class="fa fa-whatsapp" href="https://api.whatsapp.com/send?text=<?= urlencode($project->frontUrl()) ?>" target="_blank"></a>
                                 </div>
                             </div>
                         </div>

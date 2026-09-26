@@ -368,9 +368,7 @@ const projectTitles = {
         $dom->loadHTML('<?xml encoding="UTF-8">' . $html);
         libxml_clear_errors();
         $post_id = (int) $post->id;
-        $blog_web_url = $post->country == 'oman'
-            ? 'https://damas.net/oman/blog/' . $post->slug
-            : 'https://damas.net/blog/' . $post->slug;
+        $blog_web_url = $post->frontUrl();
         $web_urls = [];
         if (isset($original_blog_post_ids[$post_id])) {
             $web_urls[] = $blog_web_url;
@@ -542,9 +540,7 @@ const projectTitles = {
             }
             $post_id = (int) $post->id;
             $language_html = html_entity_decode($post->$language_field, ENT_QUOTES | ENT_HTML5, 'UTF-8');
-            $language_blog_web_url = $post->country == 'oman'
-                ? 'https://damas.net/oman/blog/' . $post->slug
-                : 'https://damas.net/blog/' . $post->slug;
+            $language_blog_web_url = $post->frontUrl();
             $language_web_urls = [];
             if (isset($original_blog_post_ids[$post_id])) {
                 $language_web_urls[] = $language_blog_web_url;

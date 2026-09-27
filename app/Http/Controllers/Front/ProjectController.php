@@ -176,14 +176,19 @@ limit 1", array($row->id, '%' . $lang . '%'));
             }
         }
 
-        $paginate_number = 6;
-        $q = Project::where("published", 1)->where("sold", '!=', 100)->with(array('cardphoto', 'flavors', 'city', 'region'));
-
         $countryCityIds = array();
         if ($country) {
             $countryCityIds = City::where('country_id', $country->id)->lists('id');
             $countryCityIds = is_array($countryCityIds) ? $countryCityIds : $countryCityIds->toArray();
         }
+
+        $districtRedirect = $this->canonicalDistrictRedirect($city, $region, $countryCityIds);
+        if ($districtRedirect) {
+            return $districtRedirect;
+        }
+
+        $paginate_number = 6;
+        $q = Project::where("published", 1)->where("sold", '!=', 100)->with(array('cardphoto', 'flavors', 'city', 'region'));
 
         if ($region) {
             $q->where('region_id', $region->id);
@@ -204,7 +209,7 @@ limit 1", array($row->id, '%' . $lang . '%'));
         $allQuery = clone $q;
         $allprojects = $allQuery->get();
         $projects = $q->paginate($paginate_number);
-        $projects->appends(request()->except('page'));
+        $projects->appends(request()->except(array('page', 'district', 'regions')));
 
         $content = $this->locationContent($country, $city, $region, $filters);
         // With no matches, offer every option in this location so the visitor can change filters instead of hitting empty dropdowns.
@@ -215,13 +220,7 @@ limit 1", array($row->id, '%' . $lang . '%'));
         $inputs = array_merge($filterData, $content);
         $inputs['city'] = $city ? $city->slug : ($country ? $country->code : '');
         $inputs['city_row'] = $city ? $city : $country;
-        if ($region) {
-            $inputs['regions'] = array($region->slug);
-        } else {
-            $inputs['regions'] = array_map(function ($r) {
-                return $r->slug;
-            }, $filters['districts']);
-        }
+        $inputs['regions'] = $region ? array($region->slug) : array();
         $inputs['project_type'] = $filters['type'] ? $filters['type']->slug : '';
         $inputs['project_categories'] = array_map(function ($c) {
             return $c->slug;
@@ -268,8 +267,65 @@ limit 1", array($row->id, '%' . $lang . '%'));
     }
 
     /**
+     * Move ?district=slug (or comma-separated slugs) onto the district listing path.
+     * Only the first district is kept: /country/city?district=alanya,aksu -> /country/city/alanya
+     *
+     * @param \App\Models\City|null $city
+     * @param \App\Models\Region|null $region
+     * @param array $countryCityIds
+     * @return \Illuminate\Http\RedirectResponse|null
+     */
+    protected function canonicalDistrictRedirect($city, $region, array $countryCityIds)
+    {
+        $districtSlugs = $this->csvQueryParam('district');
+        if (!$districtSlugs) {
+            $districtSlugs = $this->csvQueryParam('regions');
+        }
+        if (!$districtSlugs) {
+            return null;
+        }
+
+        $target = $region;
+        if (!$target) {
+            $districtQuery = Region::where('slug', $districtSlugs[0]);
+            if ($city) {
+                $districtQuery->where('city_id', $city->id);
+            } elseif (!empty($countryCityIds)) {
+                $districtQuery->whereIn('city_id', $countryCityIds);
+            }
+            $target = $districtQuery->with('city.countryRel')->first();
+        }
+
+        if (!$target || !$target->listingUrl()) {
+            return null;
+        }
+
+        return Redirect::to($target->listingUrl() . $this->locationQueryString(array('district', 'regions')), 301);
+    }
+
+    /**
+     * Remaining listing query string after dropping geo params that belong in the path.
+     *
+     * @param array $except
+     * @return string
+     */
+    protected function locationQueryString(array $except = array())
+    {
+        $query = request()->except(array_merge($except, array('page')));
+        $query = array_filter($query, function ($value) {
+            return $value !== '' && $value !== null && $value !== array();
+        });
+        if (!$query) {
+            return '';
+        }
+
+        return '?' . str_replace('%2C', ',', http_build_query($query));
+    }
+
+    /**
      * Listing filters from the query string:
-     * ?type=apartments-for-sale&category=sea-views,pool&district=a,b&rooms=1_2&price=100000-250000&sorting=views
+     * ?type=apartments-for-sale&category=sea-views,pool&rooms=1_2&price=100000-250000&sorting=views
+     * District is a path segment (/country/city/district), not a query param.
      * Unknown values are ignored.
      *
      * @param \App\Models\City|null $city
@@ -298,17 +354,6 @@ limit 1", array($row->id, '%' . $lang . '%'));
         $categorySlugs = $this->csvQueryParam('category');
         if ($categorySlugs) {
             $filters['categories'] = ProjectCategory::whereIn('slug', $categorySlugs)->get()->all();
-        }
-
-        $districtSlugs = $region ? array() : $this->csvQueryParam('district');
-        if ($districtSlugs) {
-            $districtQuery = Region::whereIn('slug', $districtSlugs);
-            if ($city) {
-                $districtQuery->where('city_id', $city->id);
-            } elseif (!empty($countryCityIds)) {
-                $districtQuery->whereIn('city_id', $countryCityIds);
-            }
-            $filters['districts'] = $districtQuery->get()->all();
         }
 
         $rooms = (string) $request->get('rooms', '');
@@ -574,6 +619,7 @@ limit 1", array($row->id, '%' . $lang . '%'));
             'seo_description' => $seoDescription,
             'seo_keywords' => $seoKeywords,
             'og_image' => $ogImage,
+            'about_body' => $aboutBody,
             'about' => '<h1 property="name">' . $h1 . '</h1><div class="clearfix">' . $aboutBody . '</div>',
         );
     }

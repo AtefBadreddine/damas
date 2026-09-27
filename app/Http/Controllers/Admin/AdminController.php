@@ -2152,6 +2152,37 @@ exit;*/
     */
     public function countries_index(Request $request)
     {
+        $move = Input::get("move");
+        if ($move) {
+            $selected_row = Helper::query("Country", "find", ["id" => Input::get("id")]);
+            switch ($move) {
+                case 'first':
+                    $index = $selected_row->placement;
+                    $selected_row->update(["placement" => 1]);
+                    Helper::query("Country", "where", ["field" => "id", "value" => $selected_row->id, "operation" => "<>"])
+                        ->where("placement", "<", $index)
+                        ->update(["placement" => \DB::raw("placement+1")]);
+                    break;
+
+                case 'last':
+                    $index = $selected_row->max("placement") + 1;
+                    $selected_row->update(["placement" => $index]);
+                    break;
+
+                case 'up':
+                    $selected_row->update(["placement" => \DB::raw("placement-1")]);
+                    break;
+
+                case 'down':
+                    $selected_row->update(["placement" => \DB::raw("placement+1")]);
+                    break;
+            }
+            return redirect()->back();
+        }
+        if (!Input::get("field")) {
+            Input::replace(['field' => 'placement', 'sort' => 'asc']);
+        }
+
         $rows = Helper::query("Country", "paginate");
         return view("admin.countries.index", compact("rows"));
     }

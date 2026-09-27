@@ -2125,15 +2125,10 @@ class HomeController extends BaseController
             }
         }
 
-        if (count($regions) === 1 && $regions[0]->listingUrl()) {
+        if (count($regions) && $regions[0]->listingUrl()) {
             $url = $regions[0]->listingUrl();
         } elseif ($cityRow && $cityRow->listingUrl()) {
             $url = $cityRow->listingUrl();
-            if (count($regions) > 1) {
-                $params['district'] = implode(',', array_map(function ($r) {
-                    return $r->slug;
-                }, $regions));
-            }
         } elseif ($country) {
             $url = $country->listingUrl();
         } else {

@@ -1700,7 +1700,13 @@ curl_close($ch);
                 break;
                 
              case 'all':
-                return call_user_func([$class, 'orderBy'], 'id', 'ASC')->get();
+                $q = call_user_func([$class, 'query']);
+                if ($model === 'Country') {
+                    $q->ordered();
+                } else {
+                    $q->orderBy('id', 'ASC');
+                }
+                return $q->get();
                 break;
                 
              case 'paginate':

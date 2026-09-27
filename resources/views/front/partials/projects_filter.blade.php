@@ -3,7 +3,7 @@
 //$is_mobile = Helper::get_device() != 'full' ? true : false;
 $is_mobile = false;
 
-$filterCountries = \App\Models\Country::orderBy('id')->get();
+$filterCountries = \App\Models\Country::ordered()->get();
 $filterCountryByCode = array();
 foreach ($filterCountries as $fc) {
     $filterCountryByCode[$fc->code] = $fc;
@@ -83,11 +83,11 @@ foreach ($filterCountries as $fc) {
 <div class="form-group">
     <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 46.18 61.05" xml:space="preserve"><g> <path class="st0" d="M23.09,0C10.36,0,0,10.36,0,23.09c0,5.25,3.62,12.93,10.76,22.83C15.92,53.07,21,58.72,21.21,58.96l1.88,2.08 l1.88-2.08c0.21-0.24,5.29-5.89,10.45-13.04c7.14-9.89,10.76-17.58,10.76-22.83C46.18,10.36,35.82,0,23.09,0L23.09,0z M23.09,53.43 C16.73,46,5.06,30.76,5.06,23.09c0-9.94,8.09-18.03,18.03-18.03s18.03,8.09,18.03,18.03C41.13,30.76,29.45,46,23.09,53.43 L23.09,53.43z M23.09,53.43"></path> <path class="st0" d="M31.47,23.09c0,4.63-3.75,8.38-8.38,8.38s-8.38-3.75-8.38-8.38s3.75-8.38,8.38-8.38S31.47,18.47,31.47,23.09 L31.47,23.09z M31.47,23.09"></path> </g> </svg>
 
-    <select name="regions[]" class="<?= $is_mobile?'':'selectpicker' ?> form-control input_seacrh selectregions" data-live-search="true"  id="selectregions" title="<?= trans("front.all regions"); ?>" multiple>
+    <select name="regions[]" class="<?= $is_mobile?'':'selectpicker' ?> form-control input_seacrh selectregions" data-live-search="true" id="selectregions" title="<?= trans("front.all regions"); ?>">
         <option value=""><?= trans("front.all regions"); ?></option>
         @foreach($inputs["regions_options"] as $region)
 			@if(in_array($region->id,json_decode($inputs["project_regions_options"])))@endif
-		<option value="<?= $region->slug ?>" <?= in_array($region->slug, $inputs['regions']) ? 'selected' : ''; ?>><?= $region->getName(); ?></option>
+		<option value="<?= $region->slug ?>" data-url="<?= htmlspecialchars((string) $region->listingUrl(), ENT_QUOTES, 'UTF-8') ?>" <?= in_array($region->slug, $inputs['regions']) ? 'selected' : ''; ?>><?= $region->getName(); ?></option>
 			 
 		@endforeach
         <?php /* @foreach($inputs["regions_options"] as $region)

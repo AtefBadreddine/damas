@@ -26,6 +26,16 @@ class UpdatePostsPostTypeEnum extends Migration
             'post_type' => 'blog',
         ));
 
+        DB::table('posts')
+            ->where('type', 'news')
+            ->whereIn('post_type', array('blog', 'news'))
+            ->update(array('post_type' => 'news'));
+
+        DB::table('posts')
+            ->where('type', 'blog')
+            ->whereIn('post_type', array('blog', 'news'))
+            ->update(array('post_type' => 'blog'));
+
         DB::statement(
             "ALTER TABLE `{$table}` MODIFY `post_type` ENUM('blog','developer','report','news') NULL DEFAULT 'blog'"
         );

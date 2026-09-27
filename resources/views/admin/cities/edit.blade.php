@@ -1,7 +1,7 @@
 @extends('admin.layouts.form', ["app_title" => "Cities", "app_desc" => "City Information"])
 @section('main_form')
 <?php
-$countries = \App\Models\Country::orderBy('name_en', 'asc')->get();
+$countries = \App\Models\Country::ordered()->get();
 $selectedCountryId = old('country_id', $row->country_id);
 $posts = \App\Models\Post::where('title_ar', '!=', '')->get();
 ?>

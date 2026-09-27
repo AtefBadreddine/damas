@@ -11,7 +11,8 @@
         ];
     ?>
     @include("admin.layouts.table", [
-        "box_title"    =>    "Countries List"
+        "box_title"    =>    "Countries List",
+        "tr_placement" =>    true,
     ])
     
 @endsection

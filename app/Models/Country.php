@@ -24,6 +24,15 @@ class Country extends BaseModel
     ];
 
     /**
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeOrdered($query)
+    {
+        return $query->orderBy('placement', 'asc')->orderBy('id', 'asc');
+    }
+
+    /**
      * Use slug in URLs: /ar/turkiye , /en/oman
      */
     public function getRouteKeyName()

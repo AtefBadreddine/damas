@@ -88,6 +88,7 @@
 }
 .content_section.show .cont{
     height: auto;
+    max-height: none;
     transition: all 1s;
 }
 .content_section .cont img{

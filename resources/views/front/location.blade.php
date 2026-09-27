@@ -22,15 +22,26 @@ $arr_rooms = [
     "2_5" => "2 + 5",
     "2_6" => "2 + 6"
 ];
+$aboutBody = '';
 if (count($allprojects) == 0) {
     $rh1 = ($current_lang == 'ar' ? 'لا يوجد نتائج' : 'No Results Found');
-    $aboutHtml = '';
 } else {
-    $parts = explode('</h1>', $inputs["about"]);
+    $parts = explode('</h1>', $inputs['about'], 2);
     $rh1 = trim(strip_tags(@$parts[0]));
-    $rh1 = ($rh1 == '' ? (@$inputs["seo_title"] ? $inputs["seo_title"] : trans("front.Properties")) : $rh1);
-    $aboutHtml = isset($parts[1]) ? $parts[1] : '';
+    $rh1 = ($rh1 == '' ? (@$inputs['seo_title'] ? $inputs['seo_title'] : trans('front.Properties')) : $rh1);
+    if (!empty($inputs['about_body'])) {
+        $aboutBody = $inputs['about_body'];
+    } elseif (isset($parts[1])) {
+        $inner = trim($parts[1]);
+        if (preg_match('#^<div class="clearfix">(.*)</div>$#s', $inner, $aboutMatch)) {
+            $aboutBody = $aboutMatch[1];
+        } else {
+            $aboutBody = $inner;
+        }
+    }
 }
+$aboutPlain = html_entity_decode(strip_tags($aboutBody), ENT_QUOTES, 'UTF-8');
+$hasAboutContent = trim(preg_replace('/\s+|&nbsp;|\x{00A0}/u', '', $aboutPlain)) !== '';
 ?>
 @include('front.partials.search_layout_styles')
 <link rel="stylesheet" type="text/css" href="{{ asset('css/search.min.css') }}?v=06">
@@ -72,15 +83,17 @@ if (count($allprojects) == 0) {
                         <strong class="num pr_count">(<?= count($allprojects); ?>)</strong>
                     </div>
 
-                    <div class="content_section" style="<?= (trim(strip_tags($aboutHtml)) != '' ? '' : 'display:none') ?>">
+                    @if($hasAboutContent)
+                    <div class="content_section">
                         <div id="about-content" class="cont">
-                            <?= $aboutHtml ?>
+                            <div class="clearfix">{!! $aboutBody !!}</div>
                         </div>
                         <div class="action_content">
                             <span class="show_more_btn"><?= trans("front.read more"); ?></span>
                             <span class="show_less_btn"><?= trans("front.read less"); ?></span>
                         </div>
                     </div>
+                    @endif
 
                     <div class="control_icons">
                         <a class="filter_btn">
@@ -167,16 +180,71 @@ $(document).ready(function () {
         $(".right_sec").removeClass("show");
     });
 
-    $(".show_less_btn").hide();
-    $(document).on("click", ".show_more_btn", function () {
-        $(".content_section").addClass("show");
-        $(".show_more_btn").hide();
-        $(".show_less_btn").show();
+    var aboutContentCounter = 1;
+    var aboutContentCollapsedHeight = 350;
+
+    function bindAboutContentActions($sec) {
+        var $cont = $sec.find(".cont").first();
+        var fullHeight = $cont.css({maxHeight: "none", height: "auto"}).height();
+        $cont.css({maxHeight: aboutContentCollapsedHeight + "px", height: "auto"});
+        if (fullHeight <= aboutContentCollapsedHeight) {
+            $sec.find(".action_content").hide();
+        }
+    }
+
+    $(".int_content .content_section").each(function () {
+        bindAboutContentActions($(this));
     });
-    $(document).on("click", ".show_less_btn", function () {
-        $(".content_section").removeClass("show");
-        $(".show_less_btn").hide();
-        $(".show_more_btn").show();
+    $(".int_content .show_less_btn").hide();
+
+    $(document).on("click", ".int_content .show_more_btn", function () {
+        var $sec = $(this).closest(".content_section");
+        var $cont = $sec.find(".cont").first();
+        var $action = $(this).closest(".action_content");
+        var $lessBtn = $action.find(".show_less_btn");
+
+        if (aboutContentCounter === 1) {
+            $cont.animate({maxHeight: "400px"}, 200);
+            $("html, body").animate({scrollTop: $sec.offset().top - 100}, "slow");
+            $lessBtn.show();
+            aboutContentCounter++;
+            return true;
+        }
+        if (aboutContentCounter === 2) {
+            $cont.animate({maxHeight: "800px"}, 200);
+            $("html, body").animate({scrollTop: $sec.offset().top - 50}, "slow");
+            $lessBtn.show();
+            aboutContentCounter++;
+            return true;
+        }
+        if (aboutContentCounter === 3) {
+            var heightDiv = $cont.css({maxHeight: "none"}).height();
+            $cont.animate({maxHeight: heightDiv}, 200);
+            $sec.addClass("show");
+            $("html, body").animate({scrollTop: $sec.offset().top + 250}, "slow");
+            $(this).hide();
+            $lessBtn.show();
+            $action.addClass("type_less");
+            return false;
+        }
+        aboutContentCounter = 1;
+        return false;
+    });
+
+    $(document).on("click", ".int_content .show_less_btn", function () {
+        var $sec = $(this).closest(".content_section");
+        var $cont = $sec.find(".cont").first();
+        var $action = $(this).closest(".action_content");
+
+        $cont.animate({maxHeight: aboutContentCollapsedHeight + "px"}, 300);
+        $sec.removeClass("show");
+        $("html, body").animate({scrollTop: $sec.offset().top - 100}, "slow");
+        aboutContentCounter = 1;
+        $action.removeClass("type_less");
+        setTimeout(function () {
+            $action.find(".show_less_btn").hide();
+            $action.find(".show_more_btn").show();
+        }, 300);
     });
 
     var PRICE_MIN = 50000, PRICE_MAX = 2000000;
@@ -225,11 +293,14 @@ $(document).ready(function () {
         var url = locationAreaUrl;
         var params = [];
 
-        var regions = selectedValues('#selectregions');
-        if (regions.length === 1 && regionUrls[regions[0]]) {
-            url = regionUrls[regions[0]];
-        } else if (regions.length > 1) {
-            params.push('district=' + regions.map(encodeURIComponent).join(','));
+        var $regionOption = $('#selectregions option:selected');
+        var regionSlug = $regionOption.val();
+        var regionUrl = '';
+        if (regionSlug) {
+            regionUrl = $regionOption.attr('data-url') || regionUrls[regionSlug] || '';
+        }
+        if (regionUrl) {
+            url = regionUrl;
         }
 
         var type = $('select[name=project_type]').val();

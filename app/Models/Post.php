@@ -140,7 +140,7 @@ class Post extends BaseModel
         if ($postType) {
             return $postType;
         }
-        return ($this->type == 'news') ? \App\Enums\PostType::NEWS : \App\Enums\PostType::BLOG;
+        return ($this->type == 'news') ? \App\Enums\PostType::$NEWS : \App\Enums\PostType::$BLOG;
     }
 
     /**

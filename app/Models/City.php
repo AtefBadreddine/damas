@@ -82,28 +82,6 @@ class City extends BaseModel
         $field = "h1_$lang";
 		return $this->$field;
     }
-
-    public function getAboutTitle()
-    {
-        if ($this->cityContent) {
-            $title = $this->cityContent->getTitle();
-            if ($title) {
-                return $title;
-            }
-        }
-        return parent::getAboutTitle();
-    }
-
-    public function getAbout()
-    {
-        if ($this->cityContent) {
-            $content = $this->cityContent->getContent();
-            if ($content) {
-                return $content;
-            }
-        }
-        return parent::getAbout();
-    }
 	
     /**
     * primary photo relation
@@ -195,16 +173,6 @@ class City extends BaseModel
     }
 
     /**
-     * Translated title/content (ar + en).
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne
-     */
-    public function cityContent()
-    {
-        return $this->hasOne("App\Models\CityContent", "city_id");
-    }
-
-    /**
      * Country slug used in geo URLs (turkiye), not the legacy code (turkey).
      *
      * @return string|null
@@ -247,12 +215,6 @@ class City extends BaseModel
                 if ($country) {
                     $city->country_id = $country->id;
                 }
-            }
-        });
-
-        static::deleting(function ($city) {
-            if ($city->cityContent) {
-                $city->cityContent->delete();
             }
         });
     }

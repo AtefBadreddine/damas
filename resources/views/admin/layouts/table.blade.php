@@ -72,7 +72,7 @@ $str_get = $str_get . $k.'='.$v.'&';
     		<ul class="nav nav-tabs" style="margin-bottom:15px;">
                 @foreach($countries as $country)
                 <li class="<?= $tab == $country->code ? 'active' : '' ?>">
-                    <a href="?tab=<?= $country->code ?>"><?= $country->title_en ?> (<?= isset($countryCounts[$country->code]) ? $countryCounts[$country->code] : 0 ?>)</a>
+                    <a href="?tab=<?= $country->code ?>"><?= $country->name_en ?> (<?= isset($countryCounts[$country->code]) ? $countryCounts[$country->code] : 0 ?>)</a>
                 </li>
                 @endforeach
                 <li class="<?= $tab == 'disabled' ? 'active' : '' ?>">

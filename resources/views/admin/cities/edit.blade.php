@@ -1,29 +1,8 @@
 @extends('admin.layouts.form', ["app_title" => "Cities", "app_desc" => "City Information"])
 @section('main_form')
 <?php
-$countries = \App\Models\Country::orderBy('title_en', 'asc')->get();
+$countries = \App\Models\Country::orderBy('name_en', 'asc')->get();
 $selectedCountryId = old('country_id', $row->country_id);
-if (!isset($contentRow) || !$contentRow) {
-    $contentRow = (object) array(
-        'title' => '',
-        'content' => '',
-        'title_en' => '',
-        'content_en' => '',
-        'title_fr' => '',
-        'content_fr' => '',
-        'title_fa' => '',
-        'content_fa' => '',
-        'title_ru' => '',
-        'content_ru' => '',
-    );
-}
-$cityContentVal = function ($contentField, $cityField) use ($contentRow, $row) {
-    $fromContent = isset($contentRow->$contentField) ? $contentRow->$contentField : null;
-    if ($fromContent !== null && $fromContent !== '') {
-        return $fromContent;
-    }
-    return isset($row->$cityField) ? $row->$cityField : '';
-};
 $posts = \App\Models\Post::where('title_ar', '!=', '')->get();
 ?>
 <style>
@@ -57,7 +36,7 @@ input[name=slug] {
         <select name="country_id" id="city-country-id" class="form-control select2me" required>
             <option value=""></option>
             @foreach($countries as $country)
-            <option value="{{ $country->id }}" data-code="{{ $country->code }}" data-slug="{{ $country->slug }}" {{ $selectedCountryId == $country->id ? 'selected' : '' }}>{{ $country->title_en }}</option>
+            <option value="{{ $country->id }}" data-code="{{ $country->code }}" data-slug="{{ $country->slug }}" {{ $selectedCountryId == $country->id ? 'selected' : '' }}>{{ $country->name_en }}</option>
             @endforeach
         </select>
         <input type="hidden" name="country" id="city-country-code" value="{{ old('country', $row->country) }}">
@@ -116,12 +95,8 @@ input[name=slug] {
     </div>
 
 <div class="form-group col-md-12">
-    <label>Title</label>
-    <?= Form::text("geo_title", $contentRow->title, ["class" => "form-control"]); ?>
-</div>
-<div class="form-group col-md-12">
     <label style="color:red;">Content</label>
-    @include('admin.layouts.full_editor', ["name" => "geo_content", "editor_value" => $cityContentVal('content', 'about_ar')])
+    @include('admin.layouts.full_editor', ["name" => "about_ar", "editor_value" => $row->about_ar])
 </div>
 <div class="col-md-12">
                     <fieldset>
@@ -171,12 +146,8 @@ input[name=slug] {
     @endif
 </div>
 <div class="form-group col-md-12">
-    <label>Title</label>
-    <?= Form::text("geo_title_en", $contentRow->title_en, ["class" => "form-control ltr"]); ?>
-</div>
-<div class="form-group col-md-12">
     <label style="color:red;">Content</label>
-    @include('admin.layouts.full_editor', ["name" => "geo_content_en", "editor_value" => $cityContentVal('content_en', 'about_en')])
+    @include('admin.layouts.full_editor', ["name" => "about_en", "editor_value" => $row->about_en])
 </div>
 <!-- seo eng -->
                 <div class="col-md-12">
@@ -226,12 +197,8 @@ input[name=slug] {
     @endif
 </div>
 <div class="form-group col-md-12">
-    <label>Title</label>
-    <?= Form::text("geo_title_fr", isset($contentRow->title_fr) ? $contentRow->title_fr : '', ["class" => "form-control ltr"]); ?>
-</div>
-<div class="form-group col-md-12">
     <label style="color:red;">Content</label>
-    @include('admin.layouts.full_editor', ["name" => "geo_content_fr", "editor_value" => $cityContentVal('content_fr', 'about_fr')])
+    @include('admin.layouts.full_editor', ["name" => "about_fr", "editor_value" => $row->about_fr])
 </div>
 <!-- seo FR -->
                 <div class="col-md-12">
@@ -279,12 +246,8 @@ input[name=slug] {
     </div>
 
 <div class="form-group col-md-12">
-    <label>Title</label>
-    <?= Form::text("geo_title_fa", isset($contentRow->title_fa) ? $contentRow->title_fa : '', ["class" => "form-control"]); ?>
-</div>
-<div class="form-group col-md-12">
     <label style="color:red;">Content</label>
-    @include('admin.layouts.full_editor', ["name" => "geo_content_fa", "editor_value" => $cityContentVal('content_fa', 'about_fa')])
+    @include('admin.layouts.full_editor', ["name" => "about_fa", "editor_value" => $row->about_fa])
 </div>
 <!-- seo FA -->
                 <div class="col-md-12">
@@ -333,12 +296,8 @@ input[name=slug] {
     </div>
 
 <div class="form-group col-md-12">
-    <label>Title</label>
-    <?= Form::text("geo_title_ru", isset($contentRow->title_ru) ? $contentRow->title_ru : '', ["class" => "form-control ltr"]); ?>
-</div>
-<div class="form-group col-md-12">
     <label style="color:red;">Content</label>
-    @include('admin.layouts.full_editor', ["name" => "geo_content_ru", "editor_value" => $cityContentVal('content_ru', 'about_ru')])
+    @include('admin.layouts.full_editor', ["name" => "about_ru", "editor_value" => $row->about_ru])
 </div>
 <!-- seo RU -->
                 <div class="col-md-12">

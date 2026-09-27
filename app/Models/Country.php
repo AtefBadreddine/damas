@@ -8,8 +8,19 @@ class Country extends BaseModel
     protected $fillable = [
         "slug",
         "code",
-        "title_ar",
-        "title_en",
+        "name_ar",
+        "name_en",
+        "h1_ar",
+        "h1_en",
+        "media_id",
+        "media_en_id",
+        "content_ar",
+        "content_en",
+        "seo_title_ar",
+        "seo_description_ar",
+        "seo_title_en",
+        "seo_description_en",
+        "placement",
     ];
 
     /**
@@ -47,7 +58,7 @@ class Country extends BaseModel
             return $pattern;
         }
 
-        $fallback = 'turkiye|oman|emirates|syria';
+        $fallback = 'turkiye|oman|uae|syria';
         try {
             if (!\Schema::hasTable('countries')) {
                 return $pattern = $fallback;
@@ -100,11 +111,44 @@ class Country extends BaseModel
     public function getTitle()
     {
         $lang = (\LaravelLocalization::getCurrentLocale() == 'pe' ? 'fa' : \LaravelLocalization::getCurrentLocale());
-        $field = "title_" . $lang;
+        $field = "name_" . $lang;
         if (isset($this->$field) && $this->$field) {
             return $this->$field;
         }
-        return $this->title_en ? $this->title_en : $this->title_ar;
+        return $this->name_en ? $this->name_en : $this->name_ar;
+    }
+
+    public function getH1()
+    {
+        return $this->localized('h1');
+    }
+
+    public function getContent()
+    {
+        return $this->localized('content');
+    }
+
+    public function getSeoTitle()
+    {
+        return $this->localized('seo_title');
+    }
+
+    public function getSeoDescription()
+    {
+        return $this->localized('seo_description');
+    }
+
+    /**
+     * Countries only store ar/en; other locales use the English value.
+     *
+     * @param string $prefix
+     * @return string|null
+     */
+    protected function localized($prefix)
+    {
+        $lang = \LaravelLocalization::getCurrentLocale() == 'ar' ? 'ar' : 'en';
+        $field = $prefix . "_" . $lang;
+        return $this->$field;
     }
 
     /**
@@ -118,24 +162,22 @@ class Country extends BaseModel
         return route('front.location.country', $this->slug, $absolute);
     }
 
-    /**
-     * Translated title/content (ar + en).
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne
-     */
-    public function countryContent()
+    public function media()
     {
-        return $this->hasOne("App\Models\CountryContent", "country_id");
+        $lang = (\LaravelLocalization::getCurrentLocale() == 'pe' ? 'fa' : \LaravelLocalization::getCurrentLocale());
+        if ($lang == 'ar') {
+            return $this->belongsTo("App\Models\Media", "media_id");
+        }
+        return $this->belongsTo("App\Models\Media", "media_en_id");
     }
 
-    protected static function boot()
+    public function mediaAr()
     {
-        parent::boot();
+        return $this->belongsTo("App\Models\Media", "media_id");
+    }
 
-        static::deleting(function ($country) {
-            if ($country->countryContent) {
-                $country->countryContent->delete();
-            }
-        });
+    public function mediaEn()
+    {
+        return $this->belongsTo("App\Models\Media", "media_en_id");
     }
 }

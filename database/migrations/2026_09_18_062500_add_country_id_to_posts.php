@@ -15,14 +15,23 @@ class AddCountryIdToPosts extends Migration
      */
     public function up()
     {
-        Schema::table('posts', function (Blueprint $table) {
-            $table->integer('country_id')->unsigned()->nullable()->after('country');
-            $table->index('country_id');
-        });
+        $hasCountry = Schema::hasColumn('posts', 'country');
 
-        $countries = DB::table('countries')->get();
-        foreach ($countries as $country) {
-            DB::table('posts')->where('country', $country->code)->update(array(
+        if (!Schema::hasColumn('posts', 'country_id')) {
+            Schema::table('posts', function (Blueprint $table) use ($hasCountry) {
+                $column = $table->integer('country_id')->unsigned()->nullable();
+                if ($hasCountry) {
+                    $column->after('country');
+                }
+                $table->index('country_id');
+            });
+        }
+
+        if (!$hasCountry) {
+            return;
+        }
+        foreach (DB::table('countries')->get() as $country) {
+            DB::table('posts')->where('country', $country->code)->whereNull('country_id')->update(array(
                 'country_id' => $country->id,
             ));
         }
@@ -35,8 +44,10 @@ class AddCountryIdToPosts extends Migration
      */
     public function down()
     {
-        Schema::table('posts', function (Blueprint $table) {
-            $table->dropColumn('country_id');
-        });
+        if (Schema::hasColumn('posts', 'country_id')) {
+            Schema::table('posts', function (Blueprint $table) {
+                $table->dropColumn('country_id');
+            });
+        }
     }
 }

@@ -143,30 +143,11 @@ class Region extends BaseModel
 		
     ];
 
-    protected static function boot()
-    {
-        parent::boot();
-
-        static::deleting(function ($region) {
-            if ($region->districtContent) {
-                $region->districtContent->delete();
-            }
-        });
-    }
 	public function city()
     {
 		return $this->belongsTo("App\Models\City", "city_id");
     }
 
-    /**
-     * Translated title/content (ar + en). Districts are stored as regions.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne
-     */
-    public function districtContent()
-    {
-        return $this->hasOne("App\Models\DistrictContent", "region_id");
-    }
 	public function getPost()
     {
 		return $this->belongsTo("App\Models\Post", "post_id");

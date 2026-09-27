@@ -130,7 +130,51 @@
 
 </fieldset>
 
-@include('admin.layouts.geo_content_tabs')
+<div class="panel with-nav-tabs panel-default">
+    <div class="panel-heading lang-heading">
+        <ul class="nav nav-tabs">
+            <li class="active"><a href="#district_about_ar" data-toggle="tab">Arabic</a></li>
+            <li><a href="#district_about_en" data-toggle="tab">English</a></li>
+            <li><a href="#district_about_fr" data-toggle="tab">French</a></li>
+            <li><a href="#district_about_fa" data-toggle="tab">Persian</a></li>
+            <li><a href="#district_about_ru" data-toggle="tab">Russian</a></li>
+        </ul>
+    </div>
+    <div class="panel-body">
+        <div class="tab-content">
+            <div class="tab-pane fade in active" id="district_about_ar">
+                <div class="form-group col-md-12">
+                    <label>Content Arabic</label>
+                    @include('admin.layouts.full_editor', ["name" => "about_ar", "rows" => 8, "editor_value" => $row->about_ar])
+                </div>
+            </div>
+            <div class="tab-pane fade" id="district_about_en">
+                <div class="form-group col-md-12">
+                    <label>Content English</label>
+                    @include('admin.layouts.full_editor', ["name" => "about_en", "rows" => 8, "editor_value" => $row->about_en])
+                </div>
+            </div>
+            <div class="tab-pane fade" id="district_about_fr">
+                <div class="form-group col-md-12">
+                    <label>Content French</label>
+                    @include('admin.layouts.full_editor', ["name" => "about_fr", "rows" => 8, "editor_value" => $row->about_fr])
+                </div>
+            </div>
+            <div class="tab-pane fade" id="district_about_fa">
+                <div class="form-group col-md-12">
+                    <label>Content Persian</label>
+                    @include('admin.layouts.full_editor', ["name" => "about_fa", "rows" => 8, "editor_value" => $row->about_fa])
+                </div>
+            </div>
+            <div class="tab-pane fade" id="district_about_ru">
+                <div class="form-group col-md-12">
+                    <label>Content Russian</label>
+                    @include('admin.layouts.full_editor', ["name" => "about_ru", "rows" => 8, "editor_value" => $row->about_ru])
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 <fieldset>
     <legend>

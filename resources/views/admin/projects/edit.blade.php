@@ -210,7 +210,7 @@
                                                     <select id="project_filter_country" class="form-control select2me">
                                                         <option value=""></option>
                                                         @foreach($countries as $country)
-                                                        <option value="<?= $country->id; ?>" <?= (int) $initialCountryId === (int) $country->id ? 'selected' : ''; ?>><?= $country->title_en; ?></option>
+                                                        <option value="<?= $country->id; ?>" <?= (int) $initialCountryId === (int) $country->id ? 'selected' : ''; ?>><?= $country->name_en; ?></option>
                                                         @endforeach
                                                     </select>
                                                 </div>

@@ -3619,8 +3619,9 @@ return $data;
 		if($lang!='ar')
 			$lang = 'en';
 		
+		$countrySlugs = \App\Models\Country::slugPattern();
 		$ret = '';
-		if (preg_match('#/(turkiye|oman|emirates|syria)/(buying-guide|guides)/([^/\?]+)#', $url, $m) || preg_match('#/(turkiye|oman|emirates|syria)/news/([^/\?]+)#', $url, $m)) {
+		if (preg_match('#/('.$countrySlugs.')/(buying-guide|guides)/([^/\?]+)#', $url, $m) || preg_match('#/('.$countrySlugs.')/news/([^/\?]+)#', $url, $m)) {
 			if($camp==true)
 				return 'Blog';
 			$post = \App\Models\Post::where("slug", isset($m[3]) ? $m[3] : $m[2])->first();
@@ -3629,7 +3630,7 @@ return $data;
 					$ret = $cat;
 					break;
 				}
-		} elseif (preg_match('#/(turkiye|oman|emirates|syria)/([^/]+)/([^/]+)/([^/\?]+)#', $url, $m)) {
+		} elseif (preg_match('#/('.$countrySlugs.')/([^/]+)/([^/]+)/([^/\?]+)#', $url, $m)) {
 			if($camp==true)
 				return 'Project';
 			$arr = DB::select("SELECT `name_".$lang."` as 'name' FROM `dms_projects` WHERE slug=?",[$m[4]]);

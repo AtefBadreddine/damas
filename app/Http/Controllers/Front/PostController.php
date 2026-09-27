@@ -22,7 +22,7 @@ class PostController extends BaseController
      */
     public function show($country, $post)
     {
-        return $this->showByType($country, $post, PostType::BLOG);
+        return $this->showByType($country, $post, PostType::$BLOG);
     }
 
     /**
@@ -34,7 +34,7 @@ class PostController extends BaseController
      */
     public function showDevelopers($country, $post)
     {
-        return $this->showByType($country, $post, PostType::DEVELOPER);
+        return $this->showByType($country, $post, PostType::$DEVELOPER);
     }
 
     /**
@@ -46,7 +46,7 @@ class PostController extends BaseController
      */
     public function showReports($country, $post)
     {
-        return $this->showByType($country, $post, PostType::REPORT);
+        return $this->showByType($country, $post, PostType::$REPORT);
     }
 
     /**
@@ -57,7 +57,7 @@ class PostController extends BaseController
      */
     public function index(Request $request)
     {
-        return $this->indexListing($request, PostType::BLOG, null);
+        return $this->indexListing($request, PostType::$BLOG, null);
     }
 
     /**
@@ -69,7 +69,7 @@ class PostController extends BaseController
      */
     public function indexCountry(Request $request, $country)
     {
-        return $this->indexListing($request, PostType::BLOG, $country);
+        return $this->indexListing($request, PostType::$BLOG, $country);
     }
 
     /**
@@ -80,7 +80,7 @@ class PostController extends BaseController
      */
     public function indexDevelopers(Request $request)
     {
-        return $this->indexListing($request, PostType::DEVELOPER, null);
+        return $this->indexListing($request, PostType::$DEVELOPER, null);
     }
 
     /**
@@ -92,7 +92,7 @@ class PostController extends BaseController
      */
     public function indexDevelopersCountry(Request $request, $country)
     {
-        return $this->indexListing($request, PostType::DEVELOPER, $country);
+        return $this->indexListing($request, PostType::$DEVELOPER, $country);
     }
 
     /**
@@ -103,7 +103,7 @@ class PostController extends BaseController
      */
     public function indexReports(Request $request)
     {
-        return $this->indexListing($request, PostType::REPORT, null);
+        return $this->indexListing($request, PostType::$REPORT, null);
     }
 
     /**
@@ -115,7 +115,7 @@ class PostController extends BaseController
      */
     public function indexReportsCountry(Request $request, $country)
     {
-        return $this->indexListing($request, PostType::REPORT, $country);
+        return $this->indexListing($request, PostType::$REPORT, $country);
     }
 
     /**
@@ -126,7 +126,7 @@ class PostController extends BaseController
      */
     public function indexNews(Request $request)
     {
-        return $this->indexListing($request, PostType::NEWS, null);
+        return $this->indexListing($request, PostType::$NEWS, null);
     }
 
     /**
@@ -138,7 +138,7 @@ class PostController extends BaseController
      */
     public function indexNewsCountry(Request $request, $country)
     {
-        return $this->indexListing($request, PostType::NEWS, $country);
+        return $this->indexListing($request, PostType::$NEWS, $country);
     }
 
     /**
@@ -155,15 +155,20 @@ class PostController extends BaseController
         $categoryType = $postType->categoryType();
         $countryModel = null;
         $countryCode = null;
+        $countryId = null;
 
         if ($countrySlug) {
             $countryModel = Country::findBySlug($countrySlug);
             if (!$countryModel) {
                 abort(404);
             }
+        } elseif ($postType === PostType::$NEWS) {
+            $countryModel = Country::findByCode('turkey');
+        }
+
+        if ($countryModel) {
             $countryCode = $countryModel->code;
-        } elseif ($postType === PostType::NEWS) {
-            $countryCode = 'turkey';
+            $countryId = $countryModel->id;
         }
 
         $curent_lang = (\LaravelLocalization::getCurrentLocale() == 'pe' ? 'fa' : \LaravelLocalization::getCurrentLocale());
@@ -172,8 +177,8 @@ class PostController extends BaseController
 
         $q = Post::where('published', 1)->where($title, '!=', '');
         $q->where('post_type', $postType->value);
-        if ($countryCode) {
-            $q->where('country', $countryCode);
+        if ($countryId) {
+            $q->where('country_id', $countryId);
         }
 
         $is_category_page = false;
@@ -182,8 +187,8 @@ class PostController extends BaseController
         $categorySlug = $request->get('category');
         if ($categorySlug) {
             $categoryQuery = PostCategory::where('slug', $categorySlug)->where('type', $categoryType);
-            if ($countryCode) {
-                $categoryQuery->where('country', $countryCode);
+            if ($countryId) {
+                $categoryQuery->where('country_id', $countryId);
             }
             $category = $categoryQuery->first();
             if (!$category) {
@@ -231,8 +236,8 @@ class PostController extends BaseController
             return view("front.blog.partials.list_posts", compact('posts', 'ajax', 'type'));
         }
         $categoriesQuery = PostCategory::where('type', $categoryType);
-        if ($countryCode) {
-            $categoriesQuery->where('country', $countryCode);
+        if ($countryId) {
+            $categoriesQuery->where('country_id', $countryId);
         }
         $categories = $categoriesQuery->orderBy("placement", "asc")->get();
         $hide_whatsapp = false;
@@ -258,7 +263,7 @@ class PostController extends BaseController
      */
     public function showNews($country, $post)
     {
-        return $this->showByType($country, $post, PostType::NEWS);
+        return $this->showByType($country, $post, PostType::$NEWS);
     }
 
     /**
@@ -297,7 +302,13 @@ class PostController extends BaseController
 
         $type = $postType->value;
         $categoryType = $postType->categoryType();
-        $countryCode = $row->country;
+        $countryId = $row->country_id;
+        if (!$countryId && $row->countryRel) {
+            $countryId = $row->countryRel->id;
+        } elseif (!$countryId && $row->country) {
+            $fallbackCountry = Country::findByCode($row->country);
+            $countryId = $fallbackCountry ? $fallbackCountry->id : null;
+        }
 
         $ajax_projects_url = '';
         if ($row->with_projects_blog == true) {
@@ -402,7 +413,11 @@ class PostController extends BaseController
             $row->save();
         }
 
-        $categories = PostCategory::where('type', $categoryType)->where('country', $countryCode)->orderBy("placement", "asc")->get();
+        $categoriesQuery = PostCategory::where('type', $categoryType);
+        if ($countryId) {
+            $categoriesQuery->where('country_id', $countryId);
+        }
+        $categories = $categoriesQuery->orderBy("placement", "asc")->get();
 
         $lang = $current_lang;
         $video_code = '';

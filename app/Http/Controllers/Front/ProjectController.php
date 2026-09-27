@@ -481,8 +481,8 @@ limit 1", array($row->id, '%' . $lang . '%'));
 
     /**
      * SEO and about copy for a geo listing.
-     * Page title comes from the deepest content table (district → city → country).
-     * If that title is empty, generate "properties for sale {place}".
+     * H1 and body come from the deepest geo row (district → city → country): h1_* plus about_* (content_* for countries).
+     * If h1 is empty, generate "properties for sale {place}".
      *
      * @param \App\Models\Country|null $country
      * @param \App\Models\City|null $city
@@ -507,24 +507,15 @@ limit 1", array($row->id, '%' . $lang . '%'));
             ? preg_replace('/\s+/', ' ', trim(trans('front.aqarat') . ' ' . trans('front.for_sale') . ' ' . $place))
             : trans('front.projects');
 
-        $geoContent = null;
-        $aboutBodyFromGeo = null;
-        try {
-            if ($region) {
-                $geoContent = $region->districtContent;
-            } elseif ($city) {
-                $geoContent = $city->cityContent;
-            } elseif ($country) {
-                $geoContent = $country->countryContent;
-            }
-            if ($geoContent) {
-                if ($geoContent->getTitle()) {
-                    $h1 = $geoContent->getTitle();
-                }
-                $aboutBodyFromGeo = $geoContent->getContent();
-            }
-        } catch (\Exception $e) {
-            $aboutBodyFromGeo = null;
+        if ($row && method_exists($row, 'getH1') && $row->getH1()) {
+            $h1 = $row->getH1();
+        }
+
+        $aboutBodyFromGeo = '';
+        if ($row instanceof Country) {
+            $aboutBodyFromGeo = $row->getContent();
+        } elseif ($row && method_exists($row, 'getAbout')) {
+            $aboutBodyFromGeo = $row->getAbout();
         }
 
         $filterType = isset($filters['type']) ? $filters['type'] : null;
@@ -554,12 +545,7 @@ limit 1", array($row->id, '%' . $lang . '%'));
             $seoKeywords = $row->getSeoKeywords();
         }
 
-        $aboutBody = '';
-        if (isset($aboutBodyFromGeo) && $aboutBodyFromGeo !== null && $aboutBodyFromGeo !== '') {
-            $aboutBody = $aboutBodyFromGeo;
-        } elseif ($row && method_exists($row, 'getAbout') && $row->getAbout()) {
-            $aboutBody = $row->getAbout();
-        }
+        $aboutBody = $aboutBodyFromGeo ? $aboutBodyFromGeo : '';
 
         $ogImage = null;
         if ($city) {
@@ -574,6 +560,12 @@ limit 1", array($row->id, '%' . $lang . '%'));
                 $ogImage = Helper::media_mob($city->mediaFa);
             } elseif ($city->media_id) {
                 $ogImage = Helper::media_mob($city->media);
+            }
+        } elseif ($country) {
+            if (\LaravelLocalization::getCurrentLocale() != 'ar' && $country->media_en_id) {
+                $ogImage = Helper::media_mob($country->mediaEn);
+            } elseif ($country->media_id) {
+                $ogImage = Helper::media_mob($country->mediaAr);
             }
         }
 

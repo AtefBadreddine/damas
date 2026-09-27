@@ -30,6 +30,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        $this->app['db']->extend('mysql', function ($config, $name) {
+            $connection = $this->app['db.factory']->make($config, $name);
+            $connection->setPostProcessor(new \App\Database\MySqlProcessor);
+            return $connection;
+        });
     }
 }

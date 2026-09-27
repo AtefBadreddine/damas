@@ -4,8 +4,8 @@
     <?php
         $lignes = [
             "id"        =>  "",
-            "title_ar"  =>  "Title Arabic",
-            "title_en"  =>  "Title English",
+            "name_ar"  =>  "Name Arabic",
+            "name_en"  =>  "Name English",
             "slug"      =>  "Slug",
             "code"      =>  "Code",
         ];

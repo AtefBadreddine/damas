@@ -4503,7 +4503,7 @@ class HomeController extends BaseController
      */
     protected function legacyPostType(Request $request)
     {
-		return \App\Enums\PostType::tryFrom((string) $this->legacyRouteValue($request, 'type')) ?: \App\Enums\PostType::BLOG;
+		return \App\Enums\PostType::tryFrom((string) $this->legacyRouteValue($request, 'type')) ?: \App\Enums\PostType::$BLOG;
     }
 
     /**
@@ -4663,10 +4663,10 @@ class HomeController extends BaseController
         }
 
         $postSitemaps = array(
-            "guides" => \App\Enums\PostType::BLOG,
-            "developers" => \App\Enums\PostType::DEVELOPER,
-            "reports" => \App\Enums\PostType::REPORT,
-            "news" => \App\Enums\PostType::NEWS,
+            "guides" => \App\Enums\PostType::$BLOG,
+            "developers" => \App\Enums\PostType::$DEVELOPER,
+            "reports" => \App\Enums\PostType::$REPORT,
+            "news" => \App\Enums\PostType::$NEWS,
         );
 
         if ( $slug and !in_array($slug, array_merge(["projects", "links"], array_keys($postSitemaps))) ) abort(404);

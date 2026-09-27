@@ -14,6 +14,10 @@ class AddOldSlugToPosts extends Migration
      */
     public function up()
     {
+        if (Schema::hasColumn('posts', 'old_slug')) {
+            return;
+        }
+
         Schema::table('posts', function (Blueprint $table) {
             $table->string('old_slug', 255)->nullable()->after('slug');
             $table->index('old_slug');

@@ -98,7 +98,8 @@ class PostCategory extends BaseModel
         static::saving(function ($category) {
             if (!empty($category->country_id)) {
                 $country = Country::find($category->country_id);
-                if ($country) {
+                // Only write the legacy string when the column still exists on this row.
+                if ($country && array_key_exists('country', $category->getAttributes())) {
                     $category->country = $country->code;
                 }
             } elseif (!empty($category->country)) {

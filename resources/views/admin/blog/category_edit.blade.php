@@ -30,7 +30,7 @@
             <label>Country</label>
             <select name="country_id" class="form-control select2me">
                 <?php foreach ($countries as $country): ?>
-                <option value="<?= $country->id ?>" <?= ((int)$row->country_id === (int)$country->id || $row->country == $country->code) ? 'selected' : '' ?>><?= $country->title_en ?></option>
+                <option value="<?= $country->id ?>" <?= ((int)$row->country_id === (int)$country->id || $row->country == $country->code) ? 'selected' : '' ?>><?= $country->name_en ?></option>
                 <?php endforeach; ?>
             </select>
         </div>

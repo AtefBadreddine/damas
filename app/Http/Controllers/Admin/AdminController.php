@@ -2124,19 +2124,14 @@ exit;*/
 			if (array_key_exists('enable_district_page', $inputs)) {
 				$inputs['enable_district_page'] = $inputs["enable_district_page"] ? 1 : 0;
 			}
-			foreach (array('about_ar', 'about_en', 'about_fr', 'about_fa', 'about_ru', 'geo_title', 'geo_content', 'geo_title_en', 'geo_content_en', 'geo_title_fr', 'geo_content_fr', 'geo_title_fa', 'geo_content_fa', 'geo_title_ru', 'geo_content_ru') as $geoField) {
-				unset($inputs[$geoField]);
-			}
             $row = Helper::query("City", "save", [
                 "inputs"    =>  $inputs,
                 "id"        =>  $id,
             ]);
-            $this->saveGeoContent($row, "App\\Models\\CityContent", "city_id", $request);
             return Helper::form_redirect("admin.cities", $row, @$inputs['redirect_to_list']);
         }
         $countries = Helper::query("Country", "all");
-        $contentRow = ($row && $row->id) ? $row->cityContent : null;
-        return view("admin.cities.edit", compact("row", "countries", "contentRow"));
+        return view("admin.cities.edit", compact("row", "countries"));
     }
     
     /**
@@ -2173,21 +2168,24 @@ exit;*/
         $row = Helper::query("Country", "find", ['id' => $id]);
         if ( $request->isMethod('post') ) {
             $this->validate($request, [
-                "title_ar" => "required",
-                "title_en" => "required",
+                "name_ar" => "required",
+                "name_en" => "required",
                 "slug"     => "required|alpha_dash|unique:{$row->table_name()},slug,$id",
                 "code"     => "required|alpha_dash|unique:{$row->table_name()},code,$id",
             ]);
             $inputs = $request->all();
+            foreach (array('media_id', 'media_en_id', 'placement') as $intField) {
+                if (!isset($inputs[$intField]) || $inputs[$intField] === '' || $inputs[$intField] === null) {
+                    $inputs[$intField] = 0;
+                }
+            }
             $row = Helper::query("Country", "save", [
                 "inputs" => $inputs,
                 "id"     => $id,
             ]);
-            $this->saveGeoContent($row, "App\\Models\\CountryContent", "country_id", $request);
             return Helper::form_redirect("admin.countries", $row, @$inputs['redirect_to_list']);
         }
-        $contentRow = ($row && $row->id) ? $row->countryContent : null;
-        return view("admin.countries.edit", compact("row", "contentRow"));
+        return view("admin.countries.edit", compact("row"));
     }
 
     /**
@@ -2209,54 +2207,6 @@ exit;*/
         return Helper::query("Country", "delete", ["id" => $id]);
     }
 
-    /**
-     * Save 1-to-1 translated title/content (ar + en) for country, city, or district.
-     *
-     * @param object $parent
-     * @param string $contentClass
-     * @param string $foreignKey
-     * @param Illuminate\Http\Request $request
-     * @return void
-     */
-    protected function saveGeoContent($parent, $contentClass, $foreignKey, Request $request)
-    {
-        if (!$parent || !$parent->id) {
-            return;
-        }
-        $content = $contentClass::firstOrNew(array($foreignKey => $parent->id));
-        $content->$foreignKey = $parent->id;
-        $map = array(
-            'title' => array('geo_title'),
-            'content' => array('geo_content', 'about_ar'),
-            'title_en' => array('geo_title_en'),
-            'content_en' => array('geo_content_en', 'about_en'),
-            'title_fr' => array('geo_title_fr'),
-            'content_fr' => array('geo_content_fr', 'about_fr'),
-            'title_fa' => array('geo_title_fa'),
-            'content_fa' => array('geo_content_fa', 'about_fa'),
-            'title_ru' => array('geo_title_ru'),
-            'content_ru' => array('geo_content_ru', 'about_ru'),
-        );
-        $fillable = $content->getFillable();
-        $posted = $request->all();
-        foreach ($map as $column => $inputNames) {
-            if (!in_array($column, $fillable)) {
-                continue;
-            }
-            foreach ($inputNames as $inputName) {
-                if (array_key_exists($inputName, $posted)) {
-                    $content->$column = $posted[$inputName];
-                    break;
-                }
-            }
-        }
-        $content->save();
-    }
-	
-	
-	
-	
-	
 	public function keywords2_edit(Request $request, $id = null)
     {
 		$row = Helper::query("Keywords2", "find", ['id' => $id]);
@@ -2727,12 +2677,10 @@ exit;*/
 			
             $region->syncRegionPhotos($request->get('region_photos', []));
 			$region->save();
-            $this->saveGeoContent($region, "App\\Models\\DistrictContent", "region_id", $request);
 			
 			return redirect()->route("admin.regions");
         }
-        $contentRow = ($row && $row->id) ? $row->districtContent : null;
-        return view("admin.regions.edit", compact("row", "contentRow"));
+        return view("admin.regions.edit", compact("row"));
     }
     
     /**

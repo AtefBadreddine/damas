@@ -18,9 +18,6 @@ $emptypic = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABA
 
 
 
-//$regions = \App\Models\Region::where('id', '>', 0)->orderBy('city_id', 'asc')->get();
-$all_regions = \App\Models\Region::select('regions.*')->leftJoin('projects AS p', 'p.region_id', '=', 'regions.id')->where("p.published", 1)->where("p.sold", '!=', 100)->groupBy('regions.id')->having(DB::raw('count(dms_p.id)'), '>', 0)->orderBy(DB::raw('count(dms_p.id)'), 'desc')->with('city.countryRel')->get();
-$proj_cats = Helper::query('ProjectCategory', "where", ["field" => "hide_search_page", "value" => false])->get();
 $citys = App\Models\City::where('id', '!=', 2)->orderBy('placement', 'asc')->get();
 ?>
 
@@ -220,7 +217,7 @@ $citys = App\Models\City::where('id', '!=', 2)->orderBy('placement', 'asc')->get
     }
     .search_section .form-group{
         float: right;
-        width: 33.3333%;
+        width: 25%;
         padding: 0px 5px;
         margin-bottom: 0px;
         position: relative;
@@ -235,21 +232,12 @@ $citys = App\Models\City::where('id', '!=', 2)->orderBy('placement', 'asc')->get
     .search_section .form-group svg path{
         fill: #808080;
     }
-    .search_section .form-group.region_group svg{
-        width: 13px;
-        right: 17px;
-    }
-    .search_section .form-group.features_group svg{
-        width: 15px;
-        right: 15px;
-        top: 15px;
-    }
     .search_section .form-group.budget_group{
-        width: 66.6666%;
+        width: 75%;
         clear: both;
     }
     .search_section .form-group.btn_sec{
-        width: 33.3333%;
+        width: 25%;
         margin: 0px;
         padding-top: 8px;
     }
@@ -844,7 +832,7 @@ echo strpos( @$_SERVER['HTTP_ACCEPT'], 'image/webp' ) !== false ?'/imgwebp/slide
             </h2>
         </div>
         <div class="left">
-            @include("front.partials.index_filter",['all_regions'=>$all_regions])
+            @include("front.partials.index_filter")
         </div>
     </div>
 
@@ -1433,49 +1421,52 @@ $json4 = Helper::ajax_statics('', 'top_city', 0, 0);
             $select.selectpicker('refresh');
         }
 
-        function fillRegions(frm) {
-            var countryId = parseInt(frm.find('select[name=country]').val(), 10);
-            var city = findBySlug(homeFilter.cities, frm.find('select[name=city]').val());
-            fillSelect(frm.find('select[name=region]'), homeFilter.regionLabel, $.grep(homeFilter.regions, function (r) {
-                return city ? r.city === city.id : r.country === countryId;
-            }));
-        }
-
         $('body').on('change', '#form-search select[name=country]', function () {
             var frm = $(this).closest('form');
             var countryId = parseInt($(this).val(), 10);
             fillSelect(frm.find('select[name=city]'), homeFilter.cityLabel, $.grep(homeFilter.cities, function (c) {
                 return c.country === countryId;
             }));
-            fillRegions(frm);
         });
 
-        $('body').on('change', '#form-search select[name=city]', function () {
-            fillRegions($(this).closest('form'));
-        });
+        function homeFilterHasBudget(frm) {
+            var min = parseInt(frm.find(".min_budj").val(), 10), max = parseInt(frm.find(".max_budj").val(), 10);
+            if (min > max) { var t = min; min = max; max = t; }
+            return min > PRICE_MIN || max < PRICE_MAX;
+        }
+
+        function homeFilterIsEmpty(frm) {
+            return !frm.find("select[name=country]").val() &&
+                !frm.find("select[name=city]").val() &&
+                !frm.find("select[name=project_type]").val() &&
+                !frm.find("select[name=rooms]").val() &&
+                !homeFilterHasBudget(frm);
+        }
 
         $('body').on("click", ".send_btn_index", function (e) {
             var frm = $(this).closest("form");
-            var region = findBySlug(homeFilter.regions, frm.find("select[name=region]").val());
+
+            if (homeFilterIsEmpty(frm)) {
+                window.location.href = homeFilter.projectsUrl;
+                return false;
+            }
+
             var city = findBySlug(homeFilter.cities, frm.find("select[name=city]").val());
-            var url = region ? region.url : (city ? city.url : homeFilter.countryUrls[frm.find("select[name=country]").val()]);
+            var countryId = frm.find("select[name=country]").val();
+            var url = city ? city.url : (countryId ? homeFilter.countryUrls[countryId] : homeFilter.projectsUrl);
 
             var params = [];
             var type = frm.find("select[name=project_type]").val();
             if (type) {
                 params.push('type=' + encodeURIComponent(type));
             }
-            var tag = frm.find("select[name=project_category]").val();
-            if (tag) {
-                params.push('category=' + encodeURIComponent(tag));
-            }
             var rooms = frm.find("select[name=rooms]").val();
             if (rooms) {
                 params.push('rooms=' + encodeURIComponent(rooms));
             }
-            var min = parseInt(frm.find(".min_budj").val(), 10), max = parseInt(frm.find(".max_budj").val(), 10);
-            if (min > max) { var t = min; min = max; max = t; }
-            if (min > PRICE_MIN || max < PRICE_MAX) {
+            if (homeFilterHasBudget(frm)) {
+                var min = parseInt(frm.find(".min_budj").val(), 10), max = parseInt(frm.find(".max_budj").val(), 10);
+                if (min > max) { var t = min; min = max; max = t; }
                 params.push('price=' + encodeURIComponent(min + '-' + (max >= PRICE_MAX ? '+' : max)));
             }
 

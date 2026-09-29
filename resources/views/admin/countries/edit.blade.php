@@ -25,8 +25,20 @@
         <span class="help-block">Matches the old country string, e.g. turkey</span>
     </div>
     <div class="form-group col-md-2">
+        <label>WhatsApp number</label>
+        <?= Form::text("whatsapp_number", $row->whatsapp_number, ["class" => "form-control ltr", "placeholder" => "905551605000"]); ?>
+        <span class="help-block">Used on this country's pages. Digits only, e.g. 905551605000</span>
+    </div>
+    <div class="form-group col-md-2">
         <label>Placement</label>
         <?= Form::text("placement", $row->placement, ["class" => "form-control ltr"]); ?>
+    </div>
+    <div class="form-group col-md-12">
+        <label>
+            <input type="checkbox" name="show" value="1" <?= (!isset($row->show) || $row->show == 1) ? 'checked' : ''; ?>>
+            Show in search filters
+        </label>
+        <span class="help-block">When unchecked, this country and its cities and districts are hidden from filters on the home page and listing pages. URLs still work.</span>
     </div>
 </fieldset>
 

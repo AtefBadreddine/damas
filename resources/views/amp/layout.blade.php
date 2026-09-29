@@ -83,7 +83,7 @@ $projectsUrl = route('front.projects');
                         <span class="icon-bar num3"></span>
                     </button>
                     <div class="icons">
-                        <a class="pull-right amp-whatsapp-icon" href="{{ Helper::whatsapp_share($infos->tel_1,$infos->whatsapp_share) }}?icon=1">
+                        <a class="pull-right amp-whatsapp-icon" href="<?= Helper::whatsappShareUrl(1) ?>">
                             <span class="flaticon-app"></span>
                         </a>
                         <a class="pull-right" href="<?= $projectsUrl; ?>">
@@ -173,7 +173,7 @@ $projectsUrl = route('front.projects');
                 </a>
             </li>
             <li>
-                <a href="https://www.damas.net/whatsapp_share?icon=1" target="_blank" aria-label="Link to AMP HTML pin trest">
+                <a href="<?= Helper::whatsappShareUrl(1) ?>" target="_blank" aria-label="Link to AMP HTML pin trest">
                     <i class="fa fa-whatsapp"></i>
                 </a>
             </li>

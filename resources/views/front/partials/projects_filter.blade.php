@@ -3,11 +3,18 @@
 //$is_mobile = Helper::get_device() != 'full' ? true : false;
 $is_mobile = false;
 
-$filterCountries = \App\Models\Country::ordered()->get();
+$filterCountries = \App\Models\Country::ordered()->visibleInFilters()->get();
+$allCountriesByCode = array();
+foreach (\App\Models\Country::ordered()->get() as $fc) {
+    $allCountriesByCode[$fc->code] = $fc;
+}
 $filterCountryByCode = array();
+$visibleCountryIds = array();
 foreach ($filterCountries as $fc) {
     $filterCountryByCode[$fc->code] = $fc;
+    $visibleCountryIds[(int) $fc->id] = true;
 }
+$hiddenFilterCityIds = array_flip(\App\Models\Country::hiddenFilterCityIds());
 
 $filterCountry = isset($locationCountry) && $locationCountry ? $locationCountry : null;
 if (!$filterCountry && !empty($inputs['city_row'])) {
@@ -24,11 +31,11 @@ if (!$filterCountry && !empty($inputs['city_row'])) {
 // Cities whose slug is a country code ("turkey") are "all cities" rows; the country select replaces them.
 $filterCities = array();
 foreach ($citys as $fcity) {
-    if (isset($filterCountryByCode[$fcity->slug])) {
+    if (isset($allCountriesByCode[$fcity->slug])) {
         continue;
     }
-    $fcCountryId = $fcity->country_id ?: (isset($filterCountryByCode[$fcity->country]) ? $filterCountryByCode[$fcity->country]->id : null);
-    if (!$fcCountryId) {
+    $fcCountryId = $fcity->country_id ?: (isset($allCountriesByCode[$fcity->country]) ? $allCountriesByCode[$fcity->country]->id : null);
+    if (!$fcCountryId || !isset($visibleCountryIds[$fcCountryId])) {
         continue;
     }
     $filterCities[] = array(
@@ -42,7 +49,6 @@ $filterCountryUrls = array();
 foreach ($filterCountries as $fc) {
     $filterCountryUrls[$fc->id] = $fc->listingUrl();
 }
-
 ?>
 <p class="top_title jazzira_font_bold"><?= trans("front.advanced search"); ?>
     <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 220.6 239.5" xml:space="preserve"><g> <path class="st0" d="M110.2,0.5c31.7,0,63.3,0,95,0c6.1,0,10.8,2.3,13.6,7.6c2.6,4.9,2.5,10.2-1,14.6c-1.9,2.3-4.9,3.8-7.4,5.6 c-2.5,1.7-5.6,2.8-7.5,5c-22,26.7-43.9,53.6-65.7,80.6c-1.7,2.1-2.8,5.3-2.8,8c-0.2,28.3-0.2,56.5,0,84.8c0,4.6-1.6,7.4-5.4,9.7 c-11.5,7.1-22.7,14.6-34.2,21.6c-2.2,1.4-6.1,2.2-8.1,1.1c-1.9-1-3.4-4.8-3.4-7.4c-0.2-19.7,0-39.3,0-59c0-17.6,0-35.3-0.3-52.9 c0-2-0.9-4.3-2.1-5.8C58.5,86.3,36,58.7,13.4,31.1c-1.1-1.3-2.7-2.4-4.3-3.2c-7-3.3-10.3-9.5-8.7-16.7C1.8,5,7.5,0.5,14.8,0.5 C46.6,0.4,78.4,0.5,110.2,0.5z M195.9,29.4c-58.3,0-115.7,0-173.4,0c0.3,0.8,0.4,1.1,0.6,1.3C44.4,56.8,65.6,82.9,87,108.9 c1.1,1.4,3.6,2.3,5.5,2.3c8.5,0.2,17.1-0.5,25.5,0.3c8.2,0.8,13.3-2.2,18.3-8.6C155.6,78.3,175.6,54.3,195.9,29.4z M91.1,119.2 c0,37.5,0,74.3,0,112c11.8-7.5,22.8-14.4,33.6-21.5c1.2-0.8,1.9-3,1.9-4.6c0.2-8.3,0.1-16.7,0.1-25c0.1-14.1,0.2-28.2,0.3-42.3 c0-6.1,0-12.2,0-18.6C114.6,119.2,103,119.2,91.1,119.2z M110.2,8.2c-30.7,0-61.3,0-92,0c-7.5,0-10.8,2.1-10.6,6.7 c0.1,4.4,3.4,6.4,10.6,6.4c61.3,0,122.6,0,183.9,0c2,0,4.5,0.4,5.8-0.6c2-1.5,4.6-4.3,4.4-6.2c-0.3-2.3-3.1-4.4-5.3-6.1 c-0.9-0.7-2.9-0.2-4.4-0.2C171.9,8.2,141.1,8.2,110.2,8.2z"/> </g> </svg>
@@ -87,7 +93,9 @@ foreach ($filterCountries as $fc) {
         <option value=""><?= trans("front.all regions"); ?></option>
         @foreach($inputs["regions_options"] as $region)
 			@if(in_array($region->id,json_decode($inputs["project_regions_options"])))@endif
+        @if(!isset($hiddenFilterCityIds[$region->city_id]))
 		<option value="<?= $region->slug ?>" data-url="<?= htmlspecialchars((string) $region->listingUrl(), ENT_QUOTES, 'UTF-8') ?>" <?= in_array($region->slug, $inputs['regions']) ? 'selected' : ''; ?>><?= $region->getName(); ?></option>
+        @endif
 			 
 		@endforeach
         <?php /* @foreach($inputs["regions_options"] as $region)
@@ -193,7 +201,10 @@ document.addEventListener('DOMContentLoaded', function () {
         clearDistricts();
 
         if (countryId && filterCountryUrls[countryId]) {
-            window.location.href = filterCountryUrls[countryId];
+            var countryTarget = filterCountryUrls[countryId];
+            window.location.href = window.preserveQueryOnPathChange
+                ? window.preserveQueryOnPathChange(countryTarget)
+                : countryTarget + window.location.search;
         }
     });
 

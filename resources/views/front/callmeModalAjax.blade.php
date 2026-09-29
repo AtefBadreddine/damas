@@ -198,7 +198,7 @@ $style_lang = in_array($current_lang, ['en', 'fr', 'ru']) ? 'en' : 'ar';
                         <ul class="social_media_icons">
                             <?php if ($hide_whatsapp == false) { ?>
                                 <li>
-                                    <a target="_blank" class="whatsappBtn faa-tada animated" href="{{ route('front.whatsapp_share') }}?icon=8&tel=905551605000">
+                                    <a target="_blank" class="whatsappBtn faa-tada animated" href="<?= Helper::whatsappShareUrl(8) ?>">
                                         <img loading="lazy" width="65" height="65" src="<?= asset("img/whatsapp-icon.svg"); ?>" alt="whatsapp-icon"/>
                                     </a>
                                 </li>
@@ -224,7 +224,7 @@ $style_lang = in_array($current_lang, ['en', 'fr', 'ru']) ? 'en' : 'ar';
                                 </a>
                             </li>
                             <li>
-                                <a target="_blank" class="phoneBtn faa-ring animated" href="tel:<?= str_replace(' ', '', $infos->tel_1) ?>">
+                                <a target="_blank" class="phoneBtn faa-ring animated" href="tel:<?= Helper::whatsappNumber() ?>">
                                     <svg width="25" height="25" version="1.1" id="Layer_1"  x="0px" y="0px" viewBox="0 0 294.2 288.2" xml:space="preserve"> <g> <path d="M270.5,220.9c-0.6,3.1-1,6.3-1.9,9.3c-4.1,13.5-8.2,27.1-12.5,40.6c-4.4,14-13.8,19.6-28.2,16.8 C150,272.2,88.4,231.8,43.8,166c-9.8-14.5-18-30.1-24.9-46.5c-8.2-19.5-14.1-39.4-18.2-60c-2.4-12.4,2.2-22.1,14.1-26.2 C30.3,27.9,46,23,61.9,18.8c13.1-3.5,22.4,2.4,26.3,15.3c5.5,18,10.9,36,16.6,53.9c2.7,8.6,0.3,15.4-6.3,21 c-5.9,4.9-12.1,9.4-18,14.3c-6.5,5.3-7.3,10.9-2.5,17.9c18.7,27.4,41.8,50.4,69.1,69.2c7.2,4.9,12.7,4.1,18.2-2.7 c4.5-5.6,8.8-11.3,13.3-16.9c6.4-7.9,12.8-9.9,22.5-6.9c18,5.5,36,11,53.9,16.5C265.8,203.6,270.3,209.6,270.5,220.9z"/> <path d="M294.2,142.3c-0.2,1.1,0,3.7-0.9,5.9c-1.1,2.8-8.6,4.7-12.6,2.6c-2.2-1.1-4.4-4.4-4.5-6.8 c-2.8-63.1-53.6-117.7-116.5-124.9c-3-0.3-6-0.7-8.9-0.9c-6.4-0.5-8.3-3.1-7.9-11.1c0.3-5.3,2.7-7.5,8.6-7.1 c32.4,1.9,61.5,12.8,86.7,33.3c32.4,26.4,50.7,60.7,55.7,102.1C294,137.3,294,139.2,294.2,142.3z"/> <path d="M241.9,140.7c-0.3,7.9-2.3,10.5-7,10.8c-8,0.5-10.2-1.2-11.3-8.3c-5.7-40.4-33-67.5-73.5-72.7c-6.5-0.8-8.2-3.7-7.3-12 c0.5-4.6,3.2-6.6,9-6.1c42.1,3.6,78.5,34.3,88.1,77.3C240.9,133.8,241.5,138.1,241.9,140.7z"/> </g> </svg>
                                 </a>
                             </li>

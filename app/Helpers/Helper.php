@@ -531,6 +531,127 @@ class Helper
 		return "https://api.whatsapp.com/send?phone=$whatsapp_num&text=$whatsapp_text";*/
 		return route("front.whatsapp_share");
 	}
+
+    /**
+     * Country for the current front URL: {country} route param, legacy action country,
+     * first path segment, optional project/city/country context, or ?whatsapp_country=.
+     *
+     * @param mixed $context Country, Project, City, or null
+     * @return \App\Models\Country|null
+     */
+    public static function currentCountry($context = null)
+    {
+        if ($context instanceof \App\Models\Country) {
+            return $context;
+        }
+        if ($context instanceof \App\Models\Project && $context->city) {
+            return self::currentCountry($context->city);
+        }
+        if ($context instanceof \App\Models\City) {
+            if ($context->countryRel) {
+                return $context->countryRel;
+            }
+            return \App\Models\Country::findByCode($context->country);
+        }
+
+        $queryCountry = request()->get('whatsapp_country');
+        if ($queryCountry) {
+            $fromQuery = \App\Models\Country::findBySlug($queryCountry);
+            if (!$fromQuery) {
+                $fromQuery = \App\Models\Country::findByCode($queryCountry);
+            }
+            if ($fromQuery) {
+                return $fromQuery;
+            }
+        }
+
+        $route = \Route::getCurrentRoute();
+        if ($route) {
+            $value = $route->parameter('country');
+            if ($value === null) {
+                $action = $route->getAction();
+                $value = isset($action['country']) ? $action['country'] : null;
+            }
+            if ($value) {
+                $fromRoute = \App\Models\Country::findBySlug($value);
+                if (!$fromRoute) {
+                    $fromRoute = \App\Models\Country::findByCode($value);
+                }
+                if ($fromRoute) {
+                    return $fromRoute;
+                }
+            }
+        }
+
+        $segments = array_values(array_filter(explode('/', request()->getPathInfo())));
+        $locales = array('ar', 'en', 'fr', 'ru', 'pe', 'fa');
+        if (!empty($segments) && in_array($segments[0], $locales)) {
+            array_shift($segments);
+        }
+        if (!empty($segments)) {
+            return \App\Models\Country::findBySlug($segments[0]);
+        }
+
+        return null;
+    }
+
+    /**
+     * WhatsApp digits for the current page.
+     * Country geo routes use countries.whatsapp_number; otherwise locale params tel_1, then tel_2.
+     *
+     * @param mixed $context Country, Project, City, or null
+     * @return string
+     */
+    public static function whatsappNumber($context = null)
+    {
+        $raw = '';
+        $country = self::currentCountry($context);
+        static $hasWhatsappColumn = null;
+        if ($hasWhatsappColumn === null) {
+            $hasWhatsappColumn = \Schema::hasTable('countries') && \Schema::hasColumn('countries', 'whatsapp_number');
+        }
+        if ($country && $hasWhatsappColumn) {
+            $raw = $country->getWhatsappNumber();
+        }
+        if ($raw === '') {
+            $infos = self::get_params();
+            if ($infos && trim((string) $infos->tel_1) !== '') {
+                $raw = $infos->tel_1;
+            } elseif ($infos && trim((string) $infos->tel_2) !== '') {
+                $raw = $infos->tel_2;
+            }
+        }
+        return preg_replace('/\D+/', '', (string) $raw);
+    }
+
+    /**
+     * Display form of the current WhatsApp / contact number (+digits).
+     *
+     * @param mixed $context
+     * @return string
+     */
+    public static function whatsappNumberDisplay($context = null)
+    {
+        $tel = self::whatsappNumber($context);
+        return $tel === '' ? '' : '+' . $tel;
+    }
+
+    /**
+     * Front WhatsApp share URL with icon tracking and the resolved tel.
+     *
+     * @param int|string $icon
+     * @param mixed $context
+     * @return string
+     */
+    public static function whatsappShareUrl($icon = '8', $context = null)
+    {
+        $url = route('front.whatsapp_share') . '?icon=' . $icon;
+        $tel = self::whatsappNumber($context);
+        if ($tel !== '') {
+            $url .= '&tel=' . $tel;
+        }
+        return $url;
+    }
     
     /**
     * is mobile

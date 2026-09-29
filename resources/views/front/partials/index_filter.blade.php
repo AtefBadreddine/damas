@@ -1,33 +1,32 @@
 <?php
-$homeCountries = \App\Models\Country::ordered()->get();
+$allCountriesByCode = array();
+foreach (\App\Models\Country::ordered()->get() as $hc) {
+    $allCountriesByCode[$hc->code] = $hc;
+}
+$homeCountries = \App\Models\Country::ordered()->visibleInFilters()->get();
 $homeCountryByCode = array();
 $homeCountryUrls = array();
+$visibleCountryIds = array();
 foreach ($homeCountries as $hc) {
     $homeCountryByCode[$hc->code] = $hc;
     $homeCountryUrls[$hc->id] = $hc->listingUrl();
+    $visibleCountryIds[(int) $hc->id] = true;
 }
 // Cities whose slug is a country code ("turkey") are "all cities" rows; the country select replaces them.
 $homeCities = array();
 $homeCityCountry = array();
 foreach ($citys as $hcity) {
-    if (isset($homeCountryByCode[$hcity->slug])) {
+    if (isset($allCountriesByCode[$hcity->slug])) {
         continue;
     }
-    $hcCountryId = $hcity->country_id ?: (isset($homeCountryByCode[$hcity->country]) ? $homeCountryByCode[$hcity->country]->id : null);
-    if (!$hcCountryId || !$hcity->listingUrl()) {
+    $hcCountryId = $hcity->country_id ?: (isset($allCountriesByCode[$hcity->country]) ? $allCountriesByCode[$hcity->country]->id : null);
+    if (!$hcCountryId || !isset($visibleCountryIds[$hcCountryId]) || !$hcity->listingUrl()) {
         continue;
     }
     $homeCityCountry[$hcity->id] = (int) $hcCountryId;
     $homeCities[] = array('id' => (int) $hcity->id, 'slug' => $hcity->slug, 'name' => $hcity->getName(), 'country' => (int) $hcCountryId, 'url' => $hcity->listingUrl());
 }
 
-$homeRegions = array();
-foreach ($all_regions as $hr) {
-    if (!isset($homeCityCountry[$hr->city_id]) || !$hr->listingUrl()) {
-        continue;
-    }
-    $homeRegions[] = array('slug' => $hr->slug, 'name' => $hr->getName(), 'city' => (int) $hr->city_id, 'country' => $homeCityCountry[$hr->city_id], 'url' => $hr->listingUrl());
-}
 ?>
 <?= Form::open(["id" => "form-search"]); ?>
 
@@ -47,13 +46,6 @@ foreach ($all_regions as $hr) {
         <option value="" selected><?= trans("front.city"); ?></option>
     </select>
 </div>
-<div class="form-group region_group">
-    <svg version="1.1" id="Layer_1"  x="0px" y="0px" viewBox="0 0 46.18 61.05" xml:space="preserve"><g> <path class="st0" d="M23.09,0C10.36,0,0,10.36,0,23.09c0,5.25,3.62,12.93,10.76,22.83C15.92,53.07,21,58.72,21.21,58.96l1.88,2.08 l1.88-2.08c0.21-0.24,5.29-5.89,10.45-13.04c7.14-9.89,10.76-17.58,10.76-22.83C46.18,10.36,35.82,0,23.09,0L23.09,0z M23.09,53.43 C16.73,46,5.06,30.76,5.06,23.09c0-9.94,8.09-18.03,18.03-18.03s18.03,8.09,18.03,18.03C41.13,30.76,29.45,46,23.09,53.43 L23.09,53.43z M23.09,53.43"></path> <path class="st0" d="M31.47,23.09c0,4.63-3.75,8.38-8.38,8.38s-8.38-3.75-8.38-8.38s3.75-8.38,8.38-8.38S31.47,18.47,31.47,23.09 L31.47,23.09z M31.47,23.09"></path> </g> </svg>
-    <select class="selectpicker form-control" name="region" title="<?= trans("front.all regions"); ?>">
-        <option value="" selected><?= trans("front.all regions"); ?></option>
-    </select>
-</div>
-
 <div class="form-group">
     <svg version="1.1" id="Layer_1"  x="0px" y="0px" viewBox="0 0 23.41 24.56" xml:space="preserve"><g> <path class="st0" d="M4.35,4.91l6.19,1.88l0.31-1.02L4.22,3.76l-2.95,1.7l0.53,0.92L4.35,4.91z M4.35,4.91"></path> <path class="st0" d="M4.35,6.79l6.19,1.88l0.31-1.02L4.22,5.63l-2.95,1.7l0.53,0.92L4.35,6.79z M4.35,6.79"></path> <path class="st0" d="M4.35,8.66l6.19,1.88l0.31-1.02L4.22,7.51l-2.95,1.7l0.53,0.92L4.35,8.66z M4.35,8.66"></path> <path class="st0" d="M4.35,10.54l6.19,1.88l0.31-1.02L4.22,9.39l-2.95,1.7l0.53,0.92L4.35,10.54z M4.35,10.54"></path> <path class="st0" d="M4.35,12.42l6.19,1.88l0.31-1.02l-6.63-2.01l-2.95,1.7l0.53,0.92L4.35,12.42z M4.35,12.42"></path> <path class="st0" d="M4.35,14.3l6.19,1.88l0.31-1.02l-6.63-2.01l-2.95,1.7l0.53,0.92L4.35,14.3z M4.35,14.3"></path> <path class="st0" d="M4.35,16.18l6.19,1.88l0.31-1.02l-6.63-2.01l-2.95,1.7l0.53,0.92L4.35,16.18z M4.35,16.18"></path> <path class="st0" d="M4.35,18.05l6.19,1.88l0.31-1.02L4.22,16.9l-2.95,1.7l0.53,0.92L4.35,18.05z M4.35,18.05"></path> <path class="st0" d="M14.47,4.91l6.19,1.88l0.31-1.02l-6.63-2.01l-2.95,1.7l0.53,0.92L14.47,4.91z M14.47,4.91"></path> <path class="st0" d="M14.47,3.03l6.19,1.88l0.31-1.02l-6.63-2.01l-2.95,1.7l0.53,0.92L14.47,3.03z M14.47,3.03"></path> <path class="st0" d="M14.47,1.15l6.19,1.88l0.31-1.02L14.34,0l-2.95,1.7l0.53,0.92L14.47,1.15z M14.47,1.15"></path> <path class="st0" d="M14.47,6.79l6.19,1.88l0.31-1.02l-6.63-2.01l-2.95,1.7l0.53,0.92L14.47,6.79z M14.47,6.79"></path> <path class="st0" d="M14.47,8.66l6.19,1.88l0.31-1.02l-6.63-2.01l-2.95,1.7l0.53,0.92L14.47,8.66z M14.47,8.66"></path> <path class="st0" d="M14.47,10.54l6.19,1.88l0.31-1.02l-6.63-2.01l-2.95,1.7l0.53,0.92L14.47,10.54z M14.47,10.54"></path> <path class="st0" d="M14.47,12.42l6.19,1.88l0.31-1.02l-6.63-2.01l-2.95,1.7l0.53,0.92L14.47,12.42z M14.47,12.42"></path> <path class="st0" d="M14.47,14.3l6.19,1.88l0.31-1.02l-6.63-2.01l-2.95,1.7l0.53,0.92L14.47,14.3z M14.47,14.3"></path> <path class="st0" d="M14.47,16.18l6.19,1.88l0.31-1.02l-6.63-2.01l-2.95,1.7l0.53,0.92L14.47,16.18z M14.47,16.18"></path> <path class="st0" d="M14.47,18.05l6.19,1.88l0.31-1.02l-6.63-2.01l-2.95,1.7l0.53,0.92L14.47,18.05z M14.47,18.05"></path> <path class="st0" d="M20.67,23.55v-1.77l0.3-0.98l-6.63-2.01l-2.95,1.7l0.3,0.52v2.55h-1.13v-1.77l0.3-0.98l-6.63-2.01l-2.95,1.7 L1.57,21v2.55H0v1.02h23.41v-1.02H20.67z M5.75,23.55v-2.16L9,22.16v1.38H5.75z M15.87,23.55v-2.16l3.25,0.78v1.38H15.87z M15.87,23.55"></path> </g> </svg>
     <select class="selectpicker form-control" name="project_type">
@@ -76,16 +68,6 @@ foreach ($all_regions as $hr) {
             ?>
             <option value="<?= $kr; ?>" <?= @$inputs["rooms"] == $kr ? 'selected' : ''; ?>><?= $i; ?></option>
         <?php endforeach; ?>
-    </select>
-</div>
-
-<div class="form-group features_group">
-    <svg version="1.1" id="Layer_1"  x="0px" y="0px" viewBox="0 0 18.73 14.27" xml:space="preserve"><g> <path class="st0" d="M16.32,12.59c0-0.3-0.29-0.54-0.65-0.54H2.91c-0.36,0-0.65,0.24-0.65,0.54v1.15c0,0.3,0.29,0.54,0.65,0.54 h12.76c0.36,0,0.65-0.24,0.65-0.54V12.59z M16.32,12.59"></path> <path class="st0" d="M18.4,0.14c-0.25-0.12-0.56-0.09-0.76,0.07l-4.47,3.49l-3.3-3.49C9.75,0.09,9.56,0,9.36,0h0 c-0.2,0-0.39,0.09-0.51,0.22l-3.3,3.52l-4.47-3.5C0.88,0.08,0.58,0.05,0.33,0.17C0.08,0.28-0.05,0.52,0.01,0.75l2.49,9.58 c0.06,0.25,0.33,0.42,0.63,0.42h12.45c0.3,0,0.57-0.18,0.63-0.42l2.49-9.61C18.78,0.5,18.65,0.26,18.4,0.14L18.4,0.14z M18.4,0.14"></path> </g> </svg>
-    <select class="selectpicker form-control pattern" name="project_category">
-        <option value=""><?= trans("front.special advantages"); ?></option>
-        @foreach($proj_cats as $cat)
-        <option value="<?= $cat->slug; ?>"><?= $cat->getName(); ?></option>
-        @endforeach
     </select>
 </div>
 
@@ -112,9 +94,8 @@ foreach ($all_regions as $hr) {
 <script>
 window.homeFilterData = {
     cities: <?= json_encode($homeCities, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_HEX_TAG) ?>,
-    regions: <?= json_encode($homeRegions, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_HEX_TAG) ?>,
     countryUrls: <?= json_encode($homeCountryUrls, JSON_UNESCAPED_SLASHES | JSON_HEX_TAG) ?>,
     cityLabel: <?= json_encode(trans("front.city"), JSON_UNESCAPED_UNICODE | JSON_HEX_TAG) ?>,
-    regionLabel: <?= json_encode(trans("front.all regions"), JSON_UNESCAPED_UNICODE | JSON_HEX_TAG) ?>
+    projectsUrl: <?= json_encode(route('front.projects'), JSON_UNESCAPED_SLASHES | JSON_HEX_TAG) ?>
 };
 </script>

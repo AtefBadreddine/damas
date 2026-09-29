@@ -520,7 +520,7 @@ class HomeController extends BaseController
 		if($request->get("tel") != '')
 			$whatsapp_num = $request->get("tel");
 		else
-			$whatsapp_num = $infos->tel_1;
+			$whatsapp_num = Helper::whatsappNumber();
 		
 		$whatsapp_num = str_replace(' ','',$whatsapp_num);
 		$whatsapp_num = str_replace('+','',$whatsapp_num);
@@ -697,7 +697,7 @@ class HomeController extends BaseController
 		if($request->get("tel") != '')
 			$whatsapp_num = $request->get("tel");
 		else
-			$whatsapp_num = $infos->tel_1;
+			$whatsapp_num = Helper::whatsappNumber();
 		
 		$whatsapp_num = str_replace(' ','',$whatsapp_num);
 		$whatsapp_num = str_replace('+','',$whatsapp_num);

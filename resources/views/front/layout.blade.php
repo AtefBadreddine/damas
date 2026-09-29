@@ -15,6 +15,14 @@ if(isset($is_proj_data) && isset($project)){
     $ccountry = $project->city->country;
 }
 
+$whatsappContext = isset($project) ? $project : (isset($locationCountry) ? $locationCountry : null);
+$whatsappTel = Helper::whatsappNumber($whatsappContext);
+$whatsappCountry = Helper::currentCountry($whatsappContext);
+$callmeModalUrl = route('front.callmeModalAjax') . '?ct=' . $ccountry;
+if ($whatsappCountry) {
+    $callmeModalUrl .= '&whatsapp_country=' . $whatsappCountry->slug;
+}
+
 $current_lang = LaravelLocalization::getCurrentLocale();
 
 $style_lang = in_array($current_lang, ['en', 'fr', 'ru']) ? 'en' : 'ar';
@@ -412,7 +420,7 @@ $projectsUrl = route('front.projects');
 
         <?php if (/*Helper::get_device() == 'mob' &&*/ $hide_whatsapp == false) { ?>
             <div class="whatsapp_direct_btn">
-                <a target="_blank" class="whatsappBtn " href="{{ route('front.whatsapp_share') }}?icon=8&tel=<?= $ccountry=='oman'?'96898272585':'905551605000' ?>">
+                <a target="_blank" class="whatsappBtn " href="<?= Helper::whatsappShareUrl(8, $whatsappContext) ?>">
                     <span class="fa fa-whatsapp"></span>
                 </a>
             </div>
@@ -432,7 +440,7 @@ $projectsUrl = route('front.projects');
              <div class="support_links">
 
             <span class="mob_icons icon type_mob">
-                <a class="support_links_btn" data-fancybox data-type="iframe" data-src="{{ route('front.callmeModalAjax') }}" href="{{ route('front.callmeModalAjax') }}?ct={{ $ccountry }}">
+                <a class="support_links_btn" data-fancybox data-type="iframe" data-src="<?= $callmeModalUrl ?>" href="<?= $callmeModalUrl ?>">
                     <img loading="lazy" width="40" height="40" class="icon_one faa-tada animated faa-slow" src="<?= asset("img/whatsapp-icon.svg"); ?>" alt="whatsapp-icon"/>
                     <svg width="40" height="32" class="icon_two faa-ring animated faa-slow" version="1.1" id="Layer_1"  x="0px" y="0px" viewBox="0 0 294.2 288.2" xml:space="preserve"> <g> <path d="M270.5,220.9c-0.6,3.1-1,6.3-1.9,9.3c-4.1,13.5-8.2,27.1-12.5,40.6c-4.4,14-13.8,19.6-28.2,16.8 C150,272.2,88.4,231.8,43.8,166c-9.8-14.5-18-30.1-24.9-46.5c-8.2-19.5-14.1-39.4-18.2-60c-2.4-12.4,2.2-22.1,14.1-26.2 C30.3,27.9,46,23,61.9,18.8c13.1-3.5,22.4,2.4,26.3,15.3c5.5,18,10.9,36,16.6,53.9c2.7,8.6,0.3,15.4-6.3,21 c-5.9,4.9-12.1,9.4-18,14.3c-6.5,5.3-7.3,10.9-2.5,17.9c18.7,27.4,41.8,50.4,69.1,69.2c7.2,4.9,12.7,4.1,18.2-2.7 c4.5-5.6,8.8-11.3,13.3-16.9c6.4-7.9,12.8-9.9,22.5-6.9c18,5.5,36,11,53.9,16.5C265.8,203.6,270.3,209.6,270.5,220.9z"></path> <path d="M294.2,142.3c-0.2,1.1,0,3.7-0.9,5.9c-1.1,2.8-8.6,4.7-12.6,2.6c-2.2-1.1-4.4-4.4-4.5-6.8 c-2.8-63.1-53.6-117.7-116.5-124.9c-3-0.3-6-0.7-8.9-0.9c-6.4-0.5-8.3-3.1-7.9-11.1c0.3-5.3,2.7-7.5,8.6-7.1 c32.4,1.9,61.5,12.8,86.7,33.3c32.4,26.4,50.7,60.7,55.7,102.1C294,137.3,294,139.2,294.2,142.3z"></path> <path d="M241.9,140.7c-0.3,7.9-2.3,10.5-7,10.8c-8,0.5-10.2-1.2-11.3-8.3c-5.7-40.4-33-67.5-73.5-72.7c-6.5-0.8-8.2-3.7-7.3-12 c0.5-4.6,3.2-6.6,9-6.1c42.1,3.6,78.5,34.3,88.1,77.3C240.9,133.8,241.5,138.1,241.9,140.7z"></path> </g> </svg>
                     <svg width="40" height="32" class="icon_three faa-tada animated faa-slow" version="1.1" id="Layer_1"  x="0px" y="0px" viewBox="0 0 21.3 21.9" xml:space="preserve"><g> <path class="st0" d="M10.7,2.4c3.2,0,5.8,2.6,5.8,5.8c0,1.8-0.8,3.7-2.1,5l-0.9,1l1.3,0.3c3.5,0.9,5.8,2.8,5.8,4.8 c-0.1,0.6-3.5,1.7-9.9,1.7c-6.3,0-9.7-1.1-9.9-1.7c0-1.5,1.2-2.9,3.3-3.9c1.2,1,2.6,1.8,4.1,2.2c0.5,0.8,1.5,1.3,2.5,1.3 c1.6,0,2.9-1.3,2.9-2.9c0-1.6-1.3-2.9-2.9-2.9c-0.7,0-1.4,0.2-1.9,0.7c-1.5-0.5-2.8-1.7-3.4-3.1C5,9.8,4.9,9,4.9,8.2 C4.9,5,7.5,2.4,10.7,2.4 M10.7,1.6c-3.6,0-6.6,3-6.6,6.6c0,0.9,0.2,1.8,0.5,2.7C5.4,12.7,7,14.1,9,14.7c0.4-0.5,1-0.8,1.7-0.8 c1.2,0,2.1,1,2.1,2.2c0,1.2-1,2.1-2.1,2.1c-0.8,0-1.6-0.5-1.9-1.2c-1.7-0.4-3.3-1.3-4.4-2.4C1.7,15.6,0,17.4,0,19.4 c0,1.7,5.3,2.5,10.7,2.5c5.3,0,10.7-0.8,10.7-2.5c0-2.5-2.6-4.6-6.4-5.6c1.4-1.5,2.3-3.6,2.3-5.6C17.3,4.6,14.3,1.6,10.7,1.6 L10.7,1.6z"/> <path class="st1" d="M17.6,13.7"/> <g> <path class="st0" d="M9.3,16.3c0.1,0.6,0.7,1.1,1.4,1.1c0.8,0,1.4-0.6,1.4-1.4c0-0.7-0.6-1.4-1.4-1.4c-0.6,0-1.1,0.4-1.3,0.9 c-3.6-0.6-6.3-3.8-6.1-7.6c0.1-3.8,3.1-6.9,6.9-7.1c4.2-0.3,7.8,2.9,8,7.1c0,0.2,0.2,0.4,0.4,0.4l0,0c0.2,0,0.4-0.2,0.4-0.4 C18.6,3.3,14.7-0.3,10,0C6,0.3,2.8,3.6,2.5,7.6C2.2,11.9,5.2,15.6,9.3,16.3L9.3,16.3z M9.3,16.3"/> </g> </g> </svg>
@@ -440,7 +448,7 @@ $projectsUrl = route('front.projects');
             </span>
 
             <span class="type_full icon shadow_type">
-                <a class="support_links_btn" data-fancybox data-type="iframe" data-src="{{ route('front.callmeModalAjax') }}" href="{{ route('front.callmeModalAjax') }}?ct={{ $ccountry }}">
+                <a class="support_links_btn" data-fancybox data-type="iframe" data-src="<?= $callmeModalUrl ?>" href="<?= $callmeModalUrl ?>">
                     <svg width="44" height="32" version="1.1" id="Layer_1"  x="0px" y="0px" viewBox="0 0 21.3 21.9" xml:space="preserve"><g> <path class="st0" d="M10.7,2.4c3.2,0,5.8,2.6,5.8,5.8c0,1.8-0.8,3.7-2.1,5l-0.9,1l1.3,0.3c3.5,0.9,5.8,2.8,5.8,4.8 c-0.1,0.6-3.5,1.7-9.9,1.7c-6.3,0-9.7-1.1-9.9-1.7c0-1.5,1.2-2.9,3.3-3.9c1.2,1,2.6,1.8,4.1,2.2c0.5,0.8,1.5,1.3,2.5,1.3 c1.6,0,2.9-1.3,2.9-2.9c0-1.6-1.3-2.9-2.9-2.9c-0.7,0-1.4,0.2-1.9,0.7c-1.5-0.5-2.8-1.7-3.4-3.1C5,9.8,4.9,9,4.9,8.2 C4.9,5,7.5,2.4,10.7,2.4 M10.7,1.6c-3.6,0-6.6,3-6.6,6.6c0,0.9,0.2,1.8,0.5,2.7C5.4,12.7,7,14.1,9,14.7c0.4-0.5,1-0.8,1.7-0.8 c1.2,0,2.1,1,2.1,2.2c0,1.2-1,2.1-2.1,2.1c-0.8,0-1.6-0.5-1.9-1.2c-1.7-0.4-3.3-1.3-4.4-2.4C1.7,15.6,0,17.4,0,19.4 c0,1.7,5.3,2.5,10.7,2.5c5.3,0,10.7-0.8,10.7-2.5c0-2.5-2.6-4.6-6.4-5.6c1.4-1.5,2.3-3.6,2.3-5.6C17.3,4.6,14.3,1.6,10.7,1.6 L10.7,1.6z"/> <path class="st1" d="M17.6,13.7"/> <g> <path class="st0" d="M9.3,16.3c0.1,0.6,0.7,1.1,1.4,1.1c0.8,0,1.4-0.6,1.4-1.4c0-0.7-0.6-1.4-1.4-1.4c-0.6,0-1.1,0.4-1.3,0.9 c-3.6-0.6-6.3-3.8-6.1-7.6c0.1-3.8,3.1-6.9,6.9-7.1c4.2-0.3,7.8,2.9,8,7.1c0,0.2,0.2,0.4,0.4,0.4l0,0c0.2,0,0.4-0.2,0.4-0.4 C18.6,3.3,14.7-0.3,10,0C6,0.3,2.8,3.6,2.5,7.6C2.2,11.9,5.2,15.6,9.3,16.3L9.3,16.3z M9.3,16.3"/> </g> </g> </svg>
                 </a>
             </span>
@@ -770,7 +778,7 @@ $projectsUrl = route('front.projects');
                                 <a  target="_blank" href="<?= $ccountry=='oman'?'https://www.instagram.com/damasgulfinvest/':'https://www.instagram.com/damasturk/' ?>" class="instagram"><div class="button icon" role="button"><i class="fa fa-instagram"></i></div></a>
                                 <a  target="_blank" href="<?= $ccountry=='oman'?'https://www.facebook.com/DamasGulfInvest':'https://www.facebook.com/damasturk/' ?>" class="facebook"><div class="button icon" role="button"></div></a>
                                 <?php if ($hide_whatsapp == false) { ?>
-                                    <a  target="_blank" href="{{ route('front.whatsapp_share') }}?icon=7&tel=<?= $ccountry=='oman'?'96898272585':'905551605000' ?>" class="whatsapp"><div class="button icon" role="button"></div></a>
+                                    <a  target="_blank" href="<?= Helper::whatsappShareUrl(7, $whatsappContext) ?>" class="whatsapp"><div class="button icon" role="button"></div></a>
                                     <!--<span class="num">+<?= $ccountry=='oman'?'968 98 27 25 85':'90 555 160 50 00' ?></span>-->
                                 <?php } ?>
                             </div>

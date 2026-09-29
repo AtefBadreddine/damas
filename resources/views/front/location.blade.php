@@ -145,8 +145,12 @@ foreach ($citys as $c) {
     }
 }
 $regionUrls = array();
+$hiddenFilterCityIds = array_flip(\App\Models\Country::hiddenFilterCityIds());
 foreach ($inputs['regions_options'] as $r) {
     if (!$r) {
+        continue;
+    }
+    if (isset($hiddenFilterCityIds[$r->city_id])) {
         continue;
     }
     $regionUrl = $r->listingUrl();
@@ -158,6 +162,43 @@ foreach ($inputs['regions_options'] as $r) {
 <script type="text/javascript" src="{{ asset('js/main_search.min.js') }}?v=10"></script>
 <script type="text/javascript" src="{{ asset('js/jquery.fancybox.min.js') }}?v=09" defer=""></script>
 <script>
+(function () {
+    var listingFilterKeys = ['type', 'category', 'rooms', 'price', 'sorting', 'sorting_type', 'district', 'regions'];
+
+    window.preserveQueryOnPathChange = function (pathUrl) {
+        var params = new URLSearchParams(window.location.search);
+        params.delete('page');
+        params.delete('district');
+        params.delete('regions');
+        var qs = params.toString();
+        return pathUrl + (qs ? '?' + qs : '');
+    };
+
+    window.buildProjectListingUrl = function (pathUrl, filterParams) {
+        filterParams = filterParams || [];
+        var params = new URLSearchParams(window.location.search);
+        params.delete('page');
+        listingFilterKeys.forEach(function (key) {
+            params.delete(key);
+        });
+        filterParams.forEach(function (pair) {
+            var eq = pair.indexOf('=');
+            if (eq === -1) {
+                return;
+            }
+            var key = decodeURIComponent(pair.slice(0, eq));
+            var value = pair.slice(eq + 1);
+            if (value === '') {
+                params.delete(key);
+            } else {
+                params.set(key, decodeURIComponent(value.replace(/\+/g, ' ')));
+            }
+        });
+        var qs = params.toString();
+        return pathUrl + (qs ? '?' + qs : '');
+    };
+})();
+
 $(document).ready(function () {
     $('.main_menu .links>li>a.projects_btn').addClass("active");
     $('.cleared_filter').show();
@@ -283,7 +324,8 @@ $(document).ready(function () {
 
     $(document).on("change", ".input_seacrh", function (e) {
         if ($(this).attr('name') === 'city') {
-            window.location.href = cityUrls[$(this).val()] || locationCountryUrl;
+            var cityTarget = cityUrls[$(this).val()] || locationCountryUrl;
+            window.location.href = window.preserveQueryOnPathChange(cityTarget);
             return false;
         }
         if (e.target.id === 'prmin' || e.target.id === 'prmax') {
@@ -335,7 +377,7 @@ $(document).ready(function () {
             }
         }
 
-        window.location.href = url + (params.length ? '?' + params.join('&') : '');
+        window.location.href = window.buildProjectListingUrl(url, params);
         return false;
     });
 

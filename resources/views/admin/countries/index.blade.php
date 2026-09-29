@@ -8,6 +8,7 @@
             "name_en"  =>  "Name English",
             "slug"      =>  "Slug",
             "code"      =>  "Code",
+            "whatsapp_number" => "WhatsApp",
         ];
     ?>
     @include("admin.layouts.table", [

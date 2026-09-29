@@ -1,6 +1,7 @@
 <?php
 $current_lang = LaravelLocalization::getCurrentLocale();
-$telccountry = (Helper::container_array(\Route::getCurrentRoute()->getPath(), ['oman'])?'96898272585':'905551605000');
+$whatsappContext = isset($project) ? $project : (isset($locationCountry) ? $locationCountry : null);
+$telccountry = Helper::whatsappNumber($whatsappContext);
 
 ?>
 <section class="down-form-content call-center <?=isset($class)?$class:''?>" <?=isset($style)?'style="'.$style.'"':''?> id="section_callcenter">
@@ -13,7 +14,7 @@ $telccountry = (Helper::container_array(\Route::getCurrentRoute()->getPath(), ['
 	<?= Form::open(["url" => route("front.callus"), "id" => "form-callus-lg"]); ?>
 
 		<div class="whatsapp">
-            <a target="_blank" href="{{ route('front.whatsapp_share') }}?icon=<?= @$form_type=='Landing - Down'?'9':'4' ?><?= @$form_type=='Landing - Down'?'&tel='.$telccountry:'' ?>">
+            <a target="_blank" href="<?= Helper::whatsappShareUrl(@$form_type=='Landing - Down'?'9':'4', $whatsappContext) ?>">
                 <div class="whatsapp-icon">
                     <i class="fa fa-whatsapp"></i>
                 </div>

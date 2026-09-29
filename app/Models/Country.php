@@ -8,6 +8,7 @@ class Country extends BaseModel
     protected $fillable = [
         "slug",
         "code",
+        "whatsapp_number",
         "name_ar",
         "name_en",
         "h1_ar",
@@ -21,6 +22,7 @@ class Country extends BaseModel
         "seo_title_en",
         "seo_description_en",
         "placement",
+        "show",
     ];
 
     /**
@@ -30,6 +32,41 @@ class Country extends BaseModel
     public function scopeOrdered($query)
     {
         return $query->orderBy('placement', 'asc')->orderBy('id', 'asc');
+    }
+
+    /**
+     * Countries visible in home / search filter dropdowns.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeVisibleInFilters($query)
+    {
+        return $query->where('show', 1);
+    }
+
+    /**
+     * City IDs for countries hidden from front filters (cascade to cities & districts).
+     *
+     * @return array
+     */
+    public static function hiddenFilterCityIds()
+    {
+        static $ids = null;
+        if ($ids !== null) {
+            return $ids;
+        }
+
+        if (!\Schema::hasColumn('countries', 'show')) {
+            return $ids = array();
+        }
+
+        $hiddenCountryIds = static::where('show', 0)->lists('id')->toArray();
+        if (empty($hiddenCountryIds)) {
+            return $ids = array();
+        }
+
+        return $ids = City::whereIn('country_id', $hiddenCountryIds)->lists('id')->toArray();
     }
 
     /**
@@ -43,6 +80,16 @@ class Country extends BaseModel
     public function getCode()
     {
         return $this->code;
+    }
+
+    /**
+     * Digits-only WhatsApp number for api.whatsapp.com (empty when unset).
+     *
+     * @return string
+     */
+    public function getWhatsappNumber()
+    {
+        return preg_replace('/\D+/', '', (string) $this->whatsapp_number);
     }
 
     public static function findBySlug($slug)

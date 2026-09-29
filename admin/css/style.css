@@ -379,3 +379,21 @@ span.red{display:none}
     color: #ffffff;
     transition: all 0.5s;
 }
+
+/* iCheck: sprites live in admin/css/blue.png (see icheck.css). Visible border + checked fallback. */
+.icheckbox_minimal-blue,
+.iradio_minimal-blue {
+    border-color: #888 !important;
+}
+.icheckbox_minimal-blue.checked {
+    background-color: #d9edf7;
+}
+
+/* iCheck: sprites live in admin/css/blue.png (see icheck.css). Visible border + checked fallback. */
+.icheckbox_minimal-blue,
+.iradio_minimal-blue {
+    border-color: #888 !important;
+}
+.icheckbox_minimal-blue.checked {
+    background-color: #d9edf7;
+}

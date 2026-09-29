@@ -2203,13 +2203,21 @@ exit;*/
                 "name_en" => "required",
                 "slug"     => "required|alpha_dash|unique:{$row->table_name()},slug,$id",
                 "code"     => "required|alpha_dash|unique:{$row->table_name()},code,$id",
+                "whatsapp_number" => "max:30",
             ]);
             $inputs = $request->all();
+            if (isset($inputs['whatsapp_number'])) {
+                $inputs['whatsapp_number'] = preg_replace('/\D+/', '', $inputs['whatsapp_number']);
+                if ($inputs['whatsapp_number'] === '') {
+                    $inputs['whatsapp_number'] = null;
+                }
+            }
             foreach (array('media_id', 'media_en_id', 'placement') as $intField) {
                 if (!isset($inputs[$intField]) || $inputs[$intField] === '' || $inputs[$intField] === null) {
                     $inputs[$intField] = 0;
                 }
             }
+            $inputs['show'] = !empty($inputs['show']) ? 1 : 0;
             $row = Helper::query("Country", "save", [
                 "inputs" => $inputs,
                 "id"     => $id,

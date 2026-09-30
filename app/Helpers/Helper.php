@@ -74,6 +74,32 @@ if (!function_exists('seo_url')) {
     }
 }
 
+if (!function_exists('locale_prefix_hidden_segment')) {
+    /**
+     * First URL segment that must stay unprefixed (home, auth, admin, ajax, cron).
+     */
+    function locale_prefix_hidden_segment($segment)
+    {
+        if ($segment === null || $segment === '') {
+            return true;
+        }
+        $segment = (string) $segment;
+        if (strpos($segment, 'cron_') === 0) {
+            return true;
+        }
+        static $skip = array(
+            'ajax', 'ajax_projects_info', 'ajax_group_projects', 'ajaxposts', 'ajax_statics',
+            'callus', 'callus2', 'callmeModalAjax', 'callvac', 'call_us_landing_tourism',
+            'loadmore', 'newsletter', 'likeitem', 'like_video', 'confirmation',
+            'preview_pdf', 'testphp', 'sitemap_xml', 'rss', 'rss_notifs',
+            'whatsapp_share', 'ratesexchange-try', 'currency', 'filter_rooms',
+            'login', 'logout', 'register', 'password', 'damas-administrator',
+            'webhooks', 'redis-test', 'clear-cache',
+        );
+        return in_array($segment, $skip, true);
+    }
+}
+
 if (!function_exists('front_link')) {
     /**
      * Prepend /ar to stored unprefixed page URLs when the current locale is Arabic.
@@ -105,20 +131,7 @@ if (!function_exists('front_link')) {
         $first = $first[0];
 
         $locales = LaravelLocalization::getSupportedLanguagesKeys();
-        if (in_array($first, $locales)) {
-            return $url;
-        }
-
-        $skip = array(
-            'ajax', 'ajax_projects_info', 'ajax_group_projects', 'ajaxposts', 'ajax_statics',
-            'callus', 'callus2', 'callmeModalAjax', 'callvac', 'call_us_landing_tourism',
-            'loadmore', 'newsletter', 'likeitem', 'like_video', 'confirmation',
-            'preview_pdf', 'testphp', 'cron_tiny_picture', 'sitemap_xml', 'rss', 'rss_notifs',
-            'whatsapp_share', 'ratesexchange-try', 'currency', 'filter_rooms',
-            'login', 'logout', 'register', 'password', 'damas-administrator',
-            'amp', 'oman', 'syria', 'webhooks',
-        );
-        if (in_array($first, $skip) || strpos($first, 'cron_') === 0) {
+        if (in_array($first, $locales) || locale_prefix_hidden_segment($first)) {
             return $url;
         }
 

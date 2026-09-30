@@ -8,7 +8,7 @@ use LaravelLocalization;
 class RedirectToLocalePrefix
 {
     /**
-     * add:  /about-us -> /ar/about-us
+     * add:  /about-us -> /ar/about-us (home, auth, admin, endpoints stay unprefixed)
      * strip: /ar/login -> /login, /ar -> /
      */
     public function handle($request, Closure $next, $direction = 'add')
@@ -28,6 +28,21 @@ class RedirectToLocalePrefix
             }
 
             return redirect(url($target) . ($query ? '?' . $query : ''), $status);
+        }
+
+        if ($path === '') {
+            return $next($request);
+        }
+
+        if (!function_exists('locale_prefix_hidden_segment')) {
+            class_exists('Helper');
+        }
+
+        $first = explode('/', $path);
+        $first = $first[0];
+        $locales = LaravelLocalization::getSupportedLanguagesKeys();
+        if (in_array($first, $locales) || locale_prefix_hidden_segment($first)) {
+            return $next($request);
         }
 
         $url = url($locale . '/' . $path);

@@ -44,9 +44,9 @@ require __DIR__ . '/admin.php';
 
 /**
 * Locale prefixes
-* Pages always carry the locale: /ar/about-us, /en/about-us.
+* Pages always carry the locale: /ar/about-us, /en/oman/guides/x.
 * Home stays / for Arabic and /en for other locales.
-* Endpoints, auth, AMP, Oman and Syria keep the default locale hidden.
+* Endpoints and auth keep the default locale hidden.
 */
 $urlLocale = LaravelLocalization::setLocale();
 $defaultLocale = LaravelLocalization::getDefaultLocale();
@@ -107,11 +107,15 @@ $omanRoutes = function () {
         Route::any('/{slug}', ['as' => 'front.blog.post.oman', 'uses' => 'HomeController@blog_show_post', 'country' => 'oman', 'type' => 'blog']);
     });
 };
-$legacyGroup([
-    'prefix' => ($legacyPrefix ? $legacyPrefix . '/oman' : 'oman'),
-    'middleware' => ['localize', 'exchange'],
+$omanFront = array(
+    'middleware' => array('localize', 'exchange'),
     'namespace' => 'Front',
-], $omanRoutes);
+    'locale_required' => true,
+);
+if ($urlLocale === null) {
+    Route::group(array_merge($omanFront, array('prefix' => 'oman', 'middleware' => array('localePrefix:add'))), $omanRoutes);
+}
+Route::group(array_merge($omanFront, array('prefix' => $localeRequiredPrefix . '/oman')), $omanRoutes);
 
 $syriaRoutes = function () {
     Route::any('/projects/{slug}', ['as' => 'front.project.syria', 'uses' => 'HomeController@project_show', 'country' => 'syria']);
@@ -122,11 +126,15 @@ $syriaRoutes = function () {
         Route::any('/{slug}', ['as' => 'front.blog.post.syria', 'uses' => 'HomeController@blog_show_post', 'country' => 'syria', 'type' => 'blog']);
     });
 };
-$legacyGroup([
-    'prefix' => ($legacyPrefix ? $legacyPrefix . '/syria' : 'syria'),
-    'middleware' => ['localize', 'exchange'],
+$syriaFront = array(
+    'middleware' => array('localize', 'exchange'),
     'namespace' => 'Front',
-], $syriaRoutes);
+    'locale_required' => true,
+);
+if ($urlLocale === null) {
+    Route::group(array_merge($syriaFront, array('prefix' => 'syria', 'middleware' => array('localePrefix:add'))), $syriaRoutes);
+}
+Route::group(array_merge($syriaFront, array('prefix' => $localeRequiredPrefix . '/syria')), $syriaRoutes);
 
 
 /**
@@ -155,7 +163,15 @@ $ampRoutes = function () {
         Route::any('/legal-affairs-turkey', ['as' => 'amp.front.legal', 'uses' => 'AmpController@legal']);
     });
 };
-$legacyGroup(['prefix' => $legacyPrefix, 'middleware' => ['localize'], 'namespace' => 'Front'], $ampRoutes);
+$ampFront = array(
+    'middleware' => array('localize'),
+    'namespace' => 'Front',
+    'locale_required' => true,
+);
+if ($urlLocale === null) {
+    Route::group(array_merge($ampFront, array('middleware' => array('localePrefix:add'))), $ampRoutes);
+}
+Route::group(array_merge($ampFront, array('prefix' => $localeRequiredPrefix)), $ampRoutes);
 
 
 /**

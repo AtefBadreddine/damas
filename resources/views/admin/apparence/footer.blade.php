@@ -37,7 +37,10 @@
                 <div class="panel panel-default">
                     <div class="panel-heading">Useful Links</div>
                     <div class="panel-body">
-                        <?php $u_links = Helper::query("FooterLink", "orderByPlacement")->where("footer_section", "useful")->toArray(); ?>
+                        <?php
+                            $u_links = Helper::query("FooterLink", "orderByPlacement")->where("footer_section", "useful")->toArray();
+                            $footerCountriesById = \App\Models\Country::ordered()->get()->keyBy('id');
+                        ?>
                         <table class="table table-bordered">
                             <tr>
                                 <th>Name</th>
@@ -48,7 +51,7 @@
                             @foreach($u_links as $u_link)
                             <tr>
                                 <td>- <?= $u_link["title_ar"]; ?> <br>- <?= $u_link["title_en"]; ?> <br>- <?= $u_link["title_fr"]; ?> <br>- <?= $u_link["title_fa"]; ?> <br>- <?= $u_link["title_ru"]; ?></td>
-                                <td><?= $u_link["country"]; ?></td>
+                                <td><?= isset($footerCountriesById[$u_link["country_id"]]) ? $footerCountriesById[$u_link["country_id"]]->name_en : ''; ?></td>
                                 <td><?= $u_link["link"]; ?></td>
                                 <td>
                                     <a href="<?= route(Route::currentRouteName(), $u_link["id"]); ?>" class="btn btn-primary btn-xs" title="edit"><i class="fa fa-edit"></i></a>

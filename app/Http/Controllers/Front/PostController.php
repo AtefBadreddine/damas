@@ -158,12 +158,12 @@ class PostController extends BaseController
         $countryId = null;
 
         if ($countrySlug) {
-            $countryModel = Country::findBySlug($countrySlug);
+            $countryModel = Country::findBySlugOrCode($countrySlug);
             if (!$countryModel) {
                 abort(404);
             }
         } elseif ($postType === PostType::$NEWS) {
-            $countryModel = Country::findByCode('turkey');
+            $countryModel = Country::findBySlugOrCode('turkey');
         }
 
         if ($countryModel) {
@@ -251,7 +251,7 @@ class PostController extends BaseController
             $listingUrl = route($postType->frontIndexRoute());
         }
 
-        return view("front.blog.index", compact('posts', 'is_category_page', 'categories', 'type', 'categoryType', 'hide_whatsapp', 'countryCode', 'listingUrl', 'slug', 'category'));
+        return view("front.blog.index", compact('posts', 'is_category_page', 'categories', 'type', 'categoryType', 'hide_whatsapp', 'countryCode', 'countryModel', 'listingUrl', 'slug', 'category'));
     }
 
     /**
@@ -305,9 +305,6 @@ class PostController extends BaseController
         $countryId = $row->country_id;
         if (!$countryId && $row->countryRel) {
             $countryId = $row->countryRel->id;
-        } elseif (!$countryId && $row->country) {
-            $fallbackCountry = Country::findByCode($row->country);
-            $countryId = $fallbackCountry ? $fallbackCountry->id : null;
         }
 
         $ajax_projects_url = '';

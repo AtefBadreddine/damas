@@ -5,7 +5,9 @@ $style_lang = in_array($current_lang, ['en', 'fr', 'ru']) ? 'en' : 'ar';
 @section('styles')
 <?php
 $infos = Helper::get_params();
-$ccountry = (Helper::container_array(\Route::getCurrentRoute()->getPath(), ['oman'])?'oman':'turkey');
+$ccountry = ($project->city && $project->city->countryRel && $project->city->countryRel->code)
+    ? $project->city->countryRel->code
+    : 'turkey';
 $hide_maps = true;
 
 $is_mobile = Helper::get_device() != 'full' ? true : false;
@@ -234,7 +236,7 @@ $flavors = $project->flavors();
                 $breadcrumbRegion = @$project->region;
                 $breadcrumbCountry = $breadcrumbCity && $breadcrumbCity->countryRel
                     ? $breadcrumbCity->countryRel
-                    : ($breadcrumbCity ? \App\Models\Country::findByCode($breadcrumbCity->country) : null);
+                    : null;
                 $breadcrumbProjectLabel = trim((string) $project->getName());
                 if ($breadcrumbProjectLabel === '') {
                     $breadcrumbProjectLabel = $project->slug;
@@ -372,10 +374,10 @@ $flavors = $project->flavors();
                         <p class="jazzira_font_bold"><?= trans("front.message project off"); ?></p>
 
                         <ul class="links_list">
-                            <li><a href="<?= route("front.search", ["property-for-sale", $ccountry]) ?>" class="btn btn-default"> <?= trans("front.property for sale"); ?></a></li>
-                            <li><a href="<?= route("front.search", ["property-for-sale", @$project->city->getSlug()]) ?>" class="btn btn-default">
+                            <li><a href="<?= Helper::geo_listing_url($project->city && $project->city->countryRel ? $project->city->countryRel : $ccountry) ?>" class="btn btn-default"> <?= trans("front.property for sale"); ?></a></li>
+                            <li><a href="<?= Helper::geo_listing_url($project->city) ?>" class="btn btn-default">
                                     <?= trans("front.projects"); ?> {{ @$project->city->getName() }}</a></li>
-                            <li><a href="<?= route("front.search", ["property-for-sale", @$project->city->getSlug(), @$project->region->getSlug()]) ?>" class="btn btn-default">
+                            <li><a href="<?= Helper::geo_listing_url($project->region) ?>" class="btn btn-default">
                                     <?= trans("front.projects"); ?> {{ @$project->region->getName() }}</a></li>
                         </ul>
                     </div>
@@ -671,7 +673,7 @@ $flavors = $project->flavors();
                              */
 
                             //if(!isset($footer_prjs)){
-                            $arr_ids = Helper::query("Fotterproject", "all")->where('country',$ccountry)->lists('project_id')->toArray();
+                            $arr_ids = \App\Models\Fotterproject::projectIdsForCountry($ccountry);
                             $footer_prjs = \App\Models\Project::whereIn('id', $arr_ids)->get();
                             //}
                             ?>
@@ -696,7 +698,7 @@ $flavors = $project->flavors();
                         </div>
 
 
-                        <a href="{{ route('front.search', ['property-for-sale', $ccountry]) }}" class="more shadow_type"><?= trans("front.More Projects") ?></a>
+                        <a href="<?= Helper::geo_listing_url($project->city && $project->city->countryRel ? $project->city->countryRel : $ccountry) ?>" class="more shadow_type"><?= trans("front.More Projects") ?></a>
 
                     </div>
 
@@ -720,7 +722,7 @@ $flavors = $project->flavors();
              */
             $similarspost = [];
             
-            $params = Helper::query("BlogParam", "find", ["id" => ($ccountry=='turkey'?1:3)]);
+            $params = \App\Models\BlogParam::forCountry($ccountry);
             
             if ($params->featured_post != '')
                 $similarspost = explode(",", $params->featured_post);
@@ -1670,15 +1672,17 @@ $(function () {
     "@type":"BreadcrumbList",
     "itemListElement":[
 
-    {"@type":"ListItem","position":1,"name":"{{ trans('front.home') }}","item":"{{ route('front.index') }}"},
-    {"@type":"ListItem","position":2,"name":"{{ trans('front.property for sale') .' '. @$project->city->getName() }}","item":"{{ route("front.search", ["property-for-sale", @$project->city->getSlug()]) }}"}
-	<?php if(isset($pptype[0])){ $i=3; ?>
-	,{"@type":"ListItem","position":3,"name":"{{ @$pptype[0]->getName() }} {{ @$project->city->getName() }}","item":"{{ route("front.search", [@$pptype[0]->getSlug(), @$project->city->getSlug()]) }}"}
-	<?php if(isset($ppcateg[0])){ $i++; ?>
-	,{"@type":"ListItem","position":<?= $i ?>,"name":"{{ @$ppcateg[0]->getName() }}","item":"{{ route('front.search', [@$pptype[0]->getSlug(), @$project->city->getSlug(), @$ppcateg[0]->getSlug()]) }}"}
-    <?php } $i++; ?>
-	,{"@type":"ListItem","position":<?= $i ?>,"name":"{{ $project->getSeoTitle()!=''?$project->getSeoTitle():$project->name_en }}","item":"{{ Request::url() }}"}
-	<?php } ?>
+    {"@type":"ListItem","position":1,"name":"{{ trans('front.home') }}","item":"{{ route('front.index') }}"}
+    @if($breadcrumbCountry && $breadcrumbCountry->listingUrl())
+    ,{"@type":"ListItem","position":2,"name":"{{ $breadcrumbCountry->getTitle() }}","item":"{{ $breadcrumbCountry->listingUrl() }}"}
+    @endif
+    @if($breadcrumbCity && $breadcrumbCity->listingUrl())
+    ,{"@type":"ListItem","position":3,"name":"{{ $breadcrumbCity->getName() }}","item":"{{ $breadcrumbCity->listingUrl() }}"}
+    @endif
+    @if($breadcrumbRegion && $breadcrumbRegion->listingUrl())
+    ,{"@type":"ListItem","position":4,"name":"{{ $breadcrumbRegion->getName() }}","item":"{{ $breadcrumbRegion->listingUrl() }}"}
+    @endif
+    ,{"@type":"ListItem","position":5,"name":"{{ $breadcrumbProjectLabel }}","item":"{{ $project->frontUrl() ? $project->frontUrl() : Request::url() }}"}
 
     ]}
 </script>

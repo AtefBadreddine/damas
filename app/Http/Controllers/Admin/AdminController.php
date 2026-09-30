@@ -2388,12 +2388,13 @@ exit;*/
         }
         $content_field = $request->get('lang') == 'en' ? 'content_en' : 'content_ar';
         foreach ($posts as $post) {
+            $postCountryCode = $post->countryRel ? $post->countryRel->code : null;
             if ($request->get('country') == 'oman') {
-                if ($post->country != 'oman') {
+                if ($postCountryCode != 'oman') {
                     continue;
                 }
             } elseif ($request->get('country') == 'turkey') {
-                if ($post->country == 'oman') {
+                if ($postCountryCode == 'oman') {
                     continue;
                 }
             }

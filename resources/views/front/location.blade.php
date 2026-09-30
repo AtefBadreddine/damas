@@ -26,17 +26,23 @@ $aboutBody = '';
 if (count($allprojects) == 0) {
     $rh1 = ($current_lang == 'ar' ? 'لا يوجد نتائج' : 'No Results Found');
 } else {
-    $parts = explode('</h1>', $inputs['about'], 2);
-    $rh1 = trim(strip_tags(@$parts[0]));
-    $rh1 = ($rh1 == '' ? (@$inputs['seo_title'] ? $inputs['seo_title'] : trans('front.Properties')) : $rh1);
+    $rh1 = trim((string) @$inputs['display_h1']);
+    if ($rh1 === '') {
+        $parts = explode('</h1>', $inputs['about'], 2);
+        $rh1 = trim(strip_tags(@$parts[0]));
+    }
+    $rh1 = ($rh1 == '' ? trans('front.Properties') : $rh1);
     if (!empty($inputs['about_body'])) {
         $aboutBody = $inputs['about_body'];
-    } elseif (isset($parts[1])) {
-        $inner = trim($parts[1]);
-        if (preg_match('#^<div class="clearfix">(.*)</div>$#s', $inner, $aboutMatch)) {
-            $aboutBody = $aboutMatch[1];
-        } else {
-            $aboutBody = $inner;
+    } else {
+        $parts = explode('</h1>', $inputs['about'], 2);
+        if (isset($parts[1])) {
+            $inner = trim($parts[1]);
+            if (preg_match('#^<div class="clearfix">(.*)</div>$#s', $inner, $aboutMatch)) {
+                $aboutBody = $aboutMatch[1];
+            } else {
+                $aboutBody = $inner;
+            }
         }
     }
 }
@@ -391,12 +397,6 @@ $(document).ready(function () {
     $(document).on("change", ".input_seacrh", function (e) {
         if (e.target.id === 'prmin' || e.target.id === 'prmax') {
             priceTouched = true;
-        }
-        if ($(this).attr('name') === 'city') {
-            $('#selectregions').children('option').not(':first').remove();
-            if ($.fn.selectpicker) {
-                $('#selectregions').selectpicker('refresh');
-            }
         }
         $('.cleared_filter').show();
         return false;

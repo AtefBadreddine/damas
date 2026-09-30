@@ -21,7 +21,7 @@
 	foreach ($citys as $c) {
 		$countrySlug = $c->getCountrySlug();
 		if ($countrySlug && !isset($countries[$countrySlug])) {
-			$countries[$countrySlug] = \App\Models\Country::findBySlug($countrySlug);
+			$countries[$countrySlug] = \App\Models\Country::findBySlugOrCode($countrySlug);
 		}
 	}
 	$countries = array_filter($countries);
@@ -32,7 +32,7 @@
 		$postCountries = \App\Models\Post::ofPostType($postType)
 			->where('published', 1)
 			->where('title_' . $current_lang, '!=', '')
-			->select('country_id', 'country')
+			->select('country_id')
 			->distinct()
 			->get();
 		$hubSlugs = array();

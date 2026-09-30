@@ -18,6 +18,16 @@ class FooterLink extends BaseModel
         "placement",
         "lang",
         "footer_section",
-        "country"
+        "country_id",
     ];
+
+    /**
+     * Geographic country parent.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function countryRel()
+    {
+        return $this->belongsTo("App\Models\Country", "country_id");
+    }
 }

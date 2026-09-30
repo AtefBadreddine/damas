@@ -1193,7 +1193,10 @@ class HomeController extends BaseController
 				$inputs["regions_options"] = \App\Models\Region::select('regions.*')->leftJoin('projects AS p', 'p.region_id', '=', 'regions.id')->where("p.published", 1)->where("p.sold",'!=', 100)->where("p.city_id", $city_row->id)->groupBy('regions.id')->having(DB::raw('count(dms_p.id)'), '>', 0)->orderBy(DB::raw('count(dms_p.id)'),'desc')->get();//
 				
             }else{
-				$citiesids = \App\Models\City::where('country',$inputs["city"])->lists('id')->toArray();
+				$countryRow = \App\Models\Country::findBySlugOrCode($inputs["city"]);
+				$citiesids = $countryRow
+					? \App\Models\City::where('country_id', $countryRow->id)->lists('id')->toArray()
+					: array();
 				//if($inputs["city"] == "turkey"){
 					$q->whereIn("city_id", $citiesids);
 					$inputs["regions_options"] = [];
@@ -2101,7 +2104,7 @@ class HomeController extends BaseController
             $params['category'] = implode(',', $categories);
         }
 		
-        $country = $citySlug ? \App\Models\Country::findByCode($citySlug) : null;
+        $country = $citySlug ? \App\Models\Country::findBySlugOrCode($citySlug) : null;
         $cityRow = null;
         if (!$country) {
             $cityRow = $citySlug ? \App\Models\City::where('slug', $citySlug)->first() : null;
@@ -4514,7 +4517,7 @@ class HomeController extends BaseController
 			return null;
 		}
 
-		$row = \App\Models\Country::findBySlug($country) ?: \App\Models\Country::findByCode($country);
+		$row = \App\Models\Country::findBySlugOrCode($country);
 		return $row ? $row->slug : null;
     }
     /**
@@ -4533,7 +4536,7 @@ class HomeController extends BaseController
 
         $countrySlug = $category->getCountrySlug() ?: $this->legacyCountrySlug($request);
         if (!$countrySlug) {
-            $country = \App\Models\Country::findByCode('turkey');
+            $country = \App\Models\Country::findBySlugOrCode('turkey');
             $countrySlug = $country ? $country->slug : 'turkiye';
         }
 
@@ -4730,7 +4733,6 @@ class HomeController extends BaseController
             "title_$current_lang AS title",
             'slug',
             'post_type',
-            'country',
             'country_id',
             "seo_description_$current_lang AS description",
             'created_at',

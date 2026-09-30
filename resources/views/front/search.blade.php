@@ -629,7 +629,7 @@ var href = '';
                 $('#price_fields').val(1);
             }
         }
-        if (changed_elem == 'city') {
+        if (changed_elem == 'country') {
             $('#selectregions').children('option').not(':first').remove();
         }
         if (changed_elem == 'rooms') {

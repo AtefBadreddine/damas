@@ -374,7 +374,7 @@ class Helper
 			$cities = Helper::query("City", "all");
 			foreach($cities as $c){
 				if($c->id!=2)
-				$arrlink[] = '<li><a href="'. route('front.search',['property-for-sale',$c->slug]) .'">'. $c->getName() .'</a></li>';
+				$arrlink[] = '<li><a href="'. self::geo_listing_url($c) .'">'. $c->getName() .'</a></li>';
 			}
 			return implode('',$arrlink);
 		
@@ -400,7 +400,7 @@ class Helper
 			
 			foreach($cities as $c){
 				if($c->id!=2 and in_array($c->id,$arr_ids))
-				$arrlink[] = '<li><a class="ptcity" href="'. route('front.search',[$project_type_slg,$c->slug]) .'">' . $project_type_nme .' '. $c->getName() .'</a></li>';
+				$arrlink[] = '<li><a class="ptcity" href="'. self::geo_listing_url($c, $project_type_slg) .'">' . $project_type_nme .' '. $c->getName() .'</a></li>';
 			}
 			return implode('',$arrlink);
 			
@@ -418,7 +418,7 @@ class Helper
 			$ptyp = Helper::query("ProjectType", "all");
 			foreach($ptyp as $c){
 				if(in_array($c->id,$arr_ids))
-				$arrlink[] = '<li><a class="pts" href="'. route('front.search',[$c->slug,$city_slg]) .'">'. $c->getName() .' '. $city_nme .'</a></li>';
+				$arrlink[] = '<li><a class="pts" href="'. self::geo_listing_url($Rcity, $c->slug) .'">'. $c->getName() .' '. $city_nme .'</a></li>';
 			}
 			return implode('',$arrlink);
 		}
@@ -461,7 +461,7 @@ class Helper
 		$activea='';
 		foreach($pcats as $c){
 			if($c->hide_search_page==0 && in_array($c->id,$arr_ids)){
-			$url = route("front.search")."/".($project_type_slg==''?'property-for-sale':$project_type_slg)."/".($city_slg==''?'turkey':$city_slg)."/".$c->slug;
+			$url = self::geo_listing_url($city_slg !== '' ? $city_slg : 'turkey', $project_type_slg, $c->slug);
 			
 			if( $project_categories_slg==$c->slug )
 				$activea = '<li class="active"><a href="'. $url .'">'. $c->getName() .'</a></li>';
@@ -548,18 +548,12 @@ class Helper
             return self::currentCountry($context->city);
         }
         if ($context instanceof \App\Models\City) {
-            if ($context->countryRel) {
-                return $context->countryRel;
-            }
-            return \App\Models\Country::findByCode($context->country);
+            return $context->countryRel;
         }
 
         $queryCountry = request()->get('whatsapp_country');
         if ($queryCountry) {
-            $fromQuery = \App\Models\Country::findBySlug($queryCountry);
-            if (!$fromQuery) {
-                $fromQuery = \App\Models\Country::findByCode($queryCountry);
-            }
+            $fromQuery = \App\Models\Country::findBySlugOrCode($queryCountry);
             if ($fromQuery) {
                 return $fromQuery;
             }
@@ -573,10 +567,7 @@ class Helper
                 $value = isset($action['country']) ? $action['country'] : null;
             }
             if ($value) {
-                $fromRoute = \App\Models\Country::findBySlug($value);
-                if (!$fromRoute) {
-                    $fromRoute = \App\Models\Country::findByCode($value);
-                }
+                $fromRoute = \App\Models\Country::findBySlugOrCode($value);
                 if ($fromRoute) {
                     return $fromRoute;
                 }
@@ -589,7 +580,7 @@ class Helper
             array_shift($segments);
         }
         if (!empty($segments)) {
-            return \App\Models\Country::findBySlug($segments[0]);
+            return \App\Models\Country::findBySlugOrCode($segments[0]);
         }
 
         return null;
@@ -1404,6 +1395,44 @@ class Helper
 		return strtr($string, array('۰'=>'0', '۱'=>'1', '۲'=>'2', '۳'=>'3', '۴'=>'4', '۵'=>'5', '۶'=>'6', '۷'=>'7', '۸'=>'8', '۹'=>'9', '٠'=>'0', '١'=>'1', '٢'=>'2', '٣'=>'3', '٤'=>'4', '٥'=>'5', '٦'=>'6', '٧'=>'7', '٨'=>'8', '٩'=>'9'));
 	}
     /**
+     * Geo listing URL with optional type/category query filters.
+     *
+     * @param \App\Models\City|\App\Models\Country|\App\Models\Region|string|null $place
+     * @param string $typeSlug
+     * @param string $categorySlug
+     * @return string
+     */
+    public static function geo_listing_url($place = null, $typeSlug = '', $categorySlug = '')
+    {
+        $url = null;
+        if (is_object($place) && method_exists($place, 'listingUrl')) {
+            $url = $place->listingUrl();
+        } elseif (is_string($place) && $place !== '') {
+            $city = \App\Models\City::where('slug', $place)->first();
+            if ($city && $city->listingUrl()) {
+                $url = $city->listingUrl();
+            } else {
+                $country = \App\Models\Country::findBySlugOrCode($place);
+                $url = $country ? $country->listingUrl() : null;
+            }
+        }
+        if (!$url) {
+            $country = \App\Models\Country::findBySlugOrCode('turkey');
+            $url = $country ? $country->listingUrl() : route('front.projects');
+        }
+
+        $query = array();
+        if ($typeSlug !== '' && $typeSlug !== 'property-for-sale') {
+            $query['type'] = $typeSlug;
+        }
+        if ($categorySlug !== '') {
+            $query['category'] = $categorySlug;
+        }
+
+        return $url . ($query ? '?' . http_build_query($query) : '');
+    }
+
+    /**
     * get url of item
     *
     * @return void
@@ -1415,7 +1444,7 @@ class Helper
         {
             case 'city':
                 $row = Helper::query("City", "find", ["id" => $link_value]);
-                $link = url("/property-for-sale/$row->slug");
+                $link = ($row && $row->listingUrl()) ? $row->listingUrl() : "#";
                 break;
             case 'post':
                 $row = Helper::query("Post", "find", ["id" => $link_value]);
@@ -1423,11 +1452,14 @@ class Helper
                 break;
             case 'category':
                 $row = Helper::query("ProjectCategory", "find", ["id" => $link_value]);
-                $link = url("/property-for-sale/turkey/$row->slug");
+                $link = $row ? self::geo_listing_url('turkey', '', $row->slug) : "#";
                 break;
             case 'region':
                 $row = Helper::query("Region", "find", ["id" => $link_value]);
-                $link = url("/property-for-sale/turkey/$row->slug");
+                if ($row && !$row->relationLoaded('city')) {
+                    $row->load('city.countryRel');
+                }
+                $link = ($row && $row->listingUrl()) ? $row->listingUrl() : "#";
                 break;
         }
         return $link;

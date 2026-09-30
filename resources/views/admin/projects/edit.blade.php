@@ -223,9 +223,6 @@
                                                         @foreach(Helper::query("City", "all") as $city)
                                                         <?php
                                                         $cityCountryId = (int) $city->country_id;
-                                                        if (!$cityCountryId && !empty($city->country) && isset($countryCodeToId[$city->country])) {
-                                                            $cityCountryId = $countryCodeToId[$city->country];
-                                                        }
                                                         ?>
                                                         <option value="<?= $city->id; ?>" data-country-id="<?= $cityCountryId; ?>" <?= $city->id == $row->city_id ? 'selected' : ''; ?>><?= $city->name_ar; ?></option>
                                                         @endforeach

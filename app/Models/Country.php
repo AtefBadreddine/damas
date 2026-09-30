@@ -92,14 +92,41 @@ class Country extends BaseModel
         return preg_replace('/\D+/', '', (string) $this->whatsapp_number);
     }
 
-    public static function findBySlug($slug)
+    /**
+     * Resolve a country from a URL slug (turkiye) or legacy code (turkey).
+     *
+     * @param string|null $value
+     * @return static|null
+     */
+    public static function findBySlugOrCode($value)
     {
-        return static::where("slug", $slug)->first();
+        if ($value === null || $value === '') {
+            return null;
+        }
+        return static::where(function ($query) use ($value) {
+            $query->where('slug', $value)->orWhere('code', $value);
+        })->first();
     }
 
-    public static function findByCode($code)
+    /**
+     * Numeric country id from a Country model, id, slug, or legacy code.
+     *
+     * @param static|int|string|null $country
+     * @return int|null
+     */
+    public static function resolveId($country)
     {
-        return static::where("code", $code)->first();
+        if ($country instanceof static) {
+            return (int) $country->id;
+        }
+        if (is_numeric($country) && (int) $country > 0) {
+            return (int) $country;
+        }
+        if ($country) {
+            $row = static::findBySlugOrCode($country);
+            return $row ? (int) $row->id : null;
+        }
+        return null;
     }
 
     /**

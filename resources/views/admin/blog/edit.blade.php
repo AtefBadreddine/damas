@@ -44,7 +44,7 @@
                             <div class="form-group">
 <!--                                <label>Slug<span class="red">(*)</span></label>-->
                                 <div class="input-group ltr">
-                                    <span class="input-group-addon"><?= url('/' . $type) . "/" ?><?= $row->country=='turkey'?'':$row->country.'/' ?></span>
+                                    <span class="input-group-addon"><?= url('/' . $type) . "/" ?><?= ($row->countryRel && $row->countryRel->code != 'turkey') ? $row->countryRel->code . '/' : '' ?></span>
                                     <?= Form::text("slug", $row->slug, ["class" => "form-control input-sm", "placeholder" => "Slug"]); ?>
                                 </div>
                             </div>
@@ -100,7 +100,7 @@
                                     <label>Country</label>
                                     <select name="country_id" class="form-control select2me">
                                         <?php foreach ($countries as $country): ?>
-                                        <option value="<?= $country->id ?>" <?= ((int)$row->country_id === (int)$country->id || $row->country == $country->code) ? 'selected' : '' ?>><?= $country->name_en ?></option>
+                                        <option value="<?= $country->id ?>" <?= ((int)$row->country_id === (int)$country->id) ? 'selected' : '' ?>><?= $country->name_en ?></option>
                                         <?php endforeach; ?>
                                     </select>
                                 </div>
@@ -110,8 +110,8 @@
                                     <label>Categories</label>
                                     <select name="category_id[]" class="form-control select2me" multiple>
                                         <option value=""></option>
-                                        @foreach(\App\Models\PostCategory::where("type", $type)->get() as $cat)
-                                        <option value="<?= $cat->id; ?>" <?= in_array($cat->id, $row->categories()->lists('post_category_id')->toArray()) ? 'selected' : ''; ?>><?= ucfirst($cat->country) .' > '. $cat->name_en; ?></option>
+                                        @foreach(\App\Models\PostCategory::where("type", $type)->with('countryRel')->get() as $cat)
+                                        <option value="<?= $cat->id; ?>" <?= in_array($cat->id, $row->categories()->lists('post_category_id')->toArray()) ? 'selected' : ''; ?>><?= ($cat->countryRel ? ucfirst($cat->countryRel->code) : '') .' > '. $cat->name_en; ?></option>
                                         @endforeach
                                     </select>
                                 </div>

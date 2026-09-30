@@ -4,7 +4,7 @@
     <?php
         $lignes = [
             "id"    =>  "",
-            "country"  =>  "Country",
+            "country_id|Country|name_en" => "Country",
             "name_en"  =>  "English Name",
             "name_ar"  =>  "Arabic Name",
         ];

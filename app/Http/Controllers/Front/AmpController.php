@@ -145,8 +145,14 @@ class AmpController extends BaseController
         if ( $inputs["city"] /*and $inputs["city"] !== "turkey"*/ ) {
             $city_row = Helper::query("City", "where", ["field" => "slug", "value" => $inputs["city"]])->first();
             if ( !$city_row ) abort(404);
-            if ( $inputs["city"] !== "turkey" ) {
+            if ( $inputs["city"] !== "turkey" && $inputs["city"] !== "oman" && $inputs["city"] !== "syria" ) {
                 $q->where("city_id", $city_row->id);
+            } else {
+                $countryRow = \App\Models\Country::findBySlugOrCode($inputs["city"]);
+                $citiesids = $countryRow
+                    ? \App\Models\City::where('country_id', $countryRow->id)->lists('id')->toArray()
+                    : array();
+                $q->whereIn("city_id", $citiesids);
             }
             
             $about_title = $city_row->getAboutTitle();

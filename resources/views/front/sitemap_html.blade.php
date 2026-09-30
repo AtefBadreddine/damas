@@ -55,7 +55,6 @@ $infos = Helper::get_params();
                     $tags = Helper::query("ProjectCategory", "all");
                     foreach ($citys as $c) {
                         $html = $html . '<ul class="main-tree">';
-                        $url = route("front.search") . "/property-for-sale/" . $c->getSlug();
 
                         if ($current_lang == 'ar') {
                             $html = $html . '<li class="tree-title">' . Helper::trimm(' عقارات للبيع  في ' . ($c->getName() == 'كل المدن' ? 'تركيا' : $c->getName())) . '</li>';
@@ -73,7 +72,7 @@ $infos = Helper::get_params();
 
                             //echo '<h1>'.$c->getName().'</h1>';
                             if ($t[0]->cnt > 0 or in_array($c->getName(), array('كل المدن', 'Turkey'))) {
-                                $url = route("front.search") . "/" . $pt->getSlug() . "/" . $c->getSlug();
+                                $url = Helper::geo_listing_url($c, $pt->getSlug());
                                 if ($current_lang == 'ar')
                                     $html = $html . '<li class="tree-item"><a href="' . $url . '">' . Helper::trimm($pt->getName() . ' للبيع  في ' . ($c->getName() == 'كل المدن' ? 'تركيا' : $c->getName())) . '</a></li>';
                                 elseif ($current_lang == 'en')
@@ -91,7 +90,7 @@ $infos = Helper::get_params();
                             $t0 = DB::select("select count(*) as 'cnt' from dms_projects,dms_cities,dms_projects_types,dms_project_type,dms_projects_categories,dms_project_category where dms_projects.city_id=dms_cities.id and dms_cities.slug=? and dms_projects.id=dms_project_type.project_id and dms_project_type.project_type_id=dms_projects_types.id and dms_projects_types.slug=? and dms_projects.id=dms_project_category.project_id and dms_project_category.project_category_id=dms_projects_categories.id and dms_projects_categories.slug=?", array($c->getSlug(), $pt->getSlug(), $t->getSlug()));
                             if ($t0[0]->cnt > 0 or in_array($c->getName(), array('كل المدن', 'Turkey'))) {
                                 foreach ($ProjectTypes as $pt) {
-                                    $url = route("front.search") . "/" . $pt->getSlug() . "/" . $c->getSlug() . "/" . $t->getSlug();
+                                    $url = Helper::geo_listing_url($c, $pt->getSlug(), $t->getSlug());
 
                                     if ($current_lang == 'ar')
                                         $html = $html . '<li class="tree-item"><a href="' . $url . '">' . Helper::trimm($pt->getName() . ' ' . str_replace('عقارات', '', $t->getName()) . ' في ' . ($c->getName() == 'كل المدن' ? 'تركيا' : $c->getName())) . '</a></li>';

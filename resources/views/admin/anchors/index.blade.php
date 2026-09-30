@@ -349,13 +349,13 @@ const projectTitles = {
         $page_search_links_by_post[$post_id] = array_values(array_unique($links));
     }
     $posts = array_values($posts_by_id);
-    foreach ($posts as $post) {
+        foreach ($posts as $post) {
         if (@$_GET['country'] == 'oman') {
-            if ($post->country != 'oman') {
+            if (!($post->countryRel && $post->countryRel->code == 'oman')) {
                 continue;
             }
         } elseif (@$_GET['country'] == 'turkey') {
-            if ($post->country == 'oman') {
+            if ($post->countryRel && $post->countryRel->code == 'oman') {
                 continue;
             }
         }
@@ -529,10 +529,10 @@ const projectTitles = {
             'general' => 'General'
         ];
         foreach ($posts as $post) {
-            if (@$_GET['country'] == 'oman' && $post->country != 'oman') {
+            if (@$_GET['country'] == 'oman' && !($post->countryRel && $post->countryRel->code == 'oman')) {
                 continue;
             }
-            if (@$_GET['country'] == 'turkey' && $post->country == 'oman') {
+            if (@$_GET['country'] == 'turkey' && $post->countryRel && $post->countryRel->code == 'oman') {
                 continue;
             }
             if (empty($post->$language_field)) {

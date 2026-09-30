@@ -6,7 +6,6 @@ class City extends BaseModel
     public $table = "cities";
     
     protected $fillable = [
-        "country",
         "country_id",
         "name_ar",
         "name_en",
@@ -162,28 +161,23 @@ class City extends BaseModel
     
 	
     /**
-    * Geographic country parent.
-    * Named countryRel because `country` is the existing code string (turkey/oman).
-    *
-    * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-    */
+     * Geographic country parent.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function countryRel()
     {
         return $this->belongsTo("App\Models\Country", "country_id");
     }
 
     /**
-     * Country slug used in geo URLs (turkiye), not the legacy code (turkey).
+     * Country slug used in geo URLs (turkiye), not the country code (turkey).
      *
      * @return string|null
      */
     public function getCountrySlug()
     {
-        if ($this->countryRel) {
-            return $this->countryRel->slug;
-        }
-        $country = Country::findByCode($this->country);
-        return $country ? $country->slug : null;
+        return $this->countryRel ? $this->countryRel->slug : null;
     }
 
     /**
@@ -194,29 +188,6 @@ class City extends BaseModel
     public function regions()
     {
         return $this->hasMany("App\Models\Region","city_id");
-    }
-
-    /**
-     * Keep country_id in sync with the legacy country string (turkey/oman),
-     * which maps to Country.code — not the URL slug (turkiye).
-     */
-    protected static function boot()
-    {
-        parent::boot();
-
-        static::saving(function ($city) {
-            if (!empty($city->country_id)) {
-                $country = Country::find($city->country_id);
-                if ($country) {
-                    $city->country = $country->code;
-                }
-            } elseif (!empty($city->country)) {
-                $country = Country::findByCode($city->country);
-                if ($country) {
-                    $city->country_id = $country->id;
-                }
-            }
-        });
     }
 
     /**

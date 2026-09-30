@@ -5,7 +5,6 @@ if (Helper::get_device() == 'tab') {
 $current_lang = LaravelLocalization::getCurrentLocale();
 $style_lang = in_array($current_lang, ['en', 'fr', 'ru']) ? 'en' : 'ar';
 
-$ccountry = (Helper::container_array(\Route::getCurrentRoute()->getPath(), ['oman'])?'oman':'turkey');
 ?>
 @section('styles')
 <?php
@@ -68,7 +67,10 @@ $emptypic = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABA
 
 
 @section('main_content')
-
+<?php
+$ccountry = ($post->countryRel && $post->countryRel->code) ? $post->countryRel->code : 'turkey';
+unset($footer_prjs);
+?>
 <style>
     .trees li.uli_h2:before{ width: 16px; }
     .trees li.uli_h3:before{ width: 32px; }
@@ -364,7 +366,7 @@ $emptypic = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABA
 
 
             <?php
-                $breadcrumbCountry = $post->countryRel ?: \App\Models\Country::findByCode($post->country);
+                $breadcrumbCountry = $post->countryRel;
                 $breadcrumbCountrySlug = $post->getCountrySlug();
                 $breadcrumbPostLabel = trim((string) $post->getTitle());
                 if ($breadcrumbPostLabel === '') {
@@ -751,7 +753,7 @@ $emptypic = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABA
             
             //if($post->similar_posts==''){
                 
-                $params = Helper::query("BlogParam", "find", ["id" => ($ccountry=='turkey'?1:3)]);
+                $params = \App\Models\BlogParam::forCountry($ccountry);
                 if ($params->featured_post != '')
                     $similars = explode(",", $params->featured_post);
             //}
@@ -817,7 +819,7 @@ $emptypic = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABA
 
             <?php
 //$post_projects = $post->projects;
-            $arr_ids = Helper::query("Fotterproject", "all")->where('country',$ccountry)->lists('project_id')->toArray();
+            $arr_ids = \App\Models\Fotterproject::projectIdsForCountry($ccountry);
             $footer_prjs = \App\Models\Project::whereIn('id', $arr_ids)->get();
             
             if (count($footer_prjs)) {
@@ -848,7 +850,7 @@ $emptypic = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABA
                             <div class="slider__button-prev"></div>
                         </div>
 
-                        <a href="{{ route('front.search', ['property-for-sale', $ccountry]) }}" class="more shadow_type"><?= trans("front.More Projects"); ?></a>
+                        <a href="<?= Helper::geo_listing_url($ccountry) ?>" class="more shadow_type"><?= trans("front.More Projects"); ?></a>
 
                     </div>
 

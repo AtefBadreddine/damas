@@ -30,7 +30,7 @@
             <label>Country</label>
             <select name="country_id" class="form-control select2me">
                 <?php foreach ($countries as $country): ?>
-                <option value="<?= $country->id ?>" <?= ((int)$row->country_id === (int)$country->id || $row->country == $country->code) ? 'selected' : '' ?>><?= $country->name_en ?></option>
+                <option value="<?= $country->id ?>" <?= ((int)$row->country_id === (int)$country->id) ? 'selected' : '' ?>><?= $country->name_en ?></option>
                 <?php endforeach; ?>
             </select>
         </div>
@@ -38,7 +38,7 @@
     <div class="form-group col-md-9">
         <label>Slug<span class="red">(*)</span></label>
         <div class="input-group ltr">
-            <span class="input-group-addon"><?= url('/' . $type . '/category')."/" ?><?= $row->country=='turkey'?'':$row->country.'/' ?></span>
+            <span class="input-group-addon"><?= url('/' . $type . '/category')."/" ?><?= ($row->countryRel && $row->countryRel->code != 'turkey') ? $row->countryRel->code . '/' : '' ?></span>
             <?= Form::text("slug", $row->slug, ["class" => "form-control input-sm"]); ?>
         </div>
     </div>

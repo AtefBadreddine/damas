@@ -24,7 +24,7 @@ if (!$filterCountry && !empty($inputs['city_row'])) {
     } elseif (isset($filterCountryByCode[$filterCityRow->slug])) {
         $filterCountry = $filterCountryByCode[$filterCityRow->slug];
     } else {
-        $filterCountry = $filterCityRow->countryRel ?: (isset($filterCountryByCode[$filterCityRow->country]) ? $filterCountryByCode[$filterCityRow->country] : null);
+        $filterCountry = $filterCityRow->countryRel;
     }
 }
 
@@ -34,16 +34,35 @@ foreach ($citys as $fcity) {
     if (isset($allCountriesByCode[$fcity->slug])) {
         continue;
     }
-    $fcCountryId = $fcity->country_id ?: (isset($allCountriesByCode[$fcity->country]) ? $allCountriesByCode[$fcity->country]->id : null);
+    $fcCountryId = $fcity->country_id;
     if (!$fcCountryId || !isset($visibleCountryIds[$fcCountryId])) {
         continue;
     }
     $filterCities[] = array(
+        'id' => (int) $fcity->id,
         'slug' => $fcity->slug,
         'name' => $fcity->getName(),
         'country' => (int) $fcCountryId,
         'url' => $fcity->listingUrl(),
     );
+}
+$filterCityIds = array();
+foreach ($filterCities as $fcRow) {
+    $filterCityIds[] = $fcRow['id'];
+}
+$filterRegions = array();
+if (!empty($filterCityIds)) {
+    foreach (\App\Models\Region::whereIn('city_id', $filterCityIds)->orderBy('id', 'asc')->get() as $fregion) {
+        if (isset($hiddenFilterCityIds[$fregion->city_id])) {
+            continue;
+        }
+        $filterRegions[] = array(
+            'slug' => $fregion->slug,
+            'name' => $fregion->getName(),
+            'city_id' => (int) $fregion->city_id,
+            'url' => (string) $fregion->listingUrl(),
+        );
+    }
 }
 $filterCountryUrls = array();
 foreach ($filterCountries as $fc) {
@@ -55,7 +74,7 @@ foreach ($filterCountries as $fc) {
 </p>
 
 
-<span class="cleared_filter"><a href="<?= isset($locationAreaUrl) ? $locationAreaUrl : route("front.search", ["property-for-sale", "turkey"]) ?>"><?= trans("front.cleared"); ?></a></span>
+<span class="cleared_filter"><a href="<?= isset($locationAreaUrl) ? $locationAreaUrl : Helper::geo_listing_url('turkey') ?>"><?= trans("front.cleared"); ?></a></span>
 
 
 <?= Form::open(isset($filterFormUrl) ? ["id" => "form-search", "url" => $filterFormUrl, "method" => "GET"] : ["id" => "form-search"]); ?>
@@ -65,7 +84,7 @@ foreach ($filterCountries as $fc) {
 <div class="form-group">
     <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 24.33 23.69" xml:space="preserve"><g> <path class="st0" d="M12.14,13.49c-1.08-1.21-2.16-2.38-3.19-3.58C8.46,9.33,7.98,8.71,7.6,8.04c-1.66-2.92-0.39-6.51,2.68-7.69 c3.15-1.21,6.62,0.84,7.11,4.18c0.15,1.06-0.05,2.04-0.53,2.98c-0.42,0.82-0.96,1.55-1.55,2.25c-0.98,1.17-1.97,2.34-2.96,3.51 C12.3,13.33,12.24,13.39,12.14,13.49z M12.17,2.78C10.72,2.79,9.54,3.97,9.55,5.4c0.01,1.44,1.19,2.61,2.63,2.61 c1.42,0,2.59-1.19,2.59-2.62C14.77,3.96,13.58,2.78,12.17,2.78z"></path> <path class="st0" d="M7.47,9.32c-0.97,0-1.88,0-2.84,0c0.07,0.1,0.1,0.16,0.14,0.21c2.33,2.9,4.66,5.8,6.99,8.71 c0.16,0.19,0.27,0.23,0.5,0.13c1.86-0.75,3.72-1.49,5.58-2.23c0.08-0.03,0.15-0.07,0.25-0.11c-1.35-1.2-2.68-2.38-4.03-3.58 c0.1-0.12,0.19-0.23,0.29-0.36c1.4,1.24,2.79,2.48,4.18,3.72c1.5-1.16,2.99-2.32,4.52-3.5c-2.11-1.07-4.19-2.13-6.28-3.2 c0.16-0.26,0.31-0.49,0.47-0.75c0.17,0.09,0.35,0.17,0.52,0.26c2.06,1.05,4.11,2.09,6.17,3.14c0.5,0.26,0.53,0.58,0.08,0.93 c-1.66,1.29-3.32,2.58-4.99,3.86c-0.12,0.09-0.26,0.17-0.4,0.23c-1.99,0.8-3.98,1.58-5.96,2.39c-0.17,0.07-0.34,0.2-0.46,0.34 c-1.06,1.29-2.11,2.58-3.17,3.88c-0.35,0.42-0.62,0.41-0.93-0.04c-2.66-3.91-5.31-7.81-7.97-11.72c-0.22-0.33-0.18-0.54,0.15-0.77 c1.1-0.76,2.21-1.51,3.32-2.26c0.12-0.08,0.28-0.13,0.43-0.14c0.9-0.03,1.79-0.03,2.69-0.06c0.15,0,0.24,0.05,0.31,0.18 C7.15,8.8,7.29,9.02,7.47,9.32z M11.62,18.8c-2.53-3.15-5.05-6.29-7.58-9.44c-1,0.68-1.98,1.35-2.98,2.04 c2.52,3.71,5.02,7.39,7.55,11.1C9.63,21.25,10.62,20.03,11.62,18.8z"></path> </g> </svg>
 
-    <select name="country" id="filter_country" class="<?= $is_mobile?'':'selectpicker' ?> form-control" title="<?= trans("front.country"); ?>">
+    <select name="country" id="filter_country" class="<?= $is_mobile?'':'selectpicker' ?> form-control input_seacrh" title="<?= trans("front.country"); ?>">
         <option value=""><?= trans("front.country"); ?></option>
         @foreach($filterCountries as $fc)
         <option value="<?= $fc->id ?>" <?= $filterCountry && $filterCountry->id == $fc->id ? 'selected' : ''; ?>><?= $fc->getTitle(); ?></option>
@@ -179,12 +198,16 @@ foreach ($filterCountries as $fc) {
 document.addEventListener('DOMContentLoaded', function () {
     var $ = window.jQuery;
     var filterCities = <?= json_encode($filterCities, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_HEX_TAG) ?>;
+    var filterRegions = <?= json_encode($filterRegions, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_HEX_TAG) ?>;
     var filterCountryUrls = <?= json_encode($filterCountryUrls, JSON_UNESCAPED_SLASHES | JSON_HEX_TAG) ?>;
     var cityPlaceholder = <?= json_encode(trans("front.city"), JSON_UNESCAPED_UNICODE | JSON_HEX_TAG) ?>;
+    var regionPlaceholder = <?= json_encode(trans("front.all regions"), JSON_UNESCAPED_UNICODE | JSON_HEX_TAG) ?>;
     window.projectsFilterData = {
         cities: filterCities,
+        regions: filterRegions,
         countryUrls: filterCountryUrls,
-        cityLabel: cityPlaceholder
+        cityLabel: cityPlaceholder,
+        regionLabel: regionPlaceholder
     };
 
     function refreshPickers($selects) {
@@ -193,30 +216,94 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
+    function cityIdFromSlug(slug) {
+        for (var i = 0; i < filterCities.length; i++) {
+            if (filterCities[i].slug === slug) {
+                return filterCities[i].id;
+            }
+        }
+        return null;
+    }
+
     function clearDistricts() {
         var $regions = $('#selectregions');
         $regions.children('option').not(':first').remove();
+        $regions.val('');
+        refreshPickers($regions);
+    }
+
+    function fillCitiesForCountry(countryId, keepSlug) {
+        var $city = $('#form-search select[name=city]');
+        $city.empty().append($('<option value=""></option>').text(cityPlaceholder));
+        if (countryId) {
+            $.each(filterCities, function (i, c) {
+                if (c.country === countryId) {
+                    $city.append($('<option></option>').val(c.slug).text(c.name));
+                }
+            });
+        }
+        if (keepSlug && $city.find('option[value="' + keepSlug + '"]').length) {
+            $city.val(keepSlug);
+        } else {
+            $city.val('');
+        }
+        refreshPickers($city);
+    }
+
+    function fillRegionsForCitySlug(citySlug, selectedSlugs) {
+        clearDistricts();
+        if (!citySlug) {
+            return;
+        }
+        var cityId = cityIdFromSlug(citySlug);
+        if (!cityId) {
+            return;
+        }
+        selectedSlugs = selectedSlugs || [];
+        var $regions = $('#selectregions');
+        $.each(filterRegions, function (i, r) {
+            if (r.city_id !== cityId) {
+                return;
+            }
+            var $opt = $('<option></option>').val(r.slug).text(r.name);
+            if (r.url) {
+                $opt.attr('data-url', r.url);
+            }
+            if (selectedSlugs.indexOf(r.slug) !== -1) {
+                $opt.prop('selected', true);
+            }
+            $regions.append($opt);
+        });
         refreshPickers($regions);
     }
 
     $(document).on('change', '#filter_country', function () {
-        var countryId = parseInt($(this).val(), 10);
-        var $city = $('#form-search select[name=city]');
-        $city.empty().append($('<option value=""></option>').text(cityPlaceholder));
-        $.each(filterCities, function (i, c) {
-            if (!countryId || c.country === countryId) {
-                $city.append($('<option></option>').val(c.slug).text(c.name));
-            }
-        });
-        $city.val('');
-        refreshPickers($city);
+        var countryId = parseInt($(this).val(), 10) || 0;
+        fillCitiesForCountry(countryId, '');
         clearDistricts();
         $('.cleared_filter').show();
     });
 
     $(document).on('change', '#form-search select[name=city]', function () {
-        clearDistricts();
+        fillRegionsForCitySlug($(this).val(), []);
         $('.cleared_filter').show();
     });
+
+    var $countrySel = $('#filter_country');
+    var $citySel = $('#form-search select[name=city]');
+    var countryIdInit = parseInt($countrySel.val(), 10) || 0;
+    if (countryIdInit) {
+        fillCitiesForCountry(countryIdInit, $citySel.val());
+    }
+    if ($citySel.val()) {
+        var selectedRegions = [];
+        $('#selectregions option:selected').each(function () {
+            var v = $(this).val();
+            if (v) {
+                selectedRegions.push(v);
+            }
+        });
+        fillRegionsForCitySlug($citySel.val(), selectedRegions);
+    }
 });
 </script>

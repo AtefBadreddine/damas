@@ -409,10 +409,6 @@ class ProjectController extends BaseController
             $projectCity = Helper::query("City", "find", ['id' => $row->city_id]);
             if ($projectCity) {
                 $initialCountryId = $projectCity->country_id;
-                if (!$initialCountryId && $projectCity->country) {
-                    $countryRow = \App\Models\Country::findByCode($projectCity->country);
-                    $initialCountryId = $countryRow ? $countryRow->id : '';
-                }
             }
         }
 

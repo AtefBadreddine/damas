@@ -29,14 +29,12 @@ class PostCategory extends BaseModel
         "seo_description_fa",
         "seo_keywords_fa",
         "icon",
-        "country",
         "country_id",
         "type",//blog or news
     ];
 
     /**
      * Geographic country parent.
-     * Named countryRel because `country` is the existing code string (turkey/oman).
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
@@ -52,11 +50,7 @@ class PostCategory extends BaseModel
      */
     public function getCountrySlug()
     {
-        if ($this->countryRel) {
-            return $this->countryRel->slug;
-        }
-        $country = Country::findByCode($this->country);
-        return $country ? $country->slug : null;
+        return $this->countryRel ? $this->countryRel->slug : null;
     }
 
     /**
@@ -69,7 +63,7 @@ class PostCategory extends BaseModel
     {
         $countrySlug = $this->getCountrySlug();
         if (!$countrySlug) {
-            $country = Country::findByCode('turkey');
+            $country = Country::findBySlugOrCode('turkey');
             $countrySlug = $country ? $country->slug : 'turkiye';
         }
 
@@ -85,30 +79,6 @@ class PostCategory extends BaseModel
     public function posts()
     {
         return $this->belongsToMany("App\Models\Post", "post_category");
-    }
-
-    /**
-     * Keep country_id in sync with the legacy country string (turkey/oman),
-     * which maps to Country.code — not the URL slug (turkiye).
-     */
-    protected static function boot()
-    {
-        parent::boot();
-
-        static::saving(function ($category) {
-            if (!empty($category->country_id)) {
-                $country = Country::find($category->country_id);
-                // Only write the legacy string when the column still exists on this row.
-                if ($country && array_key_exists('country', $category->getAttributes())) {
-                    $category->country = $country->code;
-                }
-            } elseif (!empty($category->country)) {
-                $country = Country::findByCode($category->country);
-                if ($country) {
-                    $category->country_id = $country->id;
-                }
-            }
-        });
     }
 
 }

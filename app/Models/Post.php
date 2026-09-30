@@ -55,7 +55,6 @@ class Post extends BaseModel
         "update_date",
         "update_by",
 		"update_by_name",
-		'country',
 		'country_id',
 		
 		"post_scheduling",
@@ -106,7 +105,6 @@ class Post extends BaseModel
 
     /**
      * Geographic country parent.
-     * Named countryRel because `country` is the existing code string (turkey/oman).
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
@@ -122,11 +120,7 @@ class Post extends BaseModel
      */
     public function getCountrySlug()
     {
-        if ($this->countryRel) {
-            return $this->countryRel->slug;
-        }
-        $country = Country::findByCode($this->country);
-        return $country ? $country->slug : null;
+        return $this->countryRel ? $this->countryRel->slug : null;
     }
 
     /**
@@ -319,29 +313,6 @@ class Post extends BaseModel
 			}
         }
 		return array('title'=>$title,'content'=>$content,'createdAt'=>$this->createdAt,'updatedAt'=>$this->updatedAt,'cat_id'=> @$this->categories[0]->id);
-    }
-
-    /**
-     * Keep country_id in sync with the legacy country string (turkey/oman),
-     * which maps to Country.code — not the URL slug (turkiye).
-     */
-    protected static function boot()
-    {
-        parent::boot();
-
-        static::saving(function ($post) {
-            if (!empty($post->country_id)) {
-                $country = Country::find($post->country_id);
-                if ($country) {
-                    $post->country = $country->code;
-                }
-            } elseif (!empty($post->country)) {
-                $country = Country::findByCode($post->country);
-                if ($country) {
-                    $post->country_id = $country->id;
-                }
-            }
-        });
     }
 
 }

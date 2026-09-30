@@ -39,7 +39,6 @@ input[name=slug] {
             <option value="{{ $country->id }}" data-code="{{ $country->code }}" data-slug="{{ $country->slug }}" {{ $selectedCountryId == $country->id ? 'selected' : '' }}>{{ $country->name_en }}</option>
             @endforeach
         </select>
-        <input type="hidden" name="country" id="city-country-code" value="{{ old('country', $row->country) }}">
     </div>
 </fieldset>
 
@@ -327,129 +326,15 @@ input[name=slug] {
 </div>
 </div>
 
-@if(false)
-
-<br><br>
-<h2 style="color: #ff0000">Old Edits</h2>
-<hr style="border: 2px solid #ff0000">
-<br><br>
-
-<fieldset id="city-old-edits" disabled>
-<div>
-<fieldset>
-    <legend>City Information</legend>
-<div class="city-row">
-    
-    <div class="form-group col-md-6">
-        <label>Country</label>
-        <select name="country" class="form-control select2me" required>
-    		<option value=""></option>
-    		<option value="turkey" <?=  $row->country=='turkey' ? 'selected':'' ?>>Turkey</option>
-    		<option value="oman" <?=  $row->country=='oman' ? 'selected':'' ?>>Oman</option>
-    		<option value="emirates" <?=  $row->country=='emirates' ? 'selected':'' ?>>Emirates</option>
-    		<option value="syria" <?=  $row->country=='syria' ? 'selected':'' ?>>Syria</option>
-    	</select>
-    </div>
-    <div class="form-group col-md-4">
-        <label>Picture</label>
-        @include('admin.layouts.media_input', [
-            "name"	=>	"media_index",
-            "ids"   =>	[$row->media_index]
-        ])
-    </div>
-</div>
-</fieldset>
-<fieldset>
-    <legend>About The City</legend>
-<div class="city-row">
-	<div class="form-group col-md-6">
-        <label>Content</label>
-        <select name="post_id" class="form-control select2me" >
-			<option value="0"></option>
-			@foreach($posts as $post)
-				<option value="<?= $post->id; ?>" <?= $post->id == $row->post_id ? 'selected':'' ?>><?= $post->title_ar; ?></option>
-			@endforeach
-		</select>
-    </div>
-</div>
-</fieldset>
-<fieldset>
-    <legend>Location and Coordinates</legend>
-<div class="city-row">
-    <div class="form-group col-md-12">
-        @include('admin.layouts.location_map')
-    </div>
-</div>
-</fieldset>
-<div id="city-shared-seo">
-@include('admin.layouts.seo')
-</div>
-@if(isset($row))
-<fieldset>
-    <legend>Districts Page</legend>
-<div class="city-row">
-    <div class="form-group col-md-12">
-        <div class="city-row">
-			<div class="form-group col-md-4">
-				<div class="form-group">
-					<label class="enable_district_page"><input type="checkbox" value="1" name="enable_district_page" <?= $row->enable_district_page == 1 ? 'checked' : ''; ?>> Enable districts page </label>
-				</div>
-			</div>
-	<div class="col-md-4">
-		<div class="form-group">
-			<label>Primary Image</label>
-			@include('admin.layouts.media_input', [
-			"name" => "primary_photo_id",
-			"ids"  => [$row->primary_photo_id]
-			])
-		</div>
-	</div>
-		<div class="form-group col-md-6">
-        <label>Section 1</label>
-        <select name="sec1_post_id" class="form-control select2me" >
-			<option value="0"></option>
-			@foreach($posts as $post)
-				<option value="<?= $post->id; ?>" <?= $post->id == $row->sec1_post_id ? 'selected':'' ?>><?= $post->title_ar; ?></option>
-			@endforeach
-		</select>
-		</div>
-		<div class="form-group col-md-6">
-        <label>Section 2</label>
-        <select name="sec2_post_id" class="form-control select2me" >
-			<option value="0"></option>
-			@foreach($posts as $post)
-				<option value="<?= $post->id; ?>" <?= $post->id == $row->sec2_post_id ? 'selected':'' ?>><?= $post->title_ar; ?></option>
-			@endforeach
-		</select>
-		</div>
-		<div class="form-group col-md-6">
-        <label>Section 3</label>
-        <select name="sec3_post_id" class="form-control select2me" >
-			<option value="0"></option>
-			@foreach($posts as $post)
-				<option value="<?= $post->id; ?>" <?= $post->id == $row->sec3_post_id ? 'selected':'' ?>><?= $post->title_ar; ?></option>
-			@endforeach
-		</select>
-		</div>
-		</div>
-    </div>
-</div>
-</fieldset>
-@endif
-</div>
-</fieldset>
-@endif
 @include("admin.layouts.tinymce_js")
 @include("admin.layouts.media_input_js")
 <script>
 (function () {
     function syncCountry() {
         var country = document.getElementById('city-country-id');
-        var code = document.getElementById('city-country-code');
         var prefix = document.getElementById('city-slug-prefix');
-        if (!country || !code || !prefix) return;
+        if (!country || !prefix) return;
         var option = country.options[country.selectedIndex];
-        code.value = option ? option.getAttribute('data-code') || '' : '';
         prefix.textContent = 'https://damas.net/' + (option ? option.getAttribute('data-slug') || 'country' : 'country') + '/';
     }
     if (document.readyState === 'loading') {

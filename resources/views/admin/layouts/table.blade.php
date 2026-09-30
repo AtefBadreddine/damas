@@ -236,8 +236,6 @@ $str_get = $str_get . $k.'='.$v.'&';
                             <td>
                                 @if($find_row)
                                     {{ $field ? $find_row->$field : $find_row->name_en }}
-                                @elseif($field_id === 'country_id' && !empty($row->country))
-                                    {{ $row->country }}
                                 @endif
                             </td>
                         @else
@@ -506,7 +504,7 @@ $str_get = $str_get . $k.'='.$v.'&';
 								{{ $row->update_date }}
 								<?= ($row->update_by_name!=''?"<br>".$row->update_by_name:'') ?>
 								@elseif($isPostList and $key=="title_ar")
-									#<?= ucfirst($row->country) ?><br>
+									#<?= $row->countryRel ? ucfirst($row->countryRel->code) : '' ?><br>
 									<a href="{{ $row->frontUrl() }}" target="_blank" class="gsc-link">{{ ($row->title_ar!=''?$row->title_ar:($row->title_en!=''?$row->title_en:($row->title_fa!=''?$row->title_fa:($row->title_ru!=''?$row->title_ru:'')))) }}</a>
 								@elseif($isPostList and $key=="blog_impressions")
 								    <p class="impressions"></p>

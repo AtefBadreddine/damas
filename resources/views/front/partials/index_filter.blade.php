@@ -19,7 +19,7 @@ foreach ($citys as $hcity) {
     if (isset($allCountriesByCode[$hcity->slug])) {
         continue;
     }
-    $hcCountryId = $hcity->country_id ?: (isset($allCountriesByCode[$hcity->country]) ? $allCountriesByCode[$hcity->country]->id : null);
+    $hcCountryId = $hcity->country_id;
     if (!$hcCountryId || !isset($visibleCountryIds[$hcCountryId]) || !$hcity->listingUrl()) {
         continue;
     }

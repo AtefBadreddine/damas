@@ -11,9 +11,18 @@ $ccountry = ((strpos(request()->getPathInfo(), '/oman') !== false or strpos(requ
 
 
 //n project_data /media
-if(isset($is_proj_data) && isset($project)){
-    $ccountry = $project->city->country;
+if(isset($is_proj_data) && isset($project) && $project->city && $project->city->countryRel){
+    $ccountry = $project->city->countryRel->code;
 }
+
+$ccountryModel = Helper::currentCountry(isset($project) ? $project : (isset($locationCountry) ? $locationCountry : null));
+if (!$ccountryModel && isset($post) && is_object($post) && $post->countryRel) {
+    $ccountryModel = $post->countryRel;
+}
+if (!$ccountryModel) {
+    $ccountryModel = \App\Models\Country::findBySlugOrCode($ccountry);
+}
+$ccountryId = $ccountryModel ? $ccountryModel->id : 0;
 
 $whatsappContext = isset($project) ? $project : (isset($locationCountry) ? $locationCountry : null);
 $whatsappTel = Helper::whatsappNumber($whatsappContext);
@@ -30,10 +39,16 @@ $style_lang = in_array($current_lang, ['en', 'fr', 'ru']) ? 'en' : 'ar';
 $emptypic = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
 //$emptypic = asset('img/0.png');
 
-$citys = App\Models\City::where('id', '!=', 2)->orderBy('placement', 'asc')->get();
+$citys = App\Models\City::where('id', '!=', 2)->with('countryRel')->orderBy('placement', 'asc')->get();
 $tags = \App\Models\ProjectCategory::limit(14)->get();
 
 $projectsUrl = route('front.projects');
+$cityListingUrls = array();
+foreach ($citys as $layoutCity) {
+    if ($layoutCity->slug && $layoutCity->listingUrl()) {
+        $cityListingUrls[$layoutCity->slug] = $layoutCity->listingUrl();
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="<?= ($current_lang == 'pe' ? 'fa' : $current_lang); ?>" dir="<?= $style_lang == "ar" ? "ltr" : "ltr"; ?>">
@@ -1104,7 +1119,7 @@ $projectsUrl = route('front.projects');
                         
                         
                         
-                        $arr_ids = Helper::query("Fotterproject", "all")->where('country',$ccountry)->lists('project_id')->toArray();
+                        $arr_ids = \App\Models\Fotterproject::projectIdsForCountry($ccountryModel);
                         $footer_prjs = \App\Models\Project::whereIn('id', $arr_ids)->get();
                     }
                     foreach ($footer_prjs as $p) {
@@ -1147,7 +1162,14 @@ $projectsUrl = route('front.projects');
                 <li class="animate__animated">
                     <p class="jazzira_font_bold footer_title"><?= trans("front.keywords footer"); ?></p>
 
-                    <?php $u_links = Helper::query("FooterLink", "orderByPlacement", ["lang" => ["all", ($current_lang == 'pe' ? 'fa' : $current_lang)]])->where('country',$ccountry)->toArray(); ?>
+                    <?php
+                    $footerLinkLang = ($current_lang == 'pe' ? 'fa' : $current_lang);
+                    $u_links = \App\Models\FooterLink::orderBy('placement', 'ASC')
+                        ->whereIn('lang', array('all', $footerLinkLang))
+                        ->where('country_id', $ccountryId)
+                        ->get()
+                        ->toArray();
+                    ?>
                     @foreach($u_links as $u_link)
                     @if($u_link['footer_section'] == "useful")
                     <?php $title = "title_" . ($current_lang == 'pe' ? 'fa' : $current_lang); ?>
@@ -1502,7 +1524,23 @@ console.log("waitForScriptsLoaded window.jQuery true");*/
                     if (!type)
                         type = "property-for-sale";
 
-                    window.location.href = "{{ route('front.index') }}/" + type + "/" + city + str;
+                    var cityListingUrls = <?= json_encode($cityListingUrls); ?>;
+                    var dest = cityListingUrls[city];
+                    if (dest) {
+                        var extra = [];
+                        if (type && type !== 'property-for-sale') {
+                            extra.push('type=' + encodeURIComponent(type));
+                        }
+                        if (str) {
+                            dest += (dest.indexOf('?') >= 0 ? '&' : '?') + str.replace(/^\?/, '');
+                        }
+                        if (extra.length) {
+                            dest += (dest.indexOf('?') >= 0 ? '&' : '?') + extra.join('&');
+                        }
+                        window.location.href = dest;
+                    } else {
+                        window.location.href = "{{ route('front.index') }}/" + type + "/" + city + str;
+                    }
                     return false;
                 });
 

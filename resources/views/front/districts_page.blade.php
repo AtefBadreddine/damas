@@ -423,7 +423,7 @@ $proj_cats = Helper::query('ProjectCategory', "where", ["field" => "hide_search_
                             <div class="slider__button-prev"></div>
                         </div>
 
-                        <a href="{{ route('front.search', ['property-for-sale', $city->slug]) }}" class="more shadow_type" title="<?= trans("front.districts title one property for sale in") .' '. $city->getName(); ?>"><?= trans("front.districts title one property for sale in") .' '. $city->getName() ?></a>
+                        <a href="{{ $city->listingUrl() }}" class="more shadow_type" title="<?= trans("front.districts title one property for sale in") .' '. $city->getName(); ?>"><?= trans("front.districts title one property for sale in") .' '. $city->getName() ?></a>
 
                     </div>
 
@@ -484,7 +484,7 @@ $proj_cats = Helper::query('ProjectCategory', "where", ["field" => "hide_search_
                             <div class="slider__button-prev"></div>
                         </div>
 
-                        <a href="{{ route('front.search', ['apartments-for-sale', 'istanbul']) }}" class="more shadow_type" title="<?= trans("front.districts title two apartments for sale in") .' '. $city->getName(); ?>"><?= trans("front.districts title two apartments for sale in") .' '. $city->getName(); ?></a>
+                        <a href="{{ Helper::geo_listing_url($city, 'apartments-for-sale') }}" class="more shadow_type" title="<?= trans("front.districts title two apartments for sale in") .' '. $city->getName(); ?>"><?= trans("front.districts title two apartments for sale in") .' '. $city->getName(); ?></a>
 
                     </div>
 
@@ -548,7 +548,7 @@ $proj_cats = Helper::query('ProjectCategory', "where", ["field" => "hide_search_
                             <div class="slider__button-prev"></div>
                         </div>
 
-                        <a href="{{ route('front.search', ['villas-for-sale', $city->slug]) }}" class="more shadow_type" title="<?= trans("front.districts title three villas for sale in") .' '. $city->getName(); ?>"><?= trans("front.districts title three villas for sale in") .' '. $city->getName(); ?></a>
+                        <a href="{{ Helper::geo_listing_url($city, 'villas-for-sale') }}" class="more shadow_type" title="<?= trans("front.districts title three villas for sale in") .' '. $city->getName(); ?>"><?= trans("front.districts title three villas for sale in") .' '. $city->getName(); ?></a>
 
                     </div>
 
@@ -596,7 +596,7 @@ $proj_cats = Helper::query('ProjectCategory', "where", ["field" => "hide_search_
                                   </li>
                                   </ul> */ ?>
 
-                                <a class="more" href="<?= route("front.search", ["property-for-sale", $city->slug, $reg->slug]) ?>"><?= trans("front.District projects"); ?>
+                                <a class="more" href="<?= $reg->listingUrl() ?>"><?= trans("front.District projects"); ?>
                                     <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 25 26" xml:space="preserve"><g> <path class="st0" d="M4.6,5.2l6.6,2l0.3-1.1L4.5,4L1.4,5.8l0.6,1L4.6,5.2z M4.6,5.2"></path> <path class="st0" d="M4.6,7.2l6.6,2l0.3-1.1L4.5,6L1.4,7.8l0.6,1L4.6,7.2z M4.6,7.2"></path> <path class="st0" d="M4.6,9.2l6.6,2l0.3-1.1L4.5,8L1.4,9.8l0.6,1L4.6,9.2z M4.6,9.2"></path> <path class="st0" d="M4.6,11.2l6.6,2l0.3-1.1L4.5,9.9l-3.1,1.8l0.6,1L4.6,11.2z M4.6,11.2"></path> <path class="st0" d="M4.6,13.2l6.6,2l0.3-1.1l-7.1-2.1l-3.1,1.8l0.6,1L4.6,13.2z M4.6,13.2"></path> <path class="st0" d="M4.6,15.1l6.6,2l0.3-1.1l-7.1-2.1l-3.1,1.8l0.6,1L4.6,15.1z M4.6,15.1"></path> <path class="st0" d="M4.6,17.1l6.6,2l0.3-1.1l-7.1-2.1l-3.1,1.8l0.6,1L4.6,17.1z M4.6,17.1"></path> <path class="st0" d="M4.6,19.1l6.6,2l0.3-1.1l-7.1-2.1l-3.1,1.8l0.6,1L4.6,19.1z M4.6,19.1"></path> <path class="st0" d="M15.4,5.2l6.6,2l0.3-1.1L15.3,4l-3.1,1.8l0.6,1L15.4,5.2z M15.4,5.2"></path> <path class="st0" d="M15.4,3.2l6.6,2l0.3-1.1L15.3,2l-3.1,1.8l0.6,1L15.4,3.2z M15.4,3.2"></path> <path class="st0" d="M15.4,1.2l6.6,2l0.3-1.1L15.3,0l-3.1,1.8l0.6,1L15.4,1.2z M15.4,1.2"></path> <path class="st0" d="M15.4,7.2l6.6,2l0.3-1.1L15.3,6l-3.1,1.8l0.6,1L15.4,7.2z M15.4,7.2"></path> <path class="st0" d="M15.4,9.2l6.6,2l0.3-1.1L15.3,8l-3.1,1.8l0.6,1L15.4,9.2z M15.4,9.2"></path> <path class="st0" d="M15.4,11.2l6.6,2l0.3-1.1l-7.1-2.1l-3.1,1.8l0.6,1L15.4,11.2z M15.4,11.2"></path> <path class="st0" d="M15.4,13.2l6.6,2l0.3-1.1l-7.1-2.1l-3.1,1.8l0.6,1L15.4,13.2z M15.4,13.2"></path> <path class="st0" d="M15.4,15.1l6.6,2l0.3-1.1l-7.1-2.1l-3.1,1.8l0.6,1L15.4,15.1z M15.4,15.1"></path> <path class="st0" d="M15.4,17.1l6.6,2l0.3-1.1l-7.1-2.1l-3.1,1.8l0.6,1L15.4,17.1z M15.4,17.1"></path> <path class="st0" d="M15.4,19.1l6.6,2l0.3-1.1l-7.1-2.1l-3.1,1.8l0.6,1L15.4,19.1z M15.4,19.1"></path> <path class="st0" d="M22,24.9v-1.9l0.3-1l-7.1-2.1l-3.1,1.8l0.3,0.5v2.7h-1.2v-1.9l0.3-1l-7.1-2.1l-3.1,1.8l0.3,0.5v2.7H0V26h25 v-1.1H22z M6.1,24.9v-2.3l3.5,0.8v1.5H6.1z M16.9,24.9v-2.3l3.5,0.8v1.5H16.9z M16.9,24.9"></path> </g> </svg>
                                 </a>
 

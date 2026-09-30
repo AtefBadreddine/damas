@@ -146,7 +146,7 @@ limit 1", array($row->id, '%' . $lang . '%'));
     {
         $country = null;
         if ($countrySlug) {
-            $country = Country::findBySlug($countrySlug);
+            $country = Country::findBySlugOrCode($countrySlug);
             if (!$country) {
                 abort(404);
             }
@@ -240,7 +240,12 @@ limit 1", array($row->id, '%' . $lang . '%'));
         $__city = $inputs['city'];
         $__var1 = $region ? $region->slug : null;
         $__var2 = null;
-        $search_noindex = count($allprojects) === 0;
+        $hasListingFilters = $filters['type']
+            || $filters['categories']
+            || $filters['rooms'] !== ''
+            || $filters['price'] !== ''
+            || $filters['sorting'] !== '';
+        $search_noindex = count($allprojects) === 0 || $hasListingFilters;
         $is_location_page = true;
         $locationCountry = $country;
         $locationCity = $city;
@@ -526,13 +531,13 @@ limit 1", array($row->id, '%' . $lang . '%'));
 
     /**
      * SEO and about copy for a geo listing.
-     * H1 and body come from the deepest geo row (district → city → country): h1_* plus about_* (content_* for countries).
-     * If h1 is empty, generate "properties for sale {place}".
+     * Title/description always come from the deepest geo row (district → city → country).
+     * Visible H1 uses that row unless type/category filters are on, in which case a generated heading is HTML-only.
      *
      * @param \App\Models\Country|null $country
      * @param \App\Models\City|null $city
      * @param \App\Models\Region|null $region
-     * @param array $filters type / category filters override the heading and SEO title
+     * @param array $filters type / category change the on-page H1 only
      * @return array
      */
     protected function locationContent($country, $city = null, $region = null, array $filters = array())
@@ -548,12 +553,13 @@ limit 1", array($row->id, '%' . $lang . '%'));
             $row = $region;
         }
 
-        $h1 = $place
+        $placeH1 = $place
             ? preg_replace('/\s+/', ' ', trim(trans('front.aqarat') . ' ' . trans('front.for_sale') . ' ' . $place))
             : trans('front.projects');
 
+        $geoH1 = $placeH1;
         if ($row && method_exists($row, 'getH1') && $row->getH1()) {
-            $h1 = $row->getH1();
+            $geoH1 = $row->getH1();
         }
 
         $aboutBodyFromGeo = '';
@@ -566,26 +572,30 @@ limit 1", array($row->id, '%' . $lang . '%'));
         $filterType = isset($filters['type']) ? $filters['type'] : null;
         $filterCategories = isset($filters['categories']) ? $filters['categories'] : array();
         $hasTypeOrCategory = $filterType || $filterCategories;
+        $displayH1 = $geoH1;
         if ($hasTypeOrCategory) {
             $categoryNames = array_map(function ($c) {
                 return $c->getName();
             }, $filterCategories);
-            $h1 = preg_replace('/\s+/', ' ', trim(
+            $displayH1 = preg_replace('/\s+/', ' ', trim(
                 ($filterType ? $filterType->getName() : ($place ? trans('front.aqarat') : trans('front.projects')))
                 . ($place ? ' ' . trans('front.for_sale') . ' ' . $place : '')
                 . ' ' . implode(', ', $categoryNames)
             ));
         }
 
-        $seoTitle = $h1;
-        $seoDescription = $h1;
-        $seoKeywords = '';
-        if ($row && !$hasTypeOrCategory && method_exists($row, 'getSeoTitle') && $row->getSeoTitle()) {
+        $seoTitle = $placeH1;
+        if ($row && method_exists($row, 'getH1') && $row->getH1()) {
+            $seoTitle = $row->getH1();
+        }
+        if ($row && method_exists($row, 'getSeoTitle') && $row->getSeoTitle()) {
             $seoTitle = $row->getSeoTitle();
         }
-        if ($row && !$hasTypeOrCategory && method_exists($row, 'getSeoDescription') && $row->getSeoDescription()) {
+        $seoDescription = '';
+        if ($row && method_exists($row, 'getSeoDescription') && $row->getSeoDescription()) {
             $seoDescription = $row->getSeoDescription();
         }
+        $seoKeywords = '';
         if ($row && method_exists($row, 'getSeoKeywords') && $row->getSeoKeywords()) {
             $seoKeywords = $row->getSeoKeywords();
         }
@@ -619,8 +629,9 @@ limit 1", array($row->id, '%' . $lang . '%'));
             'seo_description' => $seoDescription,
             'seo_keywords' => $seoKeywords,
             'og_image' => $ogImage,
+            'display_h1' => $displayH1,
             'about_body' => $aboutBody,
-            'about' => '<h1 property="name">' . $h1 . '</h1><div class="clearfix">' . $aboutBody . '</div>',
+            'about' => '<h1 property="name">' . $displayH1 . '</h1><div class="clearfix">' . $aboutBody . '</div>',
         );
     }
 

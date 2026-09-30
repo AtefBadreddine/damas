@@ -8,15 +8,8 @@ $infos = Helper::get_params();
 
 if ($type == 'news')
     $params = Helper::query("BlogParam", "find", ["id" => 2]);
-else{
-    $country = isset($countryCode) ? $countryCode : 'turkey';
-    if ($country == 'oman')
-        $params = Helper::query("BlogParam", "find", ["id" => 3]);
-    elseif ($country == 'syria')
-        $params = Helper::query("BlogParam", "find", ["id" => 4]);
-    else
-        $params = Helper::query("BlogParam", "find", ["id" => 1]);
-}
+else
+    $params = \App\Models\BlogParam::forCountry(isset($countryModel) ? $countryModel : (isset($countryCode) ? $countryCode : 'turkey'));
 $is_mobile = Helper::get_device() != 'full' ? true : false;
 /* $arr_prices = [
   "50000-100000" => Helper::usd_to_format("50K $") . "-" . Helper::usd_to_format("100K $"), "100000-150000" => Helper::usd_to_format("100K $") . "-" . Helper::usd_to_format("150K $"), "150000-250000" => Helper::usd_to_format("150K $") . "-" . Helper::usd_to_format("250K $"), "250000-400000" => Helper::usd_to_format("250K $") . "-" . Helper::usd_to_format("400K $"), "400000-600000" => Helper::usd_to_format("400K $") . "-" . Helper::usd_to_format("600K $"), "600000-1000000" => Helper::usd_to_format("600K $") . "-" . Helper::usd_to_format("1M $"), "1000000-2000000" => Helper::usd_to_format("1M $") . "-" . Helper::usd_to_format("2M $"), "2000000-+" => '+' . Helper::usd_to_format("2M $")

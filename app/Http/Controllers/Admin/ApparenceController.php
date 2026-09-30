@@ -270,22 +270,25 @@ class ApparenceController extends BaseController
         $menu = Helper::query("FooterLink", "find", ["id" => $id]);
         if ( $request->isMethod('post') ) {
 			
-			if(isset($_POST['save_projs'])){
+            if(isset($_POST['save_projs'])){
 				
 				
 				DB::table('fotterprojects')->where('id','>',0)->delete();
 				
-				foreach($_POST['projects_id'] as $pid){
-					
-					Helper::query("Fotterproject", "save", [
-						"inputs"    =>  ['project_id'=>$pid,'country'=>'turkey']
-					]);
-				}
-				foreach($_POST['projects_id_om'] as $pid){
-				
-					Helper::query("Fotterproject", "save", [
-						"inputs"    =>  ['project_id'=>$pid,'country'=>'oman']
-					]);
+				$posted = $request->get('projects_id', array());
+				foreach (Helper::query("Country", "all") as $country) {
+					$ids = isset($posted[$country->id]) ? (array) $posted[$country->id] : array();
+					foreach ($ids as $pid) {
+						if (!$pid) {
+							continue;
+						}
+						Helper::query("Fotterproject", "save", array(
+							"inputs" => array(
+								'project_id' => $pid,
+								'country_id' => $country->id,
+							),
+						));
+					}
 				}
 				
 				
@@ -293,8 +296,10 @@ class ApparenceController extends BaseController
 				$this->validate($request, [
 					"title_ar" =>  "required",
 					"link_type" =>  "required",
+					"country_id" =>  "required|integer",
 				]);
 				$inputs = $request->all();
+				unset($inputs['country']);
 				
 				$inputs["parent_id"] = @$inputs["parent_id"] ? $inputs["parent_id"] : 0;
 				$link_type = @$inputs["link_type"];

@@ -361,13 +361,14 @@
                     @endforeach
                     @foreach($posts as $post)
                     <?php
+                        $postCountryCode = $post->countryRel ? $post->countryRel->code : '';
                         $link = "https://damas.net/"
                             . ($language === 'en' ? 'en/' : '')
-                            . ($post->country === 'oman' ? 'oman/' : '')
+                            . ($postCountryCode === 'oman' ? 'oman/' : '')
                             . "blog/"
                             . $post->slug;
                     ?>
-                    <tr data-country="{{ strtolower($post->country) }}" rowType="post" data-id="{{ $post->id }}">
+                    <tr data-country="{{ strtolower($postCountryCode) }}" rowType="post" data-id="{{ $post->id }}">
                         <td>{{ $counter }}</td>
                         <td class="http-status">
                             <?php 

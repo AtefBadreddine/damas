@@ -109,42 +109,38 @@ class BlogController extends BaseController
 	
 	public function fpost_edit(Request $request, $id = null)
     {
-		$row = Helper::query("BlogParam", "find", ["id" => 1]);
-		
-		$rows = [];
-		if($row->featured_post!='')
-		$rows = explode(',',$row->featured_post);
-		
-		
-		
-		$row = Helper::query("BlogParam", "find", ["id" => 3]);
-		
-		$rows_om = [];
-		if($row->featured_post!='')
-		$rows_om = explode(',',$row->featured_post);
-        
-        
-        
+		$countries = Helper::query("Country", "all");
 		if ( $request->isMethod('post') ) {
-            $this->validate($request, [
-                "fposts"  =>  "required",
-            ]);
-			
-			
-           Helper::query("BlogParam", "save", [
-				"inputs"    =>  ['featured_post' =>  implode(',',$request->get('fposts',[]))],
-                "id"        =>  1,
-            ]);
-            
-            Helper::query("BlogParam", "save", [
-				"inputs"    =>  ['featured_post' =>  implode(',',$request->get('fposts_om',[]))],
-                "id"        =>  3,
-            ]);
-			
-			
+			$posted = $request->get('fposts', array());
+			foreach ($countries as $country) {
+				$ids = isset($posted[$country->id]) ? array_filter((array) $posted[$country->id]) : array();
+				$row = \App\Models\BlogParam::where('country_id', $country->id)->first();
+				$inputs = array(
+					'featured_post' => implode(',', $ids),
+					'country_id' => $country->id,
+				);
+				if (!$row) {
+					$inputs['title_ar'] = $country->name_ar;
+					$inputs['title_en'] = $country->name_en;
+				}
+				Helper::query("BlogParam", "save", array(
+					"inputs" => $inputs,
+					"id" => $row ? $row->id : null,
+				));
+			}
+
 			return redirect()->route("admin.fpost.edit");
-        }
-        return view("admin.fpost.edit", compact("rows","rows_om"));
+		}
+
+		$featuredByCountry = array();
+		foreach ($countries as $country) {
+			$row = \App\Models\BlogParam::where('country_id', $country->id)->first();
+			$featuredByCountry[$country->id] = ($row && $row->featured_post != '')
+				? explode(',', $row->featured_post)
+				: array();
+		}
+
+		return view("admin.fpost.edit", compact("countries", "featuredByCountry"));
     }
     /**
     * sections
@@ -260,10 +256,7 @@ class BlogController extends BaseController
                 "field" => "post_type",
                 "value" => $type
             ])->where('published', 1)
-              ->where(function ($q) use ($country) {
-                  $q->where('country_id', $country->id)
-                    ->orWhere('country', $country->code);
-              })
+              ->where('country_id', $country->id)
               ->count();
         }
 
@@ -302,10 +295,7 @@ class BlogController extends BaseController
             }
             $query->where('published', 1);
             if ($selectedCountry) {
-                $query->where(function ($q) use ($selectedCountry) {
-                    $q->where('country_id', $selectedCountry->id)
-                      ->orWhere('country', $selectedCountry->code);
-                });
+                $query->where('country_id', $selectedCountry->id);
             }
         }
     
@@ -327,6 +317,7 @@ class BlogController extends BaseController
         }
     
         $rows = $query
+            ->with('countryRel')
             ->orderBy($field, $sort)
             ->paginate(Helper::ajax_change_paginate_number());
     
@@ -396,6 +387,7 @@ class BlogController extends BaseController
             $this->validate($request, [
                 "slug" => "alpha_dash|unique:{$row->table_name()},slug,$id",
                 "old_slug" => "different:slug",
+                "country_id" => "required|integer",
             ]);
     
             \Log::info('BLOG DEBUG 006: AFTER VALIDATION');
@@ -579,6 +571,7 @@ class BlogController extends BaseController
             $this->validate($request, [
                 "name_ar"  =>  "required",
                 "slug"     =>  "required|alpha_dash|unique:{$row->table_name()},slug,$id",
+                "country_id" => "required|integer",
             ]);
             $inputs = $request->all();
             unset($inputs['country']);

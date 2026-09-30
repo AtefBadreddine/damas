@@ -148,6 +148,40 @@ section.form form .budget .dropdown-toggle {
     padding-right: 35px;
 }
 
+.fast_search .form-group.btn_sec {
+    width: 100%;
+    clear: both;
+    margin: 8px 0 0;
+    padding: 0 15px 15px;
+}
+.fast_search .form-group.btn_sec .send_btn {
+    width: 100%;
+    background-color: #0a8181;
+    color: #ffffff;
+    border: 0;
+    padding: 10px 35px;
+    border-radius: 10px;
+    font-size: 17px;
+    transition: all 0.3s;
+    cursor: pointer;
+    outline: none !important;
+    box-shadow: 0 0.875rem 1.8125rem -0.8125rem rgb(0 0 0 / 30%), 0 0.875rem 1.8125rem -0.8125rem rgb(23 168 169);
+    background-image: linear-gradient(90deg, #02898a, #17a8a9);
+}
+.fast_search .form-group.btn_sec .send_btn svg {
+    width: 15px;
+    position: relative;
+    top: auto;
+    right: auto;
+    margin-inline-start: 6px;
+}
+.fast_search .form-group.btn_sec .send_btn svg path {
+    fill: #ffffff;
+}
+.fast_search .form-group.btn_sec .send_btn:hover {
+    box-shadow: 0 3px 29px 2px rgb(183 183 183 / 100%);
+}
+
 .cleared_filter{
     position: absolute;
     left: 8px;

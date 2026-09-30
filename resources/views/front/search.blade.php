@@ -573,88 +573,78 @@ foreach ($all_regions as $type) {
 <?php } ?>
 var old_href = '';
 var href = '';
-    /*filter full browser*/
+    function syncProjectsFilterState(changed_elem) {
+        if (changed_elem === undefined) {
+            changed_elem = '';
+        }
+        $('#changed_elem').val(changed_elem);
+        if (changed_elem == 'city') {
+            $('#selectregions').children('option').not(':first').remove();
+        }
+
+        refresh_project_city = 1;
+        $('#ss_p_city').val($('select[name=city]').val());
+
+        refresh_project_type = 1;
+        $('#ss_p_type').val($('select[name=project_type]').val());
+
+        refresh_price = 1;
+        $('#ss_price').val($('select[name=price]').val());
+
+        refresh_project_rooms = 1;
+        $('#ss_room').val($('select[name=rooms]').val());
+
+        var ss_p_regions = [];
+        $.each($("#selectregions option:selected"), function () {
+            ss_p_regions.push($(this).val());
+        });
+        refresh_regions = 1;
+        $('#ss_p_regions').val(JSON.stringify(ss_p_regions));
+
+        var ss_p_tags = [];
+        $.each($("#project_categories option:selected"), function () {
+            ss_p_tags.push($(this).val());
+        });
+        refresh_project_tags = 1;
+        $('#ss_p_tags').val(JSON.stringify(ss_p_tags));
+
+        var prmin = parseInt($('#prmin').val(), 10) || 0;
+        var prmax = parseInt($('#prmax').val(), 10) || 0;
+        if (prmin > 50000 || prmax < 2000000) {
+            $('#price_fields').val(1);
+        }
+    }
+
+    /*filter full browser — apply only via Discover button*/
     $(document).on("change", ".input_seacrh", function (e) {
 		old_href = '';
         changed_elem = $(this).attr('name');
-        $('#changed_elem').val(changed_elem);
         if (changed_elem === undefined) {
             var prmin = parseInt($('#prmin').val());
             var prmax = parseInt($('#prmax').val());
             if (e.target.id == 'prmax') {
                 $('#price_fields').val(1);
-                /*$("#form-search").submit();*/
             }
             if (e.target.id == 'prmin') {
                 $('#price_fields').val(1);
-                /*if (prmax > prmin)
-                 $("#form-search").submit();*/
             }
-
-            /*return false;*/
         }
-        /*$('.leftcol4').removeClass('col-md-4').addClass('col-md-3');
-         $('.rightcol8').removeClass('col-md-12').addClass('col-md-12');*/
-        $('.cleared_filter').show();
-        /*if ( $(this).attr('name') == "city" ) {*/
-
         if (changed_elem == 'city') {
             $('#selectregions').children('option').not(':first').remove();
         }
-
-        if (changed_elem != 'city' /*|| (changed_elem=='city' && refresh_test_exc('city')==true)*/) {
-            refresh_project_city = 1;
-            $('#ss_p_city').val($('select[name=city]').val());
-        }
-
-        if (changed_elem != 'project_type' /*|| (changed_elem=='project_type' && refresh_test_exc('project_type')==true)*/) {
-            refresh_project_type = 1;
-            $('#ss_p_type').val($('select[name=project_type]').val());
-        }
-
-        if (changed_elem != 'price') {
-
-            refresh_price = 1;
-            $('#ss_price').val($('select[name=price]').val());
+        if (changed_elem == 'rooms') {
+            $('#selectdevice option[value="<?= route('front.filter_rooms', ['']); ?>/' + ($(this).val() != '' ? $(this).val() : 'all') + '"]').attr('selected', 'selected');
         }
         if (changed_elem == 'price') {
             $('#price_fields').val(0);
         }
-        if (changed_elem != 'rooms' /*|| (changed_elem=='rooms' && refresh_test_exc('rooms')==true)*/) {
-            refresh_project_rooms = 1;
-            $('#ss_room').val($('select[name=rooms]').val());
-        }
-        if (changed_elem == 'rooms') {
-            /*alert('changed_elem rooms');*/
-            $('#selectdevice option[value="<?= route('front.filter_rooms', ['']); ?>/' + ($(this).val() != '' ? $(this).val() : 'all') + '"]').attr('selected', 'selected');
-        }
+        $('.cleared_filter').show();
+        return false;
+    });
 
-        if (changed_elem != 'regions[]' /*|| (changed_elem=='regions[]' && refresh_test_exc('regions')==true)*/) {
-            var ss_p_regions = [];
-            $.each($("#selectregions option:selected"), function () {
-                ss_p_regions.push($(this).val());
-            });
-            refresh_regions = 1;
-            $('#ss_p_regions').val(JSON.stringify(ss_p_regions));
-        }
-        if (changed_elem != 'project_categories[]' /*|| (changed_elem=='project_categories[]' && refresh_test_exc('project_categories')==true)*/) {
-            var ss_p_tags = [];
-            $.each($("#project_categories option:selected"), function () {
-                ss_p_tags.push($(this).val());
-            });
-            refresh_project_tags = 1;
-            $('#ss_p_tags').val(JSON.stringify(ss_p_tags));
-        }
-
-        /*changed_elem == 'city' so load all filters*/
-        /*if (changed_elem == 'city'){
-         refresh_price = 1;
-         refresh_project_rooms = 1;
-         refresh_regions = 1;
-         refresh_project_tags = 1;
-         }*/
-
-
+    $(document).on('click', '.send_btn_projects', function (e) {
+        e.preventDefault();
+        syncProjectsFilterState('discover');
         $("#form-search").submit();
         return false;
     });
@@ -1102,57 +1092,9 @@ var href = '';
         if (changed_elem == 'city') {
             $('#selectregions').children('option').not(':first').remove();
             $('select[name="regions[]"]').parent('.dropdown').children('button').text('<?= trans("front.all regions"); ?>');
-
-            /*
-             $('select[name="rooms"] option:selected').prop("selected", false);
-             $('select[name="project_categories[]"] option:selected').prop("selected", false);
-             $('select[name="project_type"] option:selected').prop("selected", false);
-             
-             <?= $js_select_picker_refresh ?>*/
         }
 
-        if (changed_elem != 'city') {
-            refresh_project_city = 1;
-            $('#ss_p_city').val($('select[name=city]').val());
-        }
-
-        if (changed_elem != 'project_type') {
-            refresh_project_type = 1;
-            $('#ss_p_type').val($('select[name=project_type]').val());
-        }
-
-        if (changed_elem != 'price') {
-            refresh_price = 1;
-            $('#ss_price').val($('select[name=price]').val());
-        }
-
-        if (changed_elem != 'rooms') {
-            refresh_project_rooms = 1;
-            $('#ss_room').val($('select[name=rooms]').val());
-        }
-
-        if (changed_elem != 'regions[]') {
-            var ss_p_regions = [];
-            $.each($("#selectregions option:selected"), function () {
-                ss_p_regions.push($(this).val());
-            });
-            refresh_regions = 1;
-            $('#ss_p_regions').val(JSON.stringify(ss_p_regions));
-        }
-        if (changed_elem != 'project_categories[]') {
-            var ss_p_tags = [];
-            $.each($("#project_categories option:selected"), function () {
-                ss_p_tags.push($(this).val());
-            });
-            refresh_project_tags = 1;
-            $('#ss_p_tags').val(JSON.stringify(ss_p_tags));
-        }
-
-
-
-
-
-        $("#form-search").submit();
+        $('.cleared_filter').show();
         $(".filter-icon").addClass("delete-filter-type");
     });
     $(".search-options .dropdown .btn").on("click", function () {

@@ -293,6 +293,7 @@ $(document).ready(function () {
     var regionUrls = <?= json_encode($regionUrls, JSON_UNESCAPED_SLASHES | JSON_HEX_TAG) ?>;
     var locationAreaUrl = <?= json_encode($locationAreaUrl, JSON_UNESCAPED_SLASHES | JSON_HEX_TAG) ?>;
     var locationCountryUrl = <?= json_encode($locationCountryUrl, JSON_UNESCAPED_SLASHES | JSON_HEX_TAG) ?>;
+    var projectsListingUrl = <?= json_encode($projectsListingUrl, JSON_UNESCAPED_SLASHES | JSON_HEX_TAG) ?>;
     var currentPrice = <?= json_encode((string) @$inputs['price']) ?>;
     var currentSorting = <?= json_encode((string) @$inputs['sorting']) ?>;
     var currentSortingType = <?= json_encode((string) Request::get('sorting_type', '')) ?>;
@@ -322,28 +323,8 @@ $(document).ready(function () {
         return out;
     }
 
-    $(document).on("change", ".input_seacrh", function (e) {
-        if ($(this).attr('name') === 'city') {
-            var cityTarget = cityUrls[$(this).val()] || locationCountryUrl;
-            window.location.href = window.preserveQueryOnPathChange(cityTarget);
-            return false;
-        }
-        if (e.target.id === 'prmin' || e.target.id === 'prmax') {
-            priceTouched = true;
-        }
-
-        var url = locationAreaUrl;
+    function collectLocationFilterParams() {
         var params = [];
-
-        var $regionOption = $('#selectregions option:selected');
-        var regionSlug = $regionOption.val();
-        var regionUrl = '';
-        if (regionSlug) {
-            regionUrl = $regionOption.attr('data-url') || regionUrls[regionSlug] || '';
-        }
-        if (regionUrl) {
-            url = regionUrl;
-        }
 
         var type = $('select[name=project_type]').val();
         if (type) {
@@ -377,7 +358,53 @@ $(document).ready(function () {
             }
         }
 
+        return params;
+    }
+
+    function resolveLocationListingPath() {
+        var $regionOption = $('#selectregions option:selected');
+        var regionSlug = $regionOption.val();
+        if (regionSlug) {
+            return $regionOption.attr('data-url') || regionUrls[regionSlug] || projectsListingUrl;
+        }
+
+        var citySlug = $('select[name=city]').val();
+        if (citySlug) {
+            return cityUrls[citySlug] || projectsListingUrl;
+        }
+
+        var filterData = window.projectsFilterData || {};
+        var countryId = parseInt($('#filter_country').val(), 10);
+        if (countryId && filterData.countryUrls && filterData.countryUrls[countryId]) {
+            return filterData.countryUrls[countryId];
+        }
+
+        return projectsListingUrl;
+    }
+
+    function applyLocationFilters() {
+        var url = resolveLocationListingPath();
+        var params = collectLocationFilterParams();
         window.location.href = window.buildProjectListingUrl(url, params);
+    }
+
+    $(document).on("change", ".input_seacrh", function (e) {
+        if (e.target.id === 'prmin' || e.target.id === 'prmax') {
+            priceTouched = true;
+        }
+        if ($(this).attr('name') === 'city') {
+            $('#selectregions').children('option').not(':first').remove();
+            if ($.fn.selectpicker) {
+                $('#selectregions').selectpicker('refresh');
+            }
+        }
+        $('.cleared_filter').show();
+        return false;
+    });
+
+    $(document).on('click', '.send_btn_projects', function (e) {
+        e.preventDefault();
+        applyLocationFilters();
         return false;
     });
 

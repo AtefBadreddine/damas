@@ -166,6 +166,12 @@ foreach ($filterCountries as $fc) {
     </div>
 </div>
 
+<div class="form-group btn_sec">
+    <button type="button" class="send_btn send_btn_projects">
+        <?= trans("front.Discover"); ?>
+        <svg version="1.1" id="Layer_1" x="0px" y="0px" viewBox="0 0 26.15 22.4" xml:space="preserve"><path class="st0" d="M24.72,20.5l-6.2-6c1.2-1.5,1.9-3.4,1.9-5.5c0-4.9-4.1-9-9.2-9s-9.2,4-9.2,9c0,4.9,4.1,9,9.2,9 c2.1,0,4.1-0.7,5.6-1.9l6.2,6c0.2,0.2,0.5,0.3,0.8,0.3s0.6-0.1,0.8-0.3C25.22,21.6,25.22,20.9,24.72,20.5z M4.42,8.9 c0-3.7,3.1-6.7,6.9-6.7s6.9,3,6.9,6.7c0,1.8-0.8,3.5-2,4.7l0,0l0,0c-1.2,1.2-3,2-4.8,2C7.52,15.7,4.42,12.7,4.42,8.9z"/></svg>
+    </button>
+</div>
 
 <?= Form::close(); ?>
 
@@ -175,6 +181,11 @@ document.addEventListener('DOMContentLoaded', function () {
     var filterCities = <?= json_encode($filterCities, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_HEX_TAG) ?>;
     var filterCountryUrls = <?= json_encode($filterCountryUrls, JSON_UNESCAPED_SLASHES | JSON_HEX_TAG) ?>;
     var cityPlaceholder = <?= json_encode(trans("front.city"), JSON_UNESCAPED_UNICODE | JSON_HEX_TAG) ?>;
+    window.projectsFilterData = {
+        cities: filterCities,
+        countryUrls: filterCountryUrls,
+        cityLabel: cityPlaceholder
+    };
 
     function refreshPickers($selects) {
         if ($.fn.selectpicker) {
@@ -197,17 +208,15 @@ document.addEventListener('DOMContentLoaded', function () {
                 $city.append($('<option></option>').val(c.slug).text(c.name));
             }
         });
+        $city.val('');
         refreshPickers($city);
         clearDistricts();
-
-        if (countryId && filterCountryUrls[countryId]) {
-            var countryTarget = filterCountryUrls[countryId];
-            window.location.href = window.preserveQueryOnPathChange
-                ? window.preserveQueryOnPathChange(countryTarget)
-                : countryTarget + window.location.search;
-        }
+        $('.cleared_filter').show();
     });
 
-    $(document).on('change', '#form-search select[name=city]', clearDistricts);
+    $(document).on('change', '#form-search select[name=city]', function () {
+        clearDistricts();
+        $('.cleared_filter').show();
+    });
 });
 </script>

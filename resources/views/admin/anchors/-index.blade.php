@@ -380,6 +380,18 @@ const projectTitles = {
         libxml_clear_errors();
         $post_id = (int) $post->id;
         $blog_web_url = $post->frontUrl();
+        // $web_urls = [];
+        // if (isset($original_blog_post_ids[$post_id])) {
+        //     $web_urls[] = $blog_web_url;
+        // }
+        // if (isset($page_search_links_by_post[$post_id])) {
+        //     foreach ($page_search_links_by_post[$post_id] as $listing_url) {
+        //         if (strpos($listing_url, 'http://') !== 0 && strpos($listing_url, 'https://') !== 0) {
+        //             $listing_url = 'https://damas.net/' . ltrim($listing_url, '/');
+        //         }
+        //         $web_urls[] = $listing_url;
+        //     }
+        // }
         $web_urls = [];
 
         if ($group_by == 'disabled_blogs') {
@@ -549,9 +561,6 @@ const projectTitles = {
             'general' => 'General'
         ];
         foreach ($posts as $post) {
-            if ($group_by == 'disabled_blogs' && (int) $post->published !== 0) {
-                continue;
-            }
             if (@$_GET['country'] == 'oman' && !($post->countryRel && $post->countryRel->code == 'oman')) {
                 continue;
             }
@@ -565,19 +574,15 @@ const projectTitles = {
             $language_html = html_entity_decode($post->$language_field, ENT_QUOTES | ENT_HTML5, 'UTF-8');
             $language_blog_web_url = $post->frontUrl();
             $language_web_urls = [];
-            if ($group_by == 'disabled_blogs') {
+            if (isset($original_blog_post_ids[$post_id])) {
                 $language_web_urls[] = $language_blog_web_url;
-            } else {
-                if (isset($original_blog_post_ids[$post_id])) {
-                    $language_web_urls[] = $language_blog_web_url;
-                }
-                if (isset($page_search_links_by_post[$post_id])) {
-                    foreach ($page_search_links_by_post[$post_id] as $listing_url) {
-                        if (strpos($listing_url, 'http://') !== 0 && strpos($listing_url, 'https://') !== 0) {
-                            $listing_url = 'https://damas.net/' . ltrim($listing_url, '/');
-                        }
-                        $language_web_urls[] = $listing_url;
+            }
+            if (isset($page_search_links_by_post[$post_id])) {
+                foreach ($page_search_links_by_post[$post_id] as $listing_url) {
+                    if (strpos($listing_url, 'http://') !== 0 && strpos($listing_url, 'https://') !== 0) {
+                        $listing_url = 'https://damas.net/' . ltrim($listing_url, '/');
                     }
+                    $language_web_urls[] = $listing_url;
                 }
             }
             $language_web_urls = array_values(array_unique($language_web_urls));
@@ -661,7 +666,7 @@ const projectTitles = {
                     $group_value = $language_display_text;
                 } elseif ($group_by == 'url') {
                     $group_value = $language_href;
-                } elseif (in_array($group_by, ['web_url', 'disabled_blogs'])) {
+                } elseif ($group_by == 'web_url') {
                     foreach ($language_web_urls as $source_url) {
                         if ($search_column == 'web_url' && $search_value !== '' && !$matches_search_value($source_url, $search_value, $search_mode)) {
                             continue;
@@ -707,7 +712,7 @@ const projectTitles = {
     if ($group_by != 'none' && in_array($group_by, $groupable_columns)) {
         $groups = [];
         foreach ($anchors as $anchor) {
-            if (in_array($group_by, ['web_url', 'disabled_blogs'])) {
+            if ($group_by == 'web_url') {
                 $anchor_web_urls = isset($anchor['web_urls']) && is_array($anchor['web_urls']) ? $anchor['web_urls'] : [$anchor['web_url']];
                 foreach ($anchor_web_urls as $source_url) {
                     if ($search_column == 'web_url' && $search_value !== '' && !$matches_search_value($source_url, $search_value, $search_mode)) {
@@ -796,7 +801,7 @@ const projectTitles = {
             return $matches_search_value($row['count'], $search_value, $search_mode);
         });
     }
-    if (in_array($group_by, ['web_url', 'disabled_blogs'])) {
+    if ($group_by == 'web_url') {
         foreach ($display_rows as &$row) {
             $seen_anchor_pairs = [];
             $duplicate_count = 0;
@@ -817,7 +822,7 @@ const projectTitles = {
             $comparison = $a['count'] <=> $b['count'];
             return $order == 'asc' ? $comparison : -$comparison;
         });
-    } elseif ($sort == 'duplicates' && in_array($group_by, ['web_url', 'disabled_blogs'])) {
+    } elseif ($sort == 'duplicates' && $group_by == 'web_url') {
         usort($display_rows, function ($a, $b) use ($order) {
             $comparison = $a['duplicate_count'] <=> $b['duplicate_count'];
             return $order == 'asc' ? $comparison : -$comparison;
@@ -921,7 +926,6 @@ const projectTitles = {
             <option value="text" <?= @$_GET['group_by'] == 'text' ? 'selected' : '' ?>>Target Query</option>
             <option value="url" <?= @$_GET['group_by'] == 'url' ? 'selected' : '' ?>>Target URL</option>
             <option value="web_url" <?= @$_GET['group_by'] == 'web_url' ? 'selected' : '' ?>>Source URL</option>
-            <option value="disabled_blogs" <?= @$_GET['group_by'] == 'disabled_blogs' ? 'selected' : '' ?>>Disabled Posts</option>
             <option value="link_type" <?= @$_GET['group_by'] == 'link_type' ? 'selected' : '' ?>>Link Type</option>
             <option value="status" <?= @$_GET['group_by'] == 'status' ? 'selected' : '' ?>>HTTP</option>
         </select>
@@ -1028,9 +1032,9 @@ const projectTitles = {
                             </a>
                         </th>
                         <th>Created At</th>
-                        @if(in_array($group_by, ['web_url', 'disabled_blogs']))
+                        @if($group_by == 'web_url')
                             <th>
-                                <a href="?country=<?= @$_GET['country'] ?: 'all' ?>&lang=<?= @$_GET['lang'] == 'en' ? 'en' : 'ar' ?>&source_type=<?= urlencode($source_type_filter) ?>&link_type=<?= @$_GET['link_type'] ?: 'all' ?>&status_filter=<?= @$_GET['status_filter'] ?: 'all' ?>&group_by=<?= urlencode($group_by) ?>&search_column=<?= urlencode($search_column) ?>&search_mode=<?= urlencode($search_mode) ?>&search_value=<?= urlencode($search_value) ?>&sort=duplicates&order=<?= $sort == 'duplicates' && $order == 'asc' ? 'desc' : 'asc' ?>">
+                                <a href="?country=<?= @$_GET['country'] ?: 'all' ?>&lang=<?= @$_GET['lang'] == 'en' ? 'en' : 'ar' ?>&source_type=<?= urlencode($source_type_filter) ?>&link_type=<?= @$_GET['link_type'] ?: 'all' ?>&status_filter=<?= @$_GET['status_filter'] ?: 'all' ?>&group_by=web_url&search_column=<?= urlencode($search_column) ?>&search_mode=<?= urlencode($search_mode) ?>&search_value=<?= urlencode($search_value) ?>&sort=duplicates&order=<?= $sort == 'duplicates' && $order == 'asc' ? 'desc' : 'asc' ?>">
                                     Duplicates
                                 </a>
                             </th>
@@ -1211,7 +1215,7 @@ const projectTitles = {
                                     {{ $row['unique_dates'] }} unique
                                 @endif
                             </td>
-                            @if(in_array($group_by, ['web_url', 'disabled_blogs']))
+                            @if($group_by == 'web_url')
                             <td>{{ $row['duplicate_count'] }}</td>
                             @endif
                         </tr>

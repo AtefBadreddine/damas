@@ -8,7 +8,11 @@ Route::group(['prefix' => 'damas-administrator', 'namespace' => 'Admin', 'middle
 	
 	Route::any('/clear_cache', ['as' => 'admin.clear_cache', 'uses' => 'AdminController@clear_cache']);
 	
-	
+    // PageSpeed Insights
+    Route::any('/pagespeed', [
+        'as' => 'admin.pagespeed',
+        'uses' => 'AdminController@pagespeed_index'
+    ]);
     // index admin
     Route::any('/ajaxqueries', ['as' => 'admin.ajaxqueries', 'uses' => 'AdminController@ajax_queries']);
     // params

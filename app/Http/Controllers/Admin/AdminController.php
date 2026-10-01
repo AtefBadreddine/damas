@@ -2718,7 +2718,11 @@ exit;*/
             $region->syncRegionPhotos($request->get('region_photos', []));
 			$region->save();
 			
-			return redirect()->route("admin.regions");
+			if ($request->input('save_action') === 'close') {
+                return redirect()->route("admin.regions");
+            }
+            
+            return redirect($request->url());
         }
         return view("admin.regions.edit", compact("row"));
     }
@@ -5085,4 +5089,72 @@ if(count($arr)>0){
         $row->save();
         return redirect()->back();
     }
+public function pagespeed_index(\Illuminate\Http\Request $request)
+{
+    // Normal page load
+    if (!$request->get('url')) {
+        return view('admin.pagespeed.index');
+    }
+
+    // AJAX PageSpeed check
+    $url = $request->get('url');
+
+    $apiUrl =
+        'https://www.googleapis.com/pagespeedonline/v5/runPagespeed'
+        . '?url=' . urlencode($url)
+        . '&strategy=mobile'
+        . '&category=performance'
+        . '&key=' . urlencode(env('PAGESPEED_API_KEY'));
+
+    $ch = curl_init();
+
+    curl_setopt_array($ch, [
+        CURLOPT_URL => $apiUrl,
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_TIMEOUT => 120,
+    ]);
+
+    $response = curl_exec($ch);
+    $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    $error = curl_error($ch);
+
+    curl_close($ch);
+
+    if ($error) {
+        return response()->json([
+            'success' => false,
+            'error' => $error
+        ]);
+    }
+
+    $data = json_decode($response, true);
+
+    if ($httpCode != 200) {
+        return response()->json([
+            'success' => false,
+            'error' => @$data['error']['message'] ?: 'PageSpeed API error'
+        ]);
+    }
+
+    $audits = $data['lighthouseResult']['audits'];
+
+    return response()->json([
+        'success' => true,
+
+        'performance' => round(
+            $data['lighthouseResult']['categories']['performance']['score'] * 100
+        ),
+
+        'lcp' => round($audits['largest-contentful-paint']['numericValue']),
+        'cls' => round($audits['cumulative-layout-shift']['numericValue'], 3),
+        'tbt' => round($audits['total-blocking-time']['numericValue']),
+        'fcp' => round($audits['first-contentful-paint']['numericValue']),
+        'speed_index' => round($audits['speed-index']['numericValue']),
+
+        'inp' => @$data['loadingExperience']['metrics']
+            ['INTERACTION_TO_NEXT_PAINT']['percentile'],
+
+        'crux' => @$data['loadingExperience']['overall_category']
+    ]);
+}
 }

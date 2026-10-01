@@ -54,6 +54,54 @@ class PostCategory extends BaseModel
     }
 
     /**
+     * Find a category by slug in one country.
+     *
+     * @param \App\Models\Country|int|string|null $country
+     * @param string $slug
+     * @param string|null $type
+     * @return static|null
+     */
+    public static function findInCountry($country, $slug, $type = null)
+    {
+        $countryId = Country::resolveId($country);
+        if (!$countryId || $slug === null || $slug === '') {
+            return null;
+        }
+
+        $query = static::where('country_id', $countryId)->where('slug', $slug);
+        if ($type) {
+            $query->where('type', $type);
+        }
+
+        return $query->first();
+    }
+
+    /**
+     * Find a category by slug when the URL has no country. Returns null if none or more than one match.
+     *
+     * @param string $slug
+     * @param string|null $type
+     * @return static|null
+     */
+    public static function findUnambiguousBySlug($slug, $type = null)
+    {
+        if ($slug === null || $slug === '') {
+            return null;
+        }
+
+        $query = static::where('slug', $slug);
+        if ($type) {
+            $query->where('type', $type);
+        }
+        $rows = $query->take(2)->get();
+        if ($rows->count() !== 1) {
+            return null;
+        }
+
+        return $rows->first();
+    }
+
+    /**
      * Canonical listing URL: /{locale}/{country}/guides?category={slug}
      *
      * @param bool $absolute

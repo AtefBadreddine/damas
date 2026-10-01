@@ -186,11 +186,11 @@ class PostController extends BaseController
         $slug = null;
         $categorySlug = $request->get('category');
         if ($categorySlug) {
-            $categoryQuery = PostCategory::where('slug', $categorySlug)->where('type', $categoryType);
             if ($countryId) {
-                $categoryQuery->where('country_id', $countryId);
+                $category = PostCategory::findInCountry($countryId, $categorySlug, $categoryType);
+            } else {
+                $category = PostCategory::findUnambiguousBySlug($categorySlug, $categoryType);
             }
-            $category = $categoryQuery->first();
             if (!$category) {
                 abort(404);
             }
@@ -268,7 +268,8 @@ class PostController extends BaseController
 
     /**
      * Shared show page for guides, developers, reports and news.
-     * A post reached under the wrong type or country 301s to its canonical URL.
+     * A post reached under the wrong type 301s to its canonical URL.
+     * A slug that belongs to another country is 404, not a cross-country redirect.
      *
      * @param string $country
      * @param string $post
@@ -278,20 +279,15 @@ class PostController extends BaseController
     protected function showByType($country, $post, PostType $postType)
     {
         $with = array("projects", "categories", "countryRel");
-        $row = Post::where("slug", $post)->ofPostType($postType)->with($with)->first();
+        $row = Post::findInCountry($country, $post, $postType, $with);
         if (!$row) {
-            $row = Post::where("slug", $post)->with($with)->first();
-        }
-        $isOldSlug = false;
-        if (!$row) {
-            $row = Post::where("old_slug", $post)->with($with)->first();
-            $isOldSlug = (bool) $row;
+            $row = Post::findInCountry($country, $post, null, $with);
         }
         if (!$row) {
             abort(404);
         }
 
-        if ($isOldSlug || $row->postTypeEnum() !== $postType || $row->getCountrySlug() !== $country) {
+        if ($row->slug !== $post || $row->postTypeEnum() !== $postType) {
             $geoUrl = $row->geoUrl();
             if (!$geoUrl) {
                 abort(404);

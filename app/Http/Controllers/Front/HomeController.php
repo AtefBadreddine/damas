@@ -351,9 +351,14 @@ class HomeController extends BaseController
     * @param string $slug
     * @return void
     */
-    public function project_show($slug)
+    public function project_show(Request $request, $slug)
     {
-		$project = Helper::query("Project", "where", ["field" => "old_slug", "value" => $slug])->orWhere("slug", $slug)->first();
+		$countrySlug = $this->legacyCountrySlug($request);
+		if ( $countrySlug ) {
+			$project = \App\Models\Project::findInCountry($countrySlug, $slug);
+		} else {
+			$project = \App\Models\Project::findUnambiguousBySlug($slug);
+		}
         if ( !$project ) abort(404);
 
 		$geoUrl = $project->geoUrl();
@@ -428,7 +433,17 @@ class HomeController extends BaseController
 		
         $video_about = \App\Models\Video::where("show_on_media",true)->first();
 		//$id='D845';
-        $project = \App\Models\Project::where("slug",$id)->orWhere("name_en",strtoupper($id))->first();
+        $project = \App\Models\Project::findInCountry($country, $id);
+        if ( !$project ) {
+            $countryId = \App\Models\Country::resolveId($country);
+            $query = \App\Models\Project::where("name_en", strtoupper($id));
+            if ( $countryId ) {
+                $query->whereHas('city', function ($q) use ($countryId) {
+                    $q->where('country_id', $countryId);
+                });
+            }
+            $project = $query->first();
+        }
         //echo $project->name_en;
 		if ( !$project ) abort(404);
 		
@@ -4529,7 +4544,19 @@ class HomeController extends BaseController
     */
     public function blog_show_category(Request $request, $slug)
     {
-        $category = Helper::query('PostCategory', 'where', ['field' => 'slug', 'value' => $slug])->first();
+        $categoryType = $this->legacyPostType($request)->categoryType();
+        $routeCountry = $this->legacyCountrySlug($request);
+        if ( $routeCountry ) {
+            $category = PostCategory::findInCountry($routeCountry, $slug, $categoryType);
+            if ( !$category ) {
+                $category = PostCategory::findInCountry($routeCountry, $slug);
+            }
+        } else {
+            $category = PostCategory::findUnambiguousBySlug($slug, $categoryType);
+            if ( !$category ) {
+                $category = PostCategory::findUnambiguousBySlug($slug);
+            }
+        }
         if (!$category) {
             abort(404);
         }
@@ -4554,10 +4581,15 @@ class HomeController extends BaseController
     */
     public function blog_show_post(Request $request, $slug)
     {
-		$type = $this->legacyPostType($request)->value;
-		$post = Post::where("slug", $slug)->where("type", $type)->first();
-		if ( !$post ) $post = Post::where("slug", $slug)->first();
-		if ( !$post ) $post = Post::where("old_slug", $slug)->first();
+		$postType = $this->legacyPostType($request);
+		$countrySlug = $this->legacyCountrySlug($request);
+		if ( $countrySlug ) {
+			$post = Post::findInCountry($countrySlug, $slug, $postType);
+			if ( !$post ) $post = Post::findInCountry($countrySlug, $slug);
+		} else {
+			$post = Post::findUnambiguousBySlug($slug, $postType);
+			if ( !$post ) $post = Post::findUnambiguousBySlug($slug);
+		}
 		if ( !$post ) abort(404);
 
 		$geoUrl = $post->geoUrl();
@@ -6048,9 +6080,9 @@ class HomeController extends BaseController
 
 		//POST
 		$url = '';
-		$posts = DB::table('posts')->select('title_en','slug','title_ar','title_ru','title_fr','title_fa','seo_keywords_ar','seo_keywords_en','seo_keywords_ru','seo_keywords_fr','seo_keywords_fa')->orderBy('seo_keywords_ar')->get();
+		$posts = DB::table('posts')->select('id','title_en','slug','title_ar','title_ru','title_fr','title_fa','seo_keywords_ar','seo_keywords_en','seo_keywords_ru','seo_keywords_fr','seo_keywords_fa')->orderBy('seo_keywords_ar')->get();
 		foreach($posts as $p){
-			$post = Post::where('slug', $p->slug)->first();
+			$post = Post::find($p->id);
 			$url = $post ? $post->frontUrl() : route('front.blog.post', $p->slug);
 			if(Helper::trimm($p->seo_keywords_ar) != ''){
 				$t = explode(',',$p->seo_keywords_ar);
@@ -6092,9 +6124,9 @@ class HomeController extends BaseController
 		
 		//PROJECT
 		$url = '';
-		$projects = DB::table('projects')->select(/*'title_en','title_ar','name_en','name_ar',*/'slug','seo_keywords_ar','seo_keywords_en','seo_keywords_ru','seo_keywords_fr','seo_keywords_fa')->orderBy('seo_keywords_ar')->get();
+		$projects = DB::table('projects')->select(/*'title_en','title_ar','name_en','name_ar',*/'id','slug','seo_keywords_ar','seo_keywords_en','seo_keywords_ru','seo_keywords_fr','seo_keywords_fa')->orderBy('seo_keywords_ar')->get();
 		foreach($projects as $p){
-			$project = \App\Models\Project::where('slug', $p->slug)->first();
+			$project = \App\Models\Project::find($p->id);
 			$url = $project ? $project->frontUrl() : route('front.project', $p->slug);
 			if(Helper::trimm($p->seo_keywords_ar) != ''){
 				$t = explode(',',$p->seo_keywords_ar);

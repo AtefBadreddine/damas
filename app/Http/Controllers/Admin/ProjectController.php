@@ -61,7 +61,7 @@ class ProjectController extends BaseController
                 "project_link"  =>  "required",
                 "companies"  =>  "required",
                 /*"salemanager_ar_id"  =>  "required",*/
-                //"slug"     =>  "required|alpha_dash|unique:{$row->table_name()},slug,$id",
+                "slug"     =>  "required|alpha_dash|unique_slug_per_country:" . ($id ?: 'NULL'),
                 "dms_map"     =>  "unique:{$row->table_name()},dms_map,$id",
                 /*"latitude"     =>  "unique:{$row->table_name()},latitude,$id",
                 "longitude"     =>  "unique:{$row->table_name()},longitude,$id",*/

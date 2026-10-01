@@ -1114,12 +1114,19 @@ foreach ($citys as $layoutCity) {
                     <p class="jazzira_font_bold footer_title"><?= trans("front.Featured Projects"); ?></p>
 
                     <?php
+                    $footerUsefulCountry = null;
+                    $footerHomeRoutes = array('front.index', 'amp.front.index');
+                    $footerCurrentRoute = \Route::currentRouteName();
+                    if (!in_array($footerCurrentRoute, $footerHomeRoutes, true)) {
+                        $footerUsefulCountry = Helper::currentCountry(
+                            isset($project) ? $project : (isset($locationCountry) ? $locationCountry : null)
+                        );
+                        if (!$footerUsefulCountry && isset($post) && is_object($post) && $post->countryRel) {
+                            $footerUsefulCountry = $post->countryRel;
+                        }
+                    }
                     if (!isset($footer_prjs)) {
-                        
-                        
-                        
-                        
-                        $arr_ids = \App\Models\Fotterproject::projectIdsForCountry($ccountryModel);
+                        $arr_ids = \App\Models\Fotterproject::projectIdsForCountry($footerUsefulCountry);
                         $footer_prjs = \App\Models\Project::whereIn('id', $arr_ids)->get();
                     }
                     foreach ($footer_prjs as $p) {
@@ -1164,11 +1171,14 @@ foreach ($citys as $layoutCity) {
 
                     <?php
                     $footerLinkLang = ($current_lang == 'pe' ? 'fa' : $current_lang);
-                    $u_links = \App\Models\FooterLink::orderBy('placement', 'ASC')
-                        ->whereIn('lang', array('all', $footerLinkLang))
-                        ->where('country_id', $ccountryId)
-                        ->get()
-                        ->toArray();
+                    $uLinksQuery = \App\Models\FooterLink::orderBy('placement', 'ASC')
+                        ->whereIn('lang', array('all', $footerLinkLang));
+                    if ($footerUsefulCountry) {
+                        $uLinksQuery->where('country_id', $footerUsefulCountry->id);
+                    } else {
+                        $uLinksQuery->whereNull('country_id');
+                    }
+                    $u_links = $uLinksQuery->get()->toArray();
                     ?>
                     @foreach($u_links as $u_link)
                     @if($u_link['footer_section'] == "useful")

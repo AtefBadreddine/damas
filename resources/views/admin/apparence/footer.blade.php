@@ -44,14 +44,14 @@
                         <table class="table table-bordered">
                             <tr>
                                 <th>Name</th>
-                                <th>Country</th>
+                                <th>Show on</th>
                                 <th>Link</th>
                                 <th style="width:80px;"></th>
                             </tr>
                             @foreach($u_links as $u_link)
                             <tr>
                                 <td>- <?= $u_link["title_ar"]; ?> <br>- <?= $u_link["title_en"]; ?> <br>- <?= $u_link["title_fr"]; ?> <br>- <?= $u_link["title_fa"]; ?> <br>- <?= $u_link["title_ru"]; ?></td>
-                                <td><?= isset($footerCountriesById[$u_link["country_id"]]) ? $footerCountriesById[$u_link["country_id"]]->name_en : ''; ?></td>
+                                <td><?= $u_link["country_id"] && isset($footerCountriesById[$u_link["country_id"]]) ? $footerCountriesById[$u_link["country_id"]]->name_en : 'Global'; ?></td>
                                 <td><?= $u_link["link"]; ?></td>
                                 <td>
                                     <a href="<?= route(Route::currentRouteName(), $u_link["id"]); ?>" class="btn btn-primary btn-xs" title="edit"><i class="fa fa-edit"></i></a>

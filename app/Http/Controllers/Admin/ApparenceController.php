@@ -276,6 +276,18 @@ class ApparenceController extends BaseController
 				DB::table('fotterprojects')->where('id','>',0)->delete();
 				
 				$posted = $request->get('projects_id', array());
+				$homeIds = isset($posted['home']) ? (array) $posted['home'] : array();
+				foreach ($homeIds as $pid) {
+					if (!$pid) {
+						continue;
+					}
+					Helper::query("Fotterproject", "save", array(
+						"inputs" => array(
+							'project_id' => $pid,
+							'country_id' => null,
+						),
+					));
+				}
 				foreach (Helper::query("Country", "all") as $country) {
 					$ids = isset($posted[$country->id]) ? (array) $posted[$country->id] : array();
 					foreach ($ids as $pid) {
@@ -296,10 +308,13 @@ class ApparenceController extends BaseController
 				$this->validate($request, [
 					"title_ar" =>  "required",
 					"link_type" =>  "required",
-					"country_id" =>  "required|integer",
+					"country_id" =>  "nullable|integer",
 				]);
 				$inputs = $request->all();
 				unset($inputs['country']);
+				$inputs['country_id'] = $request->filled('country_id')
+					? (int) $request->get('country_id')
+					: null;
 				
 				$inputs["parent_id"] = @$inputs["parent_id"] ? $inputs["parent_id"] : 0;
 				$link_type = @$inputs["link_type"];

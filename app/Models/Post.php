@@ -124,6 +124,100 @@ class Post extends BaseModel
     }
 
     /**
+     * Find a post by current slug, then old_slug, in one country.
+     *
+     * @param \App\Models\Country|int|string|null $country
+     * @param string $slug
+     * @param \App\Enums\PostType|string|null $postType
+     * @param array $with
+     * @return static|null
+     */
+    public static function findInCountry($country, $slug, $postType = null, $with = array())
+    {
+        $countryId = Country::resolveId($country);
+        if (!$countryId || $slug === null || $slug === '') {
+            return null;
+        }
+
+        $row = static::findInCountryOnColumn($countryId, $slug, 'slug', $postType, $with);
+        if ($row) {
+            return $row;
+        }
+
+        return static::findInCountryOnColumn($countryId, $slug, 'old_slug', $postType, $with);
+    }
+
+    /**
+     * Find a post when the URL has no country. Current slug wins over old_slug.
+     * Returns null if none or more than one match on the winning column.
+     *
+     * @param string $slug
+     * @param \App\Enums\PostType|string|null $postType
+     * @param array $with
+     * @return static|null
+     */
+    public static function findUnambiguousBySlug($slug, $postType = null, $with = array())
+    {
+        $row = static::findUnambiguousOnColumn($slug, 'slug', $postType, $with);
+        if ($row) {
+            return $row;
+        }
+
+        return static::findUnambiguousOnColumn($slug, 'old_slug', $postType, $with);
+    }
+
+    /**
+     * @param int $countryId
+     * @param string $slug
+     * @param string $column
+     * @param \App\Enums\PostType|string|null $postType
+     * @param array $with
+     * @return static|null
+     */
+    protected static function findInCountryOnColumn($countryId, $slug, $column, $postType, $with)
+    {
+        $query = static::where('country_id', $countryId)->where($column, $slug);
+        if ($postType) {
+            $query->ofPostType($postType);
+        }
+        if ($with) {
+            $query->with($with);
+        }
+
+        return $query->first();
+    }
+
+    /**
+     * @param string $slug
+     * @param string $column
+     * @param \App\Enums\PostType|string|null $postType
+     * @param array $with
+     * @return static|null
+     */
+    protected static function findUnambiguousOnColumn($slug, $column, $postType, $with)
+    {
+        if ($slug === null || $slug === '') {
+            return null;
+        }
+
+        $query = static::where($column, $slug);
+        if ($postType) {
+            $query->ofPostType($postType);
+        }
+        $rows = $query->take(2)->get();
+        if ($rows->count() !== 1) {
+            return null;
+        }
+
+        $row = $rows->first();
+        if ($with) {
+            $row->load($with);
+        }
+
+        return $row;
+    }
+
+    /**
      * post_type as enum; legacy rows without it fall back to the blog/news `type`.
      *
      * @return \App\Enums\PostType

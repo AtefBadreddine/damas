@@ -3810,7 +3810,7 @@ foreach ( $all as $row) {
 		$arr = array();
 		if($path!=''){
         if(count($q1)>0){
-			$postRow = \App\Models\Post::where('slug', $q1[0]->slug)->first();
+			$postRow = \App\Models\Post::find($q1[0]->id);
 			$arr[] = $postRow ? $postRow->frontUrl() : route("front.blog.post", $q1[0]->slug);
 		}
         if(count($q2)>0){
@@ -3829,7 +3829,7 @@ foreach ( $all as $row) {
 		
 		if($path_m!=''){
         if(count($q01)>0){
-			$postRow = \App\Models\Post::where('slug', $q01[0]->slug)->first();
+			$postRow = \App\Models\Post::find($q01[0]->id);
 			$arr[] = $postRow ? $postRow->frontUrl() : route("front.blog.post", $q01[0]->slug);
 		}
         if(count($q02)>0){

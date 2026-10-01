@@ -1,7 +1,10 @@
 <?php
 namespace App\Http\Controllers\Front;
 use App\Http\Controllers\BaseController;
+use App\Models\Post;
+use App\Models\Project;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
 use Validator;
 use Helper;
 use DB;
@@ -34,7 +37,7 @@ class AmpController extends BaseController
     */
     public function project_show($slug)
     {
-        $project = Helper::query("Project", "where", ["field" => "slug", "value" => $slug])->first();
+        $project = Project::findUnambiguousBySlug($slug);
         if ( !$project ) abort(404);
         if ( isset($_SERVER["HTTP_REFERER"]) ) {
             $project->views += 1; $project->save();
@@ -51,8 +54,7 @@ class AmpController extends BaseController
     */
     public function blog_show_post($slug)
     { //exit('rrr');
-        $post = Helper::query("Post", "where", ["field" => "slug", "value" => $slug])->first();
-        if ( !$post ) $post = Helper::query("Post", "where", ["field" => "old_slug", "value" => $slug])->first();
+        $post = Post::findUnambiguousBySlug($slug);
         if ( !$post ) 
 			return Redirect::to(route("front.blog")); //abort(404);
         if ( isset($_SERVER["HTTP_REFERER"]) ) {

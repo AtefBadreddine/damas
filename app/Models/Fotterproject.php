@@ -21,13 +21,19 @@ class Fotterproject extends BaseModel
     }
 
     /**
-     * Featured footer project IDs for a country model, id, slug, or legacy code.
+     * Featured footer project IDs.
+     * Null or "home" is the Home bucket (country_id IS NULL).
      *
      * @param \App\Models\Country|int|string|null $country
      * @return array
      */
     public static function projectIdsForCountry($country)
     {
+        if ($country === null || $country === '' || $country === 'home') {
+            $ids = static::whereNull('country_id')->lists('project_id');
+            return is_array($ids) ? $ids : $ids->toArray();
+        }
+
         $countryId = Country::resolveId($country);
         if (!$countryId) {
             return array();

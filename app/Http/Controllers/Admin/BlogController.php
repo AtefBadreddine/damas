@@ -384,8 +384,10 @@ class BlogController extends BaseController
     
             \Log::info('BLOG DEBUG 005: BEFORE VALIDATION');
     
+            $countryId = (int) $request->get('country_id');
+            $exceptId = $id ?: 'NULL';
             $this->validate($request, [
-                "slug" => "alpha_dash|unique:{$row->table_name()},slug,$id",
+                "slug" => "alpha_dash|unique:{$row->table_name()},slug,{$exceptId},id,country_id,{$countryId}",
                 "old_slug" => "different:slug",
                 "country_id" => "required|integer",
             ]);
@@ -568,9 +570,11 @@ class BlogController extends BaseController
 		$type = $this->currentCategoryType();
         $row = Helper::query("PostCategory", "find", ['id' => $id]);
         if ( $request->isMethod('post') ) {
+            $countryId = (int) $request->get('country_id');
+            $exceptId = $id ?: 'NULL';
             $this->validate($request, [
                 "name_ar"  =>  "required",
-                "slug"     =>  "required|alpha_dash|unique:{$row->table_name()},slug,$id",
+                "slug"     =>  "required|alpha_dash|unique:{$row->table_name()},slug,{$exceptId},id,country_id,{$countryId}",
                 "country_id" => "required|integer",
             ]);
             $inputs = $request->all();

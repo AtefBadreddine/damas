@@ -157,7 +157,7 @@
 
                                             <div class="form-group col-md-4">
                                                 <div class="form-group">
-                                                    <label>Slug <span class="red"></span></label>
+                                                    <label>Slug <span class="red">(*)</span></label>
                                                     <div class="input-group ltr">
                                                         <span class="input-group-addon">projects/</span>
                                                         <?= Form::text("slug", $row->slug, ["class" => "form-control input-sm ltr"]); ?>

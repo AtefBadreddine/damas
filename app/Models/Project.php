@@ -281,6 +281,125 @@ class Project extends BaseModel
         $url = $this->geoUrl($absolute);
         return $url ? $url : route('front.project', $this->slug, $absolute);
     }
+
+    /**
+     * Find a project by current slug, then old_slug, in one country (via city.country_id).
+     *
+     * @param \App\Models\Country|int|string|null $country
+     * @param string $slug
+     * @return static|null
+     */
+    public static function findInCountry($country, $slug)
+    {
+        $countryId = Country::resolveId($country);
+        if (!$countryId || $slug === null || $slug === '') {
+            return null;
+        }
+
+        $row = static::findInCountryOnColumn($countryId, $slug, 'slug');
+        if ($row) {
+            return $row;
+        }
+
+        return static::findInCountryOnColumn($countryId, $slug, 'old_slug');
+    }
+
+    /**
+     * Find a project by slug + city + region + country. Current slug wins over old_slug.
+     *
+     * @param \App\Models\Country|int|string|null $country
+     * @param string $citySlug
+     * @param string $regionSlug
+     * @param string $projectSlug
+     * @return static|null
+     */
+    public static function findInGeo($country, $citySlug, $regionSlug, $projectSlug)
+    {
+        $countryId = Country::resolveId($country);
+        if (!$countryId || $projectSlug === null || $projectSlug === '' || $citySlug === null || $citySlug === '' || $regionSlug === null || $regionSlug === '') {
+            return null;
+        }
+
+        $row = static::findInGeoOnColumn($countryId, $citySlug, $regionSlug, $projectSlug, 'slug');
+        if ($row) {
+            return $row;
+        }
+
+        return static::findInGeoOnColumn($countryId, $citySlug, $regionSlug, $projectSlug, 'old_slug');
+    }
+
+    /**
+     * Find a project when the URL has no country. Current slug wins over old_slug.
+     * Returns null if none or more than one match on the winning column.
+     *
+     * @param string $slug
+     * @return static|null
+     */
+    public static function findUnambiguousBySlug($slug)
+    {
+        $row = static::findUnambiguousOnColumn($slug, 'slug');
+        if ($row) {
+            return $row;
+        }
+
+        return static::findUnambiguousOnColumn($slug, 'old_slug');
+    }
+
+    /**
+     * @param int $countryId
+     * @param string $slug
+     * @param string $column
+     * @return static|null
+     */
+    protected static function findInCountryOnColumn($countryId, $slug, $column)
+    {
+        return static::where($column, $slug)
+            ->whereHas('city', function ($query) use ($countryId) {
+                $query->where('country_id', $countryId);
+            })
+            ->with(array('city.countryRel', 'region'))
+            ->first();
+    }
+
+    /**
+     * @param int $countryId
+     * @param string $citySlug
+     * @param string $regionSlug
+     * @param string $projectSlug
+     * @param string $column
+     * @return static|null
+     */
+    protected static function findInGeoOnColumn($countryId, $citySlug, $regionSlug, $projectSlug, $column)
+    {
+        return static::where($column, $projectSlug)
+            ->whereHas('city', function ($query) use ($countryId, $citySlug) {
+                $query->where('country_id', $countryId)->where('slug', $citySlug);
+            })
+            ->whereHas('region', function ($query) use ($regionSlug) {
+                $query->where('slug', $regionSlug);
+            })
+            ->with(array('city.countryRel', 'region'))
+            ->first();
+    }
+
+    /**
+     * @param string $slug
+     * @param string $column
+     * @return static|null
+     */
+    protected static function findUnambiguousOnColumn($slug, $column)
+    {
+        if ($slug === null || $slug === '') {
+            return null;
+        }
+
+        $rows = static::where($column, $slug)->with(array('city.countryRel', 'region'))->take(2)->get();
+        if ($rows->count() !== 1) {
+            return null;
+        }
+
+        return $rows->first();
+    }
     
     /**
     * card photo relation

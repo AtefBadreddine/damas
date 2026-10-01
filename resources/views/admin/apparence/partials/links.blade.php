@@ -28,16 +28,13 @@
                 <?= Form::select("lang", Helper::langs("all"), $menu->lang, ["class" => "form-control select2me"]); ?>
             </div>
             <div class="form-group col-sm-4">
-                <label>Country</label>
+                <label>Show on</label>
                 <?php
                     $footerCountries = \App\Models\Country::ordered()->get();
                     $selectedFooterCountryId = $menu->country_id;
-                    if (!$selectedFooterCountryId) {
-                        $turkeyCountry = \App\Models\Country::findBySlugOrCode('turkey');
-                        $selectedFooterCountryId = $turkeyCountry ? $turkeyCountry->id : null;
-                    }
                 ?>
                 <select name="country_id" class="form-control select2me">
+                    <option value="" <?= !$selectedFooterCountryId ? 'selected' : '' ?>>Global</option>
                     @foreach($footerCountries as $footerCountry)
                     <option value="<?= $footerCountry->id ?>" <?= ((int)$selectedFooterCountryId === (int)$footerCountry->id) ? 'selected' : '' ?>><?= $footerCountry->name_en ?></option>
                     @endforeach
@@ -96,7 +93,17 @@
         <div class="col-md-12">
         <?php
             $footerCountries = isset($footerCountries) ? $footerCountries : \App\Models\Country::ordered()->get();
+            $selectedHomeProjectIds = \App\Models\Fotterproject::projectIdsForCountry(null);
         ?>
+        <div class="form-group">
+		<label>Global Projects</label>
+			<select name="projects_id[home][]" class="form-control select2me" multiple>
+				<option value=""></option>
+				@foreach(\App\Models\Project::orderBy('id', 'desc')->get() as $project)
+				<option value="<?= $project->id; ?>" <?= in_array($project->id, $selectedHomeProjectIds) ? 'selected' : ''; ?>><?= $project->name_ar; ?></option>
+				@endforeach
+			</select>
+		</div>
         @foreach($footerCountries as $footerCountry)
         <div class="form-group">
             <?php

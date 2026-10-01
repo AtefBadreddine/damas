@@ -25,15 +25,13 @@ class ProjectController extends BaseController
      */
     public function show($country, $city, $region, $project)
     {
-        $row = Project::where("old_slug", $project)->with(array("city.countryRel", "region"))->first();
-        if ($row && $row->slug !== $project && $this->matchesGeo($row, $country, $city, $region) && $row->geoUrl()) {
+        $row = Project::findInGeo($country, $city, $region, $project);
+        if (!$row) {
+            abort(404);
+        }
+        if ($row->slug !== $project && $row->geoUrl()) {
             $query = request()->getQueryString();
             return Redirect::to($row->geoUrl() . ($query ? '?' . $query : ''), 301);
-        }
-
-        $row = Project::where("slug", $project)->with(array("city.countryRel", "region"))->first();
-        if (!$row || !$this->matchesGeo($row, $country, $city, $region)) {
-            abort(404);
         }
 
         if (isset($_SERVER["HTTP_REFERER"])) {

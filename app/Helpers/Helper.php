@@ -3796,7 +3796,7 @@ return $data;
 		if (preg_match('#/('.$countrySlugs.')/(buying-guide|guides)/([^/\?]+)#', $url, $m) || preg_match('#/('.$countrySlugs.')/news/([^/\?]+)#', $url, $m)) {
 			if($camp==true)
 				return 'Blog';
-			$post = \App\Models\Post::where("slug", isset($m[3]) ? $m[3] : $m[2])->first();
+			$post = \App\Models\Post::findInCountry($m[1], isset($m[3]) ? $m[3] : $m[2]);
 			if($post!=false)
 				foreach ($post->categories()->lists('name_'. $lang) as $cat) {
 					$ret = $cat;
@@ -3805,18 +3805,18 @@ return $data;
 		} elseif (preg_match('#/('.$countrySlugs.')/([^/]+)/([^/]+)/([^/\?]+)#', $url, $m)) {
 			if($camp==true)
 				return 'Project';
-			$arr = DB::select("SELECT `name_".$lang."` as 'name' FROM `dms_projects` WHERE slug=?",[$m[4]]);
-				if(isset($arr[0])){
-					$ret = $arr[0]->name;
+			$project = \App\Models\Project::findInGeo($m[1], $m[2], $m[3], $m[4]);
+				if($project){
+					$ret = $project->getName();
 				}
 		} elseif (strpos($url, '/projects/') !== false) {
 			if($camp==true)
 				return 'Project';
 			
 			$t = explode('projects/',$url);
-			$arr = DB::select("SELECT `name_".$lang."` as 'name' FROM `dms_projects` WHERE slug=?",[$t[1]]);
-				if(isset($arr[0])){
-					$ret = $arr[0]->name;
+			$project = \App\Models\Project::findUnambiguousBySlug($t[1]);
+				if($project){
+					$ret = $project->getName();
 				}
 		
 		}elseif (strpos($url, '/blog/category/') !== false) {//اسم التصنيف
@@ -3824,9 +3824,13 @@ return $data;
 				return 'Blog';
 			$t= explode('blog/category/',$url);
 			if(isset($t[1])){
-				$arr = DB::select("SELECT name_".$lang." as 'name'  FROM `dms_posts_categories` WHERE `slug`=?",[$t[1]]);
-				if($arr[0]){
-					$ret = $arr[0]->name;
+				if (preg_match('#/('.$countrySlugs.')/#', $url, $cm)) {
+					$category = \App\Models\PostCategory::findInCountry($cm[1], $t[1]);
+				} else {
+					$category = \App\Models\PostCategory::findUnambiguousBySlug($t[1]);
+				}
+				if($category){
+					$ret = $category->getName();
 				}
 			}
 		}elseif (strpos($url, '/blog/') !== false) {//اسم التصنيف
@@ -3835,7 +3839,7 @@ return $data;
 			$t = explode('blog/',$url);
 			if(isset($t[1]) and strlen($t[1])>2){
 				$slug = $t[1];
-				$post = \App\Models\Post::where("slug", $slug)->first();
+				$post = \App\Models\Post::findUnambiguousBySlug($slug);
 				if($post!=false)
 					foreach ($post->categories()->lists('name_'. $lang) as $cat) {
 						$ret = $cat;

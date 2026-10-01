@@ -4,43 +4,58 @@
     
 	
     <?php
-	$auth_user = Auth::user();
-	if($auth_user->is('superadmin')){
+    if(\Auth::user()->is('superadmin')){
         $lignes = [
-            "id"    =>  "",
-            "created_at"    =>  "Created at",
-            "update_date"    =>  "Updated at",
-            "title_ar"  =>  "Title ",
-            "blog_impressions" => "Impressions",
+            "id" => "",
+            "created_at" => "Created on",
+            "title_ar" => "Title ",
+            "views" => "Views",
+            "word_count" => "Count",
+            "category_id" => "Category",
+            "blog_impressions" => "Imp.",
             "blog_clicks" => "Clicks",
             "blog_ctr" => "CTR",
             "blog_pos" => "Position",
-            "lang"  =>  "Langs ",
-            "word_count" => "Count",
-            "category_id"  =>  "Category",
-            "likes" =>  "Likes",
-            "views" =>  "Views",
-            "user_name"  =>  "User",
+            "blog_last_crawl" => "Last Crawl",
+            "update_date" => "Updated on",
+    
+            // "lang" => "Langs ",
+            // "likes" => "Likes",
+            // "user_name" => "User",
         ];
-	}else{
-		$lignes = [
-            "id"    =>  "",
-            "created_at"    =>  "Created at",
-            "update_date"    =>  "Updated at",
-            "title_ar"  =>  "Title ",
-            "blog_impressions" => "Impressions",
+    
+        $lignes = array_reverse($lignes);
+    
+    }else{
+    
+        $lignes = [
+            "id" => "",
+            "created_at" => "Created on",
+            "title_ar" => "Title ",
+            "views" => "Views",
+            "word_count" => "Count",
+            "category_id" => "Category",
+            "blog_impressions" => "Imp.",
             "blog_clicks" => "Clicks",
             "blog_ctr" => "CTR",
             "blog_pos" => "Position",
-            "lang"  =>  "Langs ",
-            "word_count" => "Count",
-            "category_id"  =>  "Category",
-            "likes" =>  "Likes",
-            "views" =>  "Views",
-            "user_name"  =>  "User",
-            "prevent_archiving_in_blog"  =>  "archiving in ". (isset($postType) ? $postType->label() : ucfirst($type)),
+            "blog_last_crawl" => "Last Crawl",
+            "update_date" => "Updated on",
+    
+            // "lang" => "Langs ",
+            // "likes" => "Likes",
+            // "user_name" => "User",
+    
+            "prevent_archiving_in_blog" =>
+                "archiving in ".(
+                    isset($postType)
+                        ? $postType->label()
+                        : ucfirst($type)
+                ),
         ];
-	}
+    
+        $lignes = array_reverse($lignes);
+    }
     ?>
     @include("admin.layouts.table", [
         "box_title"    =>    " Posts List",

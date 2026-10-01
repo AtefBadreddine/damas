@@ -26,6 +26,31 @@
 	<style>
 	.content-wrapper{direction:ltr}
 	.hiddenz{opacity:0.2}
+    #cache-clear-form {
+        float: left;
+        display: flex !important;
+        align-items: center;
+        gap: 8px;
+        width: auto !important;
+        margin: 7px 10px;
+        direction: ltr;
+    }
+    
+    #cache-clear-form textarea {
+        width: 500px !important;
+        max-width: 55vw;
+        height: 36px !important;
+        min-height: 36px !important;
+        margin: 0 !important;
+        resize: vertical;
+        flex: 0 1 500px;
+    }
+    
+    #cache-clear-form button {
+        height: 36px;
+        flex: 0 0 auto;
+        white-space: nowrap;
+    }
 	</style>
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.3.2/css/flag-icons.min.css" />
 </head>
@@ -43,6 +68,23 @@
             <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
                 <span class="sr-only">Toggle navigation</span>
             </a>
+            <form
+                id="cache-clear-form"
+                action="{{ route('admin.clear_cache') }}"
+                method="POST"
+            >
+                <input type="hidden" name="_token" value="{{ csrf_token() }}">
+            
+                <textarea
+                    class="form-control"
+                    name="urls"
+                    placeholder="URLs to clear, one per line"
+                    required></textarea>
+            
+                <button type="submit" class="btn btn-default">
+                    <i class="fa fa-refresh"></i> Clear Cache
+                </button>
+            </form>
             <div class="navbar-custom-menu">
                 <ul class="nav navbar-nav">
                     <li class="dropdown messages-menu hidden">

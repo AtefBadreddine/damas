@@ -85,7 +85,15 @@ foreach ($citys as $layoutCity) {
         <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
         <link rel="manifest" href="/site.webmanifest">
         
-        
+        <?php if (Route::currentRouteName() == 'front.index') { ?>
+        <link
+            rel="preload"
+            as="image"
+            href="/img/sliderMobile33.jpg"
+            media="(max-width: 480px)"
+            fetchpriority="high"
+        >
+        <?php } ?>
         
         
         <meta name="application-name" content="<?= $og_title; ?>" />
@@ -169,7 +177,6 @@ foreach ($citys as $layoutCity) {
 
          */ ?>
         <meta name="facebook-domain-verification" content="h4nuhlk434dk4z3ymzwyupcaxbnvdo">
-
         <?php /*
           <link rel="preconnect dns-prefetch" href="//www.googleadservices.com" />
           <link rel="preconnect dns-prefetch" href="//www.google-analytics.com" />
@@ -837,7 +844,7 @@ foreach ($citys as $layoutCity) {
                         </a>
                     </li>
                     <li class="toolt"><span class="tooltiptext"><?= trans("front.TurkishCitizenship"); ?></span>
-                        <a class="turkish_citizenship" href="{{ route('front.turkish_citizenship') }}">
+                        <a class="turkish_citizenship" href="https://damas.net/ar/turkiye/guides/citizenship-property-investment">
                             <?php /* <img class="passport" src="<?= asset("img/passportS.png"); ?>" alt="damasturk"/>  */ ?>
 
                             {!! Helper::get_pic(asset("img/passportS2-SM-2.png"),'passport','','','damasturk', 'width="51" height="37"') !!}
@@ -1276,7 +1283,9 @@ foreach ($citys as $layoutCity) {
 
 
         <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
-        <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700,800,900&display=swap" rel="stylesheet">
+        <?php if ($style_lang == 'en') { ?>
+            <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700,800,900&display=swap" rel="stylesheet">
+        <?php } ?>
         <link href="https://fonts.googleapis.com/css?family=Cairo:300,400,600,700,800,900&display=swap&subset=arabic" rel="stylesheet">
         <?php /* <!--<style>
           include(public_path() . "/fonts/" . $style_lang . ".css")

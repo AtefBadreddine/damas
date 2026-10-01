@@ -107,6 +107,11 @@ $auth_user = Auth::user();
                     <span>Metatag Tool</span>
                 </a>
             </li>
+            <li class="<?= ($name_route == 'admin.pagespeed') ? 'active' : ''; ?>">
+                <a href="<?= route('admin.pagespeed'); ?>">
+                    <i class="fa fa-angle-double-right"></i> Speed Insights
+                </a>
+            </li>
             <li class="<?= Helper::container_array($name_route, ['admin.sitemap']) ? 'active' : ''; ?>">
                 <a href="<?= route('admin.sitemap'); ?>"><i class="fa fa-angle-double-right"></i> Sitemap</a>
             </li>

@@ -1,6 +1,110 @@
+<?php
+    $footerLinksRoute = Route::currentRouteName();
+    $isFooterLinksPage = $footerLinksRoute === 'admin.apparence.footer';
+    $footerUsefulLinks = array();
+    $footerUsefulCountryGroups = array();
+    $footerActiveCountryId = null;
+    $footerHasCurrentUsefulLink = false;
+    $footerGlobalGroupKey = 'global';
+    if ($isFooterLinksPage) {
+        $footerCountries = \App\Models\Country::ordered()->get();
+        $footerUsefulLinks = Helper::query("FooterLink", "orderByPlacement")
+            ->where("footer_section", "useful")->toArray();
+        $footerLinksByCountry = array();
+        foreach ($footerUsefulLinks as $footerUsefulLink) {
+            $footerLinkCountryId = !empty($footerUsefulLink['country_id'])
+                ? (int)$footerUsefulLink['country_id'] : $footerGlobalGroupKey;
+            if (!isset($footerLinksByCountry[$footerLinkCountryId])) {
+                $footerLinksByCountry[$footerLinkCountryId] = array();
+            }
+            $footerLinksByCountry[$footerLinkCountryId][] = $footerUsefulLink;
+            if ((int)$footerUsefulLink['id'] === (int)$menu->id) {
+                $footerHasCurrentUsefulLink = true;
+                $footerActiveCountryId = $footerLinkCountryId;
+            }
+        }
+        $footerUsefulCountryGroups[$footerGlobalGroupKey] = array(
+            'country' => (object) array('id' => null, 'name_en' => 'Global'),
+            'links' => isset($footerLinksByCountry[$footerGlobalGroupKey]) ? $footerLinksByCountry[$footerGlobalGroupKey] : array(),
+        );
+        foreach ($footerCountries as $footerCountry) {
+            $footerCountryId = (int)$footerCountry->id;
+            if (!empty($footerLinksByCountry[$footerCountryId])) {
+                $footerUsefulCountryGroups[$footerCountryId] = array(
+                    'country' => $footerCountry,
+                    'links' => $footerLinksByCountry[$footerCountryId],
+                );
+            }
+        }
+        if (!$footerHasCurrentUsefulLink) {
+            if ($menu->id) {
+                $footerPreferredCountryId = $menu->country_id ? (int)$menu->country_id : $footerGlobalGroupKey;
+            } else {
+                $queryCountryId = \Request::query('country_id');
+                if ($queryCountryId === null || $queryCountryId === '' || $queryCountryId === $footerGlobalGroupKey) {
+                    $footerPreferredCountryId = $footerGlobalGroupKey;
+                } else {
+                    $footerPreferredCountryId = (int)$queryCountryId;
+                }
+            }
+            if (isset($footerUsefulCountryGroups[$footerPreferredCountryId])) {
+                $footerActiveCountryId = $footerPreferredCountryId;
+            }
+        }
+        if (!isset($footerUsefulCountryGroups[$footerActiveCountryId])) {
+            $footerActiveCountryId = null;
+            foreach ($footerUsefulCountryGroups as $footerCountryId => $footerCountryGroup) {
+                $footerActiveCountryId = $footerCountryId;
+                break;
+            }
+        }
+    }
+    $footerCanDeleteUsefulLink = $isFooterLinksPage && $menu->id && $menu->footer_section === 'useful';
+?>
+
 <?= Form::open(); ?>
-<div class="panel panel-default">
-    <div class="panel-heading">Links</div>
+<div class="panel with-nav-tabs panel-default">
+    <div class="panel-heading">
+        <div style="margin-bottom:10px;">Keywords</div>
+        @if($isFooterLinksPage)
+        <ul class="nav nav-tabs footer-country-tabs">
+            @foreach($footerUsefulCountryGroups as $footerCountryId => $footerCountryGroup)
+            <?php
+                if (!empty($footerCountryGroup['links'])) {
+                    $footerTabUrl = route($footerLinksRoute, $footerCountryGroup['links'][0]['id']);
+                } elseif ($footerCountryId === $footerGlobalGroupKey) {
+                    $footerTabUrl = route($footerLinksRoute, 0);
+                } else {
+                    $footerTabUrl = route($footerLinksRoute, 0).'?country_id='.$footerCountryId;
+                }
+            ?>
+            <li class="<?= $footerActiveCountryId === $footerCountryId ? 'active' : ''; ?>">
+                <a href="{{ $footerTabUrl }}">
+                    {{ $footerCountryGroup['country']->name_en }}
+                </a>
+            </li>
+            @endforeach
+        </ul>
+
+        <ul class="nav nav-tabs footer-useful-link-tabs">
+            @if(isset($footerUsefulCountryGroups[$footerActiveCountryId]))
+            @foreach($footerUsefulCountryGroups[$footerActiveCountryId]['links'] as $footerUsefulLink)
+            <li class="<?= (int)$menu->id === (int)$footerUsefulLink['id'] ? 'active' : ''; ?>">
+                <a href="{{ route($footerLinksRoute, $footerUsefulLink['id']) }}">
+                    {{ $footerUsefulLink['title_ar'] ?: ($footerUsefulLink['title_en'] ?: 'Link #'.$footerUsefulLink['id']) }}
+                </a>
+            </li>
+            @endforeach
+            @endif
+            @if($menu->id && !$footerHasCurrentUsefulLink)
+            <li class="active"><a href="{{ route($footerLinksRoute, $menu->id) }}">Edit Current Link</a></li>
+            @endif
+            <li class="<?= !$menu->id ? 'active' : ''; ?>">
+                <a href="{{ route($footerLinksRoute, 0).($footerActiveCountryId !== null && $footerActiveCountryId !== $footerGlobalGroupKey ? '?country_id='.$footerActiveCountryId : '') }}">+ New Keyword</a>
+            </li>
+        </ul>
+        @endif
+    </div>
     <div class="panel-body">
         <div class="col-md-12">
             <div class="form-group col-sm-3">
@@ -30,26 +134,29 @@
             <div class="form-group col-sm-4">
                 <label>Show on</label>
                 <?php
-                    $footerCountries = \App\Models\Country::ordered()->get();
+                    $footerCountries = isset($footerCountries) ? $footerCountries : \App\Models\Country::ordered()->get();
                     $selectedFooterCountryId = $menu->country_id;
+                    if (!$menu->id && $isFooterLinksPage && $footerActiveCountryId !== null && $footerActiveCountryId !== $footerGlobalGroupKey) {
+                        $selectedFooterCountryId = $footerActiveCountryId;
+                    }
                 ?>
                 <select name="country_id" class="form-control select2me">
                     <option value="" <?= !$selectedFooterCountryId ? 'selected' : '' ?>>Global</option>
                     @foreach($footerCountries as $footerCountry)
-                    <option value="<?= $footerCountry->id ?>" <?= ((int)$selectedFooterCountryId === (int)$footerCountry->id) ? 'selected' : '' ?>><?= $footerCountry->name_en ?></option>
+                    <option value="<?= $footerCountry->id; ?>" <?= ((int)$selectedFooterCountryId === (int)$footerCountry->id) ? 'selected' : ''; ?>><?= $footerCountry->name_en; ?></option>
                     @endforeach
                 </select>
             </div>
             <div class="form-group col-sm-4">
                 <label>Link Type<span class="red">(*)</span></label>
                 <?= Form::select("link_type", [
-                    ""    =>  "",
-                    "city"    =>  "City",
-                    "post"    =>  "Post",
-                    "category"    =>  "Features",
-                    "region"    =>  "Districts",
-                    "url"    =>  "Custom link",
-                    "parent"    =>  "Top menu",
+                    "" => "",
+                    "city" => "City",
+                    "post" => "Post",
+                    "category" => "Features",
+                    "region" => "Districts",
+                    "url" => "Custom link",
+                    "parent" => "Top menu",
                 ], $menu->link_type, ["class" => "form-control select2me", "required" => true]); ?>
             </div>
             <div id="sect_options">
@@ -64,48 +171,62 @@
                 <label>Placement</label>
                 <?= Form::text("placement", $menu->placement, ["class" => "form-control"]); ?>
             </div>
-            
             @if($datas["route_name"] == "admin.apparence.footer")
-                <div class="col-sm-4">
-                    <label>Section</label>
-                    <?= Form::select("footer_section", [
-					/*"links" => "القسم العلوي",*/
-					"useful" => "Useful links",
-					"quick" => "Quick links"], $menu->footer_section, ["class" => "form-control select2me"]); ?>
-                </div>
+            <div class="col-sm-4">
+                <label>Section</label>
+                <?= Form::select("footer_section", ["useful" => "Useful links", "quick" => "Quick links"], $menu->footer_section, ["class" => "form-control select2me"]); ?>
+            </div>
             @endif
-            
         </div>
-    </div>                    
+    </div>
     <div class="panel-footer">
-        <button class="btn btn-primary">Save</button>
+        <button type="submit" class="btn btn-primary" style="display: inline;">Save</button>
+        @if($footerCanDeleteUsefulLink)
+        <div style="margin-bottom:20px;display: inline;margin-left: 5px">
+        <?= Form::open(["method" => "DELETE", "url" => route($footerLinksRoute.".delete", $menu->id), "class" => "inline"]); ?>
+            <button type="submit" class="btn btn-danger btn-sm button_confirm" title="Delete this useful link"><i class="fa fa-trash"></i> Delete this keyword</button>
+        <?= Form::close(); ?>
+        </div>
+        @endif
     </div>
 </div>
 <?= Form::close(); ?>
 
 
-
-<?php if(!isset($menu_new)){ ?>
+<?php if (!isset($menu_new)) { ?>
+<?php
+    $footerCountries = isset($footerCountries) ? $footerCountries : \App\Models\Country::ordered()->get();
+    $selectedHomeProjectIds = \App\Models\Fotterproject::projectIdsForCountry(null);
+?>
 <?= Form::open(); ?>
-<div class="panel panel-default">
-    <div class="panel-heading">Projects</div>
+<div class="panel with-nav-tabs panel-default">
+    <div class="panel-heading">
+        <div style="margin-bottom:10px;">Projects</div>
+        <ul class="nav nav-tabs">
+            <li class="active">
+                <a href="#footer-projects-home" data-toggle="tab">Global</a>
+            </li>
+            @foreach($footerCountries as $footerCountry)
+            <li>
+                <a href="#footer-projects-<?= $footerCountry->id; ?>" data-toggle="tab"><?= $footerCountry->name_en; ?></a>
+            </li>
+            @endforeach
+        </ul>
+    </div>
     <div class="panel-body">
-        <div class="col-md-12">
-        <?php
-            $footerCountries = isset($footerCountries) ? $footerCountries : \App\Models\Country::ordered()->get();
-            $selectedHomeProjectIds = \App\Models\Fotterproject::projectIdsForCountry(null);
-        ?>
-        <div class="form-group">
-		<label>Global Projects</label>
-			<select name="projects_id[home][]" class="form-control select2me" multiple>
-				<option value=""></option>
-				@foreach(\App\Models\Project::orderBy('id', 'desc')->get() as $project)
-				<option value="<?= $project->id; ?>" <?= in_array($project->id, $selectedHomeProjectIds) ? 'selected' : ''; ?>><?= $project->name_ar; ?></option>
-				@endforeach
-			</select>
-		</div>
-        @foreach($footerCountries as $footerCountry)
-        <div class="form-group">
+        <div class="tab-content">
+            <div class="tab-pane fade in active" id="footer-projects-home">
+                <div class="form-group">
+                    <label>Global Projects</label>
+                    <select name="projects_id[home][]" class="form-control select2me" style="width:100%;" multiple>
+                        <option value=""></option>
+                        @foreach(\App\Models\Project::orderBy('id', 'desc')->get() as $project)
+                        <option value="<?= $project->id; ?>" <?= in_array($project->id, $selectedHomeProjectIds) ? 'selected' : ''; ?>><?= $project->name_ar; ?></option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+            @foreach($footerCountries as $footerCountry)
             <?php
                 $countryCityIds = \App\Models\City::where('country_id', $footerCountry->id)->lists('id');
                 $countryCityIds = is_array($countryCityIds) ? $countryCityIds : $countryCityIds->toArray();
@@ -114,28 +235,37 @@
                 }
                 $selectedProjectIds = \App\Models\Fotterproject::projectIdsForCountry($footerCountry);
             ?>
-		<label><?= $footerCountry->name_en ?> Projects</label>
-			<select name="projects_id[<?= $footerCountry->id ?>][]" class="form-control select2me" multiple>
-				<option value=""></option>
-				@foreach(\App\Models\Project::whereIn('city_id', $countryCityIds)->get() as $project)
-				<option value="<?= $project->id; ?>" <?= in_array($project->id, $selectedProjectIds) ? 'selected' : ''; ?>><?= $project->name_ar; ?></option>
-				@endforeach
-			</select>
-		</div>
-        @endforeach
+            <div class="tab-pane fade" id="footer-projects-<?= $footerCountry->id; ?>">
+                <div class="form-group">
+                    <label><?= $footerCountry->name_en; ?> Projects</label>
+                    <select name="projects_id[<?= $footerCountry->id; ?>][]" class="form-control select2me" style="width:100%;" multiple>
+                        <option value=""></option>
+                        @foreach(\App\Models\Project::whereIn('city_id', $countryCityIds)->get() as $project)
+                        <option value="<?= $project->id; ?>" <?= in_array($project->id, $selectedProjectIds) ? 'selected' : ''; ?>><?= $project->name_ar; ?></option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+            @endforeach
         </div>
-    </div>                    
+    </div>
     <div class="panel-footer">
-        <button class="btn btn-primary" name="save_projs">Save</button>
+        <button type="submit" class="btn btn-primary" name="save_projs">Save</button>
     </div>
 </div>
 <?= Form::close(); ?>
 <?php } ?>
 
-
-
-<style>.panel-body ul:first-child {padding:0;}.list-group-item{padding:5px;}</style>
-   
+<style>
+.panel-body ul:first-child{padding:0;}
+.list-group-item{padding:5px;}
+.footer-country-tabs,.footer-useful-link-tabs{display:flex;flex-wrap:wrap;}
+.footer-country-tabs>li{float:none;}
+.footer-country-tabs>li>a{font-weight:600;}
+.footer-useful-link-tabs{margin-top:14px;padding-top:10px;border-top:1px solid #ddd;}
+.footer-useful-link-tabs>li{float:none;}
+.footer-useful-link-tabs>li>a{white-space:normal;}
+</style>
 <script>
 $(function(){
     $(document).on("change", "select[name=link_type]", function(){
@@ -161,7 +291,6 @@ $(function(){
             alert('error: ' + error);
             $('#ajaxloading').hide();
         });
-
     });
 });
 </script>

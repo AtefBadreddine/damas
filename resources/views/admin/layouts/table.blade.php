@@ -1,5 +1,6 @@
 <?php
     $route = Route::currentRouteName();
+    $isPostList = \App\Enums\PostType::isAdminList($route);
     $page_num = Input::get("page") ? Input::get("page") : 1;
     $tr_placement = @$tr_placement;
     $total_rows = $rows->total();
@@ -111,14 +112,13 @@ $str_get = $str_get . $k.'='.$v.'&';
 		@else
         <h3 class="box-title"><?= @$box_title ?></h3>
 		@endif
-		@if(Route::currentRouteName()=='admin.blog.posts')
+		@if($isPostList)
     		<ul class="nav nav-tabs" style="margin-bottom:15px;">
-                <li class="<?= $tab == 'turkey' ? 'active' : '' ?>">
-                    <a href="?tab=turkey">Turkey (<?= $turkeyCount ?>)</a>
+                @foreach($countries as $country)
+                <li class="<?= $tab == $country->code ? 'active' : '' ?>">
+                    <a href="?tab=<?= $country->code ?>"><?= $country->name_en ?> (<?= isset($countryCounts[$country->code]) ? $countryCounts[$country->code] : 0 ?>)</a>
                 </li>
-                <li class="<?= $tab == 'oman' ? 'active' : '' ?>">
-                    <a href="?tab=oman">Oman (<?= $omanCount ?>)</a>
-                </li>
+                @endforeach
                 <li class="<?= $tab == 'disabled' ? 'active' : '' ?>">
                     <a href="?tab=disabled">Disabled (<?= $disabledCount ?>)</a>
                 </li>
@@ -126,7 +126,7 @@ $str_get = $str_get . $k.'='.$v.'&';
 		@endif
 
         <div class="box-tools">
-            @if(Route::currentRouteName()=='admin.blog.posts' or Route::currentRouteName()=='admin.pages.search' || Route::currentRouteName() == 'admin.projects')
+            @if($isPostList or Route::currentRouteName()=='admin.pages.search' || Route::currentRouteName() == 'admin.projects')
                 <input type="date" id="gsc-start-date" min="2017-01-01">
                 –
                 <input type="date" id="gsc-end-date" min="2017-01-01">
@@ -178,9 +178,9 @@ $str_get = $str_get . $k.'='.$v.'&';
 </select>
 
 			@endif
-			@if( Route::currentRouteName()=='admin.projects' || Route::currentRouteName()=='admin.newsletter' || Route::currentRouteName()=='admin.news.posts' || Route::currentRouteName()=='admin.blog.posts' || Route::currentRouteName()=='admin.faqpost2' )
+			@if( Route::currentRouteName()=='admin.projects' || Route::currentRouteName()=='admin.newsletter' || $isPostList || Route::currentRouteName()=='admin.faqpost2' )
 				<form method="get" style="float:right">
-                    @if(Route::currentRouteName() == 'admin.blog.posts')
+                    @if(isset($tab))
                         <input type="hidden" name="tab" value="<?= $tab ?>">
                     @endif
                     <input type="text" name="search" value="<?= @$_GET['search'] ?>">
@@ -274,7 +274,7 @@ $str_get = $str_get . $k.'='.$v.'&';
 						continue;
 				}
 				?>
-                <tr class="<?= $row->blocked == 1 ? "bg-danger" : ""; ?>" @if($route=="admin.whatsapp_msg" and $row->manual_insert=="0") style="background-color:#2ecc717d" @endif @if($route=="admin.blog.posts" and $row->published==false and (int)$row->redirect_post_id!=0) style="background-color:#b2ecec" @endif >
+                <tr class="<?= $row->blocked == 1 ? "bg-danger" : ""; ?>" @if($route=="admin.whatsapp_msg" and $row->manual_insert=="0") style="background-color:#2ecc717d" @endif @if($isPostList and $row->published==false and (int)$row->redirect_post_id!=0) style="background-color:#b2ecec" @endif >
                     <td class="text-center"><input type="checkbox" value="<?= $row->id; ?>" class="input_check"></td>
                     <!--<td><?= $rows->total() - ($krow+$rows->firstItem())+1; ?></td>-->
 					
@@ -368,9 +368,7 @@ $str_get = $str_get . $k.'='.$v.'&';
 									?>
 								@elseif($route=="admin.newlandingpage" and $key=='title')
 									<a href="https://damas.net/landing/{{$row->slug}}" target="_blank">{{ $row->$key }}</a>
-                                @elseif($key=="link" and ($route=="admin.pages.search" or $route=="admin.projects"))
-									<a href="{{ route('front.project',$row->slug) }}" target="_blank">{{ $row->$key }}</a>
-								@elseif($key=="link" and ($route=="admin.pages.search" or $route=="admin.projects"))
+                                @elseif($key=="link" and $route=="admin.pages.search")
                                     <a href="{{ $row->link }}" target="_blank" class="gsc-link">
                                         {{ $row->link }}
                                     </a>
@@ -449,11 +447,7 @@ $str_get = $str_get . $k.'='.$v.'&';
 										{{ $row->$key }}
                                     </a>
                                 @elseif($route=="admin.projects" and $key=="name_en")
-                                <a
-                                    href="https://damas.net/<?= $row->city_id == 3 ? 'oman/' : '' ?>projects/<?= $row->slug ?>"
-                                    target="_blank"
-                                    class="gsc-link"
-                                >
+                                <a href="{{ $row->frontUrl() }}" target="_blank" class="gsc-link">
                                     {{ $row->$key }}
                                 </a>
 								@elseif($route=="admin.search" and $key=="campaign")
@@ -583,31 +577,31 @@ $str_get = $str_get . $k.'='.$v.'&';
                                         $u_arr_pv = array_unique($arr_pv);
                                     ?>
                                     {{ count($u_arr_pv)."/".count($arr_pv) }}
-                                @elseif($route=="admin.blog.posts" and $key=="prevent_archiving_in_blog")
+                                @elseif($isPostList and $key=="prevent_archiving_in_blog")
 								<?php
 									echo ($row->prevent_archiving_in_blog==true?'NO':'');
 								?>
-                                @elseif($route=="admin.blog.posts" and $key=="category_id")
+                                @elseif($isPostList and $key=="category_id")
 									{{ implode(',', $row->categories()->lists('name_en')->toArray()) }}
-								@elseif($route=="admin.blog.posts" and $key=="created_at")
+								@elseif($isPostList and $key=="created_at")
                                     {{ $row->created_at ? $row->created_at->format('d M Y') : '' }}
-								@elseif($route=="admin.blog.posts" and $key=="update_date")
+								@elseif($isPostList and $key=="update_date")
 								{{ date('d M Y', strtotime(strtok($row->update_date, "\n"))) }}
 								<?= ($row->update_by_name!=''?"<br>".$row->update_by_name:'') ?>
-								@elseif($route=="admin.blog.posts" and $key=="title_ar")
-									#<?= ucfirst($row->country) ?><br>
-									<a href="<?php  $oman = ($row->country=='oman'?'/oman':''); ?>{{ str_replace('/blog/',$oman.'/blog/',route('front.blog.post',$row->slug)) }}" target="_blank" class="gsc-link">{{ ($row->title_ar!=''?$row->title_ar:($row->title_en!=''?$row->title_en:($row->title_fa!=''?$row->title_fa:($row->title_ru!=''?$row->title_ru:'')))) }}</a>
-								@elseif($route=="admin.blog.posts" and $key=="blog_impressions")
+								@elseif($isPostList and $key=="title_ar")
+									#<?= $row->countryRel ? ucfirst($row->countryRel->code) : '' ?><br>
+									<a href="{{ $row->frontUrl() }}" target="_blank" class="gsc-link">{{ ($row->title_ar!=''?$row->title_ar:($row->title_en!=''?$row->title_en:($row->title_fa!=''?$row->title_fa:($row->title_ru!=''?$row->title_ru:'')))) }}</a>
+								@elseif($isPostList and $key=="blog_impressions")
 								    <p class="impressions"></p>
-								@elseif($route=="admin.blog.posts" and $key=="blog_clicks")
+								@elseif($isPostList and $key=="blog_clicks")
 								    <p class="clicks"></p>
-								@elseif($route=="admin.blog.posts" and $key=="blog_ctr")
+								@elseif($isPostList and $key=="blog_ctr")
 								    <p class="ctr"></p>
-								@elseif($route=="admin.blog.posts" and $key=="blog_pos")
+								@elseif($isPostList and $key=="blog_pos")
 								    <p class="position"></p>
 								@elseif($route=="admin.projects" and $key=="project_position")
 								    <p class="position"></p>
-								@elseif($route=="admin.blog.posts" and $key=="blog_last_crawl")
+								@elseif($isPostList and $key=="blog_last_crawl")
                                     <p class="last-crawl"></p>
 								@elseif($key === 'word_count')
                                     <?php $wordCountLanguages = ['ar' => 'Ar', 'en' => 'En']; //, 'fr' => 'Fr', 'fa' => 'Fa', 'ru' => 'Ru' ?>
@@ -628,7 +622,7 @@ $str_get = $str_get . $k.'='.$v.'&';
                                             <div style="white-space: nowrap;">{{ $wordCountLabel }}: {{ $wordCount === false ? '—' : number_format($wordCount) }}</div>
                                         @endif
                                     @endforeach
-								@elseif($route=="admin.blog.posts" and $key=="lang")
+								@elseif($isPostList and $key=="lang")
 									<?= $row->content_ar!=''?'Ar ':''; ?>
 									<?= $row->content_en!=''?'En ':''; ?>
 									<?= $row->content_fr!=''?'Fr ':''; ?>
@@ -843,13 +837,14 @@ $(function() {
 <script>
 let tokenClient;
 let googleAccessToken = null;
-console.log(<?= json_encode($row) ?>);
 let totalClicks = 0;
 let totalImpressions = 0;
 let counter = 0;
 const percentageSpan = document.getElementById("finished-percentage");
-<?php if(Route::currentRouteName() == "admin.blog.posts"){ ?>
-const rowsCount = <?= $tab == "turkey" ? $turkeyCount : ($tab == "oman" ? $omanCount : $disabledCount) ?>;
+<?php if($isPostList){ ?>
+const rowsCount = <?= $tab == 'disabled' ? (int) $disabledCount : (int) (isset($countryCounts[$tab]) ? $countryCounts[$tab] : 0) ?>;
+<?php } elseif(in_array($route, array('admin.projects', 'admin.pages.search'), true)){ ?>
+const rowsCount = <?= (int) $rows->total() ?>;
 <?php } ?>
 let totalClicksSpan = document.getElementById("totalClicks");
 let totalImpressionsSpan = document.getElementById("totalImpressions");

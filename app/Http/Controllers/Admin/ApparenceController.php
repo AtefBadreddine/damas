@@ -305,16 +305,19 @@ class ApparenceController extends BaseController
 				
 				
 			}else{
-				$this->validate($request, [
+				$countryId = $request->get('country_id');
+				$countryId = ($countryId === null || $countryId === '') ? null : (int) $countryId;
+				$rules = [
 					"title_ar" =>  "required",
 					"link_type" =>  "required",
-					"country_id" =>  "nullable|integer",
-				]);
+				];
+				if ($countryId !== null) {
+					$rules["country_id"] = "integer";
+				}
+				$this->validate($request, $rules);
 				$inputs = $request->all();
 				unset($inputs['country']);
-				$inputs['country_id'] = $request->filled('country_id')
-					? (int) $request->get('country_id')
-					: null;
+				$inputs['country_id'] = $countryId;
 				
 				$inputs["parent_id"] = @$inputs["parent_id"] ? $inputs["parent_id"] : 0;
 				$link_type = @$inputs["link_type"];

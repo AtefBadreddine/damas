@@ -29,12 +29,10 @@
         );
         foreach ($footerCountries as $footerCountry) {
             $footerCountryId = (int)$footerCountry->id;
-            if (!empty($footerLinksByCountry[$footerCountryId])) {
-                $footerUsefulCountryGroups[$footerCountryId] = array(
-                    'country' => $footerCountry,
-                    'links' => $footerLinksByCountry[$footerCountryId],
-                );
-            }
+            $footerUsefulCountryGroups[$footerCountryId] = array(
+                'country' => $footerCountry,
+                'links' => isset($footerLinksByCountry[$footerCountryId]) ? $footerLinksByCountry[$footerCountryId] : array(),
+            );
         }
         if (!$footerHasCurrentUsefulLink) {
             if ($menu->id) {

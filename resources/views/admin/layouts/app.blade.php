@@ -253,6 +253,9 @@
     $(document).on("click", ".btn_submit", function(){
         somethingChanged = false;
     });
+    $(document).on("submit", "form", function(){
+        somethingChanged = false;
+    });
 	
 
 

@@ -5,6 +5,7 @@
         $lignes = [
             "id"    =>  "",
             "name_en"  =>  "Name English",
+            "projects_status" => "Projects ON / OFF",
             "name_ar"  =>  "Name Aarabic",
             "city_id|City|name_en"  =>  "City",
             "slug"  =>  "Slug"

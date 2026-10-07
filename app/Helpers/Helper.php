@@ -54,7 +54,13 @@ if (!function_exists('localized_url')) {
         }
 
         $root = request()->root();
-        return $root . '/' . $locale . '/' . ltrim(substr($url, strlen($root)), '/');
+        $path = '/' . ltrim((string) parse_url($url, PHP_URL_PATH), '/');
+        $localePrefix = '/' . $locale;
+        if ($path === $localePrefix || strpos($path, $localePrefix . '/') === 0) {
+            return $url;
+        }
+
+        return $root . $localePrefix . '/' . ltrim($path, '/');
     }
 }
 
@@ -67,6 +73,11 @@ if (!function_exists('seo_url')) {
         $locale = $locale ?: LaravelLocalization::getCurrentLocale();
         $url = strtok(localized_url($locale), '?');
         $url = str_replace('/public/', '/', $url);
+
+        $route = Route::current();
+        if ($route && $route->getName() === 'front.index' && $locale === LaravelLocalization::getDefaultLocale()) {
+            $url = rtrim(request()->root(), '/') . '/';
+        }
 
         $page = (int) request()->get('page');
 

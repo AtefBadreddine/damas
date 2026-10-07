@@ -1,4 +1,4 @@
-@extends('admin.layouts.app', ["app_title" => "Projects Section"])
+@extends('admin.layouts.app', ["app_title" => "Home Projects"])
 @section('main_content')
 
     <?php

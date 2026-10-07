@@ -75,8 +75,8 @@ foreach ($citys as $hcity) {
     <div class="budget">
         <div id="budgetMenu">
             <div class="range-slider"> <span class="rangeValues num"></span>
-                <input value="50000" class="min_budj" min="50000" max="2000000" step="50000" type="range">
-                    <input value="2000000" class="max_budj" min="50000" max="2000000" step="50000" type="range">
+                <input value="50000" class="min_budj" min="50000" max="1200000" step="50000" type="range">
+                    <input value="1200000" class="max_budj" min="50000" max="1200000" step="50000" type="range">
                         </div>
                         </div>
                         </div>

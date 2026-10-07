@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 
 Route::get('/cron_cache_stats', function () {
     $hits = Cache::get('cache_hits', 0);
@@ -157,7 +157,6 @@ $ampRoutes = function () {
         Route::any('/vacancies', ['as' => 'amp.front.vacancies', 'uses' => 'AmpController@vacancies']);
         Route::any('/turkish-citizenship', ['as' => 'amp.front.turkish_citizenship', 'uses' => 'AmpController@turkish_citizenship']);
         Route::any('/investment-turkey-istanbul', ['as' => 'amp.front.investment', 'uses' => 'AmpController@investment']);
-        Route::any('/living-turkey-real-estate-ownership', ['as' => 'amp.front.living_turkey', 'uses' => 'AmpController@living_turkey']);
         Route::any('/faq', ['as' => 'amp.front.faq', 'uses' => 'AmpController@faq']);
         Route::any('/story', ['as' => 'amp.front.stories', 'uses' => 'AmpController@stories']);
         Route::any('/legal-affairs-turkey', ['as' => 'amp.front.legal', 'uses' => 'AmpController@legal']);
@@ -327,30 +326,25 @@ $pageRoutes = function () {
         Route::any('/{id?}', ['as' => 'front.chat', 'uses' => 'HomeController@chat_index']);
     });
 
-    Route::any('/landing-tourism', ['as' => 'front.landing_tourism', 'uses' => 'HomeController@landing_tourism']);
-    Route::any('/{slug}-districts', ['as' => 'front.districts', 'uses' => 'HomeController@districts']);
-    Route::any('/{slug}-districts/{region_slug}', ['as' => 'front.districts', 'uses' => 'HomeController@district_detail']);
+    // Keep the fixed tourism URL ahead of the generic landing slug.
+    Route::any('/landing/tourism', ['as' => 'front.landing_tourism', 'uses' => 'HomeController@landing_tourism']);
+    Route::any('/{slug}', ['as' => 'front.districts', 'uses' => 'HomeController@districts'])->where('slug', 'istanbul|bursa|antalya|kocaali');
+    Route::any('/{region_slug}', ['as' => 'front.district_detail', 'uses' => 'HomeController@district_detail'])->where('region_slug', 'basaksehir|beylikduzu|bahcesehir|esenyurt|zeytinburnu');
     Route::any('/rating/{lead}/{hash}', ['as' => 'front.rating', 'uses' => 'HomeController@rating']);
     Route::get('/tag/{tag}', ['as' => 'front.tag', 'uses' => 'HomeController@tag']);
     Route::any('/story/{slug?}', ['as' => 'front.stories', 'uses' => 'HomeController@stories']);
     Route::get('/resale/{id}', ['as' => 'front.resale_details', 'uses' => 'HomeController@resale_details']);
     Route::any('/media/{slug}', ['as' => 'front.project_data', 'uses' => 'HomeController@project_data']);
     Route::any('/360/{id}', ['as' => 'front.p360', 'uses' => 'HomeController@p360']);
-    Route::any('/turkish-citizenship', ['as' => 'front.turkish_citizenship', 'uses' => 'HomeController@turkish_citizenship']);
-    Route::any('/landing/{slug}', ['as' => 'front.landingpage', 'uses' => 'HomeController@landingpage_show']);
-    Route::any('/landing2/{slug}', ['as' => 'front.landing2', 'uses' => 'HomeController@landing2']);
-    Route::any('/landing3/{slug}', ['as' => 'front.landing3', 'uses' => 'HomeController@landing3']);
-    Route::any('/landing4/{slug}', ['as' => 'front.landing4', 'uses' => 'HomeController@landing4']);
-    Route::any('/landing5/{slug}', ['as' => 'front.landing5', 'uses' => 'HomeController@landing5']);
-    Route::any('/landing-{slug}', ['as' => 'front.landing.newlandingpage', 'uses' => 'HomeController@newlandingpage']);
+    Route::any('/citizenship', ['as' => 'front.turkish_citizenship', 'uses' => 'HomeController@turkish_citizenship']);
+    Route::any('/landing/{slug}', ['as' => 'front.landingpage', 'uses' => 'HomeController@landing_show']);
     Route::any('/qr', ['as' => 'front.qr', 'uses' => 'HomeController@qr']);
     Route::any('/contact', ['as' => 'front.contact', 'uses' => 'HomeController@contact']);
     Route::any('/video/{slug?}', ['as' => 'front.video', 'uses' => 'HomeController@video']);
-    Route::any('/investment-turkey-istanbul', ['as' => 'front.investment', 'uses' => 'HomeController@investment']);
+    Route::any('/investment', ['as' => 'front.investment', 'uses' => 'HomeController@investment']);
     Route::any('/faq', ['as' => 'front.faq', 'uses' => 'HomeController@faq']);
     Route::any('/faq-show/{slug}', ['as' => 'front.faq_show', 'uses' => 'HomeController@faq_show']);
-    Route::any('/living-turkey-real-estate-ownership', ['as' => 'front.living_turkey', 'uses' => 'HomeController@living_turkey']);
-    Route::any('/legal-affairs-turkey', ['as' => 'front.legal', 'uses' => 'HomeController@legal']);
+    Route::any('/legal-affairs', ['as' => 'front.legal', 'uses' => 'HomeController@legal']);
     Route::get('/agents/{slug}', ['as' => 'front.agent', 'uses' => 'HomeController@agent']);
     Route::get('/privacy-policy', ['as' => 'front.privacy', 'uses' => 'HomeController@privacy']);
     Route::get('/terms-of-use', ['as' => 'front.terms', 'uses' => 'HomeController@terms']);
@@ -358,7 +352,6 @@ $pageRoutes = function () {
     Route::get('/about-us', ['as' => 'front.aboutus', 'uses' => 'HomeController@about_us']);
     Route::get('/resale', ['as' => 'front.resale', 'uses' => 'HomeController@resale']);
     Route::get('/turkish-nationality', ['as' => 'front.turkish_nationality', 'uses' => 'HomeController@turkish_nationality']);
-    Route::get('/turkey-territories', ['as' => 'front.turkey_territories', 'uses' => 'HomeController@turkey_territories']);
     Route::get('/turkey-guide', ['as' => 'front.turkey_guide', 'uses' => 'HomeController@turkey_guide']);
     Route::get('/sitemap', ['as' => 'front.sitemap_html', 'uses' => 'HomeController@sitemap_html']);
     Route::get('/vacancies', ['as' => 'front.vacancies', 'uses' => 'HomeController@vacancies']);
@@ -374,10 +367,12 @@ $pageRoutes = function () {
         'uses' => 'HomeController@search',
         'where' => ['type' => '^(?!damas-administrator$|webhooks$)[^/]+'],
     ]);
-    Route::get('/{slug}', [
+    Route::get('/{redirect_slug}', [
         'as' => 'front.redirect_url',
         'uses' => 'HomeController@redirect_url',
-        'where' => ['slug' => '^(?!damas-administrator$|webhooks$)[^/]+'],
+        'where' => [
+            'redirect_slug' => '^(?!damas-administrator$|webhooks$)[^/]+'
+        ],
     ]);
 };
 

@@ -18,6 +18,17 @@ class RedirectToLocalePrefix
         $locale = LaravelLocalization::getDefaultLocale();
         $path = trim($request->path(), '/');
 
+        // Retired landing URLs must be 404s, including before locale redirects
+        // and page-cache hits. Otherwise the legacy search catchall can serve them.
+        $landingPath = $path;
+        $segments = explode('/', $path, 2);
+        if (in_array($segments[0], LaravelLocalization::getSupportedLanguagesKeys())) {
+            $landingPath = isset($segments[1]) ? $segments[1] : '';
+        }
+        if (preg_match('#^(?:landing[2-5](?:/|$)|landing-[^/]*(?:/|$))#', $landingPath)) {
+            abort(404);
+        }
+
         if ($direction === 'strip') {
             if ($path === $locale || $path === '') {
                 $target = '/';

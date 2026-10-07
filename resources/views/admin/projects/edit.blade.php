@@ -11,6 +11,13 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/5.0.1/js/plugins/piexif.min.js" type="text/javascript"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/5.0.1/js/fileinput.min.js"></script>
 <style>
+    .not-50 {
+        width: 100% !important;
+    }
+    .project-fields > fieldset {
+        clear: both;
+        margin-bottom: 20px;
+    }
     .file-preview {
         border: 0px;
         padding: 0px;
@@ -68,11 +75,6 @@
         color: red;
         opacity: 1;
     }
-    .relatedArticlesEn .select2-choices{
-        min-height: 109px;
-        max-height: 109px;
-        overflow-y: auto;
-    }
     .remove-video-ajax {
         position: absolute;
         right: -13px;
@@ -105,17 +107,11 @@
 
             <!-- Section Arabic -->
             <div class="tab-pane fade in active" id="tab1default">
-                <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
-                    <div class="panel panel-default">
-                        <div class="panel-heading" role="tab" id="headingOne">
-                            <h4 class="panel-title">
-                                <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                                    Basic Information
-                                </a>
-                            </h4>
-                        </div>
-                        <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
-                            <div class="panel-body">
+                <div class="project-fields clearfix">
+                    
+                        
+                        
+                            
                                 <!--                                <div class="col-md-12">
                                                                     <h2 class="new-title">Basic Information</h2>
                                                                 </div>-->
@@ -165,6 +161,7 @@
                                                 </div>
                                             </div>
                                             <div class="form-group col-md-4">
+                                            <?php /*
                                                 <div class="form-group">
                                                     <label>Old Slug</label>
                                                     <div class="input-group ltr">
@@ -173,11 +170,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="form-group col-md-1">
-                                                <div class="form-group">
-                                                    <label class="enabled-project"><input type="checkbox" name="published" <?= $row->published == 1 ? 'checked' : ''; ?>> Enabled</label>
-                                                </div>
-                                            </div>
+                                            */ ?>
 
                                         </div>
                                     </div>
@@ -264,31 +257,8 @@
                                     <div class="col-md-12">
                                         <div class="row">
 
-                                            <div class="col-md-6">
-                                                <div class="form-group">
-                                                    <label>Similar Projects</label>
-                                                    <select name="similar_projects[]" class="form-control select2me" multiple>
-                                                        <option value=""></option>
-                                                        @foreach(Helper::query("Project", "all") as $prj)
-                                                        <option value="<?= $prj->id; ?>" <?= in_array($prj->id, explode(",", $row->similar_projects)) ? 'selected' : ''; ?>><?= $prj->name_ar; ?></option>
-                                                        @endforeach
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="form-group">
-                                                    <label>Related Articles</label>
-                                                    <select name="post_id[]" class="form-control select2me" multiple>
-                                                        <option value=""></option>
-                                                        <?php
-                                                        $posts = \App\Models\Post::where("published", 1)->where('title_ar', '!=', '')->get();
-                                                        ?>
-                                                        @foreach($posts as $post)
-                                                        <option value="<?= $post->id; ?>" <?= in_array($post->id, $row->posts()->lists('post_id')->toArray()) ? 'selected' : ''; ?>><?= $post->title_ar; ?></option>
-                                                        @endforeach
-                                                    </select>
-                                                </div>
-                                            </div>
+                                            
+                                            
 
                                         </div>
                                     </div>
@@ -307,6 +277,20 @@
                                                         @endforeach
                                                     </select>
                                                 </div>
+                                            </div>
+                                            <div class="form-group col-md-1">
+                                                <div class="form-group">
+                                                    <label class="enabled-project"><input type="checkbox" name="published" <?= $row->published == 1 ? 'checked' : ''; ?>> Enabled</label>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Facilities</label>
+                                                <select name="feature_id[]" class="form-control select2me" multiple>
+                                                    <option value=""></option>
+                                                    @foreach(Helper::query("ProjectFeature", "all") as $feature)
+                                                    <option value="<?= $feature->id; ?>" <?= in_array($feature->id, $row->features()->lists('project_feature_id')->toArray()) ? 'selected' : ''; ?>><?= $feature->name_ar; ?></option>
+                                                    @endforeach
+                                                </select>
                                             </div>
                                         </div>
                                     </div>
@@ -368,43 +352,27 @@
 
 
                                 </fieldset>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="panel panel-default">
-                        <div class="panel-heading" role="tab" id="headingTwo">
-                            <h4 class="panel-title">
-                                <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                                    Overview & Details
-                                </a>
-                            </h4>
-                        </div>
-                        <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
-                            <div class="panel-body">
+                            
+                        
+                    
+                    
+                        
+                        
+                            
                                 <fieldset class="background-section">
 
-                                    <div class="col-md-6">
+                                    <div class="col-md-6 not-50">
                                         <!--                                        <div class="form-group">
                                                                                     <label>Intro</label>
                                         <?= Form::textarea("intro_features_ar", $row->intro_features_ar, ["class" => "form-control text-align-right", "rows" => 4]); ?>
                                                                                 </div>-->
                                         <div class="form-group">
                                             <label>Overview</label>
-                                            <?= Form::textarea("intro_location_ar", $row->intro_location_ar, ["class" => "form-control text-align-right", "rows" => 5]); ?>
+                                            <?= Form::textarea("intro_location_ar", $row->intro_location_ar, ["class" => "form-control text-align-right project-overview-editor project-overview-rtl", "rows" => 5]); ?>
                                         </div>
                                     </div>
 
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label>Facilities</label>
-                                            <select name="feature_id[]" class="form-control select2me" multiple>
-                                                <option value=""></option>
-                                                @foreach(Helper::query("ProjectFeature", "all") as $feature)
-                                                <option value="<?= $feature->id; ?>" <?= in_array($feature->id, $row->features()->lists('project_feature_id')->toArray()) ? 'selected' : ''; ?>><?= $feature->name_ar; ?></option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                    </div>
+                                    
 
                                     <hr>
 
@@ -440,9 +408,9 @@
                                                                         </div>-->
 
                                 </fieldset>
-                            </div>
-                        </div>
-                    </div>
+                            
+                        
+                    
 
 
 
@@ -550,16 +518,10 @@
                       </div>
                       </div>
                       <?php */ ?>
-                    <div class="panel panel-default">
-                        <div class="panel-heading" role="tab" id="headingFour">
-                            <h4 class="panel-title">
-                                <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
-                                    Location & Metatag
-                                </a>
-                            </h4>
-                        </div>
-                        <div id="collapseFour" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingFour">
-                            <div class="panel-body">
+                    
+                        
+                        
+                            
                                 <fieldset class="background-section">
                                     <div class="col-md-12">
                                     </div>
@@ -599,19 +561,13 @@
                                         </div>
                                     </div>
                                 </fieldset>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="panel panel-default">
-                        <div class="panel-heading" role="tab" id="headingSeven">
-                            <h4 class="panel-title">
-                                <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseSeven" aria-expanded="false" aria-controls="collapseSeven">
-                                    Project Data
-                                </a>
-                            </h4>
-                        </div>
-                        <div id="collapseSeven" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingSeven">
-                            <div class="panel-body">
+                            
+                        
+                    
+                    
+                        
+                        
+                            
                                 <fieldset class="background-section">
                                     <div class="col-md-4">
                                         <div class="form-group">
@@ -940,25 +896,19 @@
 
 
                                 </fieldset>
-                            </div>
-                        </div>
-                    </div>
+                            
+                        
+                    
                 </div>
             </div>
 
             <!-- Section English -->
             <div class="tab-pane fade" id="tab2default">
-                <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
-                    <div class="panel panel-default">
-                        <div class="panel-heading" role="tab" id="headingFive">
-                            <h4 class="panel-title">
-                                <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFive" aria-expanded="true" aria-controls="collapseFive">
-                                    Basic Information
-                                </a>
-                            </h4>
-                        </div>
-                        <div id="collapseFive" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingFive">
-                            <div class="panel-body">
+                <div class="project-fields clearfix">
+                    
+                        
+                        
+                            
                                 <fieldset class="background-section">
                                     <div class="col-md-12">
                                         <div class="row">
@@ -979,7 +929,7 @@
                                         </div>
                                         <div class="form-group">
                                             <label>Overview</label>
-                                            <?= Form::textarea("intro_location_en", $row->intro_location_en, ["class" => "form-control ltr", "rows" => 5]); ?>
+                                            <?= Form::textarea("intro_location_en", $row->intro_location_en, ["class" => "form-control ltr project-overview-editor project-overview-ltr", "rows" => 5]); ?>
                                         </div>
                                         <!--                                        <div class="form-group">
                                                                                     <label>Salesman</label>
@@ -991,20 +941,7 @@
                                                                                     </select>
                                                                                 </div>-->
                                     </div>
-                                    <div class="col-md-6">
-                                        <div class="form-group relatedArticlesEn">
-                                            <label>Related Articles</label>
-                                            <select name="post_en_id[]" class="form-control select2me" multiple>
-                                                <option value=""></option>
-                                                <?php
-                                                $posts = \App\Models\Post::where("published", 1)->where('title_en', '!=', '')->get();
-                                                ?>
-                                                @foreach($posts as $post)
-                                                <option value="<?= $post->id; ?>" <?= in_array($post->id, $row->postsEn()->lists('post_id')->toArray()) ? 'selected' : ''; ?>><?= $post->title_en; ?></option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                    </div>
+                                    
 
 
                                     <div class="col-md-12">
@@ -1039,9 +976,9 @@
                                                                         </div>-->
 
                                 </fieldset>
-                            </div>
-                        </div>
-                    </div>
+                            
+                        
+                    
                     <!--                    <div class="panel panel-default">
                                             <div class="panel-heading" role="tab" id="headingSix">
                                                 <h4 class="panel-title">
@@ -1057,7 +994,7 @@
                                                         <div class="col-md-12">
                                                             <div class="form-group">
                                                                 <label>Overview</label>
-                    <?= Form::textarea("intro_location_en", $row->intro_location_en, ["class" => "form-control ltr", "rows" => 5]); ?>
+                    <?= Form::textarea("intro_location_en", $row->intro_location_en, ["class" => "form-control ltr project-overview-editor project-overview-ltr", "rows" => 5]); ?>
                                                             </div>
                                                         </div>
                                                         <div class="col-md-6">
@@ -1099,17 +1036,11 @@
 
             <!-- Section French -->
             <div class="tab-pane fade" id="tab3default">
-                <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
-                    <div class="panel panel-default">
-                        <div class="panel-heading" role="tab" id="headingFive">
-                            <h4 class="panel-title">
-                                <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFive2" aria-expanded="true" aria-controls="collapseFive">
-                                    Basic Information
-                                </a>
-                            </h4>
-                        </div>
-                        <div id="collapseFive2" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingFive">
-                            <div class="panel-body">
+                <div class="project-fields clearfix">
+                    
+                        
+                        
+                            
                                 <fieldset class="background-section">
                                     <div class="col-md-6">
                                         <div class="form-group">
@@ -1119,7 +1050,7 @@
                                         <div class="col-md-12">
                                             <div class="form-group">
                                                 <label>Overview</label>
-                                                <?= Form::textarea("intro_location_fr", $row->intro_location_fr, ["class" => "form-control ltr", "rows" => 5]); ?>
+                                                <?= Form::textarea("intro_location_fr", $row->intro_location_fr, ["class" => "form-control ltr project-overview-editor project-overview-ltr", "rows" => 5]); ?>
                                             </div>
                                         </div>
                                         <!--                                        <div class="form-group">
@@ -1132,20 +1063,7 @@
                                                                                     </select>
                                                                                 </div>-->
                                     </div>
-                                    <div class="col-md-6">
-                                        <div class="form-group relatedArticlesEn">
-                                            <label>Related Articles</label>
-                                            <select name="post_fr_id[]" class="form-control select2me" multiple>
-                                                <?php
-                                                $posts = \App\Models\Post::where("published", 1)->where('title_fr', '!=', '')->get();
-                                                ?>
-                                                <option value=""></option>
-                                                @foreach($posts as $post)
-                                                <option value="<?= $post->id; ?>" <?= in_array($post->id, $row->postsFr()->lists('post_id')->toArray()) ? 'selected' : ''; ?>><?= $post->title_fr; ?></option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                    </div>
+                                    
 
                                     <div class="col-md-12">
                                         <div class="form-group">
@@ -1179,25 +1097,19 @@
                                     </div>-->
 
                                 </fieldset>
-                            </div>
-                        </div>
-                    </div>
+                            
+                        
+                    
 
                 </div>
             </div>
             <!-- Section Farisi -->
             <div class="tab-pane fade" id="tab4default">
-                <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
-                    <div class="panel panel-default">
-                        <div class="panel-heading" role="tab" id="headingFiveA">
-                            <h4 class="panel-title">
-                                <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFive2A" aria-expanded="true" aria-controls="collapseFive">
-                                    Basic Information
-                                </a>
-                            </h4>
-                        </div>
-                        <div id="collapseFive2A" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingFiveA">
-                            <div class="panel-body">
+                <div class="project-fields clearfix">
+                    
+                        
+                        
+                            
                                 <fieldset class="background-section">
                                     <div class="col-md-6">
                                         <div class="form-group">
@@ -1207,7 +1119,7 @@
                                         <div class="col-md-12">
                                             <div class="form-group">
                                                 <label>Overview</label>
-                                                <?= Form::textarea("intro_location_fa", $row->intro_location_fa, ["class" => "form-control rtl text-align-right", "rows" => 5]); ?>
+                                                <?= Form::textarea("intro_location_fa", $row->intro_location_fa, ["class" => "form-control rtl text-align-right project-overview-editor project-overview-rtl", "rows" => 5]); ?>
                                             </div>
                                         </div>
                                         <!--                                        <div class="form-group">
@@ -1220,20 +1132,7 @@
                                                                                     </select>
                                                                                 </div>-->
                                     </div>
-                                    <div class="col-md-6">
-                                        <div class="form-group relatedArticlesEn">
-                                            <label>Related Articles</label>
-                                            <select name="post_fr_id[]" class="form-control select2me" multiple>
-                                                <?php
-                                                $posts = \App\Models\Post::where("published", 1)->where('title_fa', '!=', '')->get();
-                                                ?>
-                                                <option value=""></option>
-                                                @foreach($posts as $post)
-                                                <option value="<?= $post->id; ?>" <?= in_array($post->id, $row->postsFr()->lists('post_id')->toArray()) ? 'selected' : ''; ?>><?= $post->title_fr; ?></option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                    </div>
+                                    
 
                                     <div class="col-md-12">
                                         <div class="form-group">
@@ -1260,20 +1159,7 @@
 
 
                                     <?php /*
-                                      <div class="col-md-6">
-                                      <div class="form-group relatedArticlesEn">
-                                      <label>Related Articles</label>
-                                      <select name="post_fa_id[]" class="form-control select2me" multiple>
-                                      <?php
-                                      $posts = \App\Models\Post::where("published", 1)->where('title_fa','!=','')->get();
-                                      ?>
-                                      <option value=""></option>
-                                      @foreach($posts as $post)
-                                      <option value="<?= $post->id; ?>" <?= in_array($post->id, $row->postsFa()->lists('post_id')->toArray()) ? 'selected' : ''; ?>><?= $post->title_fa; ?></option>
-                                      @endforeach
-                                      </select>
-                                      </div>
-                                      </div> */ ?>
+                                       */ ?>
                                     <!--<div class="col-md-6" style="display:none">
                                         <div class="form-group">
                                             <label>Payment Method</label>
@@ -1282,9 +1168,9 @@
                                     </div>-->
 
                                 </fieldset>
-                            </div>
-                        </div>
-                    </div>
+                            
+                        
+                    
 
                 </div>
             </div>
@@ -1292,17 +1178,11 @@
 			
             <!-- Section Russian -->
             <div class="tab-pane fade" id="tab5default">
-                <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
-                    <div class="panel panel-default">
-                        <div class="panel-heading" role="tab" id="headingFiveA">
-                            <h4 class="panel-title">
-                                <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFive2A" aria-expanded="true" aria-controls="collapseFive">
-                                    Basic Information
-                                </a>
-                            </h4>
-                        </div>
-                        <div id="collapseFive2A" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingFiveA">
-                            <div class="panel-body">
+                <div class="project-fields clearfix">
+                    
+                        
+                        
+                            
                                 <fieldset class="background-section">
                                     <div class="col-md-6">
                                         <div class="form-group">
@@ -1312,7 +1192,7 @@
                                         <div class="col-md-12">
                                             <div class="form-group">
                                                 <label>Overview</label>
-                                                <?= Form::textarea("intro_location_ru", $row->intro_location_ru, ["class" => "form-control rtl text-align-right", "rows" => 5]); ?>
+                                                <?= Form::textarea("intro_location_ru", $row->intro_location_ru, ["class" => "form-control rtl text-align-right project-overview-editor project-overview-ltr", "rows" => 5]); ?>
                                             </div>
                                         </div>
                                         <!--                                        <div class="form-group">
@@ -1325,20 +1205,7 @@
                                                                                     </select>
                                                                                 </div>-->
                                     </div>
-                                    <div class="col-md-6">
-                                        <div class="form-group relatedArticlesEn">
-                                            <label>Related Articles</label>
-                                            <select name="post_fr_id[]" class="form-control select2me" multiple>
-                                                <?php
-                                                $posts = \App\Models\Post::where("published", 1)->where('title_ru', '!=', '')->get();
-                                                ?>
-                                                <option value=""></option>
-                                                @foreach($posts as $post)
-                                                <option value="<?= $post->id; ?>" <?= in_array($post->id, $row->postsFr()->lists('post_id')->toArray()) ? 'selected' : ''; ?>><?= $post->title_fr; ?></option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                    </div>
+                                    
 
                                     <div class="col-md-12">
                                         <div class="form-group">
@@ -1365,20 +1232,7 @@
 
 
                                     <?php /*
-                                      <div class="col-md-6">
-                                      <div class="form-group relatedArticlesEn">
-                                      <label>Related Articles</label>
-                                      <select name="post_ru_id[]" class="form-control select2me" multiple>
-                                      <?php
-                                      $posts = \App\Models\Post::where("published", 1)->where('title_ru','!=','')->get();
-                                      ?>
-                                      <option value=""></option>
-                                      @foreach($posts as $post)
-                                      <option value="<?= $post->id; ?>" <?= in_array($post->id, $row->postsFa()->lists('post_id')->toArray()) ? 'selected' : ''; ?>><?= $post->title_ru; ?></option>
-                                      @endforeach
-                                      </select>
-                                      </div>
-                                      </div> */ ?>
+                                       */ ?>
                                     <!--<div class="col-md-6" style="display:none">
                                         <div class="form-group">
                                             <label>Payment Method</label>
@@ -1387,9 +1241,9 @@
                                     </div>-->
 
                                 </fieldset>
-                            </div>
-                        </div>
-                    </div>
+                            
+                        
+                    
 
                 </div>
             </div>
@@ -1402,6 +1256,48 @@
 
 <!-- media js -->
 @include('admin.layouts.media_input_js')
+
+<!-- Project overview rich-text editors (use the existing TinyMCE installation). -->
+<script src="<?= asset('tinymce/tinymce.min.js'); ?>"></script>
+<script>
+    $(function () {
+        // Preserve the line-by-line list format of overviews saved before TinyMCE.
+        $('.project-overview-editor').each(function () {
+            var value = $(this).val() || '';
+            if (!$.trim(value) || /<[a-z][^>]*>/i.test(value)) return;
+            var items = [];
+            $.each(value.split(/\r\n|\r|\n/), function (_, line) {
+                line = $.trim(line).replace(/^•\s*/, '');
+                if (line) items.push('<li>' + $('<div>').text(line).html() + '</li>');
+            });
+            $(this).val(items.length ? '<ul>' + items.join('') + '</ul>' : '');
+        });
+
+        $.each(['rtl', 'ltr'], function (_, direction) {
+            tinymce.init({
+                selector: '.project-overview-' + direction,
+                language: 'en',
+                directionality: direction,
+                height: 250,
+                menubar: true,
+                relative_urls: false,
+                remove_script_host: false,
+                plugins: [
+                    'advlist autolink lists link charmap preview hr anchor',
+                    'searchreplace wordcount visualchars code fullscreen',
+                    'nonbreaking table contextmenu directionality',
+                    'paste textcolor colorpicker textpattern'
+                ],
+                toolbar1: 'undo redo | bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | bullist numlist | outdent indent | link unlink | forecolor backcolor | fontsizeselect | code fullscreen'
+            });
+        });
+
+        $('.project-overview-editor').closest('form').on('submit', function () {
+            tinymce.triggerSave();
+        });
+    });
+</script>
+
 
 <script>
     $(function () {
@@ -1474,12 +1370,7 @@
     });
 
 
-    $('.panel-collapse').on('shown.bs.collapse', function (e) {
-        var $panel = $(this).closest('.panel');
-        $('html,body').animate({
-            scrollTop: $panel.offset().top
-        }, 500);
-    });
+
 
 
 

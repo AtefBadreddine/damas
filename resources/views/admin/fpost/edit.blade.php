@@ -1,4 +1,4 @@
-@extends('admin.layouts.form', ["app_title" => "Featured Posts"])
+@extends('admin.layouts.form', ["app_title" => "Similar Posts"])
 @section('main_form')
 
 <fieldset>

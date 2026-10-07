@@ -7,7 +7,11 @@
             "name_ar"   =>   "Name Arabic",
             "name_en"   =>   "Name English",
             "country_id|Country|name_en" => "Country",
-            "slug"      =>   "Slug"
+            "slug"      =>   "Slug",
+			"project_impressions" => "Impressions",
+            "project_clicks" => "Clicks",
+            "project_ctr" => "CTR",
+            "project_position" => "Position",
         ];
     ?>
     @include("admin.layouts.table", [

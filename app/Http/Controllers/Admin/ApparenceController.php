@@ -269,7 +269,16 @@ class ApparenceController extends BaseController
     {
         $menu = Helper::query("FooterLink", "find", ["id" => $id]);
         if ( $request->isMethod('post') ) {
-			
+// 			dd([
+//                 'editing_id' => $id,
+//                 'submitted' => $request->only([
+//                     'title_ar',
+//                     'link_type',
+//                     'country_id',
+//                     'placement',
+//                     'save_projs',
+//                 ]),
+//             ]);
             if(isset($_POST['save_projs'])){
 				
 				
@@ -325,7 +334,6 @@ class ApparenceController extends BaseController
 				if ( $link_type != "url" ) {
 					$inputs["link"] = Helper::get_link_url($link_type, $link_value);
 				}
-				
 				Helper::query("FooterLink", "save", [
 					"inputs"    =>  $inputs,
 					"id"        =>  $id,

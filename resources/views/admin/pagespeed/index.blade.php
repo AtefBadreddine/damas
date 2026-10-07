@@ -6,17 +6,24 @@
 
 <?php
 
-$urls = [
-    'https://damas.net/',
-    'https://damas.net/property-for-sale/oman',
-    'https://damas.net/property-for-sale/muscat',
-    'https://damas.net/property-for-sale/turkey',
-    'https://damas.net/property-for-sale/istanbul',
-    'https://damas.net/property-for-sale/muscat/sultan-haitham-city',
-    'https://damas.net/blog/how-to-get-turkish-citizenship-through-real-estate'
-    
-    // throw the remaining magnificent URLs here
-];
+$urlGroups = ['ar' => [], 'en' => []];
+
+$countryRows = \DB::table('countries')->where('show', '1')->get(['slug']);
+$cityRows = \DB::table('cities')->get(['slug', 'country_id']);
+
+foreach ($countryRows as $countryObj) {
+    $urlGroups['ar'][] = 'https://damas.net/ar/' . $countryObj->slug;
+    $urlGroups['en'][] = 'https://damas.net/en/' . $countryObj->slug;
+}
+
+foreach ($cityRows as $cityObj) {
+    $correspondingCountry = \DB::table('countries')->where('id', $cityObj->country_id)->first();
+    if($correspondingCountry->show == '0'){
+        continue;
+    }
+    $urlGroups['ar'][] = 'https://damas.net/ar/' . $correspondingCountry->slug . '/' . $cityObj->slug;
+    $urlGroups['en'][] = 'https://damas.net/en/' . $correspondingCountry->slug . '/' . $cityObj->slug;
+}
 
 ?>
 
@@ -40,7 +47,7 @@ $urls = [
         opacity: .45;
     }
 
-    #pagespeed-table td {
+    .pagespeed-table td {
         vertical-align: middle;
     }
 </style>
@@ -55,7 +62,21 @@ $urls = [
 </div>
 
 
-<table class="table table-bordered table-striped" id="pagespeed-table">
+<ul class="nav nav-tabs" style="margin-bottom: 15px;">
+    @foreach ($urlGroups as $group => $urls)
+        <li class="{{ $group === 'ar' ? 'active' : '' }}">
+            <a href="#psi-{{ $group }}" data-toggle="tab">
+                {{ $group === 'ar' ? 'Arabic' : 'English' }} ({{ count($urls) }})
+            </a>
+        </li>
+    @endforeach
+</ul>
+
+<div class="tab-content">
+    @foreach ($urlGroups as $group => $urls)
+        <div id="psi-{{ $group }}" class="tab-pane {{ $group === 'ar' ? 'active' : '' }}">
+
+<table class="table table-bordered table-striped pagespeed-table">
 
     <thead>
     <tr>
@@ -74,15 +95,15 @@ $urls = [
 
     <tbody>
 
-    <?php foreach ($urls as $i => $url) { ?>
+    @foreach ($urls as $i => $url)
 
-        <tr data-url="<?= $url ?>">
+        <tr data-url="{{ $url }}">
 
-            <td><?= $i + 1 ?></td>
+            <td>{{ $i + 1 }}</td>
 
             <td>
-                <a href="<?= $url ?>" target="_blank">
-                    <?= $url ?>
+                <a href="{{ $url }}" target="_blank">
+                    {{ $url }}
                 </a>
             </td>
 
@@ -97,11 +118,14 @@ $urls = [
 
         </tr>
 
-    <?php } ?>
+    @endforeach
 
     </tbody>
 
 </table>
+        </div>
+    @endforeach
+</div>
 
 
 <script>
@@ -112,7 +136,7 @@ document
 
         var button = this;
         var progress = document.getElementById('pagespeed-progress');
-        var rows = document.querySelectorAll('#pagespeed-table tbody tr');
+        var rows = document.querySelectorAll('.tab-pane.active .pagespeed-table tbody tr');
 
         button.disabled = true;
 

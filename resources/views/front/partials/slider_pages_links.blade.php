@@ -122,19 +122,21 @@
 
             <div class="item swiper-slide">
                 <div class="cont shadow_type">
-                    <a class="link" href="/<?= $current_lang ?>/istanbul-districts" title="<?= trans("front.DistrictsIstanbul"); ?>">
+                    <a class="link" href="{{ route('front.districts', ['slug' => 'istanbul']) }}" title="<?= trans("front.DistrictsIstanbul"); ?>">
                         <img class="" alt="<?= trans("front.DistrictsIstanbul"); ?>" title="<?= trans("front.DistrictsIstanbul"); ?>" src="/img/pages-links/istanbul-districts.jpg" width="200" height="150"> 
                     </a>
-                    <a class="title" href="/<?= $current_lang ?>/istanbul-districts" title="<?= trans("front.DistrictsIstanbul"); ?>"> <p><?= trans("front.DistrictsIstanbul"); ?></p> </a>
+                    <a class="title" href="{{ route('front.districts', ['slug' => 'istanbul']) }}" title="<?= trans("front.DistrictsIstanbul"); ?>"> <p><?= trans("front.DistrictsIstanbul"); ?></p> </a>
                 </div> 
             </div> 
 
             <div class="item swiper-slide">
                 <div class="cont shadow_type">
-                    <a class="link" href="{{ route('front.living_turkey') }}" title="<?= trans("front.LivingTurkey2"); ?>">
+                    <!--route('front.living_turkey')-->
+                    <a class="link" title="<?= trans("front.LivingTurkey2"); ?>">
                         <img class="" alt="<?= trans("front.LivingTurkey2"); ?>" title="<?= trans("front.LivingTurkey2"); ?>" src="/img/pages-links/living.jpg" width="200" height="150"> 
                     </a>
-                    <a class="title" href="{{ route('front.living_turkey') }}" title="<?= trans("front.LivingTurkey2"); ?>"> <p><?= trans("front.LivingTurkey2"); ?></p> </a>
+                    <!--route('front.living_turkey')-->
+                    <a class="title" title="<?= trans("front.LivingTurkey2"); ?>"> <p><?= trans("front.LivingTurkey2"); ?></p> </a>
                 </div> 
             </div> 
 

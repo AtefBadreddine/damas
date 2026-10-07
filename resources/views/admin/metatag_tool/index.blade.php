@@ -143,7 +143,7 @@
         'seo_title_en',
         'seo_description_ar',
         'seo_description_en',
-        'country'
+        'country_id'
     )->get();
     $projects = \DB::table('projects')->select(
         'id',
@@ -361,14 +361,14 @@
                     @endforeach
                     @foreach($posts as $post)
                     <?php
-                        $postCountryCode = $post->countryRel ? $post->countryRel->code : '';
+                        $countryObj = \DB::table('countries')->where('id', $post->country_id)->first();
                         $link = "https://damas.net/"
-                            . ($language === 'en' ? 'en/' : '')
-                            . ($postCountryCode === 'oman' ? 'oman/' : '')
+                            . ($language === 'en' ? 'en/' : 'ar/')
+                            . $countryObj->slug . '/'
                             . "blog/"
                             . $post->slug;
                     ?>
-                    <tr data-country="{{ strtolower($postCountryCode) }}" rowType="post" data-id="{{ $post->id }}">
+                    <tr data-country="{{ strtolower($countryObj->name_en) }}" rowType="post" data-id="{{ $post->id }}">
                         <td>{{ $counter }}</td>
                         <td class="http-status">
                             <?php 

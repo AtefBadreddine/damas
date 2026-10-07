@@ -64,6 +64,25 @@ $arr_rooms = [
 
 @endsection
 
+<style>
+    .content_section .cont {
+        height: auto !important;
+        max-height: 350px !important;
+        overflow: hidden;
+        transition: none !important;
+    }
+    
+    .content_section.is-expanded .cont {
+        max-height: none !important;
+    }
+    
+    .content_section .action_content {
+        margin-top: 0 !important;
+        padding-top: 12px !important;
+        background: transparent !important;
+    }
+</style>
+
 
 @extends('front.layout', [
 'hide_main_js'=>true,
@@ -222,7 +241,7 @@ if (isset($inputs["seo_title"])) {
 								
 								if($html!=''){
 								
-$doc = new \DOMDocument();
+                                $doc = new \DOMDocument();
 
                         $html = mb_convert_encoding($html, 'HTML-ENTITIES', 'UTF-8');
                         @$doc->loadHTML($html);
@@ -423,8 +442,12 @@ function getVals() {
     }
 
     let displayElement = parent.getElementsByClassName("rangeValues")[0];
-    displayElement.innerHTML = "$" + slide1 + " - $" + slide2;
-    $(".budget .dropdown .dropdown-toggle .number").text("$" + slide1 + " - $" + slide2);
+    let formatted1 = String(slide1).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    let formatted2 = String(slide2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    
+    displayElement.innerHTML = "$" + formatted1 + " - $" + formatted2;
+    $(".budget .dropdown .dropdown-toggle .number")
+        .text("$" + formatted1 + " - $" + formatted2);
 }
 window.onload = function () {
     let sliderSections = document.getElementsByClassName("range-slider");
@@ -610,7 +633,7 @@ var href = '';
 
         var prmin = parseInt($('#prmin').val(), 10) || 0;
         var prmax = parseInt($('#prmax').val(), 10) || 0;
-        if (prmin > 50000 || prmax < 2000000) {
+        if (prmin > 50000 || prmax < 1200000) {
             $('#price_fields').val(1);
         }
     }
@@ -1368,60 +1391,22 @@ var href = '';
      $('#callmeModal').modal('show');
      });*/
 
-    var counter = 1;
-
     $(".show_less_btn").hide();
+    
     $(document).on("click", ".show_more_btn", function () {
-
-        if (counter == 1) {
-            $('.content_section .cont').animate({'max-height': '400px'}, 200);
-            $('html, body').animate({
-                scrollTop: $('.content_section').offset().top - 100
-            }, 'slow');
-            $(".show_less_btn").show();
-            counter++;
-            return true;
-
-        } else if (counter == 2) {
-            $('.content_section .cont').animate({'max-height': '800px'}, 200);
-            $('html, body').animate({
-                scrollTop: $('.content_section').offset().top - 50
-            }, 'slow');
-            $(".show_less_btn").show();
-            counter++;
-            return true;
-
-        } else if (counter == 3) {
-            var height_div = $('.content_section .cont').css({'max-height': 'initial'}).height();
-            $('.content_section .cont').animate({'max-height': height_div}, 200);
-            $('html, body').animate({
-                scrollTop: $('.content_section').offset().top + 250
-            }, 'slow');
-            $(".show_more_btn").hide();
-            $(".show_less_btn").show();
-            $(".action_content").addClass("type_less");
-            return false;
-
-        } else {
-            counter = 1;
-            return false;
-        }
-
-
+        var $section = $(this).closest(".content_section");
+    
+        $section.addClass("is-expanded");
+        $section.find(".show_more_btn").hide();
+        $section.find(".show_less_btn").show();
     });
-
-
+    
     $(document).on("click", ".show_less_btn", function () {
-        $('.content_section .cont').animate({'max-height': '86px'}, 300);
-        $('html, body').animate({
-            scrollTop: $('.content_section').offset().top - 100
-        }, 'slow');
-        counter = 1;
-        $(".action_content").removeClass("type_less");
-        setTimeout(function () {
-            $(".show_less_btn").hide();
-            $(".show_more_btn").show();
-        }, 300);
+        var $section = $(this).closest(".content_section");
+    
+        $section.removeClass("is-expanded");
+        $section.find(".show_less_btn").hide();
+        $section.find(".show_more_btn").show();
     });
 
 /*

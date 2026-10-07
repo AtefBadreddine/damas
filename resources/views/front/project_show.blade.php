@@ -60,6 +60,14 @@ $emptypic = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABA
     <?= Html::style("https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/css/datepicker.css"); ?>
 <style>
 .send_tour_btn img.icon{max-width: 30px}
+/* Preserve TinyMCE paragraphs and list markers within the overview only. */
+.project-overview { line-height: 1.8; overflow-wrap: break-word; }
+.project-overview p { margin-bottom: 1em; }
+.project-overview ul, .project-overview ol { margin: 0 0 1em; padding-inline-start: 1.5em; }
+.project-overview ul { list-style-type: disc; }
+.project-overview ol { list-style-type: decimal; }
+.project-overview li { display: list-item; list-style-type: inherit; margin-bottom: .35em; }
+
 </style>
 @endsection
 
@@ -472,9 +480,22 @@ $flavors = $project->flavors();
 
                     <div class="sub_section">
                         <h2 class="sub_title jazzira_font_bold"><?= trans("front.facilities and features"); ?></h2>
+                        <?php $projectOverview = (string) $project->getIntoLocation(); ?>
+                        @if(preg_match('/<[a-z][^>]*>/i', $projectOverview))
+                        <div class="project-overview" dir="{{ $current_lang == 'ar' ? 'rtl' : 'ltr' }}">
+                            {!! $projectOverview !!}
+                        </div>
+                        @else
+                        <!-- Preserve existing plain-text overviews as lists. -->
                         <ul class="explained">
-                            <?= str_replace('•', '', str_replace('<br />', '</li><li>', nl2br(preg_replace("/[\r\n]+/", "\n", $project->getIntoLocation())))); ?>
+                            @foreach(preg_split('/\r\n|\r|\n/', $projectOverview) as $overviewLine)
+                                <?php $overviewLine = trim(preg_replace('/^\s*•\s*/u', '', $overviewLine)); ?>
+                                @if($overviewLine !== '')
+                                <li>{{ $overviewLine }}</li>
+                                @endif
+                            @endforeach
                         </ul>
+                        @endif
                     </div>
 
                     <ul class="features">
@@ -739,7 +760,10 @@ $flavors = $project->flavors();
                             <div class="slider video_slider" dir="<?= $current_lang === 'ar' ? 'rtl' : 'ltr' ?>">
 
                                 <div class="slider__wrap swiper-wrapper">
-                                    <?php $t = 0; ?>
+                                    <?php
+                                    $t = 0; 
+                                    $similarspost = array_reverse($similarspost);    
+                                    ?>
                                     @foreach($similarspost as $id)
                                     <?php
                                     $spost = Helper::query("Post", "find", ["id" => $id]);

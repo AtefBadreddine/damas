@@ -194,6 +194,29 @@ Route::group(['prefix' => 'damas-administrator', 'namespace' => 'Admin', 'middle
     Route::group(['prefix' => 'whatsappchat'], function () {
        Route::any('/', ['as' => 'admin.whatsapp_chat', 'uses' => 'AdminController@whatsapp_chat_index']); 
     });
+    Route::group(['prefix' => 'whatsappchat'], function () {
+        
+        Route::get('/image/{id}', [
+            'as' => 'admin.whatsappchat.image',
+            'uses' => '\App\Http\Controllers\WhatsAppMediaController@showImage',
+        ]);
+    
+        Route::get('/media/{id}', [
+            'as' => 'admin.whatsappchat.media',
+            'uses' => '\App\Http\Controllers\WhatsAppMediaController@show',
+        ]);
+    
+    });
+    // WhatsApp Templates
+    Route::get('/whatsapp_templates', [
+	'as' => 'admin.whatsapp_templates',
+	'uses' => '\App\Http\Controllers\WhatsAppApi\WhatsAppTemplateController@index',
+    ]);
+
+    Route::post('/whatsapp_templates/send', [
+	'as' => 'admin.whatsapp_templates.send',
+	'uses' => '\App\Http\Controllers\WhatsAppApi\WhatsAppTemplateController@send',
+    ]);
     // competitors
     Route::group(['prefix' => 'competitors', 'middleware' => 'checkpermission:admin.competitors'], function () {
         Route::any('/', ['as' => 'admin.competitors', 'uses' => 'AdminController@competitors_index']);

@@ -1,5 +1,7 @@
 <?php
 namespace App\Http\Controllers;
+
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 class WhatsAppWebhookController extends Controller
@@ -45,8 +47,30 @@ class WhatsAppWebhookController extends Controller
             $payload['object'] !== 'whatsapp_business_account') {
             return response('Invalid WhatsApp payload.', 400);
         }
+        $autoReplyChecks = [];
+        $autoReplyText = "
+        يسعدنا ترتيب اجتماع اونلين معكم. لتجهيز خيارات مناسبة لكم، أرسل لنا:
+•  هل تخطط للشراء قريباً؟
+•  هل تحتاج شقة أم فيلا؟ كم غرفة ؟
+•  متى الوقت المناسب للاجتماع اونلين؟
+        ";
+        $normalise = function ($text) {
+            $text = preg_replace(
+                '/[\x{200E}\x{200F}\x{061C}\x{FEFF}]/u',
+                '',
+                (string) $text
+            );
+        
+            return trim(preg_replace('/[\s\p{Z}]+/u', ' ', $text));
+        };
         try {
-            DB::transaction(function () use ($rawBody, $payload) {
+            DB::transaction(function () use (
+                $rawBody,
+                $payload,
+                &$autoReplyChecks,
+                $autoReplyText,
+                $normalise
+            ) {
                 $now = gmdate('Y-m-d H:i:s');
                 DB::table('webhooks')->insert([
                     'payload' => $rawBody,
@@ -74,6 +98,12 @@ class WhatsAppWebhookController extends Controller
                                 continue;
                             }
                             $metaId = (string) $message['id'];
+                            // Also check previously stored messages for an unsent automatic reply.
+                            $autoReplyChecks[] = [
+                                'phone_number_id' => $phoneId,
+                                'contact_phone' => (string) $message['from'],
+                                'incoming_meta_id' => $metaId,
+                            ];
                             $exists = DB::table('whatsapp_messages')
                                 ->where('phone_number_id', $phoneId)
                                 ->where('meta_message_id', $metaId)
@@ -82,18 +112,55 @@ class WhatsAppWebhookController extends Controller
                                 continue;
                             }
                             $type = isset($message['type']) ? (string) $message['type'] : 'unknown';
+                            $buttonId = null;
+                            if ($type === 'button' && isset($message['button']['payload'])) {
+                                $buttonId = (string) $message['button']['payload'];
+                            } elseif (
+                                $type === 'interactive' &&
+                                isset($message['interactive']['button_reply']['id'])
+                            ) {
+                                $buttonId = (string) $message['interactive']['button_reply']['id'];
+                            } elseif (
+                                $type === 'interactive' &&
+                                isset($message['interactive']['list_reply']['id'])
+                            ) {
+                                $buttonId = (string) $message['interactive']['list_reply']['id'];
+                            }
+                            $mediaTypes = ['image', 'audio', 'video', 'document'];
+                            $mediaId = null;
+                            if (in_array($type, $mediaTypes, true) &&
+                                isset($message[$type]['id'])) {
+                                $mediaId = (string) $message[$type]['id'];
+                            }
+                            $mediaFilename = $type === 'document' &&
+                                isset($message['document']['filename']) &&
+                                is_string($message['document']['filename'])
+                                    ? mb_substr($message['document']['filename'], 0, 255, 'UTF-8')
+                                    : null;
                             $body = null;
                             if ($type === 'text' && isset($message['text']['body'])) {
                                 $body = $message['text']['body'];
                             } elseif (isset($message[$type]['caption'])) {
                                 $body = $message[$type]['caption'];
-                            } elseif ($type === 'button' && isset($message['button']['text'])) {
-                                $body = $message['button']['text'];
+                            } elseif ($type === 'audio') {
+                                $body = '[Voice message]';
+                            } elseif ($type === 'document') {
+                                $body = isset($message['document']['filename'])
+                                    ? (string) $message['document']['filename']
+                                    : '[Document]';
+                            } elseif ($type === 'video') {
+                                $body = '[Video]';
+                            } elseif ($type === 'button') {
+                                $body = isset($message['button']['text'])
+                                    ? (string) $message['button']['text']
+                                    : '[Button]';
                             } elseif ($type === 'interactive') {
                                 if (isset($message['interactive']['button_reply']['title'])) {
                                     $body = $message['interactive']['button_reply']['title'];
                                 } elseif (isset($message['interactive']['list_reply']['title'])) {
                                     $body = $message['interactive']['list_reply']['title'];
+                                } else {
+                                    $body = '[Interactive reply]';
                                 }
                             }
                             $timestamp = isset($message['timestamp'])
@@ -115,13 +182,52 @@ class WhatsAppWebhookController extends Controller
                                     'message_at' => $messageAt,
                                     'created_at' => $now,
                                     'updated_at' => $now,
+                                    'media_id' => $mediaId,
+                                    'media_filename' => $mediaFilename,
                                 ]);
                             } catch (\Illuminate\Database\QueryException $exception) {
                                 $driverCode = isset($exception->errorInfo[1])
                                     ? (int) $exception->errorInfo[1] : 0;
+                            
                                 if ($driverCode !== 1062) {
                                     throw $exception;
                                 }
+                            
+                                // Another webhook request already inserted this incoming message.
+                                continue;
+                            }
+                            
+                            // Match text or reply titles, without matching media captions.
+                            $isMeetingRequest =
+                                in_array($type, ['text', 'button', 'interactive'], true) &&
+                                $normalise($body) === $normalise('أريد اجتماع أونلاين');
+                            
+                            // Avoid automatically answering old messages delivered much later.
+                            $isRecent =
+                                ctype_digit($timestamp) &&
+                                (int) $timestamp > time() - 86340;
+                            
+                            $isConfiguredNumber =
+                                $phoneId === (string) config('whatsapp.phone_number_id');
+                            
+                            if ($isMeetingRequest && $isRecent && $isConfiguredNumber) {
+                                // Saved in the same transaction as the incoming message.
+                                DB::table('whatsapp_messages')->insert([
+                                    'phone_number_id' => $phoneId,
+                                    'contact_phone' => (string) $message['from'],
+                                    'meta_message_id' => null,
+                                    'direction' => 'outgoing',
+                                    'message_type' => 'text',
+                                    'body' => $autoReplyText,
+                                    'status' => 'sending',
+                                    'reply_to_meta_id' => $metaId,
+                                    'error_code' => null,
+                                    'message_at' => $now,
+                                    'created_at' => $now,
+                                    'updated_at' => $now,
+                                    'media_id' => null,
+                                    'media_filename' => null,
+                                ]);
                             }
                         }
                     }
@@ -134,8 +240,202 @@ class WhatsAppWebhookController extends Controller
             ]);
             return response('Unable to save event.', 503);
         }
+        // The database transaction has committed. API calls happen here.
+        foreach ($autoReplyChecks as $check) {
+            try {
+                $this->sendMeetingAutoReply(
+                    $check['phone_number_id'],
+                    $check['contact_phone'],
+                    $check['incoming_meta_id'],
+                    $autoReplyText
+                );
+            } catch (\Throwable $exception) {
+                \Log::error('WhatsApp automatic reply processing failed.', [
+                    'incoming_meta_id' => $check['incoming_meta_id'],
+                    'exception_class' => get_class($exception),
+                ]);
+            }
+        }
         return response('EVENT_RECEIVED', 200)
             ->header('Content-Type', 'text/plain');
+    }
+    private function sendMeetingAutoReply(
+        $phoneId,
+        $to,
+        $incomingMetaId,
+        $replyText
+    ) {
+        $token = config('whatsapp.access_token');
+        $version = config('whatsapp.api_version');
+    
+        if (
+            !is_string($token) || $token === '' ||
+            !is_string($version) ||
+            !preg_match('/^v[0-9]+\.[0-9]+$/', $version) ||
+            !preg_match('/^[0-9]+$/', $phoneId) ||
+            $phoneId !== (string) config('whatsapp.phone_number_id')
+        ) {
+            \Log::warning('WhatsApp automatic reply configuration is invalid.');
+            return;
+        }
+    
+        $reply = DB::table('whatsapp_messages')
+            ->where('phone_number_id', $phoneId)
+            ->where('contact_phone', $to)
+            ->where('direction', 'outgoing')
+            ->where('reply_to_meta_id', $incomingMetaId)
+            ->where('body', $replyText)
+            ->where('status', 'sending')
+            ->orderBy('id')
+            ->first();
+    
+        if (!$reply) {
+            return;
+        }
+    
+        $incoming = DB::table('whatsapp_messages')
+            ->where('phone_number_id', $phoneId)
+            ->where('contact_phone', $to)
+            ->where('direction', 'incoming')
+            ->where('meta_message_id', $incomingMetaId)
+            ->first();
+    
+        $incomingAt = $incoming
+            ? strtotime($incoming->message_at . ' UTC')
+            : false;
+    
+        if ($incomingAt === false || $incomingAt <= time() - 86340) {
+            DB::table('whatsapp_messages')
+                ->where('id', $reply->id)
+                ->where('status', 'sending')
+                ->update([
+                    'status' => 'failed',
+                    'updated_at' => gmdate('Y-m-d H:i:s'),
+                ]);
+    
+            \Log::warning('WhatsApp automatic reply expired before sending.', [
+                'local_message_id' => $reply->id,
+            ]);
+    
+            return;
+        }
+    
+        $json = json_encode([
+            'messaging_product' => 'whatsapp',
+            'to' => $to,
+            'type' => 'text',
+            'text' => [
+                'preview_url' => false,
+                'body' => $replyText,
+            ],
+        ], JSON_UNESCAPED_UNICODE);
+    
+        if ($json === false) {
+            throw new \RuntimeException('Unable to encode automatic reply.');
+        }
+    
+        // Atomically reserve this reply. Only one request can claim it.
+        // Until Meta confirms acceptance, its sending outcome is unknown.
+        $claimed = DB::table('whatsapp_messages')
+            ->where('id', $reply->id)
+            ->where('status', 'sending')
+            ->update([
+                'status' => 'unknown',
+                'updated_at' => gmdate('Y-m-d H:i:s'),
+            ]);
+    
+        if ($claimed !== 1) {
+            return;
+        }
+    
+        $curl = null;
+        $rawResponse = false;
+        $httpStatus = 0;
+    
+        try {
+            $curl = curl_init(
+                'https://graph.facebook.com/' .
+                $version . '/' . $phoneId . '/messages'
+            );
+    
+            if ($curl === false) {
+                throw new \RuntimeException('Unable to initialize cURL.');
+            }
+    
+            $configured = curl_setopt_array($curl, [
+                CURLOPT_POST => true,
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_CONNECTTIMEOUT => 5,
+                CURLOPT_TIMEOUT => 15,
+                CURLOPT_SSL_VERIFYPEER => true,
+                CURLOPT_SSL_VERIFYHOST => 2,
+                CURLOPT_HTTPHEADER => [
+                    'Authorization: Bearer ' . $token,
+                    'Content-Type: application/json',
+                ],
+                CURLOPT_POSTFIELDS => $json,
+            ]);
+    
+            if (!$configured) {
+                throw new \RuntimeException('Unable to configure cURL.');
+            }
+    
+            $rawResponse = curl_exec($curl);
+            $httpStatus = (int) curl_getinfo($curl, CURLINFO_HTTP_CODE);
+        } finally {
+            if ($curl !== null && $curl !== false) {
+                curl_close($curl);
+            }
+        }
+    
+        $result = is_string($rawResponse)
+            ? json_decode($rawResponse, true)
+            : null;
+    
+        $metaId = isset($result['messages'][0]['id']) &&
+            is_string($result['messages'][0]['id'])
+                ? $result['messages'][0]['id']
+                : null;
+    
+        $accepted =
+            $httpStatus >= 200 &&
+            $httpStatus < 300 &&
+            $metaId !== null &&
+            $metaId !== '';
+    
+        $rejected =
+            $httpStatus >= 400 &&
+            $httpStatus < 500 &&
+            $httpStatus !== 408 &&
+            isset($result['error']) &&
+            is_array($result['error']);
+    
+        $status = $accepted
+            ? 'accepted'
+            : ($rejected ? 'failed' : 'unknown');
+    
+        $errorCode = isset($result['error']['code']) &&
+            is_numeric($result['error']['code'])
+                ? (string) (int) $result['error']['code']
+                : null;
+    
+        DB::table('whatsapp_messages')
+            ->where('id', $reply->id)
+            ->update([
+                'status' => $status,
+                'meta_message_id' => $accepted ? $metaId : null,
+                'error_code' => $errorCode,
+                'updated_at' => gmdate('Y-m-d H:i:s'),
+            ]);
+    
+        if (!$accepted) {
+            \Log::warning('WhatsApp automatic reply was not confirmed.', [
+                'local_message_id' => $reply->id,
+                'http_status' => $httpStatus,
+                'status' => $status,
+                'error_code' => $errorCode,
+            ]);
+        }
     }
     public function index()
     {

@@ -50,7 +50,21 @@ $aboutPlain = html_entity_decode(strip_tags($aboutBody), ENT_QUOTES, 'UTF-8');
 $hasAboutContent = trim(preg_replace('/\s+|&nbsp;|\x{00A0}/u', '', $aboutPlain)) !== '';
 ?>
 @include('front.partials.search_layout_styles')
-<link rel="stylesheet" type="text/css" href="{{ asset('css/search.min.css') }}?v=06">
+<style>
+.int_content .content_section .cont {
+    height: auto !important;
+    max-height: none !important;
+    overflow: visible;
+    transition: none !important;
+}
+
+.int_content .content_section .action_content {
+    margin-top: 0 !important;
+    padding-top: 12px !important;
+    background: transparent !important;
+}
+</style>
+{{-- <link rel="stylesheet" type="text/css" href="{{ asset('css/search.min.css') }}?v=06"> --}}
 <?php if ($current_lang == 'en' || $current_lang == 'fr' || $current_lang == 'ru') { ?>
 <link rel="stylesheet" type="text/css" href="{{ asset('css/search-en.min.css') }}?v=05">
 <?php } ?>
@@ -92,8 +106,14 @@ $hasAboutContent = trim(preg_replace('/\s+|&nbsp;|\x{00A0}/u', '', $aboutPlain))
                     @if($hasAboutContent)
                     <div class="content_section">
                         <div id="about-content" class="cont">
-                            <div class="clearfix">{!! $aboutBody !!}</div>
+                            <div class="clearfix">{{ mb_strimwidth(
+                                trim($aboutPlain), 0, 500, '…', 'UTF-8'
+                            ) }}</div>
                         </div>
+                        
+                        <template id="about-full-html">
+                            <div class="clearfix">{!! $aboutBody !!}</div>
+                        </template>
                         <div class="action_content">
                             <span class="show_more_btn"><?= trans("front.read more"); ?></span>
                             <span class="show_less_btn"><?= trans("front.read less"); ?></span>
@@ -227,71 +247,28 @@ $(document).ready(function () {
         $(".right_sec").removeClass("show");
     });
 
-    var aboutContentCounter = 1;
-    var aboutContentCollapsedHeight = 350;
-
-    function bindAboutContentActions($sec) {
-        var $cont = $sec.find(".cont").first();
-        var fullHeight = $cont.css({maxHeight: "none", height: "auto"}).height();
-        $cont.css({maxHeight: aboutContentCollapsedHeight + "px", height: "auto"});
-        if (fullHeight <= aboutContentCollapsedHeight) {
-            $sec.find(".action_content").hide();
-        }
-    }
-
-    $(".int_content .content_section").each(function () {
-        bindAboutContentActions($(this));
-    });
-    $(".int_content .show_less_btn").hide();
-
+    var aboutContent = document.getElementById("about-content");
+    var aboutTemplate = document.getElementById("about-full-html");
+    var aboutPreview = aboutContent ? aboutContent.innerHTML : "";
+    
     $(document).on("click", ".int_content .show_more_btn", function () {
-        var $sec = $(this).closest(".content_section");
-        var $cont = $sec.find(".cont").first();
-        var $action = $(this).closest(".action_content");
-        var $lessBtn = $action.find(".show_less_btn");
-
-        if (aboutContentCounter === 1) {
-            $cont.animate({maxHeight: "400px"}, 200);
-            $("html, body").animate({scrollTop: $sec.offset().top - 100}, "slow");
-            $lessBtn.show();
-            aboutContentCounter++;
-            return true;
-        }
-        if (aboutContentCounter === 2) {
-            $cont.animate({maxHeight: "800px"}, 200);
-            $("html, body").animate({scrollTop: $sec.offset().top - 50}, "slow");
-            $lessBtn.show();
-            aboutContentCounter++;
-            return true;
-        }
-        if (aboutContentCounter === 3) {
-            var heightDiv = $cont.css({maxHeight: "none"}).height();
-            $cont.animate({maxHeight: heightDiv}, 200);
-            $sec.addClass("show");
-            $("html, body").animate({scrollTop: $sec.offset().top + 250}, "slow");
-            $(this).hide();
-            $lessBtn.show();
-            $action.addClass("type_less");
-            return false;
-        }
-        aboutContentCounter = 1;
-        return false;
+        if (!aboutContent || !aboutTemplate) return;
+    
+        aboutContent.innerHTML = aboutTemplate.innerHTML;
+    
+        var $section = $(this).closest(".content_section");
+        $section.find(".show_more_btn").hide();
+        $section.find(".show_less_btn").show();
     });
-
+    
     $(document).on("click", ".int_content .show_less_btn", function () {
-        var $sec = $(this).closest(".content_section");
-        var $cont = $sec.find(".cont").first();
-        var $action = $(this).closest(".action_content");
-
-        $cont.animate({maxHeight: aboutContentCollapsedHeight + "px"}, 300);
-        $sec.removeClass("show");
-        $("html, body").animate({scrollTop: $sec.offset().top - 100}, "slow");
-        aboutContentCounter = 1;
-        $action.removeClass("type_less");
-        setTimeout(function () {
-            $action.find(".show_less_btn").hide();
-            $action.find(".show_more_btn").show();
-        }, 300);
+        if (!aboutContent) return;
+    
+        aboutContent.innerHTML = aboutPreview;
+    
+        var $section = $(this).closest(".content_section");
+        $section.find(".show_less_btn").hide();
+        $section.find(".show_more_btn").show();
     });
 
     var PRICE_MIN = 50000, PRICE_MAX = 2000000;

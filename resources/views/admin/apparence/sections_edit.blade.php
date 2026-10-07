@@ -109,7 +109,7 @@
                 <select name="projects[]" class="form-control select2me" multiple>
                     <option value=""></option>
                     @foreach($projects as $prj)
-                        <option value="<?= $prj->id; ?>" <?= in_array($prj->id, $arr_pjcts) ? 'selected' : ''; ?>><?= $prj->name_ar; ?></option>
+                        <option value="<?= $prj->id; ?>" <?= in_array($prj->id, $arr_pjcts) ? 'selected' : ''; ?>><?= $prj->title_en; ?></option>
                     @endforeach
                 </select>
             </div>

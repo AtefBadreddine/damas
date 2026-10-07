@@ -770,8 +770,8 @@ unset($footer_prjs);
                             <div class="slider video_slider" dir="<?= $current_lang === 'ar' ? 'rtl' : 'ltr' ?>">
 
                                 <div class="slider__wrap swiper-wrapper">
-
-
+                                    
+                                    <?php $similars = array_reverse($similars); ?>
                                     @foreach($similars as $id)
                                     <?php
                                     $spost = Helper::query("Post", "find", ["id" => $id]);

@@ -1186,7 +1186,7 @@ limit 5", ['%' . $current_lang . '%']);
                                 </div>
                                 <div class="title">
                                     <h3 class="jazzira_font_bold">{{ Helper::getCityName($projects_count,0) }}</h3>
-                                    <p><span><?= trans("front.project"); ?></span><span class="num">{{ $projects_count[0]->cnt }}</span></p>
+                                    <!--<p><span><?= trans("front.project"); ?></span><span class="num">{{ $projects_count[0]->cnt }}</span></p>-->
                                 </div>
                             </a>
                         </li>
@@ -1203,7 +1203,7 @@ limit 5", ['%' . $current_lang . '%']);
 
                                 <div class="title">
                                     <h3 class="jazzira_font_bold">{{ Helper::getCityName($projects_count,4) }}</h3>
-                                    <p><span><?= trans("front.project"); ?></span><span class="num">{{ $projects_count[4]->cnt }}</span></p>
+                                    <!--<p><span><?= trans("front.project"); ?></span><span class="num">{{ $projects_count[4]->cnt }}</span></p>-->
                                 </div>
                             </a>
                         </li>
@@ -1380,7 +1380,11 @@ $json4 = Helper::ajax_statics('', 'top_city', 0, 0);
 
         let displayElement = parent.getElementsByClassName("rangeValues")[0];
         displayElement.innerHTML = "$" + slide1 + " - $" + slide2;
-        $(".budget .dropdown .dropdown-toggle .number").text("$" + slide1 + " - $" + slide2);
+        $(".budget .dropdown .dropdown-toggle .number").text("$" + slide1 + " - $" + slide2);let formatted1 = String(slide1).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    	let formatted2 = String(slide2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    
+    	displayElement.innerHTML = "$" + formatted1 + " - $" + formatted2;
+    	$(".budget .dropdown .dropdown-toggle .number").text("$" + formatted1 + " - $" + formatted2);
     }
 
     window.onload = function () {

@@ -87,10 +87,11 @@
 
 
     <div class="form-group col-md-6">
-        <label>Slug <span class="red">(*)</span></label>
+        <label>Public URL</label>
         <div class="input-group ltr">
-            <span class="input-group-addon">/landing-tourism/</span>
-            <?= Form::text("slug", $row->slug, ["class" => "form-control ltr"]); ?>
+            <span class="input-group-addon">/{lang}/landing/</span>
+            <input type="text" value="tourism" class="form-control ltr" readonly>
+            <?= Form::hidden("slug", $row->slug); ?>
         </div>
     </div>
 </fieldset>

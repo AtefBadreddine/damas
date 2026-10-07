@@ -59,70 +59,48 @@ $media = $row->media;
         </div>
 
 
+        <?php
+        // Add each card's image path here when it is ready.
+        $guideCards = [
+            ['route' => 'front.investment', 'params' => [], 'ar' => 'دليل الاستثمار', 'en' => 'Investment Guide', 'image' => '/img/JPG4.jpg'],
+            ['route' => 'front.legal', 'params' => [], 'ar' => 'دليل الشؤون القانونية', 'en' => 'Legal Affairs Guide', 'image' => '/img/JPG5.jpg'],
+            ['route' => 'front.turkish_citizenship', 'params' => [], 'ar' => 'دليل الجنسية التركية', 'en' => 'Turkish Citizenship Guide', 'image' => '/img/JPG2.jpg'],
+            ['route' => 'front.districts', 'params' => ['slug' => 'istanbul'], 'ar' => 'عقارات للبيع في إسطنبول', 'en' => 'Property for sale in Istanbul', 'image' => '/img/JPG3.jpg'],
+            ['route' => 'front.districts', 'params' => ['slug' => 'bursa'], 'ar' => 'عقارات للبيع في بورصة', 'en' => 'Property for sale in Bursa', 'image' => ''],
+            ['route' => 'front.districts', 'params' => ['slug' => 'antalya'], 'ar' => 'عقارات للبيع في أنطاليا', 'en' => 'Property for sale in Antalya', 'image' => ''],
+            ['route' => 'front.districts', 'params' => ['slug' => 'kocaali'], 'ar' => 'عقارات للبيع في كوجالي', 'en' => 'Property for sale in Kocaeli', 'image' => ''],
+            ['route' => 'front.district_detail', 'params' => ['region_slug' => 'basaksehir'], 'ar' => 'عقارات للبيع في باشاك شهير', 'en' => 'Property for sale in Basaksehir', 'image' => ''],
+            ['route' => 'front.district_detail', 'params' => ['region_slug' => 'beylikduzu'], 'ar' => 'عقارات للبيع في بيليك دوزو', 'en' => 'Property for sale in Beylikduzu', 'image' => ''],
+            ['route' => 'front.district_detail', 'params' => ['region_slug' => 'bahcesehir'], 'ar' => 'عقارات للبيع في بهجة شهير', 'en' => 'Property for sale in Bahcesehir', 'image' => ''],
+            ['route' => 'front.district_detail', 'params' => ['region_slug' => 'esenyurt'], 'ar' => 'عقارات للبيع في إسنيورت', 'en' => 'Property for sale in Esenyurt', 'image' => ''],
+            ['route' => 'front.district_detail', 'params' => ['region_slug' => 'zeytinburnu'], 'ar' => 'عقارات للبيع في زيتين بورنو', 'en' => 'Property for sale in Zeytinburnu', 'image' => ''],
+        ];
+        ?>
+
         <div class="pages_list_sec">
             <div class="row">
-                <div class="col-md-4 col-sm-6 col-xs-12">
-                    <div class="item">
-                        <a class="title" href="{{ route('front.turkish_citizenship') }}">
-                            <h2><?= trans("front.Turkish Citizenship Guide"); ?></h2>
-                        </a>
-                        <a class="link" href="{{ route('front.turkish_citizenship') }}">
-                            <img class="lazy" alt="Page Name" title="Project Id" loading="lazy" src="/img/JPG2.jpg" width="200" height="200">
-                        </a>
+                @foreach ($guideCards as $guideCard)
+                    <?php
+                    $guideCardTitle = $guideCard[$current_lang === 'ar' ? 'ar' : 'en'];
+                    $guideCardUrl = route($guideCard['route'], $guideCard['params']);
+                    ?>
+                    <div class="col-md-4 col-sm-6 col-xs-12">
+                        <div class="item">
+                            <a class="title" href="{{ $guideCardUrl }}">
+                                <h2>{{ $guideCardTitle }}</h2>
+                            </a>
+                            <a class="link" href="{{ $guideCardUrl }}" aria-label="{{ $guideCardTitle }}">
+                                @if ($guideCard['image'] !== '')
+                                    <img alt="{{ $guideCardTitle }}" title="{{ $guideCardTitle }}" loading="lazy" src="{{ $guideCard['image'] }}" width="200" height="200">
+                                @else
+                                    <div aria-hidden="true" style="width: 100%; height: 200px; background: #f5f5f5;"></div>
+                                @endif
+                            </a>
+                        </div>
                     </div>
-                </div>   
-                <div class="col-md-4 col-sm-6 col-xs-12">
-                    <div class="item">
-                        <a class="title" href="/<?= $current_lang ?>/istanbul-districts">
-                            <h2><?= trans("front.Istanbul area Guide"); ?></h2>
-                        </a>
-                        <a class="link" href="/<?= $current_lang ?>/istanbul-districts">
-                            <img class="lazy" alt="Page Name" title="Project Id" loading="lazy" src="/img/JPG3.jpg" width="200" height="200">
-                        </a>
-                    </div>
-                </div>   
-                <div class="col-md-4 col-sm-6 col-xs-12">
-                    <div class="item">
-                        <a class="title" href="{{ route('front.turkey_territories') }}">
-                            <h2><?= trans("front.Turkey Provinces Guide"); ?></h2>
-                        </a>
-                        <a class="link" href="{{ route('front.turkey_territories') }}">
-                            <img class="lazy" alt="Page Name" title="Project Id" loading="lazy" src="/img/JPG6.jpg" width="200" height="200">
-                        </a>
-                    </div>
-                </div>   
-                <div class="col-md-4 col-sm-6 col-xs-12">
-                    <div class="item">
-                        <a class="title" href="{{ route('front.living_turkey') }}">
-                            <h2><?= trans("front.Guide to Living in Turkey"); ?></h2>
-                        </a>
-                        <a class="link" href="{{ route('front.living_turkey') }}">
-                            <img class="lazy" alt="Page Name" title="Project Id" loading="lazy" src="/img/JPG7.jpg" width="200" height="200">
-                        </a>
-                    </div>
-                </div>   
-                <div class="col-md-4 col-sm-6 col-xs-12">
-                    <div class="item">
-                        <a class="title" href="{{ route('front.legal') }}">
-                            <h2><?= trans("front.Legal Affairs Guide in Turkey"); ?></h2>
-                        </a>
-                        <a class="link" href="{{ route('front.legal') }}">
-                            <img class="lazy" alt="Page Name" title="Project Id" loading="lazy" src="/img/JPG5.jpg" width="200" height="200">
-                        </a>
-                    </div>
-                </div>   
-                <div class="col-md-4 col-sm-6 col-xs-12">
-                    <div class="item">
-                        <a class="title" href="{{ route('front.investment') }}">
-                            <h2><?= trans("front.Investment guide in Turkey"); ?></h2>
-                        </a>
-                        <a class="link" href="{{ route('front.investment') }}">
-                            <img class="lazy" alt="Page Name" title="Project Id" loading="lazy" src="/img/JPG4.jpg" width="200" height="200">
-                        </a>
-                    </div>
-                </div>   
-            </div>   
-        </div>   
+                @endforeach
+            </div>
+        </div>
 
 
         <section class="form shadow_type">

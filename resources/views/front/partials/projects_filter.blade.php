@@ -177,8 +177,8 @@ foreach ($filterCountries as $fc) {
             <div id="budgetMenu" class="dropdown-menu shadow_type" aria-labelledby="dropdownMenuButton">
                 <div class="range-slider">
                     <span class="rangeValues number"></span>
-                    <input id="prmin" value="50000" class="min_budj input_seacrh" min="50000" max="2000000" step="50000" type="range" />
-                    <input id="prmax" value="2000000" class="max_budj input_seacrh" min="50000" max="2000000" step="50000" type="range" />
+                    <input id="prmin" value="50000" class="min_budj input_seacrh" min="50000" max="1200000" step="50000" type="range" />
+                    <input id="prmax" value="1200000" class="max_budj input_seacrh" min="50000" max="1200000" step="50000" type="range" />
                 </div>
             </div>
         </div>

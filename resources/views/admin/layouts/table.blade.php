@@ -1,9 +1,105 @@
 <?php
     $route = Route::currentRouteName();
+    $landingUrl = function ($landing, $language = null) use ($route) {
+        if ($language === null) {
+            $languages = array_values(array_intersect(
+                explode(',', (string) $landing->lang),
+                \LaravelLocalization::getSupportedLanguagesKeys()
+            ));
+            $language = in_array('ar', $languages) ? 'ar' : (isset($languages[0]) ? $languages[0] : 'ar');
+        }
+        $slug = $route === 'admin.landing_tourism' ? 'tourism' : rawurlencode($landing->slug);
+        return url($language . '/landing/' . $slug);
+    };
     $isPostList = \App\Enums\PostType::isAdminList($route);
     $page_num = Input::get("page") ? Input::get("page") : 1;
     $tr_placement = @$tr_placement;
     $total_rows = $rows->total();
+
+    $gscPages = ['admin.pages.search', 'admin.projects', 'admin.cities', 'admin.countries', 'admin.regions'];
+    $gscEnabled = $isPostList || in_array($route, $gscPages, true);
+    $isGeoGscList = in_array($route, ['admin.cities', 'admin.countries', 'admin.regions'], true);
+    $gscMetricClasses = [
+        'blog_impressions' => 'impressions', 'blog_clicks' => 'clicks',
+        'blog_ctr' => 'ctr', 'blog_pos' => 'position', 'blog_last_crawl' => 'last-crawl',
+        'project_impressions' => 'impressions', 'project_clicks' => 'clicks',
+        'project_ctr' => 'ctr', 'project_position' => 'position',
+        'search_pages_impressions' => 'impressions', 'search_pages_clicks' => 'clicks',
+        'search_pages_ctr' => 'ctr', 'search_pages_position' => 'position',
+        'gsc_impressions' => 'impressions', 'gsc_clicks' => 'clicks',
+        'gsc_ctr' => 'ctr', 'gsc_position' => 'position', 'gsc_last_crawl' => 'last-crawl',
+    ];
+    $geoGscUrls = [];
+    if ($isGeoGscList) {
+        // Add metric columns here; no controller changes are required.
+        foreach ([
+            'gsc_impressions' => 'Impressions', 'gsc_clicks' => 'Clicks',
+            'gsc_ctr' => 'CTR', 'gsc_position' => 'Position'
+        ] as $gscColumn => $gscLabel) {
+            $gscAlreadyVisible = false;
+            foreach ($lignes as $existingKey => $existingLabel) {
+                if ($existingLabel && isset($gscMetricClasses[$existingKey]) &&
+                    $gscMetricClasses[$existingKey] === $gscMetricClasses[$gscColumn]) {
+                    $gscAlreadyVisible = true;
+                    break;
+                }
+            }
+            if (!$gscAlreadyVisible) $lignes[$gscColumn] = $gscLabel;
+        }
+
+        // Resolve parent slugs in batches, rather than querying for each link.
+        $geoGscCities = [];
+        $geoGscCountries = [];
+        $geoGscCityIds = [];
+        $geoGscCountryIds = [];
+        foreach ($rows as $geoRow) {
+            if ($route === 'admin.regions') $geoGscCityIds[] = $geoRow->city_id;
+            if ($route === 'admin.cities') $geoGscCountryIds[] = $geoRow->country_id;
+        }
+        if (!empty($geoGscCityIds)) {
+            foreach (\DB::table('cities')->whereIn('id', array_unique($geoGscCityIds))->get(['id', 'country_id', 'slug']) as $geoCity) {
+                $geoGscCities[$geoCity->id] = $geoCity;
+                $geoGscCountryIds[] = $geoCity->country_id;
+            }
+        }
+        if (!empty($geoGscCountryIds)) {
+            foreach (\DB::table('countries')->whereIn('id', array_unique($geoGscCountryIds))->get(['id', 'slug']) as $geoCountry) {
+                $geoGscCountries[$geoCountry->id] = $geoCountry;
+            }
+        }
+        foreach ($rows as $geoRow) {
+            $geoParts = [];
+            if ($route === 'admin.countries' && trim((string) $geoRow->slug) !== '') {
+                $geoParts = [$geoRow->slug];
+            } elseif ($route === 'admin.cities' && isset($geoGscCountries[$geoRow->country_id])) {
+                $geoParts = [$geoGscCountries[$geoRow->country_id]->slug, $geoRow->slug];
+            } elseif ($route === 'admin.regions' && isset($geoGscCities[$geoRow->city_id])) {
+                $geoCity = $geoGscCities[$geoRow->city_id];
+                if (isset($geoGscCountries[$geoCity->country_id])) {
+                    $geoParts = [$geoGscCountries[$geoCity->country_id]->slug, $geoCity->slug, $geoRow->slug];
+                }
+            }
+            $geoHasSlugs = !empty($geoParts);
+            foreach ($geoParts as $geoPart) {
+                if (trim((string) $geoPart) === '') $geoHasSlugs = false;
+            }
+            $geoGscUrls[$geoRow->id] = [];
+            if ($geoHasSlugs) {
+                $geoPath = implode('/', array_map('rawurlencode', $geoParts));
+                $geoGscUrls[$geoRow->id]['ar'] = 'https://damas.net/ar/' . $geoPath;
+            }
+        }
+    }
+
+    // Project country tabs are separate from the shared post-list tabs.
+    if ($route === 'admin.projects') {
+        $projectCountries = \DB::table('countries')
+            ->orderBy('name_en')
+            ->get(['id', 'name_en']);
+        $projectCountryInput = Input::get('project_country', 'all');
+        $projectCountryTab = is_scalar($projectCountryInput) ? (string) $projectCountryInput : 'all';
+        $projectCountryParams = Input::except(['page', 'project_country']);
+    }
     $districtProjectCounts = [];
     if ($route === 'admin.regions' && isset($lignes['projects_status'])) {
         $districtIds = [];
@@ -93,6 +189,19 @@ $str_get = $str_get . $k.'='.$v.'&';
 </div>
 
 @endif
+    @if($route === 'admin.projects')
+        <ul class="nav nav-tabs" style="margin:15px 10px 0;">
+            <li class="{{ $projectCountryTab === 'all' ? 'active' : '' }}">
+                <a href="{{ route('admin.projects') . (empty($projectCountryParams) ? '' : '?' . http_build_query($projectCountryParams)) }}">All countries</a>
+            </li>
+            @foreach($projectCountries as $projectCountry)
+                <li class="{{ $projectCountryTab === (string) $projectCountry->id ? 'active' : '' }}">
+                    <a href="{{ route('admin.projects') . '?' . http_build_query(array_merge($projectCountryParams, ['project_country' => $projectCountry->id])) }}">{{ $projectCountry->name_en }}</a>
+                </li>
+            @endforeach
+        </ul>
+    @endif
+
     <div class="box-header with-border">
 		@if(Route::currentRouteName()=='admin.whatsapp_msg' || Route::currentRouteName()=='admin.search')
             <div class="col-md-3">
@@ -124,9 +233,8 @@ $str_get = $str_get . $k.'='.$v.'&';
                 </li>
             </ul>
 		@endif
-
         <div class="box-tools">
-            @if($isPostList or Route::currentRouteName()=='admin.pages.search' || Route::currentRouteName() == 'admin.projects')
+            @if($gscEnabled)
                 <input type="date" id="gsc-start-date" min="2017-01-01">
                 –
                 <input type="date" id="gsc-end-date" min="2017-01-01">
@@ -143,7 +251,7 @@ $str_get = $str_get . $k.'='.$v.'&';
                     document.getElementById('gsc-start-date').value = lastWeek;
                     document.getElementById('gsc-end-date').value = twoDaysAgo;
                 </script>
-                <button class="btn btn-primary" onclick="connectGoogle()" style="display:inline-flex;flex-direction:column;align-items:center;justify-content:space-evenly;height:100%;"><span>Connect GSC</span><span id="finished-percentage" style="font-size:10px">–</span></button>
+                <button type="button" id="gsc-connect" class="btn btn-primary" onclick="connectGoogle()" style="display:inline-flex;flex-direction:column;align-items:center;justify-content:space-evenly;height:100%;"><span>Connect GSC</span><span id="finished-percentage" style="font-size:10px">–</span></button>
                 <div class="total-stat">
                     <span id="totalImpressions" class="stat">–</span>
                     <span class="totalstat-label" >Imp.</span>
@@ -182,6 +290,9 @@ $str_get = $str_get . $k.'='.$v.'&';
 				<form method="get" style="float:right">
                     @if(isset($tab))
                         <input type="hidden" name="tab" value="<?= $tab ?>">
+                    @endif
+                    @if($route === 'admin.projects' && $projectCountryTab !== 'all')
+                        <input type="hidden" name="project_country" value="{{ $projectCountryTab }}">
                     @endif
                     <input type="text" name="search" value="<?= @$_GET['search'] ?>">
                     <input type="submit" class="btn" value="search">
@@ -229,7 +340,7 @@ $str_get = $str_get . $k.'='.$v.'&';
     </div>
     <div class="box-body">
         <div class="table-responsive">
-        <table class="table table-bordered table-hover">
+        <table id="shared-admin-table" class="table table-bordered table-hover">
             <thead>
                 <tr>
                     <th style="width:20px;"><input class="checkall" type="checkbox"></th>
@@ -237,23 +348,12 @@ $str_get = $str_get . $k.'='.$v.'&';
                     @foreach($lignes as $kth => $th)
                         <?php if ( !$th ) continue; ?>
                         <th>
-                            @if(in_array($kth, [
-                                'blog_impressions',
-                                'blog_clicks',
-                                'blog_ctr',
-                                'blog_pos',
-                                'blog_last_crawl',
-                            
-                                'project_impressions',
-                                'project_clicks',
-                                'project_ctr',
-                                'project_position'
-                            ]))
-                                <a href="#" class="gsc-sort" data-field="{{ $kth }}" data-sort="desc">
-                                    {{ $th }}
-                                </a>
+                            @if($gscEnabled && isset($gscMetricClasses[$kth]))
+                                <a href="#" class="gsc-sort" data-class="{{ $gscMetricClasses[$kth] }}" data-sort="desc">{{ $th }}</a>
                             @elseif($kth === 'word_count' || $kth === 'projects_status')
                                 {{ $th }}
+                            @elseif($route === 'admin.projects')
+                                <a href="{{ route('admin.projects') . '?' . http_build_query(array_merge(Input::except(['field', 'sort']), ['field' => explode('|', $kth)[0], 'sort' => $page_sort, 'page' => $page_num])) }}">{{ $th }}</a>
                             @else
                                 <a href="?field=<?= @explode("|", $kth)[0]; ?>&sort=<?= $page_sort; ?>&page=<?= $page_num; ?><?= @$get_params; ?><?= isset($_GET['lang'])?'&lang='.$_GET['lang']:'' ?><?= isset($_GET['tab'])?'&tab='.urlencode($_GET['tab']):'' ?>">{{ $th }}</a>
                             @endif
@@ -274,7 +374,7 @@ $str_get = $str_get . $k.'='.$v.'&';
 						continue;
 				}
 				?>
-                <tr class="<?= $row->blocked == 1 ? "bg-danger" : ""; ?>" @if($route=="admin.whatsapp_msg" and $row->manual_insert=="0") style="background-color:#2ecc717d" @endif @if($isPostList and $row->published==false and (int)$row->redirect_post_id!=0) style="background-color:#b2ecec" @endif >
+                <tr @if($isGeoGscList) data-gsc-urls="{{ json_encode($geoGscUrls[$row->id]) }}" @endif class="<?= $row->blocked == 1 ? "bg-danger" : ""; ?>" @if($route=="admin.whatsapp_msg" and $row->manual_insert=="0") style="background-color:#2ecc717d" @endif @if($isPostList and $row->published==false and (int)$row->redirect_post_id!=0) style="background-color:#b2ecec" @endif >
                     <td class="text-center"><input type="checkbox" value="<?= $row->id; ?>" class="input_check"></td>
                     <!--<td><?= $rows->total() - ($krow+$rows->firstItem())+1; ?></td>-->
 					
@@ -315,7 +415,21 @@ $str_get = $str_get . $k.'='.$v.'&';
                             <td>{{ $field ? $find_row->$field : $find_row->name_en }}</td>
                         @else
                             <td <?= $key=="mobile" ? "dir='ltr'":""; ?>>
-								@if($route=="admin.whatsapp_msg" and $key=="email")
+                                @if($isGeoGscList && isset($gscMetricClasses[$key]))
+                                    <p class="{{ $gscMetricClasses[$key] }}"></p>
+                                @elseif($isGeoGscList && in_array($key, ['name_ar', 'name_en'], true))
+                                    <?php
+                                        $gscNameUrl = isset($geoGscUrls[$row->id]['ar']) ? $geoGscUrls[$row->id]['ar'] : null;
+                                        if ($gscNameUrl && $key === 'name_en') {
+                                            $gscNameUrl = str_replace('https://damas.net/ar/', 'https://damas.net/en/', $gscNameUrl);
+                                        }
+                                    ?>
+                                    @if($gscNameUrl)
+                                        <a target="_blank" @if($key === 'name_ar') class="gsc-link" @endif href="{{ $gscNameUrl }}">{{ $row->$key }}</a>
+                                    @else
+                                        {{ $row->$key }}
+                                    @endif
+                                @elseif($route=="admin.whatsapp_msg" and $key=="email")
 									<div class="nobreak">{{ $row->$key }}</div>
 								@elseif($route=="admin.whatsapp_msg" and $key=="page")
 								<div class="nobreak">	
@@ -367,7 +481,7 @@ $str_get = $str_get . $k.'='.$v.'&';
 
 									?>
 								@elseif($route=="admin.newlandingpage" and $key=='title')
-									<a href="https://damas.net/landing/{{$row->slug}}" target="_blank">{{ $row->$key }}</a>
+									<a href="{{ $landingUrl($row) }}" target="_blank">{{ $row->$key }}</a>
                                 @elseif($key=="link" and $route=="admin.pages.search")
                                     <a href="{{ $row->link }}" target="_blank" class="gsc-link">
                                         {{ $row->link }}
@@ -381,14 +495,14 @@ $str_get = $str_get . $k.'='.$v.'&';
 								@elseif($route=="admin.projectcategory" and $key=='feature_slug')
 								    {{$row->slug}}
                                 @elseif($route=="admin.landingpage" and $key=='name')
-									<?php $langs = explode(',',$row->lang);
+									<?php $langs = array_intersect(explode(',', $row->lang), \LaravelLocalization::getSupportedLanguagesKeys());
 									foreach($langs as $ln){ ?>
-									<a href="https://www.damas.net/<?= ($ln=='ar'?'':$ln.'/') ?>landing/<?= $row->slug ?>" target="_blank">
+									<a href="{{ $landingUrl($row, $ln) }}" target="_blank">
                                         {{ $row->project->title_en  }} - {{ ucfirst($ln) }}
                                     </a><br>
 									<?php } ?>
                                 @elseif($route=="admin.landing2" and $key=='title_en')
-									<a href="https://damas.net/landing/{{ $row->slug }}" target="_blank">{{ ($row->title_en!=''?$row->title_en:($row->title_ar!=''?$row->title_ar:($row->title_fr!=''?$row->title_fr:($row->title_ru!=''?$row->title_ru:$row->title_pe))))  }}</a>
+									<a href="{{ $landingUrl($row) }}" target="_blank">{{ ($row->title_en!=''?$row->title_en:($row->title_ar!=''?$row->title_ar:($row->title_fr!=''?$row->title_fr:($row->title_ru!=''?$row->title_ru:$row->title_pe))))  }}</a>
                                 @elseif($route=="admin.landingpage" and $key=='views')
 									<?php $langs = explode(',',$row->lang);
 									foreach($langs as $ln){
@@ -554,7 +668,7 @@ $str_get = $str_get . $k.'='.$v.'&';
 									}
 									?>
 								@elseif($key=="seo_title_ar")
-								    <a href="https://damas.net/landing/{{ $row->slug }}" target="_blank">{{$row->seo_title_ar}}</a>
+								    <a href="{{ $landingUrl($row, 'ar') }}" target="_blank">{{$row->seo_title_ar}}</a>
                                 @elseif($route=="admin.messages" and $key=="form_type")
                                     <a href="<?= strtok($row->page, '?') ?>" target="_blank">{{ $row->form_type }}</a>
                                 @elseif($route=="admin.stats" and $key=="updated_at")
@@ -599,7 +713,7 @@ $str_get = $str_get . $k.'='.$v.'&';
 								    <p class="ctr"></p>
 								@elseif($isPostList and $key=="blog_pos")
 								    <p class="position"></p>
-								@elseif($route=="admin.projects" and $key=="project_position")
+								@elseif($key=="project_position" || $key=="search_pages_position")
 								    <p class="position"></p>
 								@elseif($isPostList and $key=="blog_last_crawl")
                                     <p class="last-crawl"></p>
@@ -832,93 +946,121 @@ $(function() {
     
 });
 </script>
-<script src="https://accounts.google.com/gsi/client" async defer onload="initGoogleAuth()"></script>
-
+@if($gscEnabled)
 <script>
 let tokenClient;
 let googleAccessToken = null;
-let totalClicks = 0;
-let totalImpressions = 0;
-let counter = 0;
-const percentageSpan = document.getElementById("finished-percentage");
-<?php if($isPostList){ ?>
-const rowsCount = <?= $tab == 'disabled' ? (int) $disabledCount : (int) (isset($countryCounts[$tab]) ? $countryCounts[$tab] : 0) ?>;
-<?php } elseif(in_array($route, array('admin.projects', 'admin.pages.search'), true)){ ?>
-const rowsCount = <?= (int) $rows->total() ?>;
-<?php } ?>
-let totalClicksSpan = document.getElementById("totalClicks");
-let totalImpressionsSpan = document.getElementById("totalImpressions");
+
+function collectGscLinks() {
+    const table = document.getElementById('shared-admin-table');
+    if (!table) return [];
+    const links = [];
+    table.querySelectorAll('tbody tr').forEach(row => {
+        const addLink = href => {
+            links.push({
+                href,
+                impressions: row.querySelector('.impressions'),
+                clicks: row.querySelector('.clicks'),
+                ctr: row.querySelector('.ctr'),
+                position: row.querySelector('.position'),
+                lastCrawl: row.querySelector('.last-crawl')
+            });
+        };
+        if (row.hasAttribute('data-gsc-urls')) {
+            const urls = JSON.parse(row.dataset.gscUrls);
+            if (urls.ar) addLink(urls.ar);
+        } else {
+            const seen = new Set();
+            row.querySelectorAll('.gsc-link').forEach(anchor => {
+                if (!seen.has(anchor.href)) {
+                    seen.add(anchor.href);
+                    addLink(anchor.href);
+                }
+            });
+        }
+    });
+    return links;
+}
+
+function setGscCell(cell, text, sortValue) {
+    if (!cell) return;
+    cell.textContent = text;
+    if (Number.isFinite(sortValue)) cell.dataset.sortValue = String(sortValue);
+    else delete cell.dataset.sortValue;
+}
+
+async function loadGscMetrics() {
+    const links = collectGscLinks();
+    const progress = document.getElementById('finished-percentage');
+    const clicksTotal = document.getElementById('totalClicks');
+    const impressionsTotal = document.getElementById('totalImpressions');
+    let totalClicks = 0;
+    let totalImpressions = 0;
+    let finished = 0;
+    clicksTotal.textContent = '0';
+    impressionsTotal.textContent = '0';
+    progress.textContent = links.length ? '0.00% Finished' : 'No URLs';
+
+    for (const link of links) {
+        for (const key of ['impressions', 'clicks', 'ctr', 'position', 'lastCrawl']) {
+            setGscCell(link[key], 'Fetching...');
+        }
+        try {
+            const result = await testGoogleFetch(link.href);
+            const metrics = result.rows && result.rows.length ? result.rows[0] : null;
+            const impressions = Number(metrics ? metrics.impressions : 0);
+            const clicks = Number(metrics ? metrics.clicks : 0);
+            const ctr = Number(metrics ? metrics.ctr : 0) * 100;
+            const position = metrics ? Number(metrics.position) : null;
+            setGscCell(link.impressions, String(impressions), impressions);
+            setGscCell(link.clicks, String(clicks), clicks);
+            setGscCell(link.ctr, ctr.toFixed(2) + '%', ctr);
+            setGscCell(link.position, position === null ? '—' : position.toFixed(2), position);
+            totalImpressions += impressions;
+            totalClicks += clicks;
+            impressionsTotal.textContent = String(totalImpressions);
+            clicksTotal.textContent = String(totalClicks);
+        } catch (error) {
+            console.error('GSC search analytics failed for ' + link.href, error);
+            for (const key of ['impressions', 'clicks', 'ctr', 'position']) {
+                setGscCell(link[key], 'Error');
+            }
+        }
+        if (link.lastCrawl) {
+            try {
+                const inspection = await getGoogleInspection(link.href);
+                const value = inspection.inspectionResult?.indexStatusResult?.lastCrawlTime;
+                const date = value ? new Date(value) : null;
+                const timestamp = date ? date.getTime() : NaN;
+                setGscCell(link.lastCrawl, Number.isFinite(timestamp)
+                    ? date.toLocaleDateString('en-GB', {day: '2-digit', month: 'short', year: 'numeric'})
+                    : 'Unknown', timestamp);
+            } catch (error) {
+                console.error('GSC URL inspection failed for ' + link.href, error);
+                setGscCell(link.lastCrawl, 'Error');
+            }
+        }
+        finished++;
+        progress.textContent = ((finished / links.length) * 100).toFixed(2) + '% Finished';
+    }
+}
+
 function initGoogleAuth() {
     tokenClient = google.accounts.oauth2.initTokenClient({
         client_id: '424156267069-20nnlvdq22upvnug3bcjbtc5fvmn8ggo.apps.googleusercontent.com',
         scope: 'https://www.googleapis.com/auth/webmasters.readonly',
-        callback: async (response) => {
+        callback: async response => {
+            if (response.error || !response.access_token) {
+                console.error('Google authorization failed', response.error);
+                return;
+            }
             googleAccessToken = response.access_token;
-            console.log("links:", [...document.querySelectorAll(".gsc-link")]);
-            let loadedLinks = [...document.querySelectorAll(".gsc-link")].map(curr => {
-                const row = curr.closest('tr');
-                return {
-                    impressions: row.querySelector('.impressions'),
-                    clicks: row.querySelector('.clicks'),
-                    ctr: row.querySelector('.ctr'),
-                    position: row.querySelector('.position'),
-                    lastCrawl: row.querySelector('.last-crawl'),
-                    href: curr.href
-                };
-            });
-            console.log(loadedLinks)
-            totalClicks = 0;
-            totalImpressions = 0;
-            counter = 0;
-            for (let link of loadedLinks) {
-                if (link.impressions) link.impressions.textContent = "Fetching...";
-                if (link.clicks) link.clicks.textContent = "Fetching...";
-                if (link.ctr) link.ctr.textContent = "Fetching...";
-                if (link.position) link.position.textContent = "Fetching...";
-                if (link.lastCrawl) link.lastCrawl.textContent = "Fetching..."; 
-
-                const searchResponse = await testGoogleFetch(link.href);
-                counter++;
-                percentageSpan.textContent = ((counter / rowsCount) * 100).toFixed(2) + '% Finished';
-                if (searchResponse?.rows?.length) {
-                    if (link.impressions) {
-                        link.impressions.textContent = searchResponse.rows[0].impressions;
-                        totalImpressions += Number(searchResponse.rows[0].impressions);
-                        totalImpressionsSpan.textContent = totalImpressions;
-                    }
-
-                    if (link.clicks) {
-                        link.clicks.textContent = searchResponse.rows[0].clicks;
-                        totalClicks += Number(searchResponse.rows[0].clicks);
-                        totalClicksSpan.textContent = totalClicks;
-                    }
-
-                    if (link.ctr) {
-                        link.ctr.textContent =
-                            (Number(searchResponse.rows[0].ctr) * 100).toFixed(2) + "%";
-                    }
-
-                    if (link.position) {
-                        link.position.textContent =
-                            Number(searchResponse.rows[0].position).toFixed(2);
-                    }
-                } else {
-                    if (link.impressions) link.impressions.textContent = 0;
-                    if (link.clicks) link.clicks.textContent = 0;
-                    if (link.ctr) link.ctr.textContent = 0;
-                    if (link.position) link.position.textContent = 0;
-                }
-                if (link.lastCrawl) {
-                    const inspectionResponse = await getGoogleInspection(link.href);
-
-                    const lastCrawl =
-                        inspectionResponse
-                            ?.inspectionResult
-                            ?.indexStatusResult
-                            ?.lastCrawlTime;
-
-                    link.lastCrawl.textContent = ((d) => `${d[2]} ${d[1]} ${d[3]}`)(new Date(lastCrawl).toDateString().split(' ')) /* thank you stupid dates and stupid date formatting */ ?? "Unknown";
-                }
+            const button = document.getElementById('gsc-connect');
+            button.disabled = true;
+            try {
+                await loadGscMetrics();
+            } finally {
+                button.disabled = false;
             }
         }
     });
@@ -929,74 +1071,58 @@ function connectGoogle() {
         console.log('Google OAuth is still loading');
         return;
     }
-
+    const startDate = document.getElementById('gsc-start-date').value;
+    const endDate = document.getElementById('gsc-end-date').value;
+    if (!startDate || !endDate || startDate > endDate) {
+        alert('Choose a valid start and end date.');
+        return;
+    }
     tokenClient.requestAccessToken();
 }
 
-async function testGoogleFetch(link) {
-    const body = {
-        startDate: document.getElementById('gsc-start-date').value,
-        endDate: document.getElementById('gsc-end-date').value,
-        dimensions: ['page'],
-        rowLimit: 25000,
-        dimensionFilterGroups: [
-            {
-                filters: [
-                    {
-                        dimension: 'page',
-                        operator: 'equals',
-                        expression: link
-                    }
-                ]
-            }
-        ]
-    };
-
-    try {
-        const response = await fetch(
-            'https://www.googleapis.com/webmasters/v3/sites/' +
-            encodeURIComponent('sc-domain:damas.net') +
-            '/searchAnalytics/query',
-            {
-                method: 'POST',
-                headers: {
-                    'Authorization': 'Bearer ' + googleAccessToken,
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(body)
-            }
-        );
-
-        return await response.json();
-    } catch (error) {
-        console.error(error);
-        return null;
+async function gscRequest(url, body) {
+    const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+            'Authorization': 'Bearer ' + googleAccessToken,
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(body)
+    });
+    const data = await response.json();
+    if (!response.ok || data.error) {
+        throw new Error(data.error?.message || ('GSC request failed: ' + response.status));
     }
+    return data;
+}
+
+async function testGoogleFetch(link) {
+    return gscRequest(
+        'https://www.googleapis.com/webmasters/v3/sites/' +
+        encodeURIComponent('sc-domain:damas.net') + '/searchAnalytics/query', {
+            startDate: document.getElementById('gsc-start-date').value,
+            endDate: document.getElementById('gsc-end-date').value,
+            dimensions: ['page'],
+            rowLimit: 1,
+            dimensionFilterGroups: [{filters: [{
+                dimension: 'page', operator: 'equals', expression: link
+            }]}]
+        }
+    );
 }
 
 async function getGoogleInspection(link) {
-    try {
-        const response = await fetch(
-            'https://searchconsole.googleapis.com/v1/urlInspection/index:inspect',
-            {
-                method: 'POST',
-                headers: {
-                    'Authorization': 'Bearer ' + googleAccessToken,
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    inspectionUrl: link,
-                    siteUrl: 'sc-domain:damas.net'
-                })
-            }
-        );
-
-        return await response.json();
-    } catch (error) {
-        console.error(error);
-        return null;
-    }
+    return gscRequest('https://searchconsole.googleapis.com/v1/urlInspection/index:inspect', {
+        inspectionUrl: link,
+        siteUrl: 'sc-domain:damas.net'
+    });
 }
+
+</script>
+<script src="https://accounts.google.com/gsi/client" async defer onload="initGoogleAuth()"></script>
+@endif
+
+<script>
 const checkedSpan = document.getElementById("checked-count");
 
 $(document).on('ifChecked ifUnchecked', '.input_check', function () {
@@ -1009,46 +1135,34 @@ $(document).on('ifChecked ifUnchecked', '.input_check', function () {
     }
 });
 document.querySelectorAll('.gsc-sort').forEach(button => {
-    button.addEventListener('click', function(e) {
-        e.preventDefault();
-
-        const field = this.dataset.field;
+    button.addEventListener('click', function(event) {
+        event.preventDefault();
+        const className = this.dataset.class;
+        const selector = '.' + className;
+        const tbody = document.querySelector('#shared-admin-table tbody');
+        if (!tbody || !className) return;
         const direction = this.dataset.sort;
-
-        const classMap = {
-            blog_impressions: 'impressions',
-            blog_clicks: 'clicks',
-            blog_ctr: 'ctr',
-            blog_pos: 'position',
-        
-            project_impressions: 'impressions',
-            project_clicks: 'clicks',
-            project_ctr: 'ctr',
-            project_position: 'position'
+        const valueFor = row => {
+            const cell = row.querySelector(selector);
+            if (!cell) return null;
+            if (cell.dataset.sortValue !== undefined) return Number(cell.dataset.sortValue);
+            const value = className === 'last-crawl'
+                ? Date.parse(cell.textContent)
+                : parseFloat(cell.textContent.replace(/,/g, ''));
+            return Number.isFinite(value) ? value : null;
         };
-
-        const className = classMap[field];
-
-        const tbody = document.querySelector('table tbody');
         const rows = [...tbody.querySelectorAll('tr')];
-
         rows.sort((a, b) => {
-            const aValue = parseFloat(
-                a.querySelector('.' + className)?.textContent
-            ) || 0;
-
-            const bValue = parseFloat(
-                b.querySelector('.' + className)?.textContent
-            ) || 0;
-
-            return direction === 'asc'
-                ? aValue - bValue
-                : bValue - aValue;
+            const aValue = valueFor(a);
+            const bValue = valueFor(b);
+            if (aValue === null && bValue === null) return 0;
+            if (aValue === null) return 1;
+            if (bValue === null) return -1;
+            return direction === 'asc' ? aValue - bValue : bValue - aValue;
         });
-
         rows.forEach(row => tbody.appendChild(row));
-
         this.dataset.sort = direction === 'asc' ? 'desc' : 'asc';
     });
 });
+
 </script>

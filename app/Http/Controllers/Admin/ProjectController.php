@@ -10,38 +10,82 @@ use Input;
 class ProjectController extends BaseController
 {
     
-    /**
-    * project list
-    *
-    * @param int $var
-    * @return void
-    */
     public function projects_index()
     {
-		$where = [];
-		if(isset($_GET['search']) && $_GET['search']!=''){
-			$search = '%'.$_GET['search'].'%';
-			//$where[] = [DB::raw(" name_en like $search or project_link like $search or slug like $search or payment_method like $search or intro_card_ar like $search intro_card_en or like $search ")];
-			$where[] = ["name_en", "like", $search];
-			$where[] = ["project_link", "like", $search];
-			$where[] = ["slug", "like", $search];
-			$where[] = ["payment_method", "like", $search];
-			$where[] = ["intro_card_ar", "like", $search];
-			$where[] = ["intro_card_en", "like", $search];
-			$where[] = ["location_ar", "like", $search];
-			$where[] = ["location_en", "like", $search];
-			$where[] = ["intro_location_ar", "like", $search];
-			$where[] = ["intro_location_en", "like", $search];
-			$where[] = ["transportation_ar", "like", $search];
-			$where[] = ["transportation_en", "like", $search];
-			$where[] = ["future_look_ar", "like", $search];
-			$where[] = ["future_look_en", "like", $search];
-			
-			$rows = Helper::query("Project", "paginate", $where,'or');
-		}else{
-        $rows = Helper::query("Project", "paginate");
+        $query = \App\Models\Project::query();
+    
+        // Filter projects through their city's country.
+        $countryId = \Input::get('project_country', 'all');
+    
+        if ($countryId !== 'all') {
+            if (
+                !is_scalar($countryId) ||
+                !ctype_digit((string) $countryId) ||
+                (int) $countryId < 1
+            ) {
+                abort(404);
+            }
+    
+            $query->whereIn('city_id', function ($cities) use ($countryId) {
+                $cities->select('id')
+                    ->from('cities')
+                    ->where('country_id', (int) $countryId);
+            });
         }
-		return view("admin.projects.index", compact("rows"));
+    
+        // Group all search conditions inside one WHERE (... OR ...).
+        $searchInput = \Input::get('search', '');
+    
+        if (is_string($searchInput) && $searchInput !== '') {
+            $search = '%' . $searchInput . '%';
+    
+            $query->where(function ($searchQuery) use ($search) {
+                $fields = [
+                    'name_en',
+                    'project_link',
+                    'slug',
+                    'payment_method',
+                    'intro_card_ar',
+                    'intro_card_en',
+                    'location_ar',
+                    'location_en',
+                    'intro_location_ar',
+                    'intro_location_en',
+                    'transportation_ar',
+                    'transportation_en',
+                    'future_look_ar',
+                    'future_look_en',
+                ];
+    
+                foreach ($fields as $field) {
+                    $searchQuery->orWhere($field, 'like', $search);
+                }
+            });
+        }
+    
+        // Allow sorting only by real project columns.
+        $sortField = \Input::get('field', 'id');
+        $sortDirection = \Input::get('sort', 'desc') === 'asc'
+            ? 'asc'
+            : 'desc';
+    
+        $model = $query->getModel();
+        $columns = $model->getConnection()
+            ->getSchemaBuilder()
+            ->getColumnListing($model->getTable());
+    
+        if (!is_string($sortField) || !in_array($sortField, $columns, true)) {
+            $sortField = 'id';
+        }
+    
+        $query->orderBy($sortField, $sortDirection);
+    
+        // Keep the existing rows-per-page setting.
+        $perPage = (int) \Helper::ajax_change_paginate_number();
+    
+        $rows = $query->paginate($perPage > 0 ? $perPage : 10);
+    
+        return view('admin.projects.index', compact('rows'));
     }
     
     /**

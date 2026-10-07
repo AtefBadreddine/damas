@@ -9,6 +9,10 @@
             "slug"      =>  "Slug",
             "code"      =>  "Code",
             "whatsapp_number" => "WhatsApp",
+			"project_impressions" => "Impressions",
+            "project_clicks" => "Clicks",
+            "project_ctr" => "CTR",
+            "project_position" => "Position",
         ];
     ?>
     @include("admin.layouts.table", [

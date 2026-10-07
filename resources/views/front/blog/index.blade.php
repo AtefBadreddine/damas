@@ -80,7 +80,7 @@ $all_project_types = Helper::query('ProjectType', 'all');
                 <div class="type_full">
                     <?php //if (Helper::get_device() == 'full') { ?>
                         <h1 class="jazzira_font_bold">
-                            <?= trans("front.".$type); ?> <span class="num blog-title-span" display:"inline !important">({{ $posts->total() }})</span> 
+                            <?= trans("front.".$type); ?> <!-- <span class="num blog-title-span" display:"inline !important">({{ $posts->total() }})</span> -->
                         </h1>
                         <!--<p><span><?= trans("front.search results"); ?></span> </p>-->
                     <?php //} ?>
@@ -152,8 +152,9 @@ $all_project_types = Helper::query('ProjectType', 'all');
                 
                 <?php //if (Helper::get_device() != 'full') { ?>
                     <h1 class="jazzira_font_bold page_title_mob d-block d-md-none d-lg-none" style="font-size: 1.5em">
-                        أدلة التملك <b class="num" display:"inline !important">({{ $posts->total() }})</b> 
+                        أدلة التملك 
                     </h1>
+                     <!--<b class="num" display:"inline !important">({{ $posts->total() }})</b>-->
                     <!--<p><span><?= trans("front.search results"); ?></span> </p>-->
                 <?php //} ?>
                 
@@ -270,10 +271,8 @@ $all_project_types = Helper::query('ProjectType', 'all');
                     url: url,
                 }).done(function (resp) {
                     if ($.trim(resp).indexOf("image_cont") !== -1) {
-                    window.history.pushState("", "", href);
-                    
-                    $('ul.blog_catd_sec li:last-child').remove();
-                    $('ul.blog_catd_sec').append(resp);
+                        $('ul.blog_catd_sec li:last-child').remove();
+                        $('ul.blog_catd_sec').append(resp);
                     }
                 }).fail(function () {
 
@@ -424,7 +423,7 @@ $all_project_types = Helper::query('ProjectType', 'all');
     {"@context":"http://schema.org",
     "@type":"BreadcrumbList",
     "itemListElement":[
-
+    // {"@type":"ListItem","position":3,"name":"trans('front.living turkey')","item":"route('front.living_turkey')"},
     {"@type":"ListItem","position":1,"name":"{{ trans('front.home') }}","item":"{{ route('front.index') }}"},
     <?php if (in_array($category->id, [1, 7])) {//investment; economic affaire  ?>
         {"@type":"ListItem","position":2,"name":"{{ trans('front.turkey guide') }}","item":"{{ route('front.turkey_guide') }}"},
@@ -432,7 +431,6 @@ $all_project_types = Helper::query('ProjectType', 'all');
         {"@type":"ListItem","position":4,"name":"{{ @$category->getName() }}","item":"{{ $category->listingUrl() }}"}
     <?php } elseif (in_array($category->id, [4])) {//Daily living in Turkey  ?>
         {"@type":"ListItem","position":2,"name":"{{ trans('front.turkey guide') }}","item":"{{ route('front.turkey_guide') }}"},
-        {"@type":"ListItem","position":3,"name":"{{ trans('front.living turkey') }}","item":"{{ route('front.living_turkey') }}"},
         {"@type":"ListItem","position":4,"name":"{{ @$category->getName() }}","item":"{{ $category->listingUrl() }}"}
     <?php } elseif (in_array($category->id, [6, 3])) {//turksih district ; monument tourism turkey   ?>
         {"@type":"ListItem","position":2,"name":"{{ trans('front.turkey guide') }}","item":"{{ route('front.turkey_guide') }}"},

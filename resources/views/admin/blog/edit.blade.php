@@ -136,31 +136,9 @@
                             </div>
 
 
-                            <div class="col-md-4">
-                                <!--                            <legend>Real Estate Projects</legend>-->
-                                <div class="form-group">
-                                    <label>Related Projects</label>
-                                    <select name="project_id[]" class="form-control select2me" multiple>
-                                        <option value=""></option>
-                                        @foreach(Helper::query("Project", "all") as $project)
-                                        <option value="<?= $project->id; ?>" <?= in_array($project->id, $row->projects()->lists('project_id')->toArray()) ? 'selected' : ''; ?>><?= $project->name_ar; ?></option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
+                            
 
-                            <div class="col-md-4">
-                                <!--                            <legend>Similar Posts</legend>-->
-                                <div class="form-group">
-                                    <label>Similar Posts</label>
-                                    <select name="similar_posts[]" class="form-control select2me" multiple>
-                                        <option value=""></option>
-                                        @foreach(\App\Models\Post::where('type',$type)->get() as $post)
-                                        <option value="<?= $post->id; ?>" <?= in_array($post->id, explode(",", $row->similar_posts)) ? 'selected' : ''; ?>><?= $post->title_ar; ?></option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
+                            
 
                             <div class="col-md-4">
                                 <div class="form-group">

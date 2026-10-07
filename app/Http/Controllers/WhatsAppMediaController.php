@@ -1,0 +1,225 @@
+<?php
+namespace App\Http\Controllers;
+use Illuminate\Support\Facades\DB;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
+class WhatsAppMediaController extends Controller
+{
+    public function showImage($id)
+    {
+        return $this->serve($id, ['image']);
+    }
+    public function show($id)
+    {
+        return $this->serve($id, ['image', 'audio', 'video', 'document']);
+    }
+    private function serve($id, $types)
+    {
+        if (!ctype_digit((string) $id)) {
+            abort(404);
+        }
+        $message = DB::table('whatsapp_messages')
+            ->where('id', $id)
+            ->where('phone_number_id', config('whatsapp.phone_number_id'))
+            ->where('direction', 'incoming')
+            ->whereIn('message_type', $types)
+            ->first();
+        if (!$message || !is_string($message->media_id) ||
+            !preg_match('/^[0-9]+$/', $message->media_id)) {
+            abort(404);
+        }
+        $token = config('whatsapp.access_token');
+        $version = config('whatsapp.api_version');
+        $phoneId = config('whatsapp.phone_number_id');
+        if (!is_string($token) || $token === '' ||
+            !is_string($phoneId) || !preg_match('/^[0-9]+$/', $phoneId) ||
+            !is_string($version) || !preg_match('/^v[0-9]+\.[0-9]+$/', $version)) {
+            return response('Media unavailable', 503);
+        }
+        $metadataUrl = 'https://graph.facebook.com/' . $version . '/' .
+            $message->media_id . '?phone_number_id=' . rawurlencode($phoneId);
+        $metadataBody = $this->metaGet($metadataUrl, $token, 1048576);
+        $metadata = $metadataBody !== null ? json_decode($metadataBody, true) : null;
+        if (!is_array($metadata) || empty($metadata['url']) ||
+            !is_string($metadata['url']) || !$this->isMetaMediaUrl($metadata['url'])) {
+            return response('Media unavailable', 502);
+        }
+        $mime = isset($metadata['mime_type']) && is_string($metadata['mime_type'])
+            ? strtolower(trim(explode(';', $metadata['mime_type'])[0])) : '';
+        $allowed = [
+            'audio' => ['audio/aac', 'audio/amr', 'audio/mpeg', 'audio/mp4', 'audio/ogg', 'audio/3gpp'],
+            'video' => ['video/mp4', 'video/3gpp', 'video/3gp'],
+        ];
+        if (isset($allowed[$message->message_type]) &&
+            !in_array($mime, $allowed[$message->message_type], true)) {
+            return response('Unsupported media format', 415);
+        }
+        $maxBytes = $message->message_type === 'document' ? 104857600 :
+            ($message->message_type === 'image' ? 6291456 : 17825792);
+        if (isset($metadata['file_size']) && is_numeric($metadata['file_size']) &&
+            (float) $metadata['file_size'] > $maxBytes) {
+            return response('Media is too large', 413);
+        }
+        $file = $this->metaGetFile($metadata['url'], $token, $maxBytes);
+        if ($file === null) {
+            return response('Media unavailable', 502);
+        }
+        if ($message->message_type === 'image') {
+            $info = @getimagesize($file);
+            $mime = is_array($info) && isset($info['mime']) ? $info['mime'] : '';
+            if (!in_array($mime, ['image/jpeg', 'image/png'], true)) {
+                @unlink($file);
+                return response('Unsupported image', 415);
+            }
+        }
+        if ($message->message_type === 'document') {
+            $mime = 'application/octet-stream';
+        }
+        clearstatcache(true, $file);
+        $headers = [
+            'Content-Type' => $mime,
+            'Cache-Control' => 'private, no-store',
+            'X-Content-Type-Options' => 'nosniff',
+        ];
+        
+        if ($message->message_type === 'document' || request()->query('download') === '1') {
+            $filename = '';
+        
+            if ($message->message_type === 'document') {
+                $filename = isset($message->media_filename) && is_string($message->media_filename)
+                    ? basename(str_replace('\\', '/', $message->media_filename))
+                    : '';
+        
+                $filename = trim(preg_replace('/[\x00-\x1F\x7F]/', '', $filename));
+            } else {
+                $extensions = [
+                    'audio/ogg' => 'ogg',
+                    'audio/mpeg' => 'mp3',
+                    'audio/mp4' => 'm4a',
+                    'audio/aac' => 'aac',
+                    'audio/amr' => 'amr',
+                    'audio/3gpp' => '3gp',
+                    'video/mp4' => 'mp4',
+                    'video/3gpp' => '3gp',
+                    'video/3gp' => '3gp',
+                    'image/jpeg' => 'jpg',
+                    'image/png' => 'png',
+                ];
+        
+                $filename = 'whatsapp-' . $message->message_type . '-' . $message->id .
+                    '.' . (isset($extensions[$mime]) ? $extensions[$mime] : 'bin');
+            }
+        
+            if ($filename === '') {
+                $filename = 'whatsapp-document-' . $message->id;
+            }
+        
+            $headers['Content-Disposition'] =
+                'attachment; filename="' . str_replace('"', '', $filename) . '"';
+        } else {
+            $headers['Content-Disposition'] = 'inline';
+        }
+        
+        return new \Symfony\Component\HttpFoundation\StreamedResponse(
+            function () use ($file) {
+                $handle = fopen($file, 'rb');
+        
+                if ($handle !== false) {
+                    fpassthru($handle);
+                    fclose($handle);
+                }
+        
+                @unlink($file);
+            },
+            200,
+            $headers
+        );
+    }
+    private function isMetaMediaUrl($url)
+    {
+        $parts = parse_url($url);
+        return is_array($parts) && isset($parts['scheme'], $parts['host']) &&
+            strtolower($parts['scheme']) === 'https' &&
+            strtolower($parts['host']) === 'lookaside.fbsbx.com' &&
+            !isset($parts['user']) && !isset($parts['pass']) &&
+            (!isset($parts['port']) || (int) $parts['port'] === 443);
+    }
+    private function metaGet($url, $token, $maxBytes)
+    {
+        $body = '';
+        $curl = curl_init($url);
+        if ($curl === false) {
+            return null;
+        }
+        $configured = curl_setopt_array($curl, [
+            CURLOPT_HTTPGET => true,
+            CURLOPT_FOLLOWLOCATION => false,
+            CURLOPT_PROTOCOLS => CURLPROTO_HTTPS,
+            CURLOPT_RETURNTRANSFER => false,
+            CURLOPT_CONNECTTIMEOUT => 10,
+            CURLOPT_TIMEOUT => 30,
+            CURLOPT_SSL_VERIFYPEER => true,
+            CURLOPT_SSL_VERIFYHOST => 2,
+            CURLOPT_HTTPHEADER => ['Authorization: Bearer ' . $token],
+            CURLOPT_WRITEFUNCTION => function ($curl, $chunk) use (&$body, $maxBytes) {
+                if (strlen($body) + strlen($chunk) > $maxBytes) {
+                    return 0;
+                }
+                $body .= $chunk;
+                return strlen($chunk);
+            },
+        ]);
+        $successful = $configured ? curl_exec($curl) : false;
+        $httpStatus = (int) curl_getinfo($curl, CURLINFO_HTTP_CODE);
+        curl_close($curl);
+        return $successful && $httpStatus === 200 ? $body : null;
+    }
+    private function metaGetFile($url, $token, $maxBytes)
+    {
+        $path = tempnam(sys_get_temp_dir(), 'wa_media_');
+        if ($path === false) {
+            return null;
+        }
+        @chmod($path, 0600);
+        $stream = fopen($path, 'wb');
+        if ($stream === false) {
+            @unlink($path);
+            return null;
+        }
+        $curl = curl_init($url);
+        if ($curl === false) {
+            fclose($stream);
+            @unlink($path);
+            return null;
+        }
+        $bytes = 0;
+        $configured = curl_setopt_array($curl, [
+            CURLOPT_HTTPGET => true,
+            CURLOPT_FOLLOWLOCATION => false,
+            CURLOPT_PROTOCOLS => CURLPROTO_HTTPS,
+            CURLOPT_RETURNTRANSFER => false,
+            CURLOPT_CONNECTTIMEOUT => 10,
+            CURLOPT_TIMEOUT => 120,
+            CURLOPT_SSL_VERIFYPEER => true,
+            CURLOPT_SSL_VERIFYHOST => 2,
+            CURLOPT_HTTPHEADER => ['Authorization: Bearer ' . $token],
+            CURLOPT_WRITEFUNCTION => function ($curl, $chunk) use ($stream, &$bytes, $maxBytes) {
+                $size = strlen($chunk);
+                if ($bytes + $size > $maxBytes) {
+                    return 0;
+                }
+                $written = fwrite($stream, $chunk);
+                $bytes += $written === false ? 0 : $written;
+                return $written === false ? 0 : $written;
+            },
+        ]);
+        $successful = $configured ? curl_exec($curl) : false;
+        $httpStatus = (int) curl_getinfo($curl, CURLINFO_HTTP_CODE);
+        curl_close($curl);
+        fclose($stream);
+        if (!$successful || $httpStatus !== 200 || $bytes === 0) {
+            @unlink($path);
+            return null;
+        }
+        return $path;
+    }
+}

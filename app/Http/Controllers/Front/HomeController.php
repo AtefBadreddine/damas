@@ -314,7 +314,7 @@ class HomeController extends BaseController
     *
     * @param string $slug
     * @return void
-    */
+    */ 
     public function districts($slug)
     {
 		$city = Helper::query("City", "where", ["field" => "slug", "value" => $slug])->first();
@@ -326,25 +326,37 @@ class HomeController extends BaseController
         return view("front.districts_page", compact("city","regions"));
 	}
     /**
-    * district detail
-    *
-    * @param string $slug
-    * @return void
-    */
-    public function district_detail($slug,$region_slug)
+     * District detail
+     *
+     * @param string $region_slug
+     * @return \Illuminate\View\View
+     */
+    public function district_detail($region_slug)
     {
-		$city = Helper::query("City", "where", ["field" => "slug", "value" => $slug])->first();
-		if($city==false or $city->enable_district_page==false)
-			abort(404);
-		
-		$regions = $city->regions()->where('show_on_districts_page',true)->where('city_id',$city->id)->get();
-		$region = $city->regions()->where('show_on_districts_page',true)->where('slug',$region_slug)->first();
-		
-		if($region==false)
-			abort(404);
-		
-        return view("front.district_detail", compact("city","region","regions"));
-	}
+        $region = Helper::query("Region", "where", [
+            "field" => "slug",
+            "value" => $region_slug
+        ])->where('show_on_districts_page', true)->first();
+    
+        if (!$region) {
+            abort(404);
+        }
+    
+        $city = Helper::query("City", "where", [
+            "field" => "id",
+            "value" => $region->city_id
+        ])->first();
+    
+        if (!$city || !$city->enable_district_page) {
+            abort(404);
+        }
+    
+        $regions = $city->regions()
+            ->where('show_on_districts_page', true)
+            ->get();
+    
+        return view("front.district_detail", compact("city", "region", "regions"));
+    }
 	/**
     * show project
     *
@@ -2172,6 +2184,53 @@ class HomeController extends BaseController
     * @param string $slug
     * @return void
     */
+    public function landing_show(Request $request, $slug)
+    {
+        $locale = \LaravelLocalization::getCurrentLocale();
+        $matches = [];
+        $handlers = [
+            'landingpages' => 'landingpage_show',
+            'landing2' => 'landing2',
+            'landing3' => 'landing3',
+            'newlandingpages' => 'newlandingpage',
+        ];
+
+        foreach ($handlers as $table => $method) {
+            $rows = DB::table($table)->where('slug', $slug)->get();
+            foreach ($rows as $row) {
+                // Custom templates have no language-selection field.
+                if ($table !== 'newlandingpages') {
+                    $language = ($table === 'landingpages' && $locale === 'pe') ? 'fa' : $locale;
+                    if (!in_array($language, explode(',', $row->lang))) {
+                        continue;
+                    }
+                }
+
+                $matches[] = ['table' => $table, 'id' => $row->id, 'method' => $method];
+            }
+        }
+
+        if (!count($matches)) {
+            abort(404);
+        }
+
+        if (count($matches) > 1) {
+            \Log::error('Duplicate unified landing slug', [
+                'slug' => $slug,
+                'locale' => $locale,
+                'matches' => $matches,
+            ]);
+            abort(500);
+        }
+
+        $method = $matches[0]['method'];
+        if ($method === 'newlandingpage') {
+            return $this->newlandingpage($slug, $request);
+        }
+
+        return $this->$method($request, $slug);
+    }
+
     public function landingpage_show(Request $request,$slug)
     {
 		$lang = (\LaravelLocalization::getCurrentLocale()=='pe'?'fa':\LaravelLocalization::getCurrentLocale());
@@ -5131,18 +5190,6 @@ class HomeController extends BaseController
 		return view("front.faq_show", compact("page","slug"));
     }
     /**
-    * living_turkey
-    *
-    * @return void
-    */
-    public function living_turkey() //living-turkey-real-estate-ownership
-    {
-        $page = Helper::query("Page", "where", ["field" => "slug", "value" => "living_turkey"])->first();
-        
-		$cats = \App\Models\Livingcat::orderBy('placement','asc')->get();
-		return view("front.living_turkey", compact("page","cats"));
-    }
-    /**
     * terms
     *
     * @return void
@@ -5453,28 +5500,6 @@ class HomeController extends BaseController
         return view("front.turkish_nationality", compact("row","availables_langs"));
     }
 
-    /**
-    * turkey_territories
-    *
-    * @return void
-    */
-    public function turkey_territories()
-    {
-        $row = Helper::query("Page", "where", ["field" => "slug", "value" => "turkey-territories"])->first();
-        if ( !$row ) $row = Helper::query("Page", "new");
-		$availables_langs = [];
-		if(trim($row->title_en)!='')
-			$availables_langs[] = 'en';
-		if(trim($row->title_fr)!='')
-			$availables_langs[] = 'fr';
-		if(trim($row->title_ru)!='')
-			$availables_langs[] = 'ru';
-		if(trim($row->title_fa)!='')
-			$availables_langs[] = 'pe';
-		if(trim($row->title_ar)!='')
-			$availables_langs[] = 'ar';
-        return view("front.turkey_territories", compact("row","availables_langs"));
-    }
 	
     /**
     * turkey-guide

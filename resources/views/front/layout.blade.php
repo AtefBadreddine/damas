@@ -94,7 +94,37 @@ foreach ($citys as $layoutCity) {
             fetchpriority="high"
         >
         <?php } ?>
+        <?php if ($current_lang == 'ar') { ?>
+        <link
+            rel="preload"
+            href="/fonts/ar/news/Al-Jazeera-Arabic-Regular.woff2"
+            as="font"
+            type="font/woff2"
+            crossorigin
+        >
+        <?php } ?>
+        @if (
+            strpos((string) Route::currentRouteName(), 'front.location.') === 0
+            || in_array(Route::currentRouteName(), ['front.projects', 'front.search'], true)
+        )
+            @if (Request::path() === 'ar/oman/something-that-could-never-exist.tm')
+                <link id="searchcss"
+                      rel="stylesheet"
+                      href="{{ asset('css/search.min.css?v=06') }}"
+                      media="print"
+                      onload="this.media='all'">
         
+                <noscript>
+                    <link rel="stylesheet"
+                          href="{{ asset('css/search.min.css?v=06') }}">
+                </noscript>
+            @else
+                <link id="searchcss"
+                      rel="stylesheet"
+                      href="{{ asset('css/search.min.css?v=06') }}">
+            @endif
+        @endif
+        <meta name="robots" content="max-image-preview:large">
         
         <meta name="application-name" content="<?= $og_title; ?>" />
 		
@@ -216,8 +246,8 @@ foreach ($citys as $layoutCity) {
         <?php /* <script type="text/javascript" src="//script.crazyegg.com/pages/scripts/0111/1113.js" async="async" ></script> */ ?>
         @endif
         
-        <script src="https://kit.fontawesome.com/69f3b7df45.js" crossorigin="anonymous"></script>
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+        <script defer src="https://kit.fontawesome.com/69f3b7df45.js" crossorigin="anonymous"></script>
+        <!--<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">-->
         <style>
             .all_select_sec .angle-down, #rightMenuModal > div > div > div.modal-body > div.change_all > div.btn-group.bootstrap-select.currency.dropup > button > span > div {
                 border-left: 0.35em solid transparent;
@@ -246,9 +276,6 @@ foreach ($citys as $layoutCity) {
                 }
             }
         </style>
-    </head>
-    <body id="page-top">
-
         <?php if (App::isLocal()) { ?>
             <!--pluguins.min.css-->
             <?= Html::style("resources/assets/css/bootstrap.min.css"); ?>
@@ -304,14 +331,17 @@ foreach ($citys as $layoutCity) {
             <?php } ?>
             <?php if ($current_lang == 'ar') { ?>
                 <style>
-                    @font-face { 
-					font-family: 'Al-Jazeera-Arabic-Regular';
-					src: url('{{ asset('fonts/ar/news/Al-Jazeera-Arabic-Regular.eot') }}');
-					src: url('{{ asset('fonts/ar/news/Al-Jazeera-Arabic-Regular.eot?#iefix') }}') format('embedded-opentype'), url('{{ asset('fonts/ar/news/Al-Jazeera-Arabic-Regular.svg#Al-Jazeera-Arabic-Regular') }}') format('otf'), url('{{ asset('fonts/ar/news/Al-Jazeera-Arabic-Regular.ttf') }}') format('truetype'), url('{{ asset('fonts/ar/news/Al-Jazeera-Arabic-Regular.woff') }}') format('woff'), url('{{ asset('fonts/ar/news/Al-Jazeera-Arabic-Regular.woff2') }}') format('woff2'); font-weight: normal; font-style: normal; } @font-face { font-family: 'Al-Jazeera-Arabic Bold'; src: url('{{ asset('fonts/ar/Al-Jazeera-Arabic Bold.eot') }}'); src: url('{{ asset('fonts/ar/Al-Jazeera-Arabic Bold.eot?#iefix') }}') format('embedded-opentype'), url('{{ asset('fonts/ar/Al-Jazeera-Arabic Bold.woff2') }}') format('woff2'); 
-					font-weight: normal; 
-					font-style: normal;
-					font-display: swap;
-					}
+                    @font-face {
+                        font-family: 'Al-Jazeera-Arabic-Regular';
+                    
+                        src:
+                            url('{{ asset('fonts/ar/news/Al-Jazeera-Arabic-Regular.woff2') }}') format('woff2'),
+                            url('{{ asset('fonts/ar/news/Al-Jazeera-Arabic-Regular.woff') }}') format('woff');
+                    
+                        font-weight: normal;
+                        font-style: normal;
+                        font-display: swap;
+                    }
 					@font-face { font-family: 'Al-Jazeera-Arabic-Bold'; 
 					src: url('{{ asset('fonts/ar/Al-Jazeera-Arabic-Bold.svg#Al-Jazeera-Arabic-Bold') }}') format('otf'), url('{{ asset('fonts/ar/Al-Jazeera-Arabic-Bold.ttf') }}') format('truetype'), url('{{ asset('fonts/ar/Al-Jazeera-Arabic-Bold.woff') }}') format('woff');
 					font-weight: normal;
@@ -334,8 +364,52 @@ foreach ($citys as $layoutCity) {
 
             <?php // Html::style("css/main.min.css?v=05"); ?>
             
-<link rel="stylesheet" type="text/css" href="{{ asset('css/main.min.css?v=05') }}">
-
+        <!--<link rel="stylesheet" type="text/css" href="{{ asset('css/main.min.css?v=05') }}">-->
+            @if (Request::path() === 'ar/oman')
+                <style id="critical-main-oman-v1">
+                    /*!
+                     * Bootstrap v4.0.0 (https://getbootstrap.com)
+                     * Copyright 2011-2018 The Bootstrap Authors
+                     * Copyright 2011-2018 Twitter, Inc.
+                     * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
+                     */
+                    /* DAMAS GLOBAL: candidate critical main CSS for /ar/oman.
+                     * Source: main.min.css?v=05, Coverage-20261004T164603.json.
+                     * Preserve existing inline/site/search styles. Load the full main stylesheet later.
+                     * Keep this at the original main stylesheet position to preserve cascade order.
+                     * One recorded viewport/page; validate other widths/pages before reuse.
+                     */
+                    .fancybox-container,.fancybox-thumbs,.fancybox-thumbs__list a,html{-webkit-tap-highlight-color:transparent}article,aside,dialog,figcaption,figure,footer,header,hgroup,legend,main,nav,section{display:block}dl,h1,h2,h3,h4,h5,h6,ol,p,pre,ul{margin-top:0}address,dl,ol,p,pre,ul{margin-bottom:1rem}.btn,img{vertical-align:middle}.carousel-inner,.collapsing,.dropdown-divider,.embed-responsive,.modal,.modal-open,.progress,.text-truncate,svg:not(:root){overflow:hidden}.dropdown-menu,body,caption{text-align:left}dd,h1,h2,h3,h4,h5,h6,label{margin-bottom:.5rem}.popover,.tooltip,button,select{text-transform:none}.btn:not(:disabled):not(.disabled),.close:not(:disabled):not(.disabled),.fancybox-button,.intl-tel-input .flag-dropdown,.navbar-toggler:not(:disabled):not(.disabled),.page-link:not(:disabled):not(.disabled),summary{cursor:pointer}:root{--blue:#007bff;--indigo:#6610f2;--purple:#6f42c1;--pink:#e83e8c;--red:#dc3545;--orange:#fd7e14;--yellow:#ffc107;--green:#28a745;--teal:#20c997;--cyan:#17a2b8;--white:#fff;--gray:#6c757d;--gray-dark:#343a40;--primary:#007bff;--secondary:#6c757d;--success:#28a745;--info:#17a2b8;--warning:#ffc107;--danger:#dc3545;--light:#f8f9fa;--dark:#343a40;--breakpoint-xs:0;--breakpoint-sm:576px;--breakpoint-md:768px;--breakpoint-lg:992px;--breakpoint-xl:1200px;--font-family-sans-serif:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";--font-family-monospace:SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;--animate-duration:1s;--animate-delay:1s;--animate-repeat:1}*,::after,::before{box-sizing:border-box}html{font-family:sans-serif;line-height:1.15;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;-ms-overflow-style:scrollbar}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";font-size:1rem;font-weight:400;line-height:1.5;color:#212529;background-color:#fff}b,strong{font-weight:bolder}a{color:#007bff;text-decoration:none;background-color:transparent;-webkit-text-decoration-skip:objects}a:not([href]):not([tabindex]),a:not([href]):not([tabindex]):focus,a:not([href]):not([tabindex]):hover{color:inherit;text-decoration:none}img{border-style:none}table{border-collapse:collapse}button{border-radius:0}button,input,optgroup,select,textarea{margin:0;font-family:inherit;font-size:inherit;line-height:inherit}button,input{overflow:visible}[type=reset],[type=submit],button,html [type=button]{-webkit-appearance:button}.h1,.h2,.h3,.h4,.h5,.h6,h1,h2,h3,h4,h5,h6{margin-bottom:.5rem;font-family:inherit;font-weight:500;line-height:1.2;color:inherit}.blockquote,hr{margin-bottom:1rem}.h1,h1{font-size:2.5rem}.h2,h2{font-size:2rem}.h3,h3{font-size:1.75rem}hr{box-sizing:content-box;height:0;overflow:visible;margin-top:1rem;border:0;border-top:1px solid rgba(0,0,0,.1)}.col,.col-1,.col-10,.col-11,.col-12,.col-2,.col-3,.col-4,.col-5,.col-6,.col-7,.col-8,.col-9,.col-auto,.col-lg,.col-lg-1,.col-lg-10,.col-lg-11,.col-lg-12,.col-lg-2,.col-lg-3,.col-lg-4,.col-lg-5,.col-lg-6,.col-lg-7,.col-lg-8,.col-lg-9,.col-lg-auto,.col-md,.col-md-1,.col-md-10,.col-md-11,.col-md-12,.col-md-2,.col-md-3,.col-md-4,.col-md-5,.col-md-6,.col-md-7,.col-md-8,.col-md-9,.col-md-auto,.col-sm,.col-sm-1,.col-sm-10,.col-sm-11,.col-sm-12,.col-sm-2,.col-sm-3,.col-sm-4,.col-sm-5,.col-sm-6,.col-sm-7,.col-sm-8,.col-sm-9,.col-sm-auto,.col-xl,.col-xl-1,.col-xl-10,.col-xl-11,.col-xl-12,.col-xl-2,.col-xl-3,.col-xl-4,.col-xl-5,.col-xl-6,.col-xl-7,.col-xl-8,.col-xl-9,.col-xl-auto{position:relative;width:100%;min-height:1px;padding-right:15px;padding-left:15px}.form-control{display:block;width:100%;padding:.375rem .75rem;font-size:1rem;line-height:1.5;color:#495057;background-color:#fff;background-clip:padding-box;border:1px solid #ced4da;border-radius:.25rem;transition:border-color .15s ease-in-out,box-shadow .15s ease-in-out}.form-control::-webkit-input-placeholder{color:#6c757d;opacity:1}.form-control::placeholder{color:#6c757d;opacity:1}select.form-control:not([size]):not([multiple]){height:calc(2.25rem + 2px)}.form-group{margin-bottom:1rem}.btn,.input-group-text{padding:.375rem .75rem;line-height:1.5;white-space:nowrap;font-weight:400}.btn{display:inline-block;text-align:center;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;border:1px solid transparent;font-size:1rem;border-radius:.25rem;transition:color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out}.dropdown-toggle::after{width:0;height:0;vertical-align:.255em;content:""}.fade{opacity:0;transition:opacity .15s linear}.dropdown,.dropup{position:relative}.dropdown-toggle::after{display:inline-block;margin-left:.255em;border-top:.3em solid;border-right:.3em solid transparent;border-bottom:0;border-left:.3em solid transparent}.dropdown-menu{position:absolute;top:100%;left:0;z-index:1000;display:none;float:left;min-width:10rem;padding:.5rem 0;margin:.125rem 0 0;font-size:1rem;color:#212529;list-style:none;background-color:#fff;background-clip:padding-box;border:1px solid rgba(0,0,0,.15);border-radius:.25rem}.btn-group,.btn-group-vertical{position:relative;display:-webkit-inline-box;display:-ms-inline-flexbox;display:inline-flex;vertical-align:middle}.btn-group-vertical>.btn,.btn-group>.btn{position:relative;-webkit-box-flex:0;-ms-flex:0 1 auto;flex:0 1 auto}.btn-group>.btn:first-child{margin-left:0}.nav,.navbar{display:-webkit-box;display:-ms-flexbox;-ms-flex-wrap:wrap}.nav-link,.navbar{padding:.5rem 1rem}.navbar{position:relative;display:flex;flex-wrap:wrap;-webkit-box-align:center;-ms-flex-align:center;align-items:center;-webkit-box-pack:justify;-ms-flex-pack:justify;justify-content:space-between}.navbar-brand{display:inline-block;padding-top:.3125rem;padding-bottom:.3125rem;margin-right:1rem;font-size:1.25rem;line-height:inherit;white-space:nowrap}.navbar-collapse{-ms-flex-preferred-size:100%;flex-basis:100%;-webkit-box-flex:1;-ms-flex-positive:1;flex-grow:1;-webkit-box-align:center;-ms-flex-align:center;align-items:center}.card-group,.progress-bar{-ms-flex-direction:column;-webkit-box-orient:vertical;-webkit-box-direction:normal}.breadcrumb,.pagination{border-radius:.25rem;list-style:none}.pagination,.progress{display:-webkit-box;display:-ms-flexbox}.pagination{display:flex;padding-left:0}.badge,.progress{border-radius:.25rem}.badge:empty,.modal{display:none}.progress{display:flex;height:1rem;font-size:.75rem;background-color:#e9ecef}.progress-bar{display:-webkit-box;display:-ms-flexbox;display:flex;flex-direction:column;-webkit-box-pack:center;-ms-flex-pack:center;justify-content:center;color:#fff;text-align:center;background-color:#007bff;transition:width .6s ease}.modal{position:fixed;top:0;right:0;bottom:0;left:0;z-index:1050;outline:0}.modal-content{position:relative;display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-orient:vertical;-webkit-box-direction:normal;-ms-flex-direction:column;flex-direction:column;width:100%;pointer-events:auto;background-color:#fff;background-clip:padding-box;border:1px solid rgba(0,0,0,.2);border-radius:.3rem;outline:0}.modal-header{display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-align:start;-ms-flex-align:start;align-items:flex-start;-webkit-box-pack:justify;-ms-flex-pack:justify;justify-content:space-between;padding:1rem;border-bottom:1px solid #e9ecef;border-top-left-radius:.3rem;border-top-right-radius:.3rem}.modal-body{position:relative;-webkit-box-flex:1;-ms-flex:1 1 auto;flex:1 1 auto;padding:1rem}.clearfix::after{display:block;clear:both;content:""}.d-none,select.bs-select-hidden,select.selectpicker{display:none!important}.justify-content-end{-webkit-box-pack:end!important;-ms-flex-pack:end!important;justify-content:flex-end!important}.fa,.fa-stack{display:inline-block}@font-face{font-family:FontAwesome;src:url(/css/fonts/fontawesome-webfont.eot?v=4.7.0);src:url(/css/fonts/fontawesome-webfont.eot?#iefix&v=4.7.0) format('embedded-opentype'),url(/css/fonts/fontawesome-webfont.woff2?v=4.7.0) format('woff2'),url(/css/fonts/fontawesome-webfont.woff?v=4.7.0) format('woff'),url(/css/fonts/fontawesome-webfont.ttf?v=4.7.0) format('truetype'),url(/css/fonts/fontawesome-webfont.svg?v=4.7.0#fontawesomeregular) format('svg');font-weight:400;font-style:normal;font-display:block}.fa{font:normal normal normal 14px/1 FontAwesome;font-size:inherit;text-rendering:auto;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}.pull-left{float:left}.fa-spin{-webkit-animation:fa-spin 2s infinite linear;animation:fa-spin 2s infinite linear}@-webkit-keyframes fa-spin{0%{-webkit-transform:rotate(0);transform:rotate(0)}100%{-webkit-transform:rotate(359deg);transform:rotate(359deg)}}@keyframes fa-spin{0%{-webkit-transform:rotate(0);transform:rotate(0)}100%{-webkit-transform:rotate(359deg);transform:rotate(359deg)}}.fa-twitter:before{content:"\f099"}.fa-facebook-f:before,.fa-facebook:before{content:"\f09a"}.fa-spinner:before{content:"\f110"}.fa-youtube-play:before{content:"\f16a"}.fa-instagram:before{content:"\f16d"}.fa-whatsapp:before{content:"\f232"}.bootstrap-select{width:220px\9}.bootstrap-select>.dropdown-toggle{width:100%;padding-right:25px;z-index:1}.bootstrap-select>.dropdown-toggle.bs-placeholder,.bootstrap-select>.dropdown-toggle.bs-placeholder:active,.bootstrap-select>.dropdown-toggle.bs-placeholder:focus,.bootstrap-select>.dropdown-toggle.bs-placeholder:hover{color:#999}.bootstrap-select>select{position:absolute!important;bottom:0;left:50%;display:block!important;width:.5px!important;height:100%!important;padding:0!important;opacity:0!important;border:none}.bootstrap-select:not([class*=col-]):not([class*=form-control]):not(.input-group-btn){width:220px}.bootstrap-select.form-control{margin-bottom:0;padding:0;border:none}.bootstrap-select.form-control:not([class*=col-]){width:100%}.bootstrap-select.btn-group:not(.input-group-btn),.bootstrap-select.btn-group[class*=col-]{float:none;display:inline-block;margin-left:0}.form-group .bootstrap-select.btn-group,.form-horizontal .bootstrap-select.btn-group,.form-inline .bootstrap-select.btn-group{margin-bottom:0}.bootstrap-select.btn-group .dropdown-toggle .filter-option{display:inline-block;overflow:hidden;width:100%;text-align:left}.bootstrap-select.btn-group .dropdown-toggle .caret{position:absolute;top:50%;right:12px;margin-top:-2px;vertical-align:middle}.bootstrap-select.btn-group .dropdown-menu{min-width:100%;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}.bootstrap-select.btn-group .dropdown-menu.inner{position:static;float:none;border:0;padding:0;margin:0;border-radius:0;-webkit-box-shadow:none;box-shadow:none}.bootstrap-select.btn-group .dropdown-menu li{position:relative}.bootstrap-select.btn-group .dropdown-menu li a{cursor:pointer;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}.bootstrap-select.btn-group .dropdown-menu li a span.text{display:inline-block}.bs-actionsbox,.bs-donebutton,.bs-searchbox{padding:4px 8px}.bs-searchbox .form-control{margin-bottom:0;width:100%;float:none}.animate__animated{-webkit-animation-duration:var(--animate-duration);animation-duration:var(--animate-duration);-webkit-animation-fill-mode:both;animation-fill-mode:both}@-webkit-keyframes tada{0%,to{-webkit-transform:scaleX(1);transform:scaleX(1)}10%,20%{-webkit-transform:scale3d(.9,.9,.9) rotate(-3deg);transform:scale3d(.9,.9,.9) rotate(-3deg)}30%,50%,70%,90%{-webkit-transform:scale3d(1.1,1.1,1.1) rotate(3deg);transform:scale3d(1.1,1.1,1.1) rotate(3deg)}40%,60%,80%{-webkit-transform:scale3d(1.1,1.1,1.1) rotate(-3deg);transform:scale3d(1.1,1.1,1.1) rotate(-3deg)}}@keyframes tada{0%,to{-webkit-transform:scaleX(1);transform:scaleX(1)}10%,20%{-webkit-transform:scale3d(.9,.9,.9) rotate(-3deg);transform:scale3d(.9,.9,.9) rotate(-3deg)}30%,50%,70%,90%{-webkit-transform:scale3d(1.1,1.1,1.1) rotate(3deg);transform:scale3d(1.1,1.1,1.1) rotate(3deg)}40%,60%,80%{-webkit-transform:scale3d(1.1,1.1,1.1) rotate(-3deg);transform:scale3d(1.1,1.1,1.1) rotate(-3deg)}}@keyframes ring{0%{transform:rotate(-15deg)}2%{transform:rotate(15deg)}12%,4%{transform:rotate(-18deg)}14%,6%{transform:rotate(18deg)}8%{transform:rotate(-22deg)}10%{transform:rotate(22deg)}16%{transform:rotate(-12deg)}18%{transform:rotate(12deg)}100%,20%{transform:rotate(0)}}.faa-parent.animated-hover:hover>.faa-ring,.faa-ring.animated,.faa-ring.animated-hover:hover{animation:ring 2s ease infinite;transform-origin-x:50%;transform-origin-y:0;transform-origin-z:initial}.faa-parent.animated-hover:hover>.faa-ring.faa-slow,.faa-ring.animated-hover.faa-slow:hover,.faa-ring.animated.faa-slow{animation:ring 3s ease infinite}@keyframes tada{0%{transform:scale(1)}10%,20%{transform:scale(.9) rotate(-8deg)}30%,50%,70%{transform:scale(1.2) rotate(8deg)}40%,60%{transform:scale(1.2) rotate(-8deg)}100%,70%{transform:scale(1) rotate(0)}}.faa-parent.animated-hover:hover>.faa-tada,.faa-tada.animated,.faa-tada.animated-hover:hover{animation:tada 2s linear infinite}.faa-parent.animated-hover:hover>.faa-tada.faa-slow,.faa-tada.animated-hover.faa-slow:hover,.faa-tada.animated.faa-slow{animation:tada 3s linear infinite}
+                    .action_content {
+                        float: left;
+                        width: 100%;
+                        text-align: center;
+                        background-color: rgba(255, 255, 255, .5);
+                        padding: 36px 0 0;
+                        display: block;
+                        position: relative;
+                        margin-top: -30px;
+                        cursor: pointer;
+                    }
+                    
+                    .action_content.type_less {
+                        background-color: transparent;
+                    }
+                </style>
+            
+                <link rel="stylesheet"
+                      href="{{ asset('css/main.min.css?v=05') }}"
+                      media="print"
+                      onload="this.media='all'">
+            
+                <noscript>
+                    <link rel="stylesheet"
+                          href="{{ asset('css/main.min.css?v=05') }}">
+                </noscript>
+            @else
+                <link rel="stylesheet"
+                      href="{{ asset('css/main.min.css?v=05') }}">
+            @endif
 
 			<style>
 			#gtx-trans{display:none}
@@ -372,18 +446,17 @@ foreach ($citys as $layoutCity) {
             <?php } ?>
             <?php if ($current_lang == 'ar') { ?>
                 <style>
-                    @font-face { font-family: 'Al-Jazeera-Arabic-Regular';
-					src: url('{{ asset('fonts/ar/news/Al-Jazeera-Arabic-Regular.eot') }}');
-					src: url('{{ asset('fonts/ar/news/Al-Jazeera-Arabic-Regular.eot?#iefix') }}') format('embedded-opentype'), url('{{ asset('fonts/ar/news/Al-Jazeera-Arabic-Regular.svg#Al-Jazeera-Arabic-Regular') }}') format('otf'), url('{{ asset('fonts/ar/news/Al-Jazeera-Arabic-Regular.ttf') }}') format('truetype'), url('{{ asset('fonts/ar/news/Al-Jazeera-Arabic-Regular.woff') }}') format('woff'), url('{{ asset('fonts/ar/news/Al-Jazeera-Arabic-Regular.woff2') }}') format('woff2'); 
-					font-weight: normal; 
-					font-style: normal;
-					font-display: swap;
-					}
-					font-face { font-family: 'Al-Jazeera-Arabic Bold'; src: url('{{ asset('fonts/ar/Al-Jazeera-Arabic Bold.eot') }}'); src: url('{{ asset('fonts/ar/Al-Jazeera-Arabic Bold.eot?#iefix') }}') format('embedded-opentype'), url('{{ asset('fonts/ar/Al-Jazeera-Arabic Bold.woff2') }}') format('woff2'); 
-					font-weight: normal; 
-					font-style: normal;
-					font-display: swap;
-					}
+                    @font-face {
+                        font-family: 'Al-Jazeera-Arabic-Regular';
+                    
+                        src:
+                            url('{{ asset('fonts/ar/news/Al-Jazeera-Arabic-Regular.woff2') }}') format('woff2'),
+                            url('{{ asset('fonts/ar/news/Al-Jazeera-Arabic-Regular.woff') }}') format('woff');
+                    
+                        font-weight: normal;
+                        font-style: normal;
+                        font-display: swap;
+                    }
 					@font-face { font-family: 'Al-Jazeera-Arabic-Bold'; src: url('{{ asset('fonts/ar/Al-Jazeera-Arabic-Bold.svg#Al-Jazeera-Arabic-Bold') }}') format('otf'), url('{{ asset('fonts/ar/Al-Jazeera-Arabic-Bold.ttf') }}') format('truetype'), url('{{ asset('fonts/ar/Al-Jazeera-Arabic-Bold.woff') }}') format('woff'); 
 					font-weight: normal; 
 					font-style: normal;
@@ -400,6 +473,8 @@ foreach ($citys as $layoutCity) {
             <?php
         }
         ?>
+    </head>
+    <body id="page-top">
         <?php if (!isset($hide_onesignal)) { ?>
             <!--Start Show  notif-->
             <div class="notifications-top animate__animated" id="subscribe-notifications-container" style="display:none;">
@@ -1336,7 +1411,52 @@ foreach ($citys as $layoutCity) {
         <?php } ?>
 		
 		@yield('scriptjs')
-		
+		<script>
+        (function () {
+            function initialize() {
+                document.querySelectorAll('.right_sec').forEach(function (sidebar) {
+                    function formatLabels() {
+                        sidebar.querySelectorAll(
+                            '.rangeValues, .budget .dropdown .dropdown-toggle .number'
+                        ).forEach(function (label) {
+                            var original = label.textContent;
+        
+                            var formatted = original.replace(
+                                /\d[\d,]*(?:\.\d+)?/g,
+                                function (number) {
+                                    var parts = number.replace(/,/g, '').split('.');
+        
+                                    parts[0] = parts[0].replace(
+                                        /\B(?=(\d{3})+(?!\d))/g, ','
+                                    );
+        
+                                    return parts.join('.');
+                                }
+                            );
+        
+                            if (original !== formatted) {
+                                label.textContent = formatted;
+                            }
+                        });
+                    }
+        
+                    formatLabels();
+        
+                    new MutationObserver(formatLabels).observe(sidebar, {
+                        subtree: true,
+                        childList: true,
+                        characterData: true
+                    });
+                });
+            }
+        
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', initialize);
+            } else {
+                initialize();
+            }
+        })();
+        </script>
 <script>
     
     function setCookie(name, value, daysToLive) {

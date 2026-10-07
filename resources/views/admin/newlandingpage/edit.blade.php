@@ -15,7 +15,7 @@
     <div class="form-group col-md-4">
         <label>Slug <span class="red">(*)</span></label>
         <div class="input-group ltr">
-            <span class="input-group-addon">/landing-</span>
+            <span class="input-group-addon">/{lang}/landing/</span>
             <?= Form::text("slug", $row->slug, ["class" => "form-control ltr"]); ?>
         </div>
     </div>

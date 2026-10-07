@@ -60,7 +60,7 @@
     $footerCanDeleteUsefulLink = $isFooterLinksPage && $menu->id && $menu->footer_section === 'useful';
 ?>
 
-<?= Form::open(); ?>
+<?= Form::open(["method" => "POST", "id" => "footer-keyword-editor"]); ?>
 <div class="panel with-nav-tabs panel-default">
     <div class="panel-heading">
         <div style="margin-bottom:10px;">Keywords</div>
@@ -179,17 +179,18 @@
     </div>
     <div class="panel-footer">
         <button type="submit" class="btn btn-primary" style="display: inline;">Save</button>
-        @if($footerCanDeleteUsefulLink)
-        <div style="margin-bottom:20px;display: inline;margin-left: 5px">
-        <?= Form::open(["method" => "DELETE", "url" => route($footerLinksRoute.".delete", $menu->id), "class" => "inline"]); ?>
-            <button type="submit" class="btn btn-danger btn-sm button_confirm" title="Delete this useful link"><i class="fa fa-trash"></i> Delete this keyword</button>
-        <?= Form::close(); ?>
-        </div>
-        @endif
+
     </div>
 </div>
 <?= Form::close(); ?>
 
+        @if($footerCanDeleteUsefulLink)
+        <div style="margin-bottom:20px;">
+        <?= Form::open(["method" => "DELETE", "url" => route($footerLinksRoute.".delete", $menu->id), "class" => "inline", "id" => "footer-keyword-delete"]); ?>
+            <button type="submit" class="btn btn-danger btn-sm button_confirm" title="Delete this useful link"><i class="fa fa-trash"></i> Delete this keyword</button>
+        <?= Form::close(); ?>
+        </div>
+        @endif
 
 <?php if (!isset($menu_new)) { ?>
 <?php
@@ -219,7 +220,7 @@
                     <select name="projects_id[home][]" class="form-control select2me" style="width:100%;" multiple>
                         <option value=""></option>
                         @foreach(\App\Models\Project::orderBy('id', 'desc')->get() as $project)
-                        <option value="<?= $project->id; ?>" <?= in_array($project->id, $selectedHomeProjectIds) ? 'selected' : ''; ?>><?= $project->name_ar; ?></option>
+                        <option value="<?= $project->id; ?>" <?= in_array($project->id, $selectedHomeProjectIds) ? 'selected' : ''; ?>><?= $project->title_en; ?></option>
                         @endforeach
                     </select>
                 </div>
@@ -239,7 +240,7 @@
                     <select name="projects_id[<?= $footerCountry->id; ?>][]" class="form-control select2me" style="width:100%;" multiple>
                         <option value=""></option>
                         @foreach(\App\Models\Project::whereIn('city_id', $countryCityIds)->get() as $project)
-                        <option value="<?= $project->id; ?>" <?= in_array($project->id, $selectedProjectIds) ? 'selected' : ''; ?>><?= $project->name_ar; ?></option>
+                        <option value="<?= $project->id; ?>" <?= in_array($project->id, $selectedProjectIds) ? 'selected' : ''; ?>><?= $project->title_en; ?></option>
                         @endforeach
                     </select>
                 </div>

@@ -90,10 +90,10 @@
 			foreach($regions as $reg){ ?>
             <div class="item swiper-slide district_type">
                 <div class="cont shadow_type">
-                    <a class="link" href="{{ route('front.districts',[$reg->city->slug,$reg->slug]) }}" title="<?= $reg->getName() ?>">
+                    <a class="link" href="{{ route('front.district_detail', ['region_slug' => $reg->slug]) }}" title="<?= $reg->getName() ?>">
                         <img class="" alt="<?= trans("front.DistrictsIstanbul"); ?>" title="<?= trans("front.DistrictsIstanbul"); ?>" src="{{ Helper::media_url($reg->primaryphoto) }}" width="200" height="150">
                     </a>
-                    <a class="title" href="{{ route('front.districts',[$reg->city->slug,$reg->slug]) }}" title="<?= trans("front.DistrictsIstanbul"); ?>"> <p>{{ $reg->getName() }}</p> </a>
+                    <a class="title" href="{{ route('front.district_detail', ['region_slug' => $reg->slug]) }}" title="<?= trans("front.DistrictsIstanbul"); ?>"> <p>{{ $reg->getName() }}</p> </a>
                 </div> 
             </div> 
 			<?php } ?>

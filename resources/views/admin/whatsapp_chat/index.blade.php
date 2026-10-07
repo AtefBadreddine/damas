@@ -46,6 +46,30 @@
     .contact *, .profile * {
         margin: 0;
     }
+    .contact .contact-favorite {
+        flex-shrink: 0;
+        width: 32px;
+        height: 32px;
+        padding: 0;
+        margin-inline-start: 8px;
+        border: 0;
+        border-radius: 5px;
+        background: transparent;
+        color: #444;
+        font-size: 26px;
+        line-height: 1;
+        cursor: pointer;
+    }
+    .contact .contact-favorite[aria-pressed="true"] {
+        color: #805400;
+    }
+    .contact .contact-favorite:hover {
+        background: rgba(255, 255, 255, 0.3);
+    }
+    .contact .contact-favorite:focus-visible {
+        outline: 2px solid #805400;
+        outline-offset: 2px;
+    }
     .messages {
         display: flex;
         flex-direction: column;
@@ -279,6 +303,10 @@
                 <?php else: ?>
                     <p>{{ $contact->notes }}</p>
                 <?php endif; ?>
+                <button type="button" class="contact-favorite"
+                    data-contact-id="{{ $contact->id }}"
+                    aria-pressed="false" aria-label="Add contact to favorites"
+                    title="Add contact to favorites">☆</button>
             </div>
         @endforeach
     </sction>
@@ -364,9 +392,72 @@
 </main>
 <script>
     console.log(<?= json_encode($unread_messages) ?>);
+    const contactId = <?= $contact_id ?>;
     const sendBtn = document.querySelector(".send-container");
     const messageInput = document.querySelector(".message-input");
     const messages = document.querySelector(".messages");
+    const contactsMenu = document.querySelector(".left");
+    // Favorites are local to this browser, admin user, and WhatsApp number.
+    const favoritesStorageKey = {!! json_encode('wa-chat-favorites:v1:' . (string) \Auth::id() . ':' . (string) config('whatsapp.phone_number_id'), JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT) !!};
+    const favoriteButtons = Array.from(contactsMenu.querySelectorAll(".contact-favorite"));
+    let favoriteContactIds = new Set();
+
+    function parseFavorites(raw) {
+        const ids = raw ? JSON.parse(raw) : [];
+        return new Set(Array.isArray(ids)
+            ? ids.filter(id => typeof id === "string" && /^[1-9][0-9]*$/.test(id))
+            : []);
+    }
+
+    function renderFavorites() {
+        favoriteButtons.forEach(button => {
+            const selected = favoriteContactIds.has(button.dataset.contactId);
+            const label = selected ? "Remove contact from favorites" : "Add contact to favorites";
+            button.textContent = selected ? "★" : "☆";
+            button.setAttribute("aria-pressed", selected ? "true" : "false");
+            button.setAttribute("aria-label", label);
+            button.title = label;
+        });
+    }
+
+    try {
+        favoriteContactIds = parseFavorites(localStorage.getItem(favoritesStorageKey));
+    } catch (error) {
+        console.warn("Could not load WhatsApp favorites.", error);
+    }
+    renderFavorites();
+
+    favoriteButtons.forEach(button => {
+        button.addEventListener("click", event => {
+            event.preventDefault();
+            event.stopPropagation();
+            const nextIds = new Set(favoriteContactIds);
+            const id = button.dataset.contactId;
+            if (nextIds.has(id)) nextIds.delete(id);
+            else nextIds.add(id);
+
+            try {
+                localStorage.setItem(favoritesStorageKey, JSON.stringify(Array.from(nextIds)));
+            } catch (error) {
+                console.warn("Could not save WhatsApp favorites.", error);
+                alert("Could not save favorites in this browser. Check that local storage is allowed.");
+                return;
+            }
+            favoriteContactIds = nextIds;
+            renderFavorites();
+        });
+    });
+
+    // Keep other tabs in sync, including when browser storage is cleared.
+    window.addEventListener("storage", event => {
+        if (event.key !== favoritesStorageKey && event.key !== null) return;
+        try {
+            favoriteContactIds = parseFavorites(event.newValue);
+            renderFavorites();
+        } catch (error) {
+            console.warn("Could not refresh WhatsApp favorites.", error);
+        }
+    });
     const timeFormatter = new Intl.DateTimeFormat("en-GB", {
         timeZone: "Asia/Muscat",
         hour: "2-digit",
@@ -382,7 +473,8 @@
     });
     messages.scrollTop = messages.scrollHeight;
     document.querySelectorAll(".contact").forEach(contact => {
-        contact.addEventListener("click", () => {
+        contact.addEventListener("click", event => {
+            if (event.target.closest(".contact-favorite")) return;
             window.location.replace(`https://damas.net/damas-administrator/whatsappchat?contact_id=${contact.dataset.id}`);
         });
     });
@@ -459,5 +551,14 @@
             sendBtn.click();
         }
     });
+    for(const contact of [...contactsMenu.querySelectorAll(".contact")]){
+        if(Number(contact.dataset.id) === contactId){
+            // contactsMenu.scrollBy({top: 200, left: 0, behavior: "instant"});
+            break;
+        }
+        else {
+            contactsMenu.scrollBy({top: 30, left: 0, behavior: "instant"});
+        }
+    }
 </script>
 @endsection

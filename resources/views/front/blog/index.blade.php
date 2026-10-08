@@ -80,7 +80,7 @@ $all_project_types = Helper::query('ProjectType', 'all');
                 <div class="type_full">
                     <?php //if (Helper::get_device() == 'full') { ?>
                         <h1 class="jazzira_font_bold">
-                            <?= trans("front.".$type); ?> <!-- <span class="num blog-title-span" display:"inline !important">({{ $posts->total() }})</span> -->
+                            {{ trans(\Request::route('country') === null ? 'front.blog' : 'front.' . \Request::route('country') . ' blogs') }} <!-- <span class="num blog-title-span" display:"inline !important">({{ $posts->total() }})</span> -->
                         </h1>
                         <!--<p><span><?= trans("front.search results"); ?></span> </p>-->
                     <?php //} ?>
@@ -149,10 +149,9 @@ $all_project_types = Helper::query('ProjectType', 'all');
                 <!-- THIS IS WHERE THE OLD H1 WAS -->
                 <?php //} ?>
                 
-                
                 <?php //if (Helper::get_device() != 'full') { ?>
                     <h1 class="jazzira_font_bold page_title_mob d-block d-md-none d-lg-none" style="font-size: 1.5em">
-                        أدلة التملك 
+                        {{ trans(\Request::route('country') === null ? 'front.blog' : ('front.' . \Request::route('country') . ' blogs')) }}
                     </h1>
                      <!--<b class="num" display:"inline !important">({{ $posts->total() }})</b>-->
                     <!--<p><span><?= trans("front.search results"); ?></span> </p>-->

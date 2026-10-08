@@ -2,7 +2,11 @@
 
 return [
     "project table title" => "↺ Latest Prices for Available Units",
-    "turkey blogs" => "Blogs",
+    "turkiye blogs" => "Buying guides in Türkiye",
+    "oman blogs" => "Buying guides in Oman",
+    "uae blogs" => "Buying guides in UAE",
+    "ksa blogs" => "Buying guides in Saudi Arabia",
+    "blog" => "Buying Guides",
     "aqarat" => "Property",
     "for_sale" => "For sale in ",
     "turkey" => "Turkey",
@@ -460,7 +464,6 @@ return [
     "Featured projects" => "Featured Projects",
     "Featured cities" => "Featured Cities",
     "Special features" => "Special Features",
-    "blog" => "Buying Guides",
     "guides" => "Guides",
     "developer" => "Developers",
     "report" => "Reports",

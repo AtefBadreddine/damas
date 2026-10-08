@@ -2,7 +2,11 @@
 
 return [
     "project table title" => "↺ أحدث أسعار الوحدات المتبقية للبيع:",
-    "turkey blogs" => "أدلة التملك في تركيا",
+    "turkiye blogs" => "أدلة التملك في تركيا",
+    "uae blogs" => "أدلة التملك في الإمارات",
+    "ksa blogs" => "أدلة التملك في السعودية",
+    "oman blogs" => "أدلة التملك في عمان",
+    "blog" => "أدلة التملك والاستثمار الدولي",
     "aqarat" => "عقارات",
     "for_sale" => "للبيع في",
     "turkey" => "تركيا",
@@ -473,7 +477,6 @@ return [
     "Featured projects" => "المشاريع المميزة",
     "Featured cities" => "المدن المميزة",
     "Special features" => "ميزات خاصة",
-    "blog" => "أدلة التملك",
     "guides" => "أدلة التملك",
     "developer" => "المطورون",
     "report" => "التقارير",

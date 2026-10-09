@@ -47,9 +47,9 @@ $all_project_types = Helper::query('ProjectType', 'all');
 
 
 @extends('front.layout', [
-"page_title" => ($is_category_page==false?$params->getSeoTitle():($category->getSeoTitle() ?  $category->getSeoTitle() : $category->getName())),
-"page_description" => ($is_category_page==false?$params->getSeoDescription():$category->getSeoDescription()),
-"page_keywords" => ($is_category_page==false?$params->getSeoKeywords():$category->getSeoKeywords()),
+"page_title" => ($is_category_page==false?$params->getSeoTitle():$category->getName()),
+"page_description" => $params->getSeoDescription(),
+"page_keywords" => $params->getSeoKeywords(),
 "amp_url"    =>   route("amp.front.blog")
 ])
 
@@ -108,7 +108,7 @@ $all_project_types = Helper::query('ProjectType', 'all');
                             if (isset($slug) and $slug == $cat->slug) {
                                 ?>
                                 <li class="active">
-                                    <a href="<?= $cat->listingUrl() ?>"><?= $cat->getName() ?></a>
+                                    <a href="<?= $listingUrl . '?category=' . urlencode($cat->slug) ?>"><?= $cat->getName() ?></a>
                                 </li>
                                 <?php
                             }
@@ -122,7 +122,7 @@ $all_project_types = Helper::query('ProjectType', 'all');
                             } else {
                                 ?>
                                 <li>
-                                    <a href="<?= $cat->listingUrl() ?>"><?= $cat->getName() ?></a>
+                                    <a href="<?= $listingUrl . '?category=' . urlencode($cat->slug) ?>"><?= $cat->getName() ?></a>
                                 </li>
                                 <?php
                             }
@@ -427,25 +427,25 @@ $all_project_types = Helper::query('ProjectType', 'all');
     <?php if (in_array($category->id, [1, 7])) {//investment; economic affaire  ?>
         {"@type":"ListItem","position":2,"name":"{{ trans('front.turkey guide') }}","item":"{{ route('front.turkey_guide') }}"},
         {"@type":"ListItem","position":3,"name":"{{ trans('front.turkey investment') }}","item":"{{ route('front.investment') }}"},
-        {"@type":"ListItem","position":4,"name":"{{ @$category->getName() }}","item":"{{ $category->listingUrl() }}"}
+        {"@type":"ListItem","position":4,"name":"{{ @$category->getName() }}","item":"{{ $listingUrl . '?category=' . urlencode($category->slug) }}"}
     <?php } elseif (in_array($category->id, [4])) {//Daily living in Turkey  ?>
         {"@type":"ListItem","position":2,"name":"{{ trans('front.turkey guide') }}","item":"{{ route('front.turkey_guide') }}"},
-        {"@type":"ListItem","position":4,"name":"{{ @$category->getName() }}","item":"{{ $category->listingUrl() }}"}
+        {"@type":"ListItem","position":4,"name":"{{ @$category->getName() }}","item":"{{ $listingUrl . '?category=' . urlencode($category->slug) }}"}
     <?php } elseif (in_array($category->id, [6, 3])) {//turksih district ; monument tourism turkey   ?>
         {"@type":"ListItem","position":2,"name":"{{ trans('front.turkey guide') }}","item":"{{ route('front.turkey_guide') }}"},
         {"@type":"ListItem","position":3,"name":"{{ trans('front.istanbul districts') }}","item":"{{ route('front.districts','istanbul') }}"},
-        {"@type":"ListItem","position":4,"name":"{{ @$category->getName() }}","item":"{{ $category->listingUrl() }}"}
+        {"@type":"ListItem","position":4,"name":"{{ @$category->getName() }}","item":"{{ $listingUrl . '?category=' . urlencode($category->slug) }}"}
     <?php } elseif (in_array($category->id, [8])) {//turkish citizenship  ?>
         {"@type":"ListItem","position":2,"name":"{{ trans('front.turkey guide') }}","item":"{{ route('front.turkey_guide') }}"},
         {"@type":"ListItem","position":3,"name":"{{ trans('front.turkish citizenship') }}","item":"{{ route('front.turkish_citizenship') }}"},
-        {"@type":"ListItem","position":4,"name":"{{ @$category->getName() }}","item":"{{ $category->listingUrl() }}"}
+        {"@type":"ListItem","position":4,"name":"{{ @$category->getName() }}","item":"{{ $listingUrl . '?category=' . urlencode($category->slug) }}"}
     <?php } elseif (in_array($category->id, [12])) {//taxes  ?>
         {"@type":"ListItem","position":2,"name":"{{ trans('front.turkey guide') }}","item":"{{ route('front.turkey_guide') }}"},
         {"@type":"ListItem","position":3,"name":"{{ trans('front.legal affairs turkey') }}","item":"{{ route('front.legal') }}"},
-        {"@type":"ListItem","position":4,"name":"{{ @$category->getName() }}","item":"{{ $category->listingUrl() }}"}
+        {"@type":"ListItem","position":4,"name":"{{ @$category->getName() }}","item":"{{ $listingUrl . '?category=' . urlencode($category->slug) }}"}
     <?php } else { ?>
         {"@type":"ListItem","position":2,"name":"{{ trans("front.".$type) }}","item":"{{ isset($listingUrl) ? $listingUrl : route($type == 'news' ? 'front.news' : ($type == 'developer' ? 'front.developer.index' : ($type == 'report' ? 'front.report.index' : 'front.blog.index'))) }}"},
-        {"@type":"ListItem","position":3,"name":"{{ @$category->getName() }}","item":"{{ $category->listingUrl() }}"}
+        {"@type":"ListItem","position":3,"name":"{{ @$category->getName() }}","item":"{{ $listingUrl . '?category=' . urlencode($category->slug) }}"}
     <?php } ?>
     ]}
 </script>

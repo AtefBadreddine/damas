@@ -4,7 +4,6 @@
 <fieldset>
     <legend>Tag Information</legend>
     <div class="form-group col-md-4">
-	<input type="hidden" name="type" value="<?= $type ?>" >
         <label>Name<span class="red">(*)</span></label>
         <?= Form::text("name", $row->name, ["class" => "form-control"]); ?>
     </div>
@@ -31,7 +30,7 @@
     <div class="form-group col-md-12">
         <label>Slug<span class="red">(*)</span></label>
         <div class="input-group ltr">
-            <span class="input-group-addon"><?= url('/tags/')."/" ?></span>
+            <span class="input-group-addon"><?= url('/tag') ?>/</span>
             <?= Form::text("slug", $row->slug, ["class" => "form-control input-sm"]); ?>
         </div>
     </div>
@@ -44,7 +43,5 @@
     </div>
 	
 </fieldset>
-
-@include("admin.layouts.seo",["hide_keywords" => true])
 
 @endsection

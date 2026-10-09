@@ -23,22 +23,10 @@
         <label>Name Russian</label>
         <?= Form::text("name_ru", $row->name_ru, ["class" => "form-control ltr"]); ?>
     </div>
-    <div class="form-group col-md-4">
-    </div>
-    <div class="col-md-3" style="clear: both;">
-        <div class="form-group">
-            <label>Country</label>
-            <select name="country_id" class="form-control select2me">
-                <?php foreach ($countries as $country): ?>
-                <option value="<?= $country->id ?>" <?= ((int)$row->country_id === (int)$country->id) ? 'selected' : '' ?>><?= $country->name_en ?></option>
-                <?php endforeach; ?>
-            </select>
-        </div>
-    </div>
-    <div class="form-group col-md-9">
+    <div class="form-group col-md-12">
         <label>Slug<span class="red">(*)</span></label>
         <div class="input-group ltr">
-            <span class="input-group-addon"><?= url('/' . $type . '/category')."/" ?><?= ($row->countryRel && $row->countryRel->code != 'turkey') ? $row->countryRel->code . '/' : '' ?></span>
+            <span class="input-group-addon"><?= url('/category') ?>/</span>
             <?= Form::text("slug", $row->slug, ["class" => "form-control input-sm"]); ?>
         </div>
     </div>
@@ -48,9 +36,6 @@
             <?= Form::text("icon", $row->icon, ["class" => "form-control input-sm"]); ?>
         </div>
     </div>
-	<input type="hidden" name="type" value="<?= $type ?>" >
 </fieldset>
-
-@include("admin.layouts.seo")
 
 @endsection

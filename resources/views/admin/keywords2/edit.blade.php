@@ -53,7 +53,7 @@
                             <label>Display in</label>
                             <select name="display[]" class="form-control select2me" multiple required>
                                 <option value="projects" <?= strpos($row->display, ';projects;') !== false ?'selected':'' ?>>Projects</option>
-								@foreach(\App\Models\PostCategory::orderBy('type','asc')->get() as $cat)
+								@foreach(\App\Models\PostCategory::orderBy('placement','asc')->get() as $cat)
 								<option value="<?= $cat->id ?>" <?= strpos($row->display, ';'. $cat->id .';') !== false ?'selected':'' ?>><?= $cat->name_en ?></option>
 								@endforeach
                             </select>

@@ -58,12 +58,21 @@
         }
     }
     $footerCanDeleteUsefulLink = $isFooterLinksPage && $menu->id && $menu->footer_section === 'useful';
+    $isQuickMenuPage = isset($is_quick_menu_page) ? $is_quick_menu_page : ($footerLinksRoute === 'admin.apparence.menus');
+    $menuOwnForm = !isset($menu_own_form) || $menu_own_form;
+    $titleLabelArabic = $isQuickMenuPage ? 'Title (Arabic)' : 'Link Title in Arabic';
+    $titleLabelEnglish = $isQuickMenuPage ? 'Title (English)' : 'Link Title in English';
+    $titleLabelFrench = $isQuickMenuPage ? 'Title (French)' : 'Link Title in French';
+    $titleLabelPersian = $isQuickMenuPage ? 'Title (Persian)' : 'Link Title in Persian';
+    $titleLabelRussian = $isQuickMenuPage ? 'Title (Russian)' : 'Link Title in Russian';
 ?>
 
-<?= Form::open(["method" => "POST", "id" => "footer-keyword-editor"]); ?>
+<?php if ($menuOwnForm): ?><?= Form::open(["method" => "POST", "id" => "footer-keyword-editor"]); ?><?php endif; ?>
 <div class="panel with-nav-tabs panel-default">
     <div class="panel-heading">
+        @if($isFooterLinksPage)
         <div style="margin-bottom:10px;">Keywords</div>
+        @endif
         @if($isFooterLinksPage)
         <ul class="nav nav-tabs footer-country-tabs">
             @foreach($footerUsefulCountryGroups as $footerCountryId => $footerCountryGroup)
@@ -106,29 +115,35 @@
     <div class="panel-body">
         <div class="col-md-12">
             <div class="form-group col-sm-3">
-                <label>Link Title in Arabic <span class="red">(*)</span></label>
+                <label><?= $titleLabelArabic; ?> <span class="red">(*)</span></label>
                 <?= Form::text("title_ar", $menu->title_ar, ["class" => "form-control", "required" => true]); ?>
             </div>
             <div class="form-group col-sm-3">
-                <label>Link Title in English</label>
+                <label><?= $titleLabelEnglish; ?></label>
                 <?= Form::text("title_en", $menu->title_en, ["class" => "form-control ltr"]); ?>
             </div>
             <div class="form-group col-sm-3">
-                <label>Link Title in French</label>
+                <label><?= $titleLabelFrench; ?></label>
                 <?= Form::text("title_fr", $menu->title_fr, ["class" => "form-control ltr"]); ?>
             </div>
             <div class="form-group col-sm-3">
-                <label>Link Title in Persian</label>
+                <label><?= $titleLabelPersian; ?></label>
                 <?= Form::text("title_fa", $menu->title_fa, ["class" => "form-control"]); ?>
             </div>
             <div class="form-group col-sm-3">
-                <label>Link Title in Russian</label>
+                <label><?= $titleLabelRussian; ?></label>
                 <?= Form::text("title_ru", $menu->title_ru, ["class" => "form-control ltr"]); ?>
             </div>
             <div class="form-group col-sm-4">
                 <label>Lang</label>
-                <?= Form::select("lang", Helper::langs("all"), $menu->lang, ["class" => "form-control select2me"]); ?>
+                <?php if ($isQuickMenuPage): ?>
+                    <?= Form::select("lang[]", Helper::langs("all"), Helper::parseMenuLangs($menu->lang), ["class" => "form-control menu-lang-multiselect", "multiple" => "multiple", "id" => "menu-lang-select"]); ?>
+                    <p class="help-block">All = every locale. Picking a language with All selected keeps the language and drops All.</p>
+                <?php else: ?>
+                    <?= Form::select("lang", Helper::langs("all"), $menu->lang, ["class" => "form-control select2me"]); ?>
+                <?php endif; ?>
             </div>
+            @if($isFooterLinksPage)
             <div class="form-group col-sm-4">
                 <label>Show on</label>
                 <?php
@@ -145,6 +160,7 @@
                     @endforeach
                 </select>
             </div>
+            @endif
             <div class="form-group col-sm-4">
                 <label>Link Type<span class="red">(*)</span></label>
                 <?= Form::select("link_type", [
@@ -179,10 +195,12 @@
     </div>
     <div class="panel-footer">
         <button type="submit" class="btn btn-primary" style="display: inline;">Save</button>
-
+        @if($isQuickMenuPage && $menu->id)
+        <a href="{{ route('admin.apparence.menus') }}" class="btn btn-default">Cancel</a>
+        @endif
     </div>
 </div>
-<?= Form::close(); ?>
+<?php if ($menuOwnForm): ?><?= Form::close(); ?><?php endif; ?>
 
         @if($footerCanDeleteUsefulLink)
         <div style="margin-bottom:20px;">
@@ -267,11 +285,57 @@
 </style>
 <script>
 $(function(){
+    function menuLangValues($el) {
+        var vals = $el.val() || [];
+        return $.isArray(vals) ? vals.slice() : [vals];
+    }
+    function setMenuLangValues($el, vals) {
+        $el.find("option").prop("selected", false);
+        $.each(vals, function (_, val) {
+            $el.find("option[value='" + val + "']").prop("selected", true);
+        });
+        $el.val(vals);
+        if ($el.data("select2")) {
+            try { $el.select2("val", vals); } catch (e) {}
+        }
+    }
+    $(".menu-lang-multiselect").each(function () {
+        var $el = $(this);
+        var syncing = false;
+        var previous = menuLangValues($el);
+        if ($().select2 && !$el.data("select2")) {
+            $el.select2({
+                width: "100%",
+                placeholder: "Choose languages",
+                allowClear: false,
+                dir: "ltr"
+            });
+        }
+        $el.on("change", function () {
+            if (syncing) return;
+            var curr = menuLangValues($el);
+            var specific = $.grep(curr, function (v) { return v !== "all"; });
+            var hasAll = curr.indexOf("all") !== -1;
+            var addedAll = hasAll && previous.indexOf("all") === -1;
+            var next = curr;
+            if (hasAll && specific.length) {
+                next = addedAll ? ["all"] : specific;
+                syncing = true;
+                setMenuLangValues($el, next);
+                syncing = false;
+            }
+            previous = next.slice();
+        });
+        $el.closest("form").on("submit", function () {
+            $el.prop("disabled", false);
+            setMenuLangValues($el, menuLangValues($el));
+        });
+    });
     $(document).on("change", "select[name=link_type]", function(){
         var vl = $(this).val();
         var inputs = {};
         inputs['link_type'] = vl;
-        inputs['lang'] = $("select[name=lang]").val();
+        inputs['lang'] = $("select[name='lang[]']").val() || $("select[name=lang]").val();
         inputs['route_name'] = '<?= Route::currentRouteName(); ?>';
         $("#ajaxloading").show();
         $.ajax({

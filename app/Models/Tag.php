@@ -15,28 +15,28 @@ class Tag extends BaseModel
 		"title_ru",
 
         "media_id",
-        /*"media_en_id",
-        "media_fr_id",
-        "media_ru_id",
-        "media_fa_id",*/
-        
 		"placement",
-		
-		"seo_title_ar",
-        "seo_description_ar",
-        "seo_title_en",
-        "seo_description_en",
-        "seo_title_fa",
-        "seo_description_fa",
-
-		"seo_title_fr",
-        "seo_description_fr",
-        "seo_title_ru",
-        "seo_description_ru",
-        "type",
-        
-        
     ];
+
+    /**
+     * Find a tag by slug. Returns null if none or more than one match.
+     *
+     * @param string $slug
+     * @return static|null
+     */
+    public static function findUnambiguousBySlug($slug)
+    {
+        if ($slug === null || $slug === '') {
+            return null;
+        }
+
+        $rows = static::where('slug', $slug)->take(2)->get();
+        if ($rows->count() !== 1) {
+            return null;
+        }
+
+        return $rows->first();
+    }
     
     /**
     * media
@@ -46,14 +46,9 @@ class Tag extends BaseModel
     public function media()
     {
 		$lang = (LaravelLocalization::getCurrentLocale()=='pe'?'fa':LaravelLocalization::getCurrentLocale());
-        //if($lang=='ar')
 			return $this->belongsTo("App\Models\Media", "media_id");
-		/*else
-			return $this->belongsTo("App\Models\Media", "media_".$lang."_id");*/
     }
     
-    
-	
     /**
     * posts
     *
@@ -63,21 +58,4 @@ class Tag extends BaseModel
     {
         return $this->belongsToMany("App\Models\Post","post_tag");
     }
-	
-	
-	
-    /**
-    * Sync project posts relation
-    *
-    * @param array $types
-    * @return void
-    */
-    /*public function syncPosts($posts = [])
-    {
-        if ( count($posts) ) {
-            $this->posts()->sync($posts); return;
-        }
-        $this->posts()->detach();
-    }*/
-	
 }

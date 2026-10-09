@@ -6,7 +6,7 @@
     <ul class="categories_group">
         <?php foreach ($categories as $cat) { ?>
             <li <?= (isset($slug) and $slug == $cat->slug) ? 'class="active"' : '' ?>>
-                <a href="<?= $cat->listingUrl() ?>"><?= $cat->getName() ?></a>
+                <a href="<?= $listingUrl . '?category=' . urlencode($cat->slug) ?>"><?= $cat->getName() ?></a>
                 <?= $cat->icon ?>
             </li>
         <?php } ?>

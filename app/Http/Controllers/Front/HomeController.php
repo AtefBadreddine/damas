@@ -2102,71 +2102,9 @@ class HomeController extends BaseController
      */
     protected function legacySearchGeoUrl(Request $request, $type, $citySlug, $var1, $var2)
     {
-        $var1 = $var1 ? array_values(array_filter(explode(',', $var1))) : array();
-        $var2 = $var2 ? array_values(array_filter(explode(',', $var2))) : array();
+        $query = $request->except(array('ajax', 'amp', 'page'));
 
-        $categories = array();
-        $regionSlugs = array();
-        if ($var1) {
-            if (\App\Models\ProjectCategory::whereIn('slug', $var1)->count() > 0) {
-                $categories = $var1;
-            } elseif (\App\Models\Region::whereIn('slug', $var1)->count() > 0) {
-                $regionSlugs = $var1;
-            } else {
-                return null;
-            }
-        }
-        if ($var2) {
-            $regionSlugs = $var2;
-        }
-
-        $params = array();
-        if ($type && $type !== 'property-for-sale') {
-            if (!\App\Models\ProjectType::where('slug', $type)->first()) {
-                return null;
-            }
-            $params['type'] = $type;
-        }
-        if ($categories) {
-            $params['category'] = implode(',', $categories);
-        }
-		
-        $country = $citySlug ? \App\Models\Country::findBySlugOrCode($citySlug) : null;
-        $cityRow = null;
-        if (!$country) {
-            $cityRow = $citySlug ? \App\Models\City::where('slug', $citySlug)->first() : null;
-            if (!$cityRow || !$cityRow->listingUrl()) {
-                return null;
-            }
-        }
-
-        $regions = array();
-        if ($regionSlugs) {
-            $regionQuery = \App\Models\Region::whereIn('slug', $regionSlugs);
-            if ($cityRow) {
-                $regionQuery->where('city_id', $cityRow->id);
-            }
-            $regions = $regionQuery->get()->all();
-            if (!$cityRow && $regions) {
-                $cityRow = $regions[0]->city;
-                $regions = array_values(array_filter($regions, function ($r) use ($cityRow) {
-                    return $r->city_id == $cityRow->id;
-                }));
-            }
-        }
-
-        if (count($regions) && $regions[0]->listingUrl()) {
-            $url = $regions[0]->listingUrl();
-        } elseif ($cityRow && $cityRow->listingUrl()) {
-            $url = $cityRow->listingUrl();
-        } elseif ($country) {
-            $url = $country->listingUrl();
-        } else {
-            return null;
-        }
-
-        $query = array_merge($request->except(array('ajax', 'amp', 'page')), $params);
-        return $url . ($query ? '?' . str_replace('%2C', ',', http_build_query($query)) : '');
+        return Helper::legacyListingUrlFromParts($type, $citySlug, $var1, $var2, $query);
     }
     
     /**
@@ -4596,41 +4534,30 @@ class HomeController extends BaseController
     }
     /**
     * show blog category
-    * Old /blog/category/{slug} (and /oman|/syria variants) → /{country}/guides?category={slug}.
+    * Old /blog/category/{slug} → /guides?category={slug}.
+    * /oman|/syria/blog/category/{slug} → /{country}/guides?category={slug}.
     *
     * @param string $slug
     * @return void
     */
     public function blog_show_category(Request $request, $slug)
     {
-        $categoryType = $this->legacyPostType($request)->categoryType();
-        $routeCountry = $this->legacyCountrySlug($request);
-        if ( $routeCountry ) {
-            $category = PostCategory::findInCountry($routeCountry, $slug, $categoryType);
-            if ( !$category ) {
-                $category = PostCategory::findInCountry($routeCountry, $slug);
-            }
-        } else {
-            $category = PostCategory::findUnambiguousBySlug($slug, $categoryType);
-            if ( !$category ) {
-                $category = PostCategory::findUnambiguousBySlug($slug);
-            }
-        }
+        $category = PostCategory::findUnambiguousBySlug($slug);
         if (!$category) {
             abort(404);
         }
 
-        $countrySlug = $category->getCountrySlug() ?: $this->legacyCountrySlug($request);
-        if (!$countrySlug) {
-            $country = \App\Models\Country::findBySlugOrCode('turkey');
-            $countrySlug = $country ? $country->slug : 'turkiye';
-        }
-
         parse_str($request->getQueryString() ?: '', $query);
         $query['category'] = $category->slug;
+        $suffix = '?' . http_build_query($query);
 
-        $url = route($this->legacyPostType($request)->frontCountryRoute(), $countrySlug) . '?' . http_build_query($query);
-        return Redirect::to($url, 301);
+        $postType = $this->legacyPostType($request);
+        $countrySlug = $this->legacyCountrySlug($request);
+        if ($countrySlug) {
+            return Redirect::to(route($postType->frontCountryRoute(), $countrySlug) . $suffix, 301);
+        }
+
+        return Redirect::to(route($postType->frontIndexRoute()) . $suffix, 301);
     }
     /**
     * show blogpost
@@ -7152,7 +7079,7 @@ return response()->json($arr1);
     */
     public function tag($slug)
     {
-		$tag = Helper::query("Tag", "where", ["field" => "slug", "value" => $slug])->first();
+		$tag = \App\Models\Tag::findUnambiguousBySlug($slug);
 		if(!$tag or $tag->getTitle()=='')
 			abort(404);
 		

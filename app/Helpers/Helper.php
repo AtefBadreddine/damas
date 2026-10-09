@@ -111,10 +111,61 @@ if (!function_exists('locale_prefix_hidden_segment')) {
     }
 }
 
+if (!function_exists('locale_neutral_url')) {
+    /**
+     * Strip site domain and leading locale segment so menus store one path for all languages.
+     */
+    function locale_neutral_url($url)
+    {
+        if ($url === null || $url === '' || $url === '#') {
+            return $url === '#' ? '#' : '/';
+        }
+
+        $url = trim($url);
+        $url = str_replace(
+            array('https://www.damas.net', 'http://www.damas.net', 'https://damas.net', 'http://damas.net'),
+            '',
+            $url
+        );
+
+        if (preg_match('#^(https?:)?//#', $url)
+            || strpos($url, 'mailto:') === 0
+            || strpos($url, 'tel:') === 0
+            || strpos($url, 'javascript:') === 0) {
+            return $url;
+        }
+
+        $parts = parse_url($url);
+        $path = isset($parts['path']) ? $parts['path'] : $url;
+        $path = '/' . ltrim($path, '/');
+        $segments = array_values(array_filter(explode('/', trim($path, '/')), 'strlen'));
+
+        $localeKeys = array('ar', 'en', 'fr', 'pe', 'ru', 'fa');
+        if (count($segments) && in_array($segments[0], $localeKeys, true)) {
+            array_shift($segments);
+        }
+
+        if (count($segments) === 0) {
+            $path = '/';
+        } else {
+            $path = '/' . implode('/', $segments);
+        }
+
+        if (!empty($parts['query'])) {
+            $path .= '?' . $parts['query'];
+        }
+        if (!empty($parts['fragment'])) {
+            $path .= '#' . $parts['fragment'];
+        }
+
+        return $path;
+    }
+}
+
 if (!function_exists('front_link')) {
     /**
-     * Prepend /ar to stored unprefixed page URLs when the current locale is Arabic.
-     * Leaves endpoints, already-prefixed paths, home, and external URLs unchanged.
+     * Apply the current locale prefix to stored locale-neutral internal paths.
+     * Home stays / for Arabic and /{locale} for others; auth/admin/ajax paths stay unprefixed.
      */
     function front_link($url)
     {
@@ -122,31 +173,37 @@ if (!function_exists('front_link')) {
             return $url;
         }
 
-        $url = str_replace(array('https://www.damas.net', 'http://www.damas.net', 'https://damas.net', 'http://damas.net'), '', $url);
-
-        if (preg_match('#^(https?:)?//#', $url) || strpos($url, 'mailto:') === 0 || strpos($url, 'tel:') === 0 || strpos($url, 'javascript:') === 0) {
+        if (preg_match('#^(https?:)?//#', $url)
+            || strpos($url, 'mailto:') === 0
+            || strpos($url, 'tel:') === 0
+            || strpos($url, 'javascript:') === 0) {
             return $url;
         }
 
-        if (LaravelLocalization::getCurrentLocale() !== LaravelLocalization::getDefaultLocale()) {
-            return $url;
+        $neutral = locale_neutral_url($url);
+        if ($neutral === '#') {
+            return '#';
         }
 
-        $parts = parse_url($url);
-        $path = isset($parts['path']) ? $parts['path'] : '';
-        if ($path === '' || $path === '/') {
-            return $url;
+        $parts = parse_url($neutral);
+        $pathOnly = isset($parts['path']) ? $parts['path'] : $neutral;
+        $pathOnly = '/' . ltrim($pathOnly, '/');
+        $segments = array_values(array_filter(explode('/', trim($pathOnly, '/')), 'strlen'));
+
+        $currentLocale = LaravelLocalization::getCurrentLocale();
+        $defaultLocale = LaravelLocalization::getDefaultLocale();
+
+        if (count($segments) === 0 || $pathOnly === '/') {
+            if ($currentLocale === $defaultLocale) {
+                return '/';
+            }
+            $new = '/' . $currentLocale;
+        } elseif (locale_prefix_hidden_segment($segments[0])) {
+            $new = $pathOnly;
+        } else {
+            $new = '/' . $currentLocale . '/' . implode('/', $segments);
         }
 
-        $first = explode('/', ltrim($path, '/'));
-        $first = $first[0];
-
-        $locales = LaravelLocalization::getSupportedLanguagesKeys();
-        if (in_array($first, $locales) || locale_prefix_hidden_segment($first)) {
-            return $url;
-        }
-
-        $new = '/' . LaravelLocalization::getDefaultLocale() . '/' . ltrim($path, '/');
         if (!empty($parts['query'])) {
             $new .= '?' . $parts['query'];
         }
@@ -1488,6 +1545,167 @@ class Helper
         }
         return $link;
     }
+
+    /**
+     * Build geo listing URL from legacy /{type}/{city}/... search paths.
+     *
+     * @param string|null $type
+     * @param string|null $citySlug
+     * @param string|null $var1
+     * @param string|null $var2
+     * @param array $query
+     * @return string|null
+     */
+    public static function legacyListingUrlFromParts($type, $citySlug, $var1 = null, $var2 = null, $query = array())
+    {
+        $var1 = $var1 ? array_values(array_filter(explode(',', $var1))) : array();
+        $var2 = $var2 ? array_values(array_filter(explode(',', $var2))) : array();
+
+        $categories = array();
+        $regionSlugs = array();
+        if ($var1) {
+            if (\App\Models\ProjectCategory::whereIn('slug', $var1)->count() > 0) {
+                $categories = $var1;
+            } elseif (\App\Models\Region::whereIn('slug', $var1)->count() > 0) {
+                $regionSlugs = $var1;
+            } else {
+                return null;
+            }
+        }
+        if ($var2) {
+            $regionSlugs = $var2;
+        }
+
+        $params = array();
+        if ($type && $type !== 'property-for-sale') {
+            if (!\App\Models\ProjectType::where('slug', $type)->first()) {
+                return null;
+            }
+            $params['type'] = $type;
+        }
+        if ($categories) {
+            $params['category'] = implode(',', $categories);
+        }
+
+        $country = $citySlug ? \App\Models\Country::findBySlugOrCode($citySlug) : null;
+        $cityRow = null;
+        if (!$country) {
+            $cityRow = $citySlug ? \App\Models\City::where('slug', $citySlug)->first() : null;
+            if (!$cityRow || !$cityRow->listingUrl()) {
+                return null;
+            }
+        }
+
+        $regions = array();
+        if ($regionSlugs) {
+            $regionQuery = \App\Models\Region::whereIn('slug', $regionSlugs);
+            if ($cityRow) {
+                $regionQuery->where('city_id', $cityRow->id);
+            }
+            $regions = $regionQuery->get()->all();
+            if (!$cityRow && $regions) {
+                $cityRow = $regions[0]->city;
+                $regions = array_values(array_filter($regions, function ($r) use ($cityRow) {
+                    return $r->city_id == $cityRow->id;
+                }));
+            }
+        }
+
+        if (count($regions) && $regions[0]->listingUrl()) {
+            $url = $regions[0]->listingUrl();
+        } elseif ($cityRow && $cityRow->listingUrl()) {
+            $url = $cityRow->listingUrl();
+        } elseif ($country) {
+            $url = $country->listingUrl();
+        } else {
+            return null;
+        }
+
+        $query = array_merge($query, $params);
+
+        return $url . ($query ? '?' . str_replace('%2C', ',', http_build_query($query)) : '');
+    }
+
+    /**
+     * @param string|null $url
+     * @return string|null
+     */
+    public static function legacyListingUrlFromPath($url)
+    {
+        if ($url === null || $url === '' || $url === '#') {
+            return null;
+        }
+
+        if (preg_match('#^(https?:)?//#', $url)) {
+            return null;
+        }
+
+        $neutral = locale_neutral_url($url);
+        $parts = parse_url($neutral);
+        $path = isset($parts['path']) ? trim($parts['path'], '/') : '';
+        if ($path === '' || strpos($path, '/') === false) {
+            return null;
+        }
+
+        $segments = explode('/', $path);
+        if (count($segments) >= 2 && \App\Models\Country::findBySlugOrCode($segments[0])) {
+            return null;
+        }
+
+        $type = $segments[0];
+        $citySlug = isset($segments[1]) ? $segments[1] : null;
+        $var1 = isset($segments[2]) ? $segments[2] : null;
+        $var2 = isset($segments[3]) ? $segments[3] : null;
+        $query = array();
+        if (!empty($parts['query'])) {
+            parse_str($parts['query'], $query);
+        }
+
+        return self::legacyListingUrlFromParts($type, $citySlug, $var1, $var2, $query);
+    }
+
+    /**
+     * @param string $url
+     * @return string
+     */
+    public static function menuHrefFromUrl($url)
+    {
+        if (preg_match('#^(https?:)?//#', $url)) {
+            $root = rtrim(request()->root(), '/');
+            if (strpos($url, $root) === 0) {
+                $relative = substr($url, strlen($root));
+                return $relative === '' ? '/' : $relative;
+            }
+            return $url;
+        }
+
+        return front_link($url);
+    }
+
+    /**
+     * @param array $item
+     * @return string
+     */
+    public static function menuFrontLink($item)
+    {
+        $linkType = isset($item['link_type']) ? $item['link_type'] : '';
+        $linkValue = isset($item['link_value']) ? $item['link_value'] : null;
+
+        if ($linkType && !in_array($linkType, array('url', 'parent'), true) && $linkValue) {
+            $url = self::get_link_url($linkType, $linkValue);
+            if ($url && $url !== '#') {
+                return self::menuHrefFromUrl($url);
+            }
+        }
+
+        $link = isset($item['link']) ? $item['link'] : '';
+        $legacy = self::legacyListingUrlFromPath($link);
+        if ($legacy) {
+            return self::menuHrefFromUrl($legacy);
+        }
+
+        return front_link($link);
+    }
     
     /**
     * get json data for projects
@@ -1771,6 +1989,98 @@ curl_close($ch);
             
         return ["ar" => "Arabic", "en" => "English", "fr" => "French", "fa" => "Persian", "ru" => "Russian"];
     }
+
+    /**
+     * Split stored menu lang values (all / ar / ar,en) into a list of codes.
+     *
+     * @param string|null $lang
+     * @return array
+     */
+    public static function parseMenuLangs($lang)
+    {
+        $parts = array_values(array_filter(array_map('trim', explode(',', (string) $lang))));
+        return $parts ? $parts : array('all');
+    }
+
+    /**
+     * Store one or more menu langs in the existing lang column.
+     *
+     * @param mixed $langs
+     * @return string
+     */
+    public static function normalizeMenuLangs($langs)
+    {
+        $allowed = array_keys(self::langs(true));
+        $langs = array_values(array_unique(array_intersect((array) $langs, $allowed)));
+        $codes = array_values(array_diff($langs, array('all')));
+        if (count($codes)) {
+            return count($codes) >= 5 ? 'all' : implode(',', $codes);
+        }
+
+        return 'all';
+    }
+
+    /**
+     * @param string|null $storedLang
+     * @param string $locale
+     * @return bool
+     */
+    public static function menuMatchesLang($storedLang, $locale)
+    {
+        $codes = self::parseMenuLangs($storedLang);
+        return in_array('all', $codes, true) || in_array($locale, $codes, true);
+    }
+
+    /**
+     * Keep items visible for a locale, plus their ancestors so the tree stays intact.
+     *
+     * @param array $items
+     * @param string $locale
+     * @return array
+     */
+    public static function menuItemsForLang($items, $locale)
+    {
+        $byId = array();
+        foreach ($items as $item) {
+            $byId[$item['id']] = $item;
+        }
+        $keep = array();
+        foreach ($items as $item) {
+            if (!self::menuMatchesLang(isset($item['lang']) ? $item['lang'] : 'all', $locale)) {
+                continue;
+            }
+            $keep[$item['id']] = true;
+            $parentId = isset($item['parent_id']) ? $item['parent_id'] : 0;
+            while ($parentId && isset($byId[$parentId])) {
+                $keep[$parentId] = true;
+                $parentId = isset($byId[$parentId]['parent_id']) ? $byId[$parentId]['parent_id'] : 0;
+            }
+        }
+        $filtered = array();
+        foreach ($items as $item) {
+            if (isset($keep[$item['id']])) {
+                $filtered[] = $item;
+            }
+        }
+
+        return $filtered;
+    }
+
+    /**
+     * @param array $items
+     * @param int $id
+     * @return bool
+     */
+    public static function menuContainsId($items, $id)
+    {
+        foreach ($items as $item) {
+            if ((int) $item['id'] === (int) $id) {
+                return true;
+            }
+        }
+
+        return false;
+    }
     
     /**
     * change paginate number
@@ -1827,6 +2137,9 @@ curl_close($ch);
                 
             case 'save':
                 $inputs = $params['inputs'];
+                if (isset($inputs['lang']) && is_array($inputs['lang'])) {
+                    $inputs['lang'] = self::normalizeMenuLangs($inputs['lang']);
+                }
                 $id = @$params['id'];
                 if ( $id ) {
                     $row = call_user_func([$class, "find"], $id);
@@ -1932,7 +2245,25 @@ curl_close($ch);
                 
                 $q = call_user_func([$class, 'orderBy'], 'placement', 'ASC');
                 
-                if ( $lang )$q->whereIn("lang", $lang);
+                if ( $lang ) {
+                    $langCodes = array();
+                    foreach ((array) $lang as $code) {
+                        $code = trim((string) $code);
+                        if ($code === '') {
+                            continue;
+                        }
+                        $langCodes[] = $code;
+                        if ($code === 'pe') {
+                            $langCodes[] = 'fa';
+                        }
+                    }
+                    $langCodes = array_values(array_unique($langCodes));
+                    $q->where(function ($query) use ($langCodes) {
+                        foreach ($langCodes as $code) {
+                            $query->orWhereRaw('FIND_IN_SET(?, lang)', array($code));
+                        }
+                    });
+                }
                 if ( $device ) $q->whereIn("device", $device);
                 
                 return $q->get();
@@ -2435,7 +2766,7 @@ curl_close($ch);
                 break;
                 
             case 'url':
-                $input = Form::text("link", @$inputs["link"], ["class" => "form-control ltr", "placeholder" => "https://www.example.com"]);
+                $input = Form::text("link", @$inputs["link"], ["class" => "form-control ltr", "placeholder" => "/about-us (locale prefix added on front)"]);
                 $label = "Link";
                 break;
                 
@@ -2683,7 +3014,7 @@ curl_close($ch);
 				if ( $item['link_type'] == 'parent' ) {
 				    $content.='role="button" data-toggle="collapse" data-parent="#accordionLinks" href="#collapseOne'.$i.'" aria-expanded="true" aria-controls="collapseOne'.$i.'"';
 				}else{
-				    $content.=' href="'. str_replace('.net/en','.net'. ($ilang=='ar'?'':'/'.$ilang),$item['link_en'])  .'" ';
+				    $content.=' href="'. e(self::menuFrontLink($item)) .'" ';
 				}
 				
 				$content.='>
@@ -2704,7 +3035,7 @@ curl_close($ch);
 				
 					foreach($items as $subm) {
 						if ( $subm['parent_id'] == $item['id'] and  trim($subm["title_$lang"])!='') {
-    					    $content.='<li><a href="'. str_replace('.net/en','.net'. ($ilang=='ar'?'':'/'.$ilang),$subm['link_en']) .'" title="'. $subm["title_$lang"] .'">'.$subm["title_$lang"].'</a></li>';
+    					    $content.='<li><a href="'. e(self::menuFrontLink($subm)) .'" title="'. $subm["title_$lang"] .'">'.$subm["title_$lang"].'</a></li>';
     					}
 					}
 					
@@ -2794,7 +3125,6 @@ curl_close($ch);
     public static function menu_tree_front_mobile_amp($parent, $level, $items, $class_ul = "naviga", $class_ahref= "nav-link")
     {
         $lang = (LaravelLocalization::getCurrentLocale()=='pe'?'fa':LaravelLocalization::getCurrentLocale());
-			$index_link = $lang == "ar" ? "link" : "link_".$lang;
 			$content = '';
 			foreach($items as $item) {
 				if ( $item['parent_id'] == 0 ) {
@@ -2804,7 +3134,7 @@ curl_close($ch);
 							<ul class="amp-menu-links">';
 					foreach($items as $subm) {
 						if ( $subm['parent_id'] == $item['id'] ) {
-							$content.='<li><a href="'.$subm[$index_link].'">'.$subm["title_$lang"].'</a></li>';
+							$content.='<li><a href="'. e(self::menuFrontLink($subm)) .'">'.$subm["title_$lang"].'</a></li>';
 						}
 					}
 					$content .="</ul></div></section>";
@@ -2834,28 +3164,59 @@ curl_close($ch);
 			$content .= '</ul>';
         return $content;
     }
-    public static function menu_tree_admin($parent, $level, $items, $lang = "ar")
+    public static function menu_tree_admin($parent, $level, $items, $lang = "ar", $editingId = null, $editorHtml = null)
     {
+        $langBadges = array(
+            'all' => 'All',
+            'ar' => 'AR',
+            'en' => 'EN',
+            'fr' => 'FR',
+            'fa' => 'FA',
+            'ru' => 'RU',
+        );
         $content = '<ul class="list-group">';
         foreach($items as $item) {
             if ( $item['parent_id'] == $parent ) {
-                $submenu = self::menu_tree_admin($item['id'], ($level+1), $items, $lang);
+                $submenu = self::menu_tree_admin($item['id'], ($level+1), $items, $lang, $editingId, $editorHtml);
+                $displayTitle = trim((string) @$item["title_$lang"]);
+                if ($displayTitle === '') {
+                    $displayTitle = trim((string) @$item['title_ar']) !== ''
+                        ? $item['title_ar']
+                        : @$item['title_en'];
+                }
+                $itemLangCodes = self::parseMenuLangs(isset($item['lang']) ? $item['lang'] : 'all');
+                $langBadgesHtml = '';
+                foreach ($itemLangCodes as $itemLangCode) {
+                    $langBadge = isset($langBadges[$itemLangCode]) ? $langBadges[$itemLangCode] : strtoupper($itemLangCode);
+                    $langBadgesHtml .= '<span class="sm-lang-badge">' . e($langBadge) . '</span>';
+                }
+                $isEditing = $editingId && (int) $item['id'] === (int) $editingId;
+                $editUrl = $isEditing
+                    ? route(Route::currentRouteName())
+                    : route(Route::currentRouteName(), $item['id']);
                 ob_start();
                 ?>
-                    <li class="list-group-item">
-                        <?= $item["title_$lang"]; ?>
-                        <div class="pull-left">
-                            <a href="<?= route(Route::currentRouteName(), $item['id']); ?>" class="btn btn-primary btn-xs" title="تعديل"><i class="fa fa-edit"></i></a>
-                            <?php /*if ( $submenu == '<ul class="list-group"></ul>' and $item['fixed'] == 0 ):*/ ?>
+                    <li class="list-group-item<?= $isEditing ? ' is-editing sm-row-toggle-close' : ''; ?>"<?= $isEditing ? ' data-menu-close-url="' . e(route(Route::currentRouteName())) . '"' : ''; ?> data-menu-id="<?= (int) $item['id']; ?>">
+                        <span class="sm-row-label">
+                            <?= $langBadgesHtml; ?>
+                            <?= e($displayTitle); ?>
+                        </span>
+                        <div class="pull-left sm-row-actions">
+                            <?php if ($isEditing): ?>
+                                <span class="sm-editing-badge">Editing</span>
+                            <?php endif; ?>
+                            <a href="<?= $editUrl; ?>" class="btn btn-primary btn-xs" title="<?= $isEditing ? 'Close' : 'تعديل'; ?>"<?= $isEditing ? ' aria-current="true"' : ''; ?>><i class="fa fa-<?= $isEditing ? 'times' : 'edit'; ?>"></i></a>
                                 <?= Form::open(["method" => "DELETE", "url" => route(Route::currentRouteName().".delete", $item['id']), "class" => "inline"]); ?>
                                     <button data-id="<?= $item['id']; ?>" class="btn btn-danger btn-xs button_confirm" title="حذف"><i class="fa fa-trash"></i></button>
                                 <?= Form::close(); ?>
-                            <?php //endif; ?>
                         </div>
                     </li>
                 <?php
                 $li = ob_get_clean();
                 $content .= $li;
+                if ($isEditing && $editorHtml) {
+                    $content .= '<li class="list-group-item sm-inline-editor-item" id="sm-inline-editor">' . $editorHtml . '</li>';
+                }
                 $content .= $submenu;
             }
         }
@@ -3835,11 +4196,7 @@ return $data;
 				return 'Blog';
 			$t= explode('blog/category/',$url);
 			if(isset($t[1])){
-				if (preg_match('#/('.$countrySlugs.')/#', $url, $cm)) {
-					$category = \App\Models\PostCategory::findInCountry($cm[1], $t[1]);
-				} else {
-					$category = \App\Models\PostCategory::findUnambiguousBySlug($t[1]);
-				}
+				$category = \App\Models\PostCategory::findUnambiguousBySlug($t[1]);
 				if($category){
 					$ret = $category->getName();
 				}

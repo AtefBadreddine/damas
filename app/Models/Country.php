@@ -181,16 +181,6 @@ class Country extends BaseModel
         return $this->hasMany("App\Models\Post", "country_id");
     }
 
-    /**
-     * post categories
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function postCategories()
-    {
-        return $this->hasMany("App\Models\PostCategory", "country_id");
-    }
-
     public function getTitle()
     {
         $lang = (\LaravelLocalization::getCurrentLocale() == 'pe' ? 'fa' : \LaravelLocalization::getCurrentLocale());

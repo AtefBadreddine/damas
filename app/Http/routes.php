@@ -233,8 +233,8 @@ $redirectOnlyRoutes = function () {
         Route::any('/{slug}', ['as' => 'front.blog.post', 'uses' => 'HomeController@blog_show_post', 'type' => 'blog']);
     });
     Route::group(['prefix' => 'news'], function () {
-        Route::any('/{slug}', ['as' => 'front.news.post', 'uses' => 'HomeController@blog_show_post', 'type' => 'news']);
         Route::any('/category/{slug}', ['as' => 'front.news.category', 'uses' => 'HomeController@blog_show_category', 'type' => 'news']);
+        Route::any('/{slug}', ['as' => 'front.news.post', 'uses' => 'HomeController@blog_show_post', 'type' => 'news']);
     });
 };
 

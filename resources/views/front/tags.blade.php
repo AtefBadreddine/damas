@@ -7,8 +7,7 @@ $infos = Helper::get_params();
 ?>
 
 @extends('front.layout', [
-"page_title"        =>    ($tag->getSeoTitle() ? $tag->getSeoTitle() : $tag->getTitle()),
-"page_description"  =>    $tag->getSeoDescription()
+"page_title"        =>    $tag->getTitle(),
 ])
 @section('main_content')
 

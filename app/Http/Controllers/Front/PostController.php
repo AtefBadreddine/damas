@@ -152,7 +152,6 @@ class PostController extends BaseController
     protected function indexListing(Request $request, PostType $postType, $countrySlug = null)
     {
         $type = $postType->value;
-        $categoryType = $postType->categoryType();
         $countryModel = null;
         $countryCode = null;
         $countryId = null;
@@ -186,11 +185,7 @@ class PostController extends BaseController
         $slug = null;
         $categorySlug = $request->get('category');
         if ($categorySlug) {
-            if ($countryId) {
-                $category = PostCategory::findInCountry($countryId, $categorySlug, $categoryType);
-            } else {
-                $category = PostCategory::findUnambiguousBySlug($categorySlug, $categoryType);
-            }
+            $category = PostCategory::findUnambiguousBySlug($categorySlug);
             if (!$category) {
                 abort(404);
             }
@@ -235,11 +230,7 @@ class PostController extends BaseController
             $ajax = true;
             return view("front.blog.partials.list_posts", compact('posts', 'ajax', 'type'));
         }
-        $categoriesQuery = PostCategory::where('type', $categoryType);
-        if ($countryId) {
-            $categoriesQuery->where('country_id', $countryId);
-        }
-        $categories = $categoriesQuery->orderBy("placement", "asc")->get();
+        $categories = PostCategory::orderBy("placement", "asc")->get();
         $hide_whatsapp = false;
         if ($category && in_array($category->id, array(3, 4, 5, 6))) {
             $hide_whatsapp = true;
@@ -251,7 +242,7 @@ class PostController extends BaseController
             $listingUrl = route($postType->frontIndexRoute());
         }
 
-        return view("front.blog.index", compact('posts', 'is_category_page', 'categories', 'type', 'categoryType', 'hide_whatsapp', 'countryCode', 'countryModel', 'listingUrl', 'slug', 'category'));
+        return view("front.blog.index", compact('posts', 'is_category_page', 'categories', 'type', 'hide_whatsapp', 'countryCode', 'countryModel', 'listingUrl', 'slug', 'category'));
     }
 
     /**
@@ -297,7 +288,6 @@ class PostController extends BaseController
         }
 
         $type = $postType->value;
-        $categoryType = $postType->categoryType();
         $countryId = $row->country_id;
         if (!$countryId && $row->countryRel) {
             $countryId = $row->countryRel->id;
@@ -406,11 +396,7 @@ class PostController extends BaseController
             $row->save();
         }
 
-        $categoriesQuery = PostCategory::where('type', $categoryType);
-        if ($countryId) {
-            $categoriesQuery->where('country_id', $countryId);
-        }
-        $categories = $categoriesQuery->orderBy("placement", "asc")->get();
+        $categories = PostCategory::orderBy("placement", "asc")->get();
 
         $lang = $current_lang;
         $video_code = '';
@@ -437,6 +423,6 @@ class PostController extends BaseController
         $post = $row;
         $listingUrl = route($postType->frontCountryRoute(), $country);
 
-        return view("front.blog.show", compact("post", "ajax_projects_url", "link_lang", "categories", "video_code", "faqs", "availables_langs", 'type', 'categoryType', 'hide_whatsapp', 'listingUrl'));
+        return view("front.blog.show", compact("post", "ajax_projects_url", "link_lang", "categories", "video_code", "faqs", "availables_langs", 'type', 'hide_whatsapp', 'listingUrl'));
     }
 }

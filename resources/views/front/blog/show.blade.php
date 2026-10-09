@@ -1513,7 +1513,7 @@ if (isset($post_video2) && $post_video2 != false) {
     <?php } else { ?>
         
         {"@type":"ListItem","position":2,"name":"{{ trans("front.".$type) }}","item":"{{ $listingUrl }}"},
-        {"@type":"ListItem","position":3,"name":"{{ @$post->categories[0]->getName() }}","item":"{{ $post->categories[0]->listingUrl() }}"}
+        {"@type":"ListItem","position":3,"name":"{{ @$post->categories[0]->getName() }}","item":"{{ $listingUrl . '?category=' . urlencode($post->categories[0]->slug) }}"}
         
     <?php } ?>
 

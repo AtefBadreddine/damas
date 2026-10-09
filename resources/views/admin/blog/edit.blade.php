@@ -110,8 +110,8 @@
                                     <label>Categories</label>
                                     <select name="category_id[]" class="form-control select2me" multiple>
                                         <option value=""></option>
-                                        @foreach(\App\Models\PostCategory::where("type", $type)->with('countryRel')->get() as $cat)
-                                        <option value="<?= $cat->id; ?>" <?= in_array($cat->id, $row->categories()->lists('post_category_id')->toArray()) ? 'selected' : ''; ?>><?= ($cat->countryRel ? ucfirst($cat->countryRel->code) : '') .' > '. $cat->name_en; ?></option>
+                                        @foreach(\App\Models\PostCategory::orderBy('placement', 'asc')->get() as $cat)
+                                        <option value="<?= $cat->id; ?>" <?= in_array($cat->id, $row->categories()->lists('post_category_id')->toArray()) ? 'selected' : ''; ?>><?= $cat->getName(); ?></option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -121,7 +121,7 @@
                                     <label>Tags</label>
                                     <select name="tag_id[]" class="form-control select2me" multiple>
                                         <option value=""></option>
-                                        @foreach(\App\Models\Tag::where('type',$type)->get() as $cat)
+                                        @foreach(\App\Models\Tag::orderBy('placement', 'asc')->orderBy('id', 'asc')->get() as $cat)
                                         <option value="<?= $cat->id; ?>" <?= in_array($cat->id, $row->tags()->lists('tag_id')->toArray()) ? 'selected' : ''; ?> title="<?= $cat->title_en != '' ? $cat->title_en . "\n" : '' ?><?= $cat->title_ar != '' ? $cat->title_ar . "\n" : '' ?><?= $cat->title_fr != '' ? $cat->title_fr . "\n" : '' ?><?= $cat->title_pe != '' ? $cat->title_pe . "\n" : '' ?><?= $cat->title_ru != '' ? $cat->title_ru : '' ?>"><?= $cat->name; ?>
                                             (<?= $cat->title_ar != '' ? 'AR ' : '' ?><?= $cat->title_en != '' ? 'EN ' : '' ?><?= $cat->title_fr != '' ? 'FR ' : '' ?><?= $cat->title_fa != '' ? 'PE ' : '' ?><?= $cat->title_ru != '' ? 'RU ' : '' ?>)</option>
                                         @endforeach

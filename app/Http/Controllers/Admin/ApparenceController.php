@@ -29,8 +29,14 @@ class ApparenceController extends BaseController
             if ( $link_type != "url" ) {
                 $inputs["link"] = Helper::get_link_url($link_type, $link_value);
             }
-            $inputs["link_en"] = str_replace("damas.net", "damas.net/en", $inputs["link"]);
-            $inputs["link_fr"] = str_replace("damas.net", "damas.net/fr", $inputs["link"]);
+            if (!empty($inputs["link"])) {
+                $inputs["link"] = locale_neutral_url($inputs["link"]);
+            }
+            $langInput = $request->input("lang", array());
+            if (!is_array($langInput)) {
+                $langInput = preg_split('/\s*,\s*/', (string) $langInput, -1, PREG_SPLIT_NO_EMPTY);
+            }
+            $inputs["lang"] = Helper::normalizeMenuLangs($langInput);
             Helper::query("Menu", "save", [
                 "inputs"    =>  $inputs,
                 "id"        =>  $id,

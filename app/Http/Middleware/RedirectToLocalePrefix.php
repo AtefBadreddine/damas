@@ -45,6 +45,18 @@ class RedirectToLocalePrefix
             return $next($request);
         }
 
+        // Unprefixed legacy URLs already 301 in the controller. Skip the locale hop
+        // so /blog/x goes once to /ar/guides/... instead of /blog/x -> /ar/blog/x -> geo.
+        // /news and /projects listings still need /ar; only their old child paths skip.
+        // /oman|/syria/blog uses the same controller 301; skip global and route localePrefix:add.
+        $isLegacyRedirect = ($path === 'blog' || strpos($path, 'blog/') === 0)
+            || preg_match('#^(oman|syria)/blog(/|$)#', $path)
+            || preg_match('#^news/(category/)?[^/]+$#', $path)
+            || preg_match('#^((oman|syria)/)?projects/[^/]+$#', $path);
+        if ($isLegacyRedirect) {
+            return $next($request);
+        }
+
         if (!function_exists('locale_prefix_hidden_segment')) {
             class_exists('Helper');
         }

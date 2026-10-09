@@ -504,11 +504,6 @@ class BlogController extends BaseController
     */
     public function categories()
     {
-		$type = $this->currentCategoryType();
-		
-		
-		
-		
 		$move = Input::get("move");
         if ( $move ) {
             $pos = Input::get("pos");
@@ -551,12 +546,10 @@ class BlogController extends BaseController
 			$sort = in_array(Input::get("sort"), ["asc", "desc"]) ? Input::get("sort") : "desc";
 			//$rows = $q->orderBy("$field", "$sort")
 		
-		$rows = Helper::query("PostCategory", "where", ["field" => "type", "value" => $type])->orderBy("$field", "$sort")
-			//->orderBy(@$_GET['field'], @$_GET['sort'])
+		$rows = Helper::query("PostCategory", "orderBy", ["field" => $field, "value" => $sort])
 			->paginate(Helper::ajax_change_paginate_number());
 			
-        //$rows = Helper::query("PostCategory", "paginate");
-        return view("admin.blog.category_index", compact("rows","type"));
+        return view("admin.blog.category_index", compact("rows"));
     }
     
     /**
@@ -567,26 +560,23 @@ class BlogController extends BaseController
     */
     public function categories_edit(Request $request, $id = null)
     {
-		$type = $this->currentCategoryType();
         $row = Helper::query("PostCategory", "find", ['id' => $id]);
         if ( $request->isMethod('post') ) {
-            $countryId = (int) $request->get('country_id');
             $exceptId = $id ?: 'NULL';
             $this->validate($request, [
                 "name_ar"  =>  "required",
-                "slug"     =>  "required|alpha_dash|unique:{$row->table_name()},slug,{$exceptId},id,country_id,{$countryId}",
-                "country_id" => "required|integer",
+                "slug"     =>  "required|alpha_dash|unique:{$row->table_name()},slug,{$exceptId},id",
             ]);
             $inputs = $request->all();
-            unset($inputs['country']);
+            unset($inputs['country'], $inputs['country_id'], $inputs['type']);
+            $isNews = strpos(\Route::currentRouteName(), 'admin.news.') === 0;
             return Helper::query("PostCategory", "save", [
                 "inputs"    =>  $inputs,
                 "id"        =>  $id,
-                "route"     =>  "admin.".$type.".categories",
+                "route"     =>  $isNews ? "admin.news.categories" : "admin.blog.categories",
             ]);
         }
-        $countries = Helper::query("Country", "all");
-        return view("admin.blog.category_edit", compact("row","type","countries"));
+        return view("admin.blog.category_edit", compact("row"));
     }
     
     /**
@@ -610,12 +600,8 @@ class BlogController extends BaseController
     */
     public function tags()
     {
-		$type = $this->currentCategoryType();
-		
-		$rows = Helper::query("Tag", "where", ["field" => "type", "value" => $type])
-			//->orderBy(@$_GET['field'], @$_GET['sort'])
+		$rows = Helper::query("Tag", "orderBy", ["field" => "placement", "value" => "asc"])
 			->paginate(Helper::ajax_change_paginate_number());
-        //$rows = Helper::query("Tag", "paginate");
         return view("admin.blog.tag_index", compact("rows"));
     }
     
@@ -627,22 +613,22 @@ class BlogController extends BaseController
     */
     public function tags_edit(Request $request, $id = null)
     {
-		$type = $this->currentCategoryType();
-        
-		
 		$row = Helper::query("Tag", "find", ['id' => $id]);
         if ( $request->isMethod('post') ) {
+            $exceptId = $id ?: 'NULL';
             $this->validate($request, [
-                "slug"     =>  "required|alpha_dash|unique:{$row->table_name()},slug,$id",
+                "slug"     =>  "required|alpha_dash|unique:{$row->table_name()},slug,{$exceptId},id",
             ]);
             $inputs = $request->all();
+            unset($inputs['country'], $inputs['country_id'], $inputs['type']);
+            $isNews = strpos(\Route::currentRouteName(), 'admin.news.') === 0;
             return Helper::query("Tag", "save", [
                 "inputs"    =>  $inputs,
                 "id"        =>  $id,
-                "route"     =>  "admin.".$type.".tags",
+                "route"     =>  $isNews ? "admin.news.tags" : "admin.blog.tags",
             ]);
         }
-        return view("admin.blog.tag_edit", compact("row","type"));
+        return view("admin.blog.tag_edit", compact("row"));
     }
     
     /**

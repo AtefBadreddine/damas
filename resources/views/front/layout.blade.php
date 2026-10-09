@@ -696,7 +696,8 @@ foreach ($citys as $layoutCity) {
                         
 						<?php
                         /* display only on full */
-                        echo Helper::new_menu_tree_front(0, 0, Helper::query("Menu", "orderByPlacement", ["lang" => ["all", $current_lang]])->toArray());
+                        $quickMenuLang = $current_lang === 'pe' ? 'fa' : $current_lang;
+                        echo Helper::new_menu_tree_front(0, 0, Helper::query("Menu", "orderByPlacement", ["lang" => ["all", $quickMenuLang]])->toArray());
                         ?>
 						
                         </div>

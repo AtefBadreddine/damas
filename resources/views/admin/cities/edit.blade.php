@@ -1,4 +1,4 @@
-@extends('admin.layouts.form', ["app_title" => "Cities", "app_desc" => "City Information"])
+@extends('admin.layouts.form', ["app_title" => "Cities", "app_desc" => ""])
 @section('main_form')
 <?php
 $countries = \App\Models\Country::ordered()->get();
@@ -30,9 +30,9 @@ input[name=slug] {
 
 <div id="city-form">
 <fieldset>
-    <legend>City Location</legend>
+    <legend>Common City Data</legend>
     <div class="form-group col-md-6">
-        <label>Country <span class="red">(*)</span></label>
+        <label for="city-country-id" style="display:block">Country <span class="red">(*)</span></label>
         <select name="country_id" id="city-country-id" class="form-control select2me" required>
             <option value=""></option>
             @foreach($countries as $country)
@@ -40,16 +40,23 @@ input[name=slug] {
             @endforeach
         </select>
     </div>
+    <div class="form-group col-md-6">
+        <label>Slug <span class="red">(*)</span></label>
+        <div class="input-group ltr">
+            <span class="input-group-addon" id="city-slug-prefix">https://damas.net/country/</span>
+            <?= Form::text("slug", $row->slug, ["class" => "form-control"]); ?>
+        </div>
+    </div>
 </fieldset>
 
 <div class="panel with-nav-tabs panel-default">
     <div class="panel-heading lang-heading">
         <ul class="nav nav-tabs">
-            <li class="active"><a href="#tab1default" data-toggle="tab">Arabic Section</a></li>
-            <li><a href="#tab2default" data-toggle="tab">English Section</a></li>
-            <li><a href="#tab3default" data-toggle="tab">French Section</a></li>
-            <li><a href="#tab4default" data-toggle="tab">Farisi Section</a></li>
-            <li><a href="#tab5default" data-toggle="tab">Russian Section</a></li>
+            <li class="active"><a href="#tab1default" data-toggle="tab">Arabic</a></li>
+            <li><a href="#tab2default" data-toggle="tab">English</a></li>
+            <li><a href="#tab3default" data-toggle="tab">French</a></li>
+            <li><a href="#tab4default" data-toggle="tab">Farisi</a></li>
+            <li><a href="#tab5default" data-toggle="tab">Russian</a></li>
         </ul>
     </div>
     <div class="panel-body">
@@ -59,19 +66,12 @@ input[name=slug] {
 
 <fieldset>
     <div class="form-group col-md-6">
-        <label style="color:red;">H1 title <span class="red">(*)</span></label>
+        <label >H1 Tag<span class="red">(*)</span></label>
         <?= Form::text("h1_ar", $row->h1_ar, ["class" => "form-control"]); ?>
     </div>
     <div class="form-group col-md-6">
         <label>Name Arabic<span class="red">(*)</span></label>
         <?= Form::text("name_ar", $row->name_ar, ["class" => "form-control", "dir" => "rtl"]); ?>
-    </div>
-    <div class="form-group col-md-6">
-        <label>Slug <span class="red">(*)</span></label>
-        <div class="input-group ltr">
-            <span class="input-group-addon" id="city-slug-prefix">https://damas.net/country/</span>
-            <?= Form::text("slug", $row->slug, ["class" => "form-control"]); ?>
-        </div>
     </div>
 	<div class="form-group col-md-6">
         <label>Link Preview Image</label>
@@ -84,7 +84,7 @@ input[name=slug] {
         @endif
     </div>
 	<div class="form-group col-md-6">
-        <label style="color:red;">Bring Content From Post</label>
+        <label >Bring Content From Post</label>
         <select name="post_id" class="form-control select2me" >
 			<option value="0"></option>
 			@foreach($posts as $post)
@@ -94,27 +94,21 @@ input[name=slug] {
     </div>
 
 <div class="form-group col-md-12">
-    <label style="color:red;">Content</label>
+    <label >Content</label>
     @include('admin.layouts.full_editor', ["name" => "about_ar", "editor_value" => $row->about_ar])
 </div>
 <div class="col-md-12">
                     <fieldset>
                         <legend>Metatag Arabic</legend>
-                        <div class="form-group col-md-4">
+                        <div class="form-group col-md-12">
                                                         <label>Title</label>
                             <?= Form::text("seo_title_ar", $row->seo_title_ar, ["class" => "form-control text-align-right", "placeholder" => "Title"]); ?>
                         </div>
-                        <div class="form-group col-md-4">
+                        <div class="form-group col-md-12">
                                                         <label>Description</label>
                             <?= Form::textarea("seo_description_ar", $row->seo_description_ar, ["class" => "form-control text-align-right", "rows" => 5, "placeholder" => "Description"]); ?>
                         </div>
 
-                        @if(@$hide_keywords==false)
-                        <div class="form-group col-md-4" style="">
-                                                        <label>Keywords</label>
-                            <?= Form::text("seo_keywords_ar", $row->seo_keywords_ar, ["class" => "form-control text-align-right", "placeholder" => "Keywords"]); ?>
-                        </div>
-                        @endif
                     </fieldset>
                 </div>
 
@@ -127,7 +121,7 @@ input[name=slug] {
 
 <fieldset>
     <div class="form-group col-md-6">
-        <label style="color:red;">H1 title <span class="red">(*)</span></label>
+        <label >H1 Tag<span class="red">(*)</span></label>
         <?= Form::text("h1_en", $row->h1_en, ["class" => "form-control"]); ?>
     </div>
     <div class="form-group col-md-6">
@@ -145,25 +139,19 @@ input[name=slug] {
     @endif
 </div>
 <div class="form-group col-md-12">
-    <label style="color:red;">Content</label>
+    <label >Content</label>
     @include('admin.layouts.full_editor', ["name" => "about_en", "editor_value" => $row->about_en])
 </div>
 <!-- seo eng -->
                 <div class="col-md-12">
                     <fieldset>
                         <legend>English</legend>
-                        <div class="form-group col-md-4">
+                        <div class="form-group col-md-12">
                             <?= Form::text("seo_title_en", $row->seo_title_en, ["class" => "form-control ltr", "placeholder" => "Title"]); ?>
                         </div>
-                        <div class="form-group col-md-4">
+                        <div class="form-group col-md-12">
                             <?= Form::textarea("seo_description_en", $row->seo_description_en, ["class" => "form-control ltr", "rows" => 5, "placeholder" => "Description"]); ?>
                         </div>
-
-                        @if(@$hide_keywords==false)
-                        <div class="form-group col-md-4">
-                            <?= Form::text("seo_keywords_en", $row->seo_keywords_en, ["class" => "form-control ltr", "placeholder" => "Keywords"]); ?>
-                        </div>
-                        @endif
                     </fieldset>
                 </div>
 
@@ -178,7 +166,7 @@ input[name=slug] {
 
 <fieldset>
     <div class="form-group col-md-6">
-        <label style="color:red;">H1 title <span class="red">(*)</span></label>
+        <label >H1 Tag<span class="red">(*)</span></label>
         <?= Form::text("h1_fr", $row->h1_fr, ["class" => "form-control"]); ?>
     </div>
     <div class="form-group col-md-6">
@@ -196,25 +184,19 @@ input[name=slug] {
     @endif
 </div>
 <div class="form-group col-md-12">
-    <label style="color:red;">Content</label>
+    <label >Content</label>
     @include('admin.layouts.full_editor', ["name" => "about_fr", "editor_value" => $row->about_fr])
 </div>
 <!-- seo FR -->
                 <div class="col-md-12">
                     <fieldset>
                         <legend>FRENCH</legend>
-                        <div class="form-group col-md-4">
+                        <div class="form-group col-md-12">
                             <?= Form::text("seo_title_fr", $row->seo_title_fr, ["class" => "form-control ltr", "placeholder" => "Title"]); ?>
                         </div>
-                        <div class="form-group col-md-4">
+                        <div class="form-group col-md-12">
                             <?= Form::textarea("seo_description_fr", $row->seo_description_fr, ["class" => "form-control ltr", "rows" => 5, "placeholder" => "Description"]); ?>
                         </div>
-
-                        @if(@$hide_keywords==false)
-                        <div class="form-group col-md-4">
-                            <?= Form::text("seo_keywords_fr", $row->seo_keywords_fr, ["class" => "form-control ltr", "placeholder" => "Keywords"]); ?>
-                        </div>
-                        @endif
                     </fieldset>
                 </div>
 
@@ -226,7 +208,7 @@ input[name=slug] {
 
 <fieldset>
     <div class="form-group col-md-6">
-        <label style="color:red;">H1 title <span class="red">(*)</span></label>
+        <label >H1 Tag<span class="red">(*)</span></label>
         <?= Form::text("h1_fa", $row->h1_fa, ["class" => "form-control"]); ?>
     </div>
     <div class="form-group col-md-6">
@@ -245,25 +227,19 @@ input[name=slug] {
     </div>
 
 <div class="form-group col-md-12">
-    <label style="color:red;">Content</label>
+    <label >Content</label>
     @include('admin.layouts.full_editor', ["name" => "about_fa", "editor_value" => $row->about_fa])
 </div>
 <!-- seo FA -->
                 <div class="col-md-12">
                     <fieldset>
                         <legend>PERSIAN</legend>
-                        <div class="form-group col-md-4">
+                        <div class="form-group col-md-12">
                             <?= Form::text("seo_title_fa", $row->seo_title_fa, ["class" => "form-control text-align-right", "placeholder" => "Title"]); ?>
                         </div>
-                        <div class="form-group col-md-4">
+                        <div class="form-group col-md-12">
                             <?= Form::textarea("seo_description_fa", $row->seo_description_fa, ["class" => "form-control text-align-right", "rows" => 5, "placeholder" => "Description"]); ?>
                         </div>
-
-                        @if(@$hide_keywords==false)
-                        <div class="form-group col-md-4">
-                            <?= Form::text("seo_keywords_fa", $row->seo_keywords_fa, ["class" => "form-control text-align-right", "placeholder" => "Keywords"]); ?>
-                        </div>
-                        @endif
                     </fieldset>
                 </div>
 
@@ -276,7 +252,7 @@ input[name=slug] {
 
 <fieldset>
     <div class="form-group col-md-6">
-        <label style="color:red;">H1 title <span class="red">(*)</span></label>
+        <label >H1 Tag<span class="red">(*)</span></label>
         <?= Form::text("h1_ru", $row->h1_ru, ["class" => "form-control"]); ?>
     </div>
     <div class="form-group col-md-6">
@@ -295,25 +271,19 @@ input[name=slug] {
     </div>
 
 <div class="form-group col-md-12">
-    <label style="color:red;">Content</label>
+    <label >Content</label>
     @include('admin.layouts.full_editor', ["name" => "about_ru", "editor_value" => $row->about_ru])
 </div>
 <!-- seo RU -->
                 <div class="col-md-12">
                     <fieldset>
                         <legend>Russian</legend>
-                        <div class="form-group col-md-4">
+                        <div class="form-group col-md-12">
                             <?= Form::text("seo_title_ru", $row->seo_title_ru, ["class" => "form-control text-align-left", "placeholder" => "Title"]); ?>
                         </div>
-                        <div class="form-group col-md-4">
+                        <div class="form-group col-md-12">
                             <?= Form::textarea("seo_description_ru", $row->seo_description_ru, ["class" => "form-control text-align-left", "rows" => 5, "placeholder" => "Description"]); ?>
                         </div>
-
-                        @if(@$hide_keywords==false)
-                        <div class="form-group col-md-4">
-                            <?= Form::text("seo_keywords_ru", $row->seo_keywords_ru, ["class" => "form-control text-align-left", "placeholder" => "Keywords"]); ?>
-                        </div>
-                        @endif
                     </fieldset>
                 </div>
 

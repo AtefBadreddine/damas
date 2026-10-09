@@ -61,6 +61,10 @@
     </div>
 </div>
                 <div class="form-group col-md-12">
+                    <label>Video Arabic</label>
+                    <?= Form::text("linkvideo_ar", $row->linkvideo_ar, ["class" => "form-control ltr"]); ?>
+                </div>
+                <div class="form-group col-md-12">
                     <label>Content Arabic</label>
                     @include('admin.layouts.full_editor', ["name" => "about_ar", "rows" => 8, "editor_value" => $row->about_ar])
                 </div>
@@ -96,6 +100,10 @@
         <?= Form::text("name_en", $row->name_en, ["class" => "form-control ltr"]); ?>
     </div>
 </div>
+                <div class="form-group col-md-12">
+                    <label>Video English</label>
+                    <?= Form::text("linkvideo_en", $row->linkvideo_en, ["class" => "form-control ltr"]); ?>
+                </div>
                 <div class="form-group col-md-12">
                     <label>Content English</label>
                     @include('admin.layouts.full_editor', ["name" => "about_en", "rows" => 8, "editor_value" => $row->about_en])
@@ -133,6 +141,10 @@
     </div>
 </div>
                 <div class="form-group col-md-12">
+                    <label>Video French</label>
+                    <?= Form::text("linkvideo_fr", $row->linkvideo_fr, ["class" => "form-control ltr"]); ?>
+                </div>
+                <div class="form-group col-md-12">
                     <label>Content French</label>
                     @include('admin.layouts.full_editor', ["name" => "about_fr", "rows" => 8, "editor_value" => $row->about_fr])
                 </div>
@@ -169,6 +181,10 @@
     </div>
 </div>
                 <div class="form-group col-md-12">
+                    <label>Video Persian</label>
+                    <?= Form::text("linkvideo_fa", $row->linkvideo_fa, ["class" => "form-control ltr"]); ?>
+                </div>
+                <div class="form-group col-md-12">
                     <label>Content Persian</label>
                     @include('admin.layouts.full_editor', ["name" => "about_fa", "rows" => 8, "editor_value" => $row->about_fa])
                 </div>
@@ -204,6 +220,10 @@
         <?= Form::text("name_ru", $row->name_ru, ["class" => "form-control ltr"]); ?>
     </div>
 </div>
+                <div class="form-group col-md-12">
+                    <label>Video Russian</label>
+                    <?= Form::text("linkvideo_ru", $row->linkvideo_ru, ["class" => "form-control ltr"]); ?>
+                </div>
                 <div class="form-group col-md-12">
                     <label>Content Russian</label>
                     @include('admin.layouts.full_editor', ["name" => "about_ru", "rows" => 8, "editor_value" => $row->about_ru])
@@ -269,30 +289,7 @@
 </div>
 </fieldset>
 
-<fieldset>
-    <legend>Videos</legend>
 
-	<div class="form-group col-md-6">
-        <label>Video Arabic</label>
-        <?= Form::text("linkvideo_ar", $row->linkvideo_ar, ["class" => "form-control"]); ?>
-    </div>
-    <div class="form-group col-md-6">
-        <label>Video English</label>
-        <?= Form::text("linkvideo_en", $row->linkvideo_en, ["class" => "form-control"]); ?>
-    </div>
-    <div class="form-group col-md-6">
-        <label>Video French</label>
-        <?= Form::text("linkvideo_fr", $row->linkvideo_fr, ["class" => "form-control"]); ?>
-    </div>
-    <div class="form-group col-md-6">
-        <label>Video Persian</label>
-        <?= Form::text("linkvideo_fa", $row->linkvideo_fa, ["class" => "form-control"]); ?>
-    </div>
-    <div class="form-group col-md-6">
-        <label>Video Russian</label>
-        <?= Form::text("linkvideo_ru", $row->linkvideo_ru, ["class" => "form-control"]); ?>
-    </div>
-</fieldset>
 
 <?php /* 
     <div class="form-group col-md-6 hiddenz">
@@ -500,94 +497,6 @@
                                         </div>
                                     </div>
 </div> */ ?>
-</fieldset>
-
-<fieldset>
-    <legend>Location and Coordinates</legend>
-    <div class="form-group col-md-12">
-        @include('admin.layouts.location_map')
-    </div>
-</fieldset>
-
-<fieldset>
-    <div class="col-md-12">
-        <div class="col-md-12">
-            <legend>Services and Strength of the District</legend>
-            <div class="form-group col-md-6">
-                <label>Transportation </label>
-                <?= Form::text("transport", $row->transport, ["class" => "form-control"]); ?>
-            </div>
-            <div class="form-group col-md-6">
-                <label>Post</label>
-                <select name="transport_desc" class="form-control select2me">
-                    <option value=""></option>
-                    @foreach(Helper::query("Post", "all") as $p)
-                    <option value="<?= $p->id; ?>" <?= $row->transport_desc == $p->id ? 'selected' : ''; ?>><?= $p->title_ar; ?></option>
-                    @endforeach
-                </select>
-            </div>
-
-            <div class="form-group col-md-6">
-                <label>Schools and Universities</label>
-                <?= Form::text("schools", $row->schools, ["class" => "form-control"]); ?>
-            </div>
-
-            <div class="form-group col-md-6">
-                <label>Post</label>
-                <select name="schools_desc" class="form-control select2me">
-                    <option value=""></option>
-                    @foreach(Helper::query("Post", "all") as $p)
-                    <option value="<?= $p->id; ?>" <?= $row->schools_desc == $p->id ? 'selected' : ''; ?>><?= $p->title_ar; ?></option>
-                    @endforeach
-                </select>
-            </div>
-            <div class="form-group col-md-6">
-                <label>Health Institutions</label>
-                <?= Form::text("health", $row->health, ["class" => "form-control"]); ?>
-            </div>
-
-            <div class="form-group col-md-6">
-                <label>Post</label>
-                <select name="health_desc" class="form-control select2me">
-                    <option value=""></option>
-                    @foreach(Helper::query("Post", "all") as $p)
-                    <option value="<?= $p->id; ?>" <?= $row->health_desc == $p->id ? 'selected' : ''; ?>><?= $p->title_ar; ?></option>
-                    @endforeach
-                </select>
-            </div>
-            
-            <div class="form-group col-md-6">
-                <label>Social Facilities</label>
-                <?= Form::text("social", $row->social, ["class" => "form-control"]); ?>
-            </div>
-            <div class="form-group col-md-6">
-                <label>Post</label>
-                <select name="social_desc" class="form-control select2me">
-                    <option value=""></option>
-                    @foreach(Helper::query("Post", "all") as $p)
-                    <option value="<?= $p->id; ?>" <?= $row->social_desc == $p->id ? 'selected' : ''; ?>><?= $p->title_ar; ?></option>
-                    @endforeach
-                </select>
-            </div>
-
-            <div class="form-group col-md-6">
-                <label>Shopping Centers</label>
-                <?= Form::text("shopping", $row->shopping, ["class" => "form-control"]); ?>
-            </div>
-
-            <div class="form-group col-md-6">
-                <label>Post</label>
-                <select name="shopping_desc" class="form-control select2me">
-                    <option value=""></option>
-                    @foreach(Helper::query("Post", "all") as $p)
-                    <option value="<?= $p->id; ?>" <?= $row->shopping_desc == $p->id ? 'selected' : ''; ?>><?= $p->title_ar; ?></option>
-                    @endforeach
-                </select>
-            </div>
-
-
-        </div>
-    </div>
 </fieldset>
 
 <fieldset>

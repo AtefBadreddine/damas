@@ -23,8 +23,6 @@ class Region extends BaseModel
 		"about_ar",
         "about_en",
         "about_fa",
-        "latitude",
-        "longitude",
         "seo_title_ar",
         "seo_description_ar",
         "seo_keywords_ar",
@@ -40,18 +38,6 @@ class Region extends BaseModel
         
         "placement",
 
-		"transport",
-        "schools",
-        "health",
-        "social",
-        "shopping",
-
-        "transport_desc",
-        "schools_desc",
-        "health_desc",
-        "social_desc",
-        "shopping_desc",
-		
         "linkvideo_ar",
         "linkvideo_en",
         "linkvideo_fa",

@@ -1,6 +1,6 @@
 <?php
 if (!isset($availables_langs))
-    $availables_langs = ['ar', 'en', 'fr', 'pe', 'ru'];
+    $availables_langs = ['ar', 'en'];
 
 $current_lang = LaravelLocalization::getCurrentLocale();
 $style_lang = in_array($current_lang, ['en', 'fr', 'ru']) ? 'en' : 'ar';
@@ -375,15 +375,6 @@ $emptypic = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABA
                         @endif
                         @if(in_array('en',$availables_langs))
                         <option data-icon="flag_icon USD" class="USD num" <?= $current_lang == 'en' ? 'selected' : '' ?> value="<?= ((isset($link_lang) && $link_lang != '') ? $link_lang : localized_url('en')); ?>">English</option>
-                        @endif
-                        @if(in_array('fr',$availables_langs))
-                        <option data-icon="flag_icon FR" class="fr num" <?= $current_lang == 'fr' ? 'selected' : '' ?> value="<?= ((isset($link_lang) && $link_lang != '') ? $link_lang : localized_url('fr')); ?>">Français</option>
-                        @endif
-                        @if(in_array('pe',$availables_langs))
-                        <option data-icon="flag_icon PE" class="fa fa_font" <?= $current_lang == 'pe' ? 'selected' : '' ?> value="<?= ((isset($link_lang) && $link_lang != '') ? $link_lang : localized_url('pe')); ?>">فارسی</option>
-                        @endif
-                        @if(in_array('ru',$availables_langs))
-                        <option data-icon="flag_icon RU" class="ru ru_font" <?= $current_lang == 'ru' ? 'selected' : '' ?> value="<?= ((isset($link_lang) && $link_lang != '') ? $link_lang : localized_url('ru')); ?>">русский</option>
                         @endif
                     </select>
 

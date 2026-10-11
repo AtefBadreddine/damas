@@ -10,13 +10,24 @@ class RedirectToLocalePrefix
     /**
      * add:  /about-us -> /ar/about-us (home, auth, admin, endpoints stay unprefixed)
      * strip: /ar/login -> /login, /ar -> /
+     * Retired locales (fr, pe, ru) always go to English: /fr/oman -> /en/oman, /ru -> /en
      */
+    private static $retiredLocales = ['fr', 'pe', 'ru'];
+
     public function handle($request, Closure $next, $direction = 'add')
     {
         $query = $request->getQueryString();
         $status = in_array($request->method(), ['GET', 'HEAD']) ? 301 : 307;
         $locale = LaravelLocalization::getDefaultLocale();
         $path = trim($request->path(), '/');
+
+        // Runs before CacheGetPages, so cached /fr|/pe|/ru pages are never served again.
+        $segments = explode('/', $path, 2);
+        if (in_array($segments[0], self::$retiredLocales, true)) {
+            $target = 'en' . (isset($segments[1]) && $segments[1] !== '' ? '/' . $segments[1] : '');
+
+            return redirect(url($target) . ($query ? '?' . $query : ''), $status);
+        }
 
         // Retired landing URLs must be 404s, including before locale redirects
         // and page-cache hits. Otherwise the legacy search catchall can serve them.

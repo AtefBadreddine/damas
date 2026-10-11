@@ -1,6 +1,6 @@
 <?php
 if (!isset($availables_langs))
-    $availables_langs = ['ar', 'en', 'fr', 'pe', 'ru'];
+    $availables_langs = ['ar', 'en'];
 
 
 if (!isset($hide_whatsapp))

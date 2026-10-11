@@ -4785,15 +4785,6 @@ class HomeController extends BaseController
 			
 				DB::table('posts')->where("id",$p->id)->update(["send_notif_en" => 1]);
 			}
-			if($p->send_notif_fr==false and $send_post==false and $p->title_fr!=''){
-				$send_post = true;
-				$url = 'https://damas.net/fr/'. ($p->type) .'/'.$p->slug;
-				Helper::sendOnesignalNotification($app_id_damasnet,$auth_key_damasnet,$p->title_fr,$p->seo_description_fr,$img,$url);
-				Helper::sendOnesignalNotification($app_id_damasturk,$auth_key_damasturk,$p->title_fr,$p->seo_description_fr,$img,$url);
-				Helper::sendOnesignalNotification($app_id_damasturk_no_w,$auth_key_damasturk_no_w,$p->title_fr,$p->seo_description_fr,$img,$url);
-			
-				DB::table('posts')->where("id",$p->id)->update(["send_notif_fr" => 1]);
-			}
 			if($send_post == true)
 			break;
 		}
@@ -4805,7 +4796,7 @@ class HomeController extends BaseController
 			$projects = DB::table('projects')
 					->where("published", 1)
 					->where(function($query) {
-							$query->where('send_notif_ar', 0)->orWhere('send_notif_en', 0)->orWhere('send_notif_fr', 0);
+							$query->where('send_notif_ar', 0)->orWhere('send_notif_en', 0);
 					})
 					->orderBy('id','asc')
 					->get();
@@ -4831,14 +4822,6 @@ class HomeController extends BaseController
 					Helper::sendOnesignalNotification($app_id_damasturk,$auth_key_damasturk,$p->seo_title_en,$p->seo_description_en,$img,$url);
 					Helper::sendOnesignalNotification($app_id_damasturk_no_w,$auth_key_damasturk_no_w,$p->seo_title_en,$p->seo_description_en,$img,$url);
 					DB::table('projects')->where("id" , $pr->id)->update(["send_notif_en" => 1]);
-				}
-				if($p->send_notif_fr==false  and $send_post==false){
-					
-					$url = 'https://www.damas.net/fr'.$notifPath;
-					Helper::sendOnesignalNotification($app_id_damasnet,$auth_key_damasnet,$p->seo_title_fr,$p->seo_description_fr,$img,$url);
-					Helper::sendOnesignalNotification($app_id_damasturk,$auth_key_damasturk,$p->seo_title_fr,$p->seo_description_fr,$img,$url);
-					Helper::sendOnesignalNotification($app_id_damasturk_no_w,$auth_key_damasturk_no_w,$p->seo_title_fr,$p->seo_description_fr,$img,$url);
-					DB::table('projects')->where("id" , $pr->id)->update(["send_notif_fr" => 1]);
 				}
 				
 				

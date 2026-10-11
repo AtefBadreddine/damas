@@ -4,10 +4,7 @@ return [
 	'supportedLocales' => [
 		'ar'          => ['name' => 'Arabic',                 'script' => 'Arab', 'native' => 'العربية'],
 		'en'          => ['name' => 'English',                'script' => 'Latn', 'native' => 'English'],
-		'fr'          => ['name' => 'Frensh',                'script' => 'Latn', 'native' => 'Frensh'],
-		'pe'          => ['name' => 'Persian',                'script' => 'Arab', 'native' => 'Persian'],
-		'ru'          => ['name' => 'Russian',                'script' => 'Latn', 'native' => 'Russian'],
-		//'fa'          => ['name' => 'Persian',                'script' => 'Arab', 'native' => 'Persian'],
+		// fr, pe and ru are retired: RedirectToLocalePrefix 301s /fr|/pe|/ru/... to /en/...
 	],
 	
 	

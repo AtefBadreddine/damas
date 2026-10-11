@@ -95,11 +95,11 @@
 <div class="panel with-nav-tabs panel-default">
     <div class="panel-heading lang-heading">
         <ul class="nav nav-tabs">
-            <li class="active"><a href="#tab1default" data-toggle="tab">Arabic Section</a></li>
-            <li><a href="#tab2default" data-toggle="tab">English Section</a></li>
-            <li><a href="#tab3default" data-toggle="tab">French Section</a></li>
-            <li><a href="#tab4default" data-toggle="tab">Persian Section</a></li>
-            <li><a href="#tab5default" data-toggle="tab">Russian Section</a></li>
+            <li class="active"><a href="#tab1default" data-toggle="tab">Arabic</a></li>
+            <li><a href="#tab2default" data-toggle="tab">English</a></li>
+            <li><a href="#tab3default" data-toggle="tab">French</a></li>
+            <li><a href="#tab4default" data-toggle="tab">Persian</a></li>
+            <li><a href="#tab5default" data-toggle="tab">Russian</a></li>
         </ul>
     </div>
     <div class="panel-body">
@@ -922,7 +922,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-md-6">
+                                    <div class="col-md-12">
                                         <div class="form-group">
                                             <label>Card Intro</label>
                                             <?= Form::text("intro_card_en", $row->intro_card_en, ["class" => "form-control ltr"]); ?>
@@ -1278,7 +1278,8 @@
                 selector: '.project-overview-' + direction,
                 language: 'en',
                 directionality: direction,
-                height: 250,
+                height: 400,
+                width: '100%',
                 menubar: true,
                 relative_urls: false,
                 remove_script_host: false,

@@ -8,6 +8,7 @@ $infos = Helper::get_params();
 $ccountry = ($project->city && $project->city->countryRel && $project->city->countryRel->code)
     ? $project->city->countryRel->code
     : 'turkey';
+$featuredCountryId = $project->city ? (int) $project->city->country_id : 0;
 $hide_maps = true;
 
 $is_mobile = Helper::get_device() != 'full' ? true : false;
@@ -639,8 +640,8 @@ $flavors = $project->flavors();
 			
 			$f_lang = ($current_lang=='pe'?'fa':$current_lang);
 			
-			if($ccountry=='turkey'){
-			$arr_keys = \App\Models\Keywords2::where('display','like','%;projects;%')->where('keyword_'.$f_lang,'!=','')->get();
+			if ($project->city && $project->city->country_id) {
+			$arr_keys = \App\Models\Keywords2::forContext($project->city->country_id, array('projects'), $f_lang);
 			
 			if(count($arr_keys)>0){
 			?>
@@ -648,8 +649,8 @@ $flavors = $project->flavors();
                 <h2 class="sub_title jazzira_font_bold"><?= trans("front.The most important and latest real estate projects"); ?></h2>
                 
                 <ul class="keywords_paragraph_list">
-				<?php foreach($arr_keys as $r){ ?>
-                    <li><p><strong><a title="{{ $r->getKeyword() }}" href="<?= $f_lang=='ar'?$r->url:str_replace('.com/','.com/'.$f_lang.'/',$r->url) ?>">{{ $r->getKeyword() }}</a></strong></p></li>
+				<?php foreach($arr_keys as $r){ if ($r->getUrl($f_lang) === '') continue; ?>
+                    <li><p><strong><a title="{{ $r->getKeyword() }}" href="{{ $r->getUrl($f_lang) }}">{{ $r->getKeyword() }}</a></strong></p></li>
                 <?php } ?>
                 </ul>
 
@@ -680,6 +681,14 @@ $flavors = $project->flavors();
 
 
 
+            <?php
+            $arr_ids = \App\Models\Fotterproject::projectIdsForCountry($featuredCountryId);
+            $footer_prjs = \App\Models\Project::whereIn('id', $arr_ids)
+                ->whereHas('city', function ($query) use ($featuredCountryId) {
+                    $query->where('country_id', $featuredCountryId);
+                })->get();
+            ?>
+            @if(count($footer_prjs) > 0)
             <div class="int_content not_bg">
 
                 <h2 class="sub_title jazzira_font_bold">{{ trans('front.similar projects') }}</h2>
@@ -689,15 +698,7 @@ $flavors = $project->flavors();
                     <div class="slider" <?php if ($style_lang == 'ar') { ?>  dir="rtl"  <?php } else { ?>  dir="ltr" <?php } ?>>
 
                         <div class="slider__wrap swiper-wrapper">
-                            <?php
-                            /* $similars = explode(",", $project->similar_projects);
-                             */
 
-                            //if(!isset($footer_prjs)){
-                            $arr_ids = \App\Models\Fotterproject::projectIdsForCountry($ccountry);
-                            $footer_prjs = \App\Models\Project::whereIn('id', $arr_ids)->get();
-                            //}
-                            ?>
                             @foreach($footer_prjs as $prj)
                             <?php
                             //$prj = Helper::query("Project", "find", ["id" => $similar]);
@@ -731,6 +732,8 @@ $flavors = $project->flavors();
             </div>
 
 
+            @endif
+
             <?php
             /* if ($current_lang == 'ar')
               $similarspost = $project->posts;
@@ -741,35 +744,23 @@ $flavors = $project->flavors();
               elseif ($current_lang == 'fa')
               $similarspost = $project->postsFa;
              */
-            $similarspost = [];
-            
-            $params = \App\Models\BlogParam::forCountry($ccountry);
-            
-            if ($params->featured_post != '')
-                $similarspost = explode(",", $params->featured_post);
-
-
-            if (count($similarspost) > 0) {
+            $params = \App\Models\BlogParam::forFeaturedCountry($featuredCountryId);
+            $similarspost = array_filter(array_map('intval', explode(',', (string) $params->featured_post)));
+            $featuredPosts = \App\Models\Post::whereIn('id', $similarspost)
+                ->where('country_id', $featuredCountryId)
+                ->orderBy('updated_at', 'desc')->orderBy('id', 'desc')->get();
+            if (count($featuredPosts) > 0) {
                 ?>
                 <div class="int_content not_bg">
                     <div class="similar_articles sec">
-                        <h2 class="sub_title jazzira_font_bold"><?= trans("front.related articles"); ?></h2>
+                        <h2 class="sub_title jazzira_font_bold"><?= trans("front.related posts"); ?></h2>
 
                         <div class="wrapper sec">
 
                             <div class="slider video_slider" dir="<?= $current_lang === 'ar' ? 'rtl' : 'ltr' ?>">
 
                                 <div class="slider__wrap swiper-wrapper">
-                                    <?php
-                                    $t = 0; 
-                                    $similarspost = array_reverse($similarspost);    
-                                    ?>
-                                    @foreach($similarspost as $id)
-                                    <?php
-                                    $spost = Helper::query("Post", "find", ["id" => $id]);
-                                    if (!$spost->id)
-                                        continue;
-                                    ?>
+                                    @foreach($featuredPosts as $spost)
                                     @include("front.partials.post_item", ["post" => $spost, "open_blank" => false, "class" => "card-small","page"=>"index"])
                                     @endforeach
                                 </div>

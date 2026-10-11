@@ -1,6 +1,9 @@
 @extends('admin.layouts.app', ["app_title" => "WhatsApp Chat"])
 @section('main_content')
 <style>
+    *, *::before, *::after {
+        outline: none;
+    }
     main {
         background-color: #ddd;
         height: 80vh;
@@ -214,6 +217,49 @@
         align-items: center;
         justify-content: space-evenly;
     }
+    .left { min-width: 0; }
+    .contact { flex-shrink: 0; }
+    .contact[hidden], .search-clear[hidden], .search-empty[hidden] {
+        display: none !important;
+    }
+    .search-bar {
+        position: sticky;
+        top: 0;
+        z-index: 2;
+        flex-shrink: 0;
+        background: #aaa;
+        padding: 10px 6px;
+    }
+    .search-controls {
+        display: flex;
+        align-items: center;
+        background: #fff;
+        border-radius: 8px;
+        border: 1px solid #888;
+    }
+    .search-controls:focus-within { border-color: #13aaa8; }
+    .search {
+        flex: 1;
+        min-width: 0;
+        width: 100%;
+        border: 0;
+        background: transparent;
+        padding: 9px;
+        color: #222;
+        font-size: 14px;
+    }
+    .search-clear {
+        flex-shrink: 0;
+        border: 0;
+        background: transparent;
+        padding: 5px 10px;
+        color: #555;
+        font-size: 22px;
+        cursor: pointer;
+    }
+    .search-clear:focus-visible { outline: 2px solid #13aaa8; }
+    .search-count { margin-top: 5px; color: #333; font-size: 12px; }
+    .search-empty { padding: 20px 10px; text-align: center; color: #333; }
 </style>
 <?php
     $contacts = \DB::table('whatsapp_contacts as c')
@@ -292,9 +338,20 @@
     \DB::table('whatsapp_messages')->where('contact_phone', $contact_obj->phone)->update(['admin_read_at' => \DB::raw('NOW()')]);
 ?>
 <main>
-    <sction class="left">
+    <section class="left">
+        <div class="search-bar">
+            <div class="search-controls">
+                <input type="search" class="search" placeholder="Search name, phone or notes"
+                    aria-label="Search contacts" autocomplete="off" dir="auto">
+                <button type="button" class="search-clear" aria-label="Clear search" title="Clear search" hidden>×</button>
+            </div>
+            <div class="search-count" role="status" aria-live="polite"></div>
+        </div>
         @foreach($contacts as $contact)
-            <div class="contact <?= $contact->id == $contact_id ? 'current-contact' : '' ?>" data-id="{{ $contact->id }}">
+            <div class="contact <?= $contact->id == $contact_id ? 'current-contact' : '' ?>" data-id="{{ $contact->id }}"
+                data-search-name="{{ $contact->name }}"
+                data-search-phone="{{ $contact->phone }}"
+                data-search-notes="{{ $contact->notes }}">
                 <p>{{ $contact->name }}</p>
                 <?php if (isset($unread_messages[$contact->id])): ?>
                     <div class="message-popup">
@@ -309,7 +366,8 @@
                     title="Add contact to favorites">☆</button>
             </div>
         @endforeach
-    </sction>
+        <div class="search-empty" hidden>No matching contacts. Try another name or number.</div>
+    </section>
     <section class="right">
         <div>
             <div class="profile">
@@ -391,7 +449,6 @@
     </section>
 </main>
 <script>
-    console.log(<?= json_encode($unread_messages) ?>);
     const contactId = <?= $contact_id ?>;
     const sendBtn = document.querySelector(".send-container");
     const messageInput = document.querySelector(".message-input");
@@ -401,7 +458,7 @@
     const favoritesStorageKey = {!! json_encode('wa-chat-favorites:v1:' . (string) \Auth::id() . ':' . (string) config('whatsapp.phone_number_id'), JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT) !!};
     const favoriteButtons = Array.from(contactsMenu.querySelectorAll(".contact-favorite"));
     let favoriteContactIds = new Set();
-
+    const searchInput = document.querySelector(".search");
     function parseFavorites(raw) {
         const ids = raw ? JSON.parse(raw) : [];
         return new Set(Array.isArray(ids)
@@ -553,12 +610,80 @@
     });
     for(const contact of [...contactsMenu.querySelectorAll(".contact")]){
         if(Number(contact.dataset.id) === contactId){
-            // contactsMenu.scrollBy({top: 200, left: 0, behavior: "instant"});
+            contactsMenu.scrollBy({top: -(contact.offsetHeight), left: 0, behavior: "instant"});
             break;
         }
         else {
-            contactsMenu.scrollBy({top: 30, left: 0, behavior: "instant"});
+            contactsMenu.scrollBy({top: contact.offsetHeight, left: 0, behavior: "instant"});
         }
     }
+    const searchClear = contactsMenu.querySelector(".search-clear");
+    const searchCount = contactsMenu.querySelector(".search-count");
+    const searchEmpty = contactsMenu.querySelector(".search-empty");
+
+    function normalizeSearch(value) {
+        return String(value || "")
+            .normalize("NFKD")
+            .replace(/[\u0300-\u036f\u0610-\u061a\u064b-\u065f\u0670\u06d6-\u06ed]/g, "")
+            .replace(/\u0640/g, "")
+            .replace(/[\u200e\u200f\u202a-\u202e\u2066-\u2069]/g, "")
+            .replace(/[أإآٱ]/g, "ا")
+            .replace(/ى/g, "ي")
+            .replace(/[٠-٩]/g, digit => String(digit.charCodeAt(0) - 0x0660))
+            .replace(/[۰-۹]/g, digit => String(digit.charCodeAt(0) - 0x06f0))
+            .toLowerCase()
+            .replace(/\s+/g, " ")
+            .trim();
+    }
+
+    // Cache searchable fields once; keep the original cards and their listeners.
+    const searchableContacts = Array.from(contactsMenu.querySelectorAll(".contact"), element => ({
+        element,
+        fields: [element.dataset.searchName, element.dataset.searchPhone, element.dataset.searchNotes]
+            .map(normalizeSearch),
+        phoneDigits: normalizeSearch(element.dataset.searchPhone).replace(/\D/g, "")
+    }));
+
+    function filterContacts() {
+        const query = normalizeSearch(searchInput.value);
+        const terms = query.split(" ").filter(Boolean);
+        const phoneQuery = /[0-9]/.test(query) && /^[+0-9\s().-]+$/.test(query)
+            ? query.replace(/\D/g, "") : "";
+        let visible = 0;
+
+        searchableContacts.forEach(contact => {
+            const matches = !query || (phoneQuery
+                ? contact.phoneDigits.includes(phoneQuery)
+                : terms.every(term => contact.fields.some(field => field.includes(term))
+                    || (/^[0-9]+$/.test(term) && contact.phoneDigits.includes(term))));
+            contact.element.hidden = !matches;
+            if (matches) visible++;
+        });
+
+        searchClear.hidden = searchInput.value.length === 0;
+        searchEmpty.hidden = visible !== 0;
+        searchCount.textContent = query
+            ? `${visible} of ${searchableContacts.length} contacts`
+            : `${searchableContacts.length} contacts`;
+    }
+
+    searchInput.addEventListener("input", () => {
+        filterContacts();
+        contactsMenu.scrollTop = 0;
+    });
+    function clearContactSearch() {
+        searchInput.value = "";
+        filterContacts();
+        contactsMenu.scrollTop = 0;
+        searchInput.focus();
+    }
+    searchClear.addEventListener("click", clearContactSearch);
+    searchInput.addEventListener("keydown", event => {
+        if (event.key === "Escape") {
+            event.preventDefault();
+            clearContactSearch();
+        }
+    });
+    filterContacts();
 </script>
 @endsection

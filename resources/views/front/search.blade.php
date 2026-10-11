@@ -1427,16 +1427,26 @@ waitForScriptsLoaded2();*/
 		<?php
 			$f_lang = ($current_lang=='pe'?'fa':$current_lang);
 			$cat_id = $inputs["cat_id"];
+            $keywordCountryId = null;
+            $locationSlug = isset($__city) ? $__city : null;
+            if ($locationSlug) {
+                $keywordCountry = \App\Models\Country::findBySlugOrCode($locationSlug);
+                if ($keywordCountry) $keywordCountryId = $keywordCountry->id;
+                else {
+                    $keywordCities = \App\Models\City::where('slug', $locationSlug)->take(2)->get();
+                    if (count($keywordCities) === 1) $keywordCountryId = $keywordCities[0]->country_id;
+                }
+            }
 			
-			$arr_keys = \App\Models\Keywords2::where('display','like','%;' . $cat_id . ';%')->where('keyword_'.$f_lang,'!=','')->get();
+			$arr_keys = \App\Models\Keywords2::forContext($keywordCountryId, array($cat_id), $f_lang);
 			
 			if(count($arr_keys)>0){
 			?>
 			var html_keyword = '<p class="keywords_paragraph"><span class="jazzira_font_bold"><?= trans("front.The most important and latest real estate projects"); ?></span><strong class="jazzira_font_bold"><a title="%keyword%" href="%url%">%keyword%</a></strong></p>';
 			var arr_keywords = Array();
 			
-				<?php foreach($arr_keys as $r){ ?>
-					arr_keywords.push({'url':'<?= htmlentities($f_lang=='ar'?$r->url:str_replace('.com/','.com/'.$f_lang.'/',$r->url)) ?>','keyword':'{{ htmlentities($r->getKeyword()) }}'});
+				<?php foreach($arr_keys as $r){ if ($r->getUrl($f_lang) === '') continue; ?>
+					arr_keywords.push(<?= json_encode(array('url' => $r->getUrl($f_lang), 'keyword' => $r->getKeyword()), JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT) ?>);
                 <?php } ?>
 
 
@@ -1459,7 +1469,11 @@ function display_keywords(arr_keywords,html_keyword){
 	var icnt_sec = Math.ceil(cnt_sec-3);
 
 	if(icnt_sec+j < $( "#about-content .clearfix" ).children().length-2 )
-	$( "#about-content .clearfix" ).children().eq(icnt_sec+j).after(html_keyword.replace('%url%',arr_keywords[i].url).replace('%keyword%',arr_keywords[i].keyword).replace('%keyword%',arr_keywords[i].keyword));
+	{
+        var box = $(html_keyword);
+        box.find('a').attr({href: arr_keywords[i].url, title: arr_keywords[i].keyword}).text(arr_keywords[i].keyword);
+        $("#about-content .clearfix").children().eq(icnt_sec+j).after(box);
+    }
 	}
 	}
 }

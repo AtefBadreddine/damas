@@ -3,17 +3,54 @@
 
 
 <style>
-    .projects_filter_section{
-        display: none;
-        margin-bottom: 30px;
-        background-color: #eaeaea;
-        padding: 16px 5px;
+    .select2-container {
+        max-width: none !important;
     }
-    .projects_filter_section.show{
+    label {
         display: block;
     }
 </style>
 
+<fieldset>
+    <legend>Common {{ $postType->label() }} Data</legend>
+    <div class="col-md-2">
+        <div class="form-group">
+            <label>Country</label>
+            <select name="country_id" class="form-control select2me">
+                <?php foreach ($countries as $country): ?>
+                <option value="<?= $country->id ?>" <?= ((int)$row->country_id === (int)$country->id) ? 'selected' : '' ?>><?= $country->name_en ?></option>
+                <?php endforeach; ?>
+            </select>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            <label>Slug<span class="red">(*)</span></label>
+            <div class="input-group ltr">
+                <span class="input-group-addon">https://damas.net/{{ \DB::table('countries')->where('id', $row->country_id)->first()->slug ?: 'country' }}/{{strtolower($postType->label())}}/</span>
+                <?= Form::text("slug", $row->slug, ["class" => "form-control input-sm", "placeholder" => "Slug"]); ?>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-2" style="margin-top:25px;">
+        <div class="form-group">
+            <label class="enabled-section"><input type="checkbox" id="published" name="published" <?= $row->published == 1 ? 'checked' : ''; ?>> Enabled</label>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            <div class="input-group ltr">
+                <span class="input-group-addon" style="color:red;">Old slug</span>
+                <?= Form::text("old_slug", $row->old_slug, ["class" => "form-control input-sm", "placeholder" => "Old slug (301 to current URL)"]); ?>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            <label class="enabled-section" style="color:red;"><input type="checkbox" id="prevent_archiving_in_blog" name="prevent_archiving_in_blog" <?= $row->prevent_archiving_in_blog == 1 ? 'checked' : ''; ?>>Add noindex Tag for Google</label>
+        </div>
+    </div>
+</fieldset>
 
 <fieldset>
     <!--    <legend>Add a New post</legend>-->
@@ -21,11 +58,11 @@
         <div class="panel with-nav-tabs panel-default">
             <div class="panel-heading">
                 <ul class="nav nav-tabs">
-                    <li class="active"><a href="#tab1default" data-toggle="tab">Arabic Section</a></li>
-                    <li><a href="#tab2default" data-toggle="tab">English Section</a></li>
-                    <li><a href="#tab3default" data-toggle="tab">French Section</a></li>
-                    <li><a href="#tab4default" data-toggle="tab">Persian Section</a></li>
-                    <li><a href="#tab5default" data-toggle="tab">Russian Section</a></li>
+                    <li class="active"><a href="#tab1default" data-toggle="tab">Arabic</a></li>
+                    <li><a href="#tab2default" data-toggle="tab">English</a></li>
+                    <li><a href="#tab3default" data-toggle="tab">French</a></li>
+                    <li><a href="#tab4default" data-toggle="tab">Persian</a></li>
+                    <li><a href="#tab5default" data-toggle="tab">Russian</a></li>
                 </ul>
             </div>
             <div class="panel-body">
@@ -36,30 +73,40 @@
                         <input type="hidden" name="type" value="<?= $type ?>" >
                         <div class="col-md-4">
                             <div class="form-group">
-<!--                                <label>Title Arabic<span class="red">(*)</span></label>-->
+                                <label>H1 Tag</label>
                                 <?= Form::text("title_ar", $row->title_ar, ["class" => "form-control", "placeholder" => "Arabic Title"]); ?>
                             </div> 
                         </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-<!--                                <label>Slug<span class="red">(*)</span></label>-->
-                                <div class="input-group ltr">
-                                    <span class="input-group-addon"><?= url('/' . $type) . "/" ?><?= ($row->countryRel && $row->countryRel->code != 'turkey') ? $row->countryRel->code . '/' : '' ?></span>
-                                    <?= Form::text("slug", $row->slug, ["class" => "form-control input-sm", "placeholder" => "Slug"]); ?>
-                                </div>
-                            </div>
-                        </div>
                         <div class="col-md-2">
                             <div class="form-group">
-                                <label class="enabled-section"><input type="checkbox" id="published" name="published" <?= $row->published == 1 ? 'checked' : ''; ?>> Enabled</label>
+                                <label>Categories</label>
+                                <select name="category_id[]" class="form-control select2me" multiple>
+                                    <option value=""></option>
+                                    @foreach(\App\Models\PostCategory::orderBy('placement', 'asc')->get() as $cat)
+                                    <option value="<?= $cat->id; ?>" <?= in_array($cat->id, $row->categories()->lists('post_category_id')->toArray()) ? 'selected' : ''; ?>><?= $cat->getName(); ?></option>
+                                    @endforeach
+                                </select>
                             </div>
                         </div>
-                        <div class="col-md-6 col-md-offset-4">
+                        <div class="col-md-4">
                             <div class="form-group">
-                                <div class="input-group ltr">
-                                    <span class="input-group-addon">Old slug</span>
-                                    <?= Form::text("old_slug", $row->old_slug, ["class" => "form-control input-sm", "placeholder" => "Old slug (301 to current URL)"]); ?>
-                                </div>
+                                <label>Tags</label>
+                                <select name="tag_id[]" class="form-control select2me" multiple>
+                                    <option value=""></option>
+                                    @foreach(\App\Models\Tag::orderBy('placement', 'asc')->orderBy('id', 'asc')->get() as $cat)
+                                    <option value="<?= $cat->id; ?>" <?= in_array($cat->id, $row->tags()->lists('tag_id')->toArray()) ? 'selected' : ''; ?> title="<?= $cat->title_en != '' ? $cat->title_en . "\n" : '' ?><?= $cat->title_ar != '' ? $cat->title_ar . "\n" : '' ?><?= $cat->title_fr != '' ? $cat->title_fr . "\n" : '' ?><?= $cat->title_pe != '' ? $cat->title_pe . "\n" : '' ?><?= $cat->title_ru != '' ? $cat->title_ru : '' ?>"><?= $cat->name; ?>
+                                        (<?= $cat->title_ar != '' ? 'AR ' : '' ?><?= $cat->title_en != '' ? 'EN ' : '' ?><?= $cat->title_fr != '' ? 'FR ' : '' ?><?= $cat->title_fa != '' ? 'PE ' : '' ?><?= $cat->title_ru != '' ? 'RU ' : '' ?>)</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Post Image</label>
+                                @include("admin.layouts.media_input", [
+                                "name"    =>    "media_id",
+                                "ids"    =>    [$row->media_id]
+                                ])
                             </div>
                         </div>
 
@@ -95,39 +142,6 @@
                         @endif		
                         <div class="col-md-12">
                             <!--<legend>Featured Post</legend>-->
-                            <div class="col-md-2">
-                                <div class="form-group">
-                                    <label>Country</label>
-                                    <select name="country_id" class="form-control select2me">
-                                        <?php foreach ($countries as $country): ?>
-                                        <option value="<?= $country->id ?>" <?= ((int)$row->country_id === (int)$country->id) ? 'selected' : '' ?>><?= $country->name_en ?></option>
-                                        <?php endforeach; ?>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label>Categories</label>
-                                    <select name="category_id[]" class="form-control select2me" multiple>
-                                        <option value=""></option>
-                                        @foreach(\App\Models\PostCategory::orderBy('placement', 'asc')->get() as $cat)
-                                        <option value="<?= $cat->id; ?>" <?= in_array($cat->id, $row->categories()->lists('post_category_id')->toArray()) ? 'selected' : ''; ?>><?= $cat->getName(); ?></option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="form-group">
-                                    <label>Tags</label>
-                                    <select name="tag_id[]" class="form-control select2me" multiple>
-                                        <option value=""></option>
-                                        @foreach(\App\Models\Tag::orderBy('placement', 'asc')->orderBy('id', 'asc')->get() as $cat)
-                                        <option value="<?= $cat->id; ?>" <?= in_array($cat->id, $row->tags()->lists('tag_id')->toArray()) ? 'selected' : ''; ?> title="<?= $cat->title_en != '' ? $cat->title_en . "\n" : '' ?><?= $cat->title_ar != '' ? $cat->title_ar . "\n" : '' ?><?= $cat->title_fr != '' ? $cat->title_fr . "\n" : '' ?><?= $cat->title_pe != '' ? $cat->title_pe . "\n" : '' ?><?= $cat->title_ru != '' ? $cat->title_ru : '' ?>"><?= $cat->name; ?>
-                                            (<?= $cat->title_ar != '' ? 'AR ' : '' ?><?= $cat->title_en != '' ? 'EN ' : '' ?><?= $cat->title_fr != '' ? 'FR ' : '' ?><?= $cat->title_fa != '' ? 'PE ' : '' ?><?= $cat->title_ru != '' ? 'RU ' : '' ?>)</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
                             <div class="col-md-3" style="display:none">
                                 <div class="form-group">
                                     <label>Website Version</label>
@@ -140,102 +154,11 @@
 
                             
 
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label>Image Card</label>
-                                    @include("admin.layouts.media_input", [
-                                    "name"    =>    "media_id",
-                                    "ids"    =>    [$row->media_id]
-                                    ])
-                                </div>
-                            </div>
 
 
 
-                            <div class="col-md-4">
-                                <div class="form-group" style="padding:24px 14px">
-                                    <label class="enabled-section"><input type="checkbox" id="prevent_archiving_in_blog" name="prevent_archiving_in_blog" <?= $row->prevent_archiving_in_blog == 1 ? 'checked' : ''; ?>> Prevent archiving in <?= isset($postType) ? $postType->label() : ucfirst($type) ?> </label>
-                                </div>
-                            </div>
+                            
 
-                            <div class="col-md-4">
-                                <div class="form-group" style="padding:24px 14px">
-                                    <label class="enabled-section with_projects_blog"><input type="checkbox" id="with_projects_blog" name="with_projects_blog" <?= $row->with_projects_blog == 1 ? 'checked' : ''; ?>> With projects Blog </label>
-                                </div>
-                            </div>
-	<?php
-		/*$all_regions = \App\Models\Region::select('regions.*')->leftJoin('projects AS p', 'p.region_id', '=', 'regions.id')->where("p.published", 1)->where("p.sold", '!=', 100)->groupBy('regions.id')->having(DB::raw('count(dms_p.id)'), '>', 0)->orderBy(DB::raw('count(dms_p.id)'), 'desc')->get();
-		$proj_cats = Helper::query('ProjectCategory', "where", ["field" => "hide_search_page", "value" => false])->get();
-		$citys = App\Models\City::where('id', '!=', 2)->orderBy('placement', 'asc')->get();
-		$all_project_types = Helper::query('ProjectType', 'all');
-		
-		$arr_cities = [];
-		foreach($citys as $c)
-			$arr_cities[$c->id] = $c->getName();*/
-	?>
-                            <!-- Start Projects Filters -->
-                            <div class="col-md-12 projects_filter_section <?= $row->with_projects_blog==true?'show':'' ?>">
-                                <div class="col-md-12">
-								<input type="text" class="form-control" placeholder="Search URL" name="projects_url" value="<?= $row->projects_url ?>"/>
-								</div>
-								<?php /*<!--<div class="col-md-2">
-                                    <div class="form-group">
-                                        <label>City</label>
-                                        <select class="form-control" name="city" id="city">
-                                            @foreach($citys as $city)
-											<option value="<?= $city->slug; ?>" data-city="<?= $city->id; ?>"><?= $city->getName(); ?></option>
-											@endforeach
-                                        </select>
-                                    </div>
-                                </div>-->
-                                <div class="col-md-2">
-                                    <div class="form-group">
-                                        <label>City Region</label>
-                                        <select class="form-control" name="region" id="region" >
-											@foreach($all_regions as $r)
-											<option value="<?= $r->slug; ?>"  data-city="<?= $r->city_id; ?>"><?= $arr_cities[$r->city_id]; ?> - <?= $r->getName(); ?></option>
-											@endforeach
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-md-2">
-                                    <div class="form-group">
-                                        <label>Types</label>
-                                        <select class="form-control" name="project_type" id="project_type">
-                                            @foreach($all_project_types as $typ)
-											<option value="<?= $typ->slug; ?>"><?= $typ->getName(); ?></option>
-											@endforeach
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label>Features</label>
-                                        <select class="form-control select2me" name="project_category[]" id="features" multiple>
-                                            @foreach($proj_cats as $cat)
-											<option value="<?= $cat->slug; ?>"><?= $cat->getName(); ?></option>
-											@endforeach
-                                        </select>
-                                    </div>
-                                </div>
-                                
-                                <div class="col-md-2">
-                                    <div class="form-group">
-                                        <label>Content Place</label>
-                                        <select class="form-control" name="content_place" id="content_place">
-                                            <option value="up">Up</option>
-                                            <option value="down">Down</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <label>Number of results: <b>(25)</b></label>
-                                    </div>
-                                </div>*/ ?>
-                            </div>
-                            <!-- End Peojects Filters -->
 
 
                         </div>
@@ -252,20 +175,14 @@
                             <fieldset>
                                 <legend>Metatag</legend>
                                 <div class="form-group col-md-12">
-                                    <!--                            <label>Title</label>-->
+                                    <label>Title</label>
                                     <?= Form::text("seo_title_ar", $row->seo_title_ar, ["class" => "form-control text-align-right", "placeholder" => "Title"]); ?>
                                 </div>
                                 <div class="form-group col-md-12">
-                                    <!--                            <label>Description</label>-->
+                                    <label>Description</label>
                                     <?= Form::textarea("seo_description_ar", $row->seo_description_ar, ["class" => "form-control text-align-right", "rows" => 5, "placeholder" => "Description"]); ?>
                                 </div>
 
-                                @if(@$hide_keywords==false)
-                                <div class="form-group col-md-12" style="">
-                                    <!--                            <label>Keywords</label>-->
-                                    <?= Form::text("seo_keywords_ar", $row->seo_keywords_ar, ["class" => "form-control text-align-right", "placeholder" => "Keywords"]); ?>
-                                </div>
-                                @endif
                             </fieldset>
                         </div>
 
@@ -275,7 +192,7 @@
                     <!-- Section English -->
                     <div class="tab-pane fade" id="tab2default">
                         <div class="form-group col-md-12">
-                            <!--                            <label>Title English</label>-->
+                            <label>H1 Tag</label>
                             <?= Form::text("title_en", $row->title_en, ["class" => "form-control ltr", "placeholder" => "English Title"]); ?>
                         </div>
 
@@ -290,20 +207,13 @@
                             <fieldset>
                                 <legend>Metatag</legend>
                                 <div class="form-group col-md-12">
-                                    <!--                            <label>Title</label>-->
+                                <label>Title</label>
                                     <?= Form::text("seo_title_en", $row->seo_title_en, ["class" => "form-control ltr", "placeholder" => "Title"]); ?>
                                 </div>
                                 <div class="form-group col-md-12">
-                                    <!--                            <label>Description</label>-->
+                                <label>Description</label>
                                     <?= Form::textarea("seo_description_en", $row->seo_description_en, ["class" => "form-control ltr", "rows" => 5, "placeholder" => "Description"]); ?>
                                 </div>
-
-                                @if(@$hide_keywords==false)
-                                <div class="form-group col-md-12">
-                                    <!--                            <label>Keywords</label>-->
-                                    <?= Form::text("seo_keywords_en", $row->seo_keywords_en, ["class" => "form-control ltr", "placeholder" => "Keywords"]); ?>
-                                </div>
-                                @endif
                             </fieldset>
                         </div>
 
@@ -313,7 +223,7 @@
                     <!-- Section Fr -->
                     <div class="tab-pane fade" id="tab3default">
                         <div class="form-group col-md-12">
-                            <!--                            <label>Title English</label>-->
+                            <label>H1 Tag</label>
                             <?= Form::text("title_fr", $row->title_fr, ["class" => "form-control ltr", "placeholder" => "Title"]); ?>
                         </div>
 
@@ -328,20 +238,13 @@
                             <fieldset>
                                 <legend>Metatag</legend>
                                 <div class="form-group col-md-12">
-                                    <!--                            <label>Title</label>-->
+                                <label>Title</label>
                                     <?= Form::text("seo_title_fr", $row->seo_title_fr, ["class" => "form-control ltr", "placeholder" => "Title"]); ?>
                                 </div>
                                 <div class="form-group col-md-12">
-                                    <!--                            <label>Description</label>-->
+                                <label>Description</label>
                                     <?= Form::textarea("seo_description_fr", $row->seo_description_fr, ["class" => "form-control ltr", "rows" => 5, "placeholder" => "Description"]); ?>
                                 </div>
-
-                                @if(@$hide_keywords==false)
-                                <div class="form-group col-md-12">
-                                    <!--                            <label>Keywords</label>-->
-                                    <?= Form::text("seo_keywords_fr", $row->seo_keywords_fr, ["class" => "form-control ltr", "placeholder" => "Keywords"]); ?>
-                                </div>
-                                @endif
                             </fieldset>
                         </div>
 
@@ -349,6 +252,7 @@
                     </div>
                     <!-- Section Fa -->
                     <div class="tab-pane fade" id="tab4default">
+                        <label>H1 Tag</label>
                         <div class="form-group col-md-12">
                             <?= Form::text("title_fa", $row->title_fa, ["class" => "form-control ltr", "placeholder" => "Title"]); ?>
                         </div>
@@ -363,24 +267,15 @@
                             <fieldset>
                                 <legend>Metatag</legend>
                                 <div class="form-group col-md-12">
-                                    <!--                            <label>Title</label>-->
+                                <label>Title</label>
                                     <?= Form::text("seo_title_fa", $row->seo_title_fa, ["class" => "form-control text-align-right", "placeholder" => "Title"]); ?>
                                 </div>
                                 <div class="form-group col-md-12">
-                                    <!--                            <label>Description</label>-->
+                                <label>Description</label>
                                     <?= Form::textarea("seo_description_fa", $row->seo_description_fa, ["class" => "form-control text-align-right", "rows" => 5, "placeholder" => "Description"]); ?>
                                 </div>
-
-                                @if(@$hide_keywords==false)
-                                <div class="form-group col-md-12">
-                                    <!--                            <label>Keywords</label>-->
-                                    <?= Form::text("seo_keywords_fa", $row->seo_keywords_fa, ["class" => "form-control text-align-right", "placeholder" => "Keywords"]); ?>
-                                </div>
-                                @endif
                             </fieldset>
                         </div>
-
-
                     </div>
 
 
@@ -389,7 +284,7 @@
                     <!-- Section Ru -->
                     <div class="tab-pane fade" id="tab5default">
                         <div class="form-group col-md-12">
-                            <!--                            <label>Title English</label>-->
+                            <label>H1 Tag</label>
                             <?= Form::text("title_ru", $row->title_ru, ["class" => "form-control ltr", "placeholder" => "Title"]); ?>
                         </div>
 
@@ -404,19 +299,14 @@
                             <fieldset>
                                 <legend>Metatag</legend>
                                 <div class="form-group col-md-12">
+                                    <label>Title</label>
                                     <?= Form::text("seo_title_ru", $row->seo_title_ru, ["class" => "form-control ltr", "placeholder" => "Title"]); ?>
                                 </div>
                                 <div class="form-group col-md-12">
-                                    <!--                            <label>Description</label>-->
+                                    <label>Description</label>
                                     <?= Form::textarea("seo_description_ru", $row->seo_description_ru, ["class" => "form-control ltr", "rows" => 5, "placeholder" => "Description"]); ?>
                                 </div>
 
-                                @if(@$hide_keywords==false)
-                                <div class="form-group col-md-12">
-                                    <!--                            <label>Keywords</label>-->
-                                    <?= Form::text("seo_keywords_ru", $row->seo_keywords_ru, ["class" => "form-control ltr", "placeholder" => "Keywords"]); ?>
-                                </div>
-                                @endif
                             </fieldset>
                         </div>
 
@@ -446,12 +336,6 @@
     });
 
 
-    $(document).on("ifChanged", "#with_projects_blog", function () {
-        if ($(this).is(':checked'))
-            $(".projects_filter_section").addClass("show");
-        else
-            $(".projects_filter_section").removeClass("show");
-    });
 
 
     $('.date5').datetimepicker({
@@ -463,4 +347,109 @@
 
 
 </script>
+
+<script>
+$(function () {
+    var countryField = document.querySelector('select[name="country_id"]');
+    if (!countryField || !countryField.form) return;
+    var form = countryField.form;
+    var fields = [
+        ['country_id', 'Country'],
+        ['slug', 'Slug'],
+        ['title_ar', 'Arabic H1 tag'],
+        ['category_id[]', 'Categories'],
+        ['content_ar', 'Arabic content'],
+        ['title_en', 'English H1 tag'],
+        ['content_en', 'English content'],
+        ['seo_title_ar', 'Arabic meta title'],
+        ['seo_description_ar', 'Arabic meta description'],
+        ['seo_title_en', 'English meta title'],
+        ['seo_description_en', 'English meta description']
+    ];
+
+    function editorFor(field) {
+        return window.tinymce && field.id ? window.tinymce.get(field.id) : null;
+    }
+
+    function hasValue(field) {
+        if (field.tagName === 'SELECT') {
+            return Array.prototype.some.call(field.options, function (option) {
+                return option.selected && option.value.trim() !== '';
+            });
+        }
+        var editor = editorFor(field);
+        var value = editor ? editor.getContent() : field.value;
+        if (field.name === 'content_ar' || field.name === 'content_en') {
+            var container = document.createElement('div');
+            container.innerHTML = value;
+            // Images and other embedded content also count as content.
+            if (container.querySelector('img, video, audio, iframe, object, embed, svg')) return true;
+            value = container.textContent || '';
+        }
+        return value.replace(/[\s\u00a0\u200b-\u200f\ufeff]/g, '') !== '';
+    }
+
+    fields.forEach(function (item) {
+        var field = form.elements.namedItem(item[0]);
+        if (!field) return;
+        field.setAttribute('aria-required', 'true');
+        var group = field.closest('.form-group');
+        var label = group && group.querySelector('label');
+        if (label && !label.querySelector('.red')) {
+            var marker = document.createElement('span');
+            marker.className = 'red';
+            marker.textContent = ' (*)';
+            label.appendChild(marker);
+        }
+    });
+
+    // Validate before existing submit handlers run. Native required attributes
+    // cannot reliably focus hidden TinyMCE textareas or inactive language tabs.
+    form.addEventListener('submit', function (event) {
+        if (window.tinymce) window.tinymce.triggerSave();
+        form.querySelectorAll('[data-post-required-error]').forEach(function (message) {
+            var group = message.closest('.form-group');
+            if (group) group.classList.remove('has-error');
+            message.remove();
+        });
+        var firstMissing = null;
+        fields.forEach(function (item) {
+            var field = form.elements.namedItem(item[0]);
+            if (!field || hasValue(field)) return;
+            if (!firstMissing) firstMissing = field;
+            var group = field.closest('.form-group');
+            var message = document.createElement('span');
+            message.className = 'help-block';
+            message.setAttribute('data-post-required-error', 'true');
+            message.textContent = item[1] + ' is required.';
+            if (group) {
+                group.classList.add('has-error');
+                group.appendChild(message);
+            } else {
+                field.parentNode.appendChild(message);
+            }
+        });
+        if (!firstMissing) return;
+        event.preventDefault();
+        event.stopImmediatePropagation();
+        var pane = firstMissing.closest('.tab-pane');
+        if (pane) {
+            var tab = $(form).find('a[data-toggle="tab"]').filter(function () {
+                return this.getAttribute('href') === '#' + pane.id;
+            });
+            if (tab.length) tab.tab('show');
+        }
+        window.setTimeout(function () {
+            var group = firstMissing.closest('.form-group') || firstMissing;
+            group.scrollIntoView({behavior: 'smooth', block: 'center'});
+            var editor = editorFor(firstMissing);
+            if (editor) editor.focus();
+            else if ($(firstMissing).hasClass('select2-hidden-accessible') || $(firstMissing).data('select2')) {
+                $(firstMissing).select2('open');
+            } else firstMissing.focus();
+        }, 200);
+    }, true);
+});
+</script>
+
 @endsection

@@ -60,8 +60,6 @@ class Post extends BaseModel
 		"post_scheduling",
 		"post_scheduling_date",
 		"type",//blog or news
-		"with_projects_blog",
-		"projects_url",
 
 		
     ];

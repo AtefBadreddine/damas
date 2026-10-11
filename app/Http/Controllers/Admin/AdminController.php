@@ -2253,11 +2253,16 @@ exit;*/
 		
         if ( $request->isMethod('post') ) {
             $this->validate($request, [
-                "url"  =>  "required",
+                "url" => "required|url",
+                "country_id" => "required|integer|exists:countries,id",
+                "display" => "required|array",
+                "url_en" => "url",
             ]);
-				
-				$inputs = $request->all();
-				$inputs['url'] = str_replace(['/ar/','/en/','/fr/','/fa/','/ru/'],'',$request->get('url'));
+
+                $inputs = $request->all();
+                $inputs['country_id'] = (int) $request->get('country_id');
+                $inputs['url'] = trim($request->get('url'));
+                $inputs['url_en'] = trim($request->get('url_en', ''));
 				$display = $request->get('display');
 				
 				$inputs['display'] = ';' . implode(";",$display) . ';';
@@ -2272,7 +2277,8 @@ exit;*/
 				//return redirect()->back()->with('flashmessage', ['typ' => 'success', 'message' => 'Successfully saved.']); 
 				//return redirect()->route("admin.keywords2");
         }
-        return view("admin.keywords2.edit", compact("row"));
+        $countries = \App\Models\Country::orderBy("name_en", "asc")->get();
+        return view("admin.keywords2.edit", compact("row", "countries"));
     }
 	
 	/**

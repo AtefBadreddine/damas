@@ -519,7 +519,7 @@ $emptypic = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABA
                                 <div class="slider__button-prev"></div>
                             </div>
 
-                            <a href="{{ route('front.search', ['property-for-sale', 'turkey']) }}" class="more shadow_type" title="<?= trans("front.Property for sale in Turkey"); ?>"><?= trans("front.Property for sale in Turkey"); ?></a>
+                            <a href="{{ Helper::geo_listing_url('turkey') }}" class="more shadow_type" title="<?= trans("front.Property for sale in Turkey"); ?>"><?= trans("front.Property for sale in Turkey"); ?></a>
 
                         </div>
 
@@ -965,7 +965,7 @@ $json4 = Helper::ajax_statics('', 'top_city', 0, 0);
      if (xDiff > 0) {
      window.location.href = "/";
      } else {
-     window.location.href = "/property-for-sale/turkey";
+     window.location.href = "<?= Helper::geo_listing_url('turkey') ?>";
      }
      } else {
      if (yDiff > 0) {

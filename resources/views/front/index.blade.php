@@ -983,7 +983,7 @@ echo strpos( @$_SERVER['HTTP_ACCEPT'], 'image/webp' ) !== false ?'/imgwebp/slide
                             </div>
 
 
-                            <a href="{{ route('front.search', ['property-for-sale', 'oman',$cat_slug]) }}" class="more shadow_type"><?= trans("front.More Projects"); ?></a>
+                            <a href="{{ Helper::legacy_listing_url('property-for-sale', 'oman', $cat_slug) }}" class="more shadow_type"><?= trans("front.More Projects"); ?></a>
 
 
                         </div>

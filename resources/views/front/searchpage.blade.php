@@ -93,7 +93,7 @@ $infos = Helper::get_params();
 <ul class="links_list">
 	<li><a href="<?= route("front.index"); ?>" class="btn btn-default"> <?= trans("front.home"); ?></a></li>
 	<li><a href="<?= route("front.turkish_citizenship"); ?>" class="btn btn-default"> <?= trans("front.TurkishCitizenship"); ?></a></li>
-	<li><a href="<?= route("front.search", ["property-for-sale", "turkey"]) ?>" class="btn btn-default"> <?= trans("front.projects"); ?></a></li>
+	<li><a href="<?= Helper::geo_listing_url('turkey') ?>" class="btn btn-default"> <?= trans("front.projects"); ?></a></li>
 </ul>
 
 

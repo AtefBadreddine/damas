@@ -270,7 +270,7 @@ background-color: #fff;
                             @endforeach
                             <li class="item">
                                 <div class="more-option">
-                                    <a href="<?= route("front.search") . "/property-for-sale/turkey/" . $agent->region->slug; ?>">
+                                    <a href="<?= Helper::geo_listing_url($agent->region); ?>">
                                         <div class="logo">
                                             <img src="https://www.damas.net/img/Logo1.svg">
                                         </div>
@@ -893,7 +893,7 @@ background-color: #fff;
                                         @endforeach
 
                                         <div class="more-option">
-                                            <a href="<?= route("front.search") . "/property-for-sale/turkey/" . $agent->region->slug; ?>">
+                                            <a href="<?= Helper::geo_listing_url($agent->region); ?>">
                                                 <div class="logo">
                                                     <img src="https://www.damas.net/img/Logo1.svg">
                                                 </div>

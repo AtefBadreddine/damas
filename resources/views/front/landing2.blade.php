@@ -565,7 +565,7 @@ $emptypic = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABA
 
                     <div class="more_sec">
                         <p><?= trans("front.More Offers title"); ?></p>
-                        <a href="<?= route("front.search", ["property-for-sale", "turkey"]) ?>"> <?= trans("front.More Offers btn"); ?></a>
+                        <a href="<?= Helper::geo_listing_url('turkey') ?>"> <?= trans("front.More Offers btn"); ?></a>
                     </div>
 
 

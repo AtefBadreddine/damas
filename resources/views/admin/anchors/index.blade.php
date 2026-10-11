@@ -192,9 +192,6 @@ const projectTitles = {
         if (preg_match('#/(?:blog|guides)(?:/|$)#i', $path)) {
             return 'Guides';
         }
-        if (stripos($url, '-for-sale/') !== false) {
-            return 'Listing';
-        }
         return 'General';
     };
     $classify_source_types = function ($urls) use ($classify_source_type) {
@@ -340,24 +337,6 @@ const projectTitles = {
             $posts_by_id[$post_id] = $disabled_post;
         }
     }
-    $page_search_links_by_post = [];
-    $page_search_rows = \App\Models\PageSearch::with('getPost')->whereNotNull('post_id')->get();
-    foreach ($page_search_rows as $page_search) {
-        $post_id = (int) $page_search->post_id;
-        if (!$post_id || empty($page_search->link)) {
-            continue;
-        }
-        if (!isset($page_search_links_by_post[$post_id])) {
-            $page_search_links_by_post[$post_id] = [];
-        }
-        $page_search_links_by_post[$post_id][] = $page_search->link;
-        if (!isset($posts_by_id[$post_id]) && $page_search->getPost) {
-            $posts_by_id[$post_id] = $page_search->getPost;
-        }
-    }
-    foreach ($page_search_links_by_post as $post_id => $links) {
-        $page_search_links_by_post[$post_id] = array_values(array_unique($links));
-    }
     $posts = array_values($posts_by_id);
         foreach ($posts as $post) {
         if ($group_by == 'disabled_blogs' && (int) $post->published !== 0) {
@@ -389,19 +368,6 @@ const projectTitles = {
         } else {
             if (isset($original_blog_post_ids[$post_id])) {
                 $web_urls[] = $blog_web_url;
-            }
-        
-            if (isset($page_search_links_by_post[$post_id])) {
-                foreach ($page_search_links_by_post[$post_id] as $listing_url) {
-                    if (
-                        strpos($listing_url, 'http://') !== 0 &&
-                        strpos($listing_url, 'https://') !== 0
-                    ) {
-                        $listing_url = 'https://damas.net/' . ltrim($listing_url, '/');
-                    }
-        
-                    $web_urls[] = $listing_url;
-                }
             }
         }
         $web_urls = array_values(array_unique($web_urls));
@@ -490,7 +456,6 @@ const projectTitles = {
     }
     if ($source_type_filter != 'all') {
         $wanted_source_type = [
-            'listing' => 'Listing',
             'guides' => 'Guides',
             'general' => 'General'
         ];
@@ -540,13 +505,12 @@ const projectTitles = {
         });
     }
     $groupable_columns = ['text', 'url', 'web_url', 'link_type', 'status', 'disabled_blogs'];
-    $count_language_rows = function ($language_field) use ($posts, $link_statuses, $group_by, $groupable_columns, $classify_link, $matches_search, $matches_search_value, $search_column, $search_value, $search_mode, $status_label, $classify_source_types, $source_type_filter, $page_search_links_by_post, $original_blog_post_ids) {
+    $count_language_rows = function ($language_field) use ($posts, $link_statuses, $group_by, $groupable_columns, $classify_link, $matches_search, $matches_search_value, $search_column, $search_value, $search_mode, $status_label, $classify_source_types, $source_type_filter, $original_blog_post_ids) {
         $language_title_field = $language_field == 'content_en' ? 'title_en' : 'title_ar';
         $row_count = 0;
         $group_keys = [];
         $group_counts = [];
         $wanted_source_type = [
-            'listing' => 'Listing',
             'guides' => 'Guides',
             'general' => 'General'
         ];
@@ -572,14 +536,6 @@ const projectTitles = {
             } else {
                 if (isset($original_blog_post_ids[$post_id])) {
                     $language_web_urls[] = $language_blog_web_url;
-                }
-                if (isset($page_search_links_by_post[$post_id])) {
-                    foreach ($page_search_links_by_post[$post_id] as $listing_url) {
-                        if (strpos($listing_url, 'http://') !== 0 && strpos($listing_url, 'https://') !== 0) {
-                            $listing_url = 'https://damas.net/' . ltrim($listing_url, '/');
-                        }
-                        $language_web_urls[] = $listing_url;
-                    }
                 }
             }
             $language_web_urls = array_values(array_unique($language_web_urls));
@@ -897,7 +853,6 @@ const projectTitles = {
         <?php $source_type_filter = isset($_GET['source_type']) ? $_GET['source_type'] : 'all'; ?>
         <select onchange="window.location.href='?country=<?= @$_GET['country'] ?: 'all' ?>&lang=<?= @$_GET['lang'] == 'en' ? 'en' : 'ar' ?>&source_type='+this.value+'&link_type=<?= @$_GET['link_type'] ?: 'all' ?>&status_filter=<?= @$_GET['status_filter'] ?: 'all' ?>&group_by=<?= @$_GET['group_by'] ?: 'none' ?>&search_column=<?= urlencode($search_column) ?>&search_mode=<?= urlencode($search_mode) ?>&search_value=<?= urlencode($search_value) ?>'">
             <option value="all" <?= $source_type_filter == 'all' ? 'selected' : '' ?>>All Types</option>
-            <option value="listing" <?= $source_type_filter == 'listing' ? 'selected' : '' ?>>Listing</option>
             <option value="guides" <?= $source_type_filter == 'guides' ? 'selected' : '' ?>>Guides</option>
             <option value="general" <?= $source_type_filter == 'general' ? 'selected' : '' ?>>General</option>
         </select>

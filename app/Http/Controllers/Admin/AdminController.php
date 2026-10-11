@@ -691,7 +691,7 @@ class AdminController extends BaseController
                 'error' => 'Too many changes were provided'
             ], 413);
         }
-        $allowedTypes = ['post', 'project', 'listing'];
+        $allowedTypes = ['post', 'project'];
         $allowedFields = [
             'title',
             'title_ar',
@@ -809,26 +809,6 @@ class AdminController extends BaseController
                     }
                     if (!empty($updates)) {
                         \DB::table('projects')->where('id', $id)->update($updates);
-                        $processedRows++;
-                    }
-                    continue;
-                }
-                if ($type === 'listing') {
-                    $listing = \DB::table('page_search')
-                        ->select('id')
-                        ->where('id', $id)
-                        ->first();
-                    if (!$listing) {
-                        throw new \Exception('Listing not found: ' . $id);
-                    }
-                    foreach (['title', 'title_en'] as $field) {
-                        if (array_key_exists($field, $change)) {
-                            $updates[$field] = $change[$field];
-                            $updatedFields++;
-                        }
-                    }
-                    if (!empty($updates)) {
-                        \DB::table('page_search')->where('id', $id)->update($updates);
                         $processedRows++;
                     }
                     continue;
@@ -3805,7 +3785,6 @@ foreach ( $all as $row) {
         $q1 = DB::select("SELECT * FROM dms_posts WHERE (content_ar LIKE '%$path%') or (content_en LIKE '%$path%' )",[]);
         $q2 = DB::select("SELECT * FROM dms_pages WHERE (content_ar LIKE '%$path%') or (content_en LIKE '%$path%' )");
         $q3 = DB::select("SELECT * FROM dms_regions WHERE (about_ar LIKE '%$path%') or (about_en LIKE '%$path%' )");
-        $q4 = DB::select("SELECT * FROM dms_page_search WHERE (content LIKE '%$path%') or (content_en LIKE '%$path%' )");
         $q5 = DB::select("SELECT * FROM dms_cities WHERE (about_ar LIKE '%$path%') or (about_en LIKE '%$path%' )");
         }
 		
@@ -3813,10 +3792,13 @@ foreach ( $all as $row) {
         $q01 = DB::select("SELECT * FROM dms_posts WHERE (content_ar LIKE '%$path_m%') or (content_en LIKE '%$path_m%' )",[]);
         $q02 = DB::select("SELECT * FROM dms_pages WHERE (content_ar LIKE '%$path_m%') or (content_en LIKE '%$path_m%' )");
         $q03 = DB::select("SELECT * FROM dms_regions WHERE (about_ar LIKE '%$path_m%') or (about_en LIKE '%$path_m%' )");
-        $q04 = DB::select("SELECT * FROM dms_page_search WHERE (content LIKE '%$path_m%') or (content_en LIKE '%$path_m%' )");
         $q05 = DB::select("SELECT * FROM dms_cities WHERE (about_ar LIKE '%$path_m%') or (about_en LIKE '%$path_m%' )");
 		}
 
+		// Region/city usage: its listing URL, or the table row when it has none.
+		$usageUrl = function ($model, $table, $rowId) {
+			return ($model && $model->listingUrl()) ? $model->listingUrl() : $table . ' #' . $rowId;
+		};
 		$arr = array();
 		if($path!=''){
         if(count($q1)>0){
@@ -3827,13 +3809,10 @@ foreach ( $all as $row) {
 			$arr[] = 'https://www.damas.net/'.$q2[0]->slug;
 		}
         if(count($q3)>0){
-			$arr[] = 'https://www.damas.net/property-for-sale/turkey/'.$q3[0]->slug;
-		}
-        if(count($q4)>0){
-			$arr[] = $q4[0]->link;
+			$arr[] = $usageUrl(\App\Models\Region::find($q3[0]->id), 'dms_regions', $q3[0]->id);
 		}
         if(count($q5)>0){
-			$arr[] = route("front.search", ['property-for-sale', $q5[0]->slug]);
+			$arr[] = $usageUrl(\App\Models\City::find($q5[0]->id), 'dms_cities', $q5[0]->id);
 		}
 }
 		
@@ -3846,13 +3825,10 @@ foreach ( $all as $row) {
 			$arr[] = 'https://www.damas.net/'.$q02[0]->slug;
 		}
         if(count($q03)>0){
-			$arr[] = 'https://www.damas.net/property-for-sale/turkey/'.$q03[0]->slug;
-		}
-        if(count($q04)>0){
-			$arr[] = $q04[0]->link;
+			$arr[] = $usageUrl(\App\Models\Region::find($q03[0]->id), 'dms_regions', $q03[0]->id);
 		}
         if(count($q05)>0){
-			$arr[] = route("front.search", ['property-for-sale', $q05[0]->slug]);
+			$arr[] = $usageUrl(\App\Models\City::find($q05[0]->id), 'dms_cities', $q05[0]->id);
 		}
 		}
 
@@ -3861,9 +3837,6 @@ foreach ( $all as $row) {
 $i0 = DB::select("SELECT * FROM dms_cities where media_en_id=? or media_id=?",[$media->id,$media->id]);
 if(count($i0)>0)
 	$arr[] = 'dms_cities';
-$i1 = DB::select("SELECT * FROM dms_page_search where media_en_id=? or media_id=?",[$media->id,$media->id]);
-if(count($i1)>0)
-	$arr[] = 'dms_page_search';
 $i2 = DB::select("SELECT * FROM dms_posts  where media_id=?",[$media->id]);
 if(count($i2)>0)
 	$arr[] = 'dms_posts';
@@ -4157,31 +4130,6 @@ if(count($arr)>0){
 		}
 		else
 			return view("admin.pages.edit", compact("row", "slug", "app_title"));
-    }
-    public function pages_search()
-    {
-        $rows = Helper::query("PageSearch", "paginate");
-        return view("admin.pages.search.index", compact("rows"));
-    }
-    public function pages_search_edit(Request $request, $id = null)
-    {
-        $row = Helper::query("PageSearch", "find", ['id' => $id]);
-        if ( $request->isMethod('post') ) {
-            $this->validate($request, [
-                "name"  =>  "required",
-                "link"  =>  "required",
-            ]);
-            return Helper::query("PageSearch", "save", [
-                "inputs"    =>  $request->all(),
-                "id"        =>  $id,
-                "route"     =>  "admin.pages.search",
-            ]);
-        }
-        return view("admin.pages.search.edit", compact("row"));
-    }
-	public function pages_search_delete($id)
-    {
-        return Helper::query("PageSearch", "delete", ["id" => $id]);
     }
 	
 	

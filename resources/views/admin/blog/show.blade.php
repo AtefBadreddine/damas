@@ -420,7 +420,7 @@ $proj_cats = Helper::query('ProjectCategory', "where", ["field" => "hide_search_
                             <div class="slider__button-prev"></div>
                         </div>
 
-                        <a href="{{ route('front.search', ['property-for-sale', 'turkey']) }}" class="more shadow_type"><?= trans("front.More Projects"); ?></a>
+                        <a href="{{ Helper::geo_listing_url('turkey') }}" class="more shadow_type"><?= trans("front.More Projects"); ?></a>
 
                     </div>
 

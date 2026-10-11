@@ -68,6 +68,25 @@ class RedirectToLocalePrefix
             return $next($request);
         }
 
+        // Old /{type}/{city}/{var1?}/{var2?} listings go straight to the geo URL,
+        // not /ar/{type}/... first. The type check runs before any other lookup, so
+        // other pages (and /oman, /syria) skip this block. Unknown cities and slugs
+        // resolve to null and fall through. The AMP search form result is a 302.
+        $parts = explode('/', $path);
+        if ($status === 301 && count($parts) >= 2 && count($parts) <= 4
+            && \Helper::isLegacyListingType($first)) {
+            $geoUrl = \Helper::legacyListingUrlFromRequest(
+                $request,
+                $parts[0],
+                $parts[1],
+                isset($parts[2]) ? $parts[2] : null,
+                isset($parts[3]) ? $parts[3] : null
+            );
+            if ($geoUrl) {
+                return redirect($geoUrl, $request->get('amp') == '1' ? 302 : 301);
+            }
+        }
+
         $url = url($locale . '/' . $path);
 
         return redirect($url . ($query ? '?' . $query : ''), $status);

@@ -5,7 +5,7 @@
 @endforeach
 
 
-<div class="more-option" onclick="location.href='{{route("front.search", ["property-for-sale", "turkey",$slug])}}'">
+<div class="more-option" onclick="location.href='{{ Helper::legacy_listing_url("property-for-sale", "turkey", $slug) }}'">
 	<div class="logo"><img src="<?= asset('img/damas-logo2.png'); ?>"/></div>
 	<span><?=trans("front.More options")?></span>
 	<i class="flaticon-copy-files"></i>

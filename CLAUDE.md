@@ -35,12 +35,13 @@ The URL scheme was restructured. **Old routes are kept only so they can 301 to t
   - `strip` 301s `/ar/login` → `/login` and `/ar` → `/`.
   - Non-GET requests get a 307 instead of a 301.
   - Retired `landing2-5` and `landing-*` URLs `abort(404)` here, before any other handling.
+  - Unprefixed old listing URLs (`/{type}/{city}/{var1?}/{var2?}`, where `{type}` passes `Helper::isLegacyListingType()`) 301 straight to the geo URL here via `Helper::legacyListingUrlFromRequest()`, one hop, before the `/ar` redirect. The old AMP search form (`?amp=1` on a listing path) gets a 302. `?amp=1` on any other path is ignored.
 - **Endpoints stay unprefixed**: AJAX, cron, callus, login/register, `damas-administrator`, webhooks and similar are listed in `locale_prefix_hidden_segment()` in `app/Helpers/Helper.php`. Add any new technical endpoint there, or it will be redirected to `/ar/...`.
 - **`$legacyGroup`** in routes.php registers auth, endpoint and home routes twice. One copy is the normal one. The other is a `/{defaultLocale}/...` copy that strips the prefix.
 - **Redirect-only legacy routes** point at `HomeController` methods that only look up the record and 301 to its new URL. They are `$redirectOnlyRoutes` (`/projects/{slug}`, `/blog/...`, `/news/{slug}`, `/news/category/...`) plus the `/oman/...` and `/syria/...` groups. Examples:
   - `project_show` and `blog_show_post` redirect to `geoUrl()`.
   - `blog_index` and `blog_show_category` redirect to the index route, as `/guides?category=slug`.
-  - `search()` uses `legacySearchGeoUrl()`, and `redirect_url` uses the DB-driven short redirects.
+  - `search()` (the old listing renderer, now removed) only 301s via `Helper::legacyListingUrlFromRequest()` or 404s, and `redirect_url` uses the DB-driven short redirects. Build links to old-style type/city/tag/region combinations with `Helper::legacy_listing_url()`.
 - These redirect-only paths are deliberately **excluded** from the locale `add` redirect (the `$isLegacyRedirect` check in `RedirectToLocalePrefix`). That keeps each one to a single hop (`/blog/x` → `/ar/guides/...`) rather than chaining through `/ar/blog/x`. If you add a legacy path, update that check too.
 - Legacy routes pass `country` and `type` as **extra keys in the route action array**, not via `Route::defaults()`. On Laravel 5.1, `defaults()` overwrites the last path parameter. `HomeController::legacyRouteValue()` reads them back (route parameter first, then the action array).
 

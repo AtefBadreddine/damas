@@ -194,11 +194,6 @@ $menuLink = function ($routeName, $suffix = '') {
             <i class="fa fa-cubes"></i> <span>Listings</span> <i class="fa fa-angle-right pull-right"></i>
         </a>
         <ul class="treeview-menu">
-            @if($auth_user->is('superadmin') or $auth_user->can('admin.pages.search'))
-            <li>
-                <a <?= $menuLink('admin.pages.search'); ?>><i class="fa fa-angle-double-right"></i> Old Listings</a>
-            </li>
-            @endif
             <li>
                 <a <?= $menuLink('admin.countries'); ?>><i class="fa fa-angle-double-right"></i> Countries</a>
             </li>
@@ -291,7 +286,7 @@ $menuLink = function ($routeName, $suffix = '') {
     <!-- End Blog -->
     
     <!-- Start Pages -->
-    @if($auth_user->is('superadmin') or $auth_user->can('admin.pages.search') or $auth_user->can('admin.landingpage') or $auth_user->can('admin.faq'))
+    @if($auth_user->is('superadmin') or $auth_user->can('admin.landingpage') or $auth_user->can('admin.faq'))
     <li class="treeview">
         <a href="#">
             <i class="fa fa-files-o"></i> <span>Landing </span> <i class="fa fa-angle-right pull-right"></i>

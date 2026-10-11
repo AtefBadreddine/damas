@@ -77,19 +77,19 @@
 
             <div class="item swiper-slide">
                 <div class="cont shadow_type">
-                    <a class="link" href="<?= route("front.search", ["apartments-for-sale", "istanbul"]) ?>" title="<?= trans("front.Istanbul apartments"); ?>">
+                    <a class="link" href="<?= Helper::legacy_listing_url("apartments-for-sale", "istanbul") ?>" title="<?= trans("front.Istanbul apartments"); ?>">
                         <img class="lazy" alt="<?= trans("front.Istanbul apartments"); ?>" title="<?= trans("front.Istanbul apartments"); ?>" loading="lazy" src="/img/pages-links/apartments.jpg" width="200" height="150"> 
                     </a>
-                    <a class="title" href="<?= route("front.search", ["apartments-for-sale", "istanbul"]) ?>" title="<?= trans("front.Istanbul apartments"); ?>"> <p><?= trans("front.Istanbul apartments"); ?></p> </a>
+                    <a class="title" href="<?= Helper::legacy_listing_url("apartments-for-sale", "istanbul") ?>" title="<?= trans("front.Istanbul apartments"); ?>"> <p><?= trans("front.Istanbul apartments"); ?></p> </a>
                 </div> 
             </div> 
 
             <div class="item swiper-slide">
                 <div class="cont shadow_type">
-                    <a class="link" href="<?= route("front.search", ["villas-for-sale", "istanbul"]) ?>" title="<?= trans("front.Istanbul villas"); ?>">
+                    <a class="link" href="<?= Helper::legacy_listing_url("villas-for-sale", "istanbul") ?>" title="<?= trans("front.Istanbul villas"); ?>">
                         <img class="lazy" alt="<?= trans("front.Istanbul villas"); ?>" title="<?= trans("front.Istanbul villas"); ?>" loading="lazy" src="/img/pages-links/villas.jpg" width="200" height="150"> 
                     </a>
-                    <a class="title" href="<?= route("front.search", ["villas-for-sale", "istanbul"]) ?>" title="<?= trans("front.Istanbul villas"); ?>"> <p><?= trans("front.Istanbul villas"); ?></p> </a>
+                    <a class="title" href="<?= Helper::legacy_listing_url("villas-for-sale", "istanbul") ?>" title="<?= trans("front.Istanbul villas"); ?>"> <p><?= trans("front.Istanbul villas"); ?></p> </a>
                 </div> 
             </div> 
 

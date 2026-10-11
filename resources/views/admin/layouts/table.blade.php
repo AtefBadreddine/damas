@@ -16,7 +16,7 @@
     $tr_placement = @$tr_placement;
     $total_rows = $rows->total();
 
-    $gscPages = ['admin.pages.search', 'admin.projects', 'admin.cities', 'admin.countries', 'admin.regions'];
+    $gscPages = ['admin.projects', 'admin.cities', 'admin.countries', 'admin.regions'];
     $gscEnabled = $isPostList || in_array($route, $gscPages, true);
     $isGeoGscList = in_array($route, ['admin.cities', 'admin.countries', 'admin.regions'], true);
     $gscMetricClasses = [
@@ -24,8 +24,6 @@
         'blog_ctr' => 'ctr', 'blog_pos' => 'position', 'blog_last_crawl' => 'last-crawl',
         'project_impressions' => 'impressions', 'project_clicks' => 'clicks',
         'project_ctr' => 'ctr', 'project_position' => 'position',
-        'search_pages_impressions' => 'impressions', 'search_pages_clicks' => 'clicks',
-        'search_pages_ctr' => 'ctr', 'search_pages_position' => 'position',
         'gsc_impressions' => 'impressions', 'gsc_clicks' => 'clicks',
         'gsc_ctr' => 'ctr', 'gsc_position' => 'position', 'gsc_last_crawl' => 'last-crawl',
     ];
@@ -497,15 +495,11 @@ $str_get = $str_get . $k.'='.$v.'&';
 									?>
 								@elseif($route=="admin.newlandingpage" and $key=='title')
 									<a href="{{ $landingUrl($row) }}" target="_blank">{{ $row->$key }}</a>
-                                @elseif($key=="link" and $route=="admin.pages.search")
-                                    <a href="{{ $row->link }}" target="_blank" class="gsc-link">
-                                        {{ $row->link }}
-                                    </a>
-								@elseif($key=="search_pages_impressions" || $key=="project_impressions")
+								@elseif($key=="project_impressions")
 								    <p class="impressions"></p>
-								@elseif($key=="search_pages_clicks" || $key=="project_clicks")
+								@elseif($key=="project_clicks")
 								    <p class="clicks"></p>
-								@elseif($key=="search_pages_ctr" || $key=="project_ctr")
+								@elseif($key=="project_ctr")
 								    <p class="ctr"></p>
 								@elseif($route=="admin.projectcategory" and $key=='feature_slug')
 								    {{$row->slug}}
@@ -728,7 +722,7 @@ $str_get = $str_get . $k.'='.$v.'&';
 								    <p class="ctr"></p>
 								@elseif($isPostList and $key=="blog_pos")
 								    <p class="position"></p>
-								@elseif($key=="project_position" || $key=="search_pages_position")
+								@elseif($key=="project_position")
 								    <p class="position"></p>
 								@elseif($isPostList and $key=="blog_last_crawl")
                                     <p class="last-crawl"></p>

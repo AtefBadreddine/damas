@@ -160,17 +160,6 @@
         'special_h1_ar',
         'special_h1_en'
     )->get();
-    $listings = \DB::table('page_search')->select(
-        'id',
-        'title',
-        'title_en',
-        'link',
-        'seo_title_ar',
-        'seo_title_en',
-        'seo_description_ar',
-        'seo_description_en',
-        'post_id'
-    )->get();
     $links_statuses = \DB::table('links_status')->select('link', 'status', 'schema_json')->whereNotNull('schema_json')->get();
     $counter = 1;
     $projects = \App\Models\Project::with([
@@ -206,7 +195,6 @@
         </select>
         <select id="typeFilter">
             <option value="all">All Types</option>
-            <option value="listing">Listing</option>
             <option value="project">Projects</option>
             <option value="post">Guides</option>
             <option value="general">General</option>
@@ -273,92 +261,6 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach($listings as $listing)
-                    <?php
-                    $customH1 = $language === 'en'
-                        ? trim((string)$listing->title_en)
-                        : trim((string)$listing->title);
-                    $post = null;
-                    if ((int)$listing->post_id !== 0) {
-                        $column = $language === 'en' ? 'title_en' : 'title_ar';
-                        $post = \DB::table('posts')
-                            ->select($column)
-                            ->where('id', $listing->post_id)
-                            ->first();
-                    }
-                    if ($post) {
-                        $h1Source = 'blog';
-                        $h1 = $post->{$column};
-                        $effectivePostId = (int)$listing->post_id;
-                    } elseif ($customH1 !== '') {
-                        $h1Source = 'custom';
-                        $h1 = $customH1;
-                        $effectivePostId = 0;
-                    } else {
-                        $h1Source = 'generated';
-                        $h1 = Helper::generate_search_h1_from_link($listing->link, $language);
-                        $effectivePostId = 0;
-                    }
-                    ?>
-                    <tr rowType="listing" data-id="{{ $listing->id }}" data-post-id="{{ $effectivePostId }}" data-country="<?= (strpos($listing->link, "oman") !== false || strpos($listing->link, "muscat") !== false) ? "oman" : "turkey" ?>">
-                        <td>{{ $counter }}</td>
-                        <td class="http-status">
-                            <?php
-                            $hasfound = false;
-                                foreach($links_statuses as $statusObj){
-                                    if($statusObj->link === $listing->link){
-                                        $hasfound = true;
-                                        $statusChain = json_decode($statusObj->status, true);
-                                        echo is_array($statusChain)
-                                            ? implode(' → ', $statusChain)
-                                            : htmlspecialchars($statusObj->status, ENT_QUOTES, 'UTF-8');
-                                    }
-                                }
-                                if($hasfound === false){
-                                    echo "—";
-                                }
-                            ?>
-                        </td>
-                        <td class="h1td contenteditable">
-                            <span class="h1-source">[{{ $h1Source }}]</span>
-                            <a contenteditable="true" href="{{ $listing->link }}" target="_blank" class="link">{{ $h1 }}</a>
-                        </td>
-                        <td class="h1len"></td>
-                        <td class="slug">{{ $listing->link }}</td>
-                        <td contenteditable="true" class="meta">{{ $language === 'en' ? $listing->seo_title_en : $listing->seo_title_ar }}</td>
-                        <td class="metalen"></td>
-                        <td contenteditable="true" class="desc tlargetr">{{ $language === 'en' ? $listing->seo_description_en : $listing->seo_description_ar }}</td>
-                        <td class="desclen"></td>
-                        <td class="canonical"></td>
-                        <td class="indexing"></td>
-                        <td class="last-crawl"></td>
-                        <td class="rich-results"></td>
-                        <td class="schema">
-                            <?php
-                                $schemasArr = [];
-                                foreach ($links_statuses as $statusObj) {
-                                    if ($statusObj->link !== $listing->link) {
-                                        continue;
-                                    }
-                                    $rawSchemas = json_decode($statusObj->schema_json, true);
-                                    foreach ($rawSchemas as $rawSchema) {
-                                        $schema = is_string($rawSchema) ? json_decode($rawSchema, true) : $rawSchema;
-                                        if (!is_array($schema) || !isset($schema['@type'])) {
-                                            continue;
-                                        }
-                                        $types = is_array($schema['@type']) ? $schema['@type'] : [$schema['@type']];
-                                        foreach ($types as $type) {
-                                            $schemasArr[] = htmlspecialchars($type, ENT_QUOTES, 'UTF-8');
-                                        }
-                                    }
-                                    break;
-                                }
-                                echo implode(', ', array_unique($schemasArr));
-                            ?>
-                        </td>
-                        <td class="sitemap"></td>
-                    </tr>
-                    @endforeach
                     @foreach($posts as $post)
                     <?php
                         $countryObj = \DB::table('countries')->where('id', $post->country_id)->first();
@@ -1072,18 +974,6 @@
         const id = row.dataset.id;
         const type = row.getAttribute("rowType");
         if (!id) return;
-        if (type === "listing") {
-            const linkedPostId = Number(row.dataset.postId || 0);
-            const listingH1Field = currentLanguage === "en" ? "title_en" : "title";
-            if (linkedPostId > 0) {
-                trackField(row, ".h1td .link", "post", linkedPostId, h1Field);
-            } else {
-                trackField(row, ".h1td .link", "listing", id, listingH1Field);
-            }
-            trackField(row, ".meta", "listing", id, metaField);
-            trackField(row, ".desc", "listing", id, descriptionField);
-            return;
-        }
         if (!["post", "project"].includes(type)) return;
         trackField(row, ".h1td .link", type, id, h1Field);
         trackField(row, ".meta", type, id, metaField);

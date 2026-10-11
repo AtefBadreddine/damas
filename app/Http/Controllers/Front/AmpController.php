@@ -292,35 +292,17 @@ class AmpController extends BaseController
             ]);
         } else {
             
-            $req_url = str_replace("/amp", "", \LaravelLocalization::getLocalizedURL("ar"));
-            $page_seo = Helper::query("PageSearch", "where", ["field" => "link", "value" => $req_url])->first();
             $current_lang = \LaravelLocalization::getCurrentLocale();
-            
-            if ( $page_seo ) {                
-                $inputs["seo_title"] = $page_seo->getSeoTitle();
-                $inputs["seo_description"] = $page_seo->getSeoDescription();
-                $inputs["seo_keywords"] = $page_seo->getSeoKeywords();
-                
-                if ( $current_lang == 'en' ) {
-                    $inputs["og_image"] = $page_seo->media_en_id ? Helper::media_url($page_seo->mediaEn) : null;
-                } else {
-                    $inputs["og_image"] = $page_seo->media_id ? Helper::media_url($page_seo->media) : null;                    
-                }
-                
-                if ( $page_seo->content ) {
-                    $inputs["about"] = '<h1>'.$page_seo->title.'</h1><div class="clearfix">'.$page_seo->content.'</div>';
-                }
+
+            if ( $current_lang == 'en' ) {
+                $inputs["og_image"] = $inputs["city_row"]->media_en_id ? Helper::media_url($inputs["city_row"]->mediaEn) : null;
             } else {
-                if ( $current_lang == 'en' ) {
-                    $inputs["og_image"] = $inputs["city_row"]->media_en_id ? Helper::media_url($inputs["city_row"]->mediaEn) : null;
-                } else {
-                    $inputs["og_image"] = $inputs["city_row"]->media_id ? Helper::media_url($inputs["city_row"]->media) : null;                    
-                }
-                $inputs["seo_title"] = implode(".", $arr_seo_title);
-                $inputs["seo_description"] = trim(implode(".", $arr_seo_description));
-                $inputs["seo_keywords"] = trim(implode(".", $arr_seo_keywords));
+                $inputs["og_image"] = $inputs["city_row"]->media_id ? Helper::media_url($inputs["city_row"]->media) : null;
             }
-            
+            $inputs["seo_title"] = implode(".", $arr_seo_title);
+            $inputs["seo_description"] = trim(implode(".", $arr_seo_description));
+            $inputs["seo_keywords"] = trim(implode(".", $arr_seo_keywords));
+
             $projects = $q->paginate($paginate_number);
         }
         

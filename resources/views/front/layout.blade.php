@@ -49,6 +49,20 @@ foreach ($citys as $layoutCity) {
         $cityListingUrls[$layoutCity->slug] = $layoutCity->listingUrl();
     }
 }
+// Country values (e.g. "turkey", "oman") go to the country listing.
+// Countries come from the cities' eager-loaded countryRel, so no extra query.
+foreach ($citys as $layoutCity) {
+    $layoutCountry = $layoutCity->countryRel;
+    $layoutCountryUrl = $layoutCountry ? $layoutCountry->listingUrl() : null;
+    if (!$layoutCountryUrl) {
+        continue;
+    }
+    foreach (array($layoutCountry->slug, $layoutCountry->code) as $layoutCountryKey) {
+        if ($layoutCountryKey && !isset($cityListingUrls[$layoutCountryKey])) {
+            $cityListingUrls[$layoutCountryKey] = $layoutCountryUrl;
+        }
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="<?= ($current_lang == 'pe' ? 'fa' : $current_lang); ?>" dir="<?= $style_lang == "ar" ? "ltr" : "ltr"; ?>">

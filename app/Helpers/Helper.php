@@ -247,127 +247,6 @@ class Helper
         }
     }
     /**
-     * generate the fallback H1 for a search/listing URL.
-     *
-     * @param string $link
-     * @param string $language
-     * @return string|null
-     */
-    public static function generate_search_h1_from_link($link, $language = 'ar')
-    {
-        static $cache = [];
-        $language = $language === 'en' ? 'en' : 'ar';
-        $path = parse_url($link, PHP_URL_PATH);
-        if (!is_string($path)) {
-            return null;
-        }
-        $segments = array_values(array_filter(explode('/', trim($path, '/')), 'strlen'));
-        $segments = array_map('rawurldecode', $segments);
-        if (isset($segments[0]) && in_array($segments[0], ['ar', 'en', 'fr', 'tr', 'fa', 'pe'], true)) {
-            array_shift($segments);
-        }
-        $projectTypeSlug = isset($segments[0]) ? $segments[0] : 'property-for-sale';
-        $citySlug = isset($segments[1]) ? $segments[1] : 'turkey';
-        $var1 = isset($segments[2]) ? array_values(array_filter(explode(',', $segments[2]), 'strlen')) : [];
-        $var2 = isset($segments[3]) ? array_values(array_filter(explode(',', $segments[3]), 'strlen')) : [];
-        $cacheKey = $language . '|' . $projectTypeSlug . '|' . $citySlug . '|' . implode(',', $var1) . '|' . implode(',', $var2);
-        if (array_key_exists($cacheKey, $cache)) {
-            return $cache[$cacheKey];
-        }
-        $originalLanguage = \LaravelLocalization::getCurrentLocale();
-        \LaravelLocalization::setLocale($language);
-        try {
-            $projectTypeName = trans('front.aqarat') . ' ' . trans('front.for_sale');
-            if ($projectTypeSlug !== 'property-for-sale') {
-                $projectType = self::query("ProjectType", "where", [
-                    "field" => "slug",
-                    "value" => $projectTypeSlug
-                ])->first();
-                if (!$projectType) {
-                    $cache[$cacheKey] = null;
-                    return null;
-                }
-                $projectTypeName = $projectType->getName() . ' ' . trans('front.for_sale');
-            }
-            $city = self::query("City", "where", [
-                "field" => "slug",
-                "value" => $citySlug
-            ])->first();
-            if (!$city) {
-                $cache[$cacheKey] = null;
-                return null;
-            }
-            $cityName = $city->getName();
-            $categorySlugs = [];
-            $regionSlugs = [];
-            if (count($var1) > 0) {
-                $categoryCheck = self::query("ProjectCategory", "whereIn", [
-                    "field" => "slug",
-                    "value" => $var1
-                ])->get();
-                if (count($categoryCheck) > 0) {
-                    $categorySlugs = $var1;
-                } else {
-                    $regionCheck = self::query("Region", "whereIn", [
-                        "field" => "slug",
-                        "value" => $var1
-                    ])->get();
-                    if (count($regionCheck) === 0) {
-                        $cache[$cacheKey] = null;
-                        return null;
-                    }
-                    $regionSlugs = $var1;
-                }
-            }
-            if (count($var2) > 0) {
-                $regionCheck = self::query("Region", "whereIn", [
-                    "field" => "slug",
-                    "value" => $var2
-                ])->get();
-                if (count($regionCheck) === 0) {
-                    $cache[$cacheKey] = null;
-                    return null;
-                }
-                $regionSlugs = $var2;
-            }
-            $regionNames = [];
-            foreach ($regionSlugs as $regionSlug) {
-                $region = self::query("Region", "where", [
-                    "field" => "slug",
-                    "value" => $regionSlug
-                ])->first();
-                if (!$region) {
-                    $cache[$cacheKey] = null;
-                    return null;
-                }
-                $regionNames[] = $region->getName();
-            }
-            $categoryNames = [];
-            foreach ($categorySlugs as $categorySlug) {
-                $category = self::query("ProjectCategory", "where", [
-                    "field" => "slug",
-                    "value" => $categorySlug
-                ])->first();
-                if (!$category) {
-                    $cache[$cacheKey] = null;
-                    return null;
-                }
-                $categoryNames[] = $category->getName();
-            }
-            $parts = [
-                $projectTypeName,
-                $cityName,
-                implode(', ', $regionNames),
-                implode(', ', $categoryNames)
-            ];
-            $result = trim(preg_replace('/\s+/u', ' ', implode(' ', array_filter($parts, 'strlen'))));
-            $cache[$cacheKey] = $result;
-            return $result;
-        } finally {
-            \LaravelLocalization::setLocale($originalLanguage);
-        }
-    }
-    /**
     * global mobile phone
     *
     * @return void
@@ -441,121 +320,6 @@ class Helper
 		
 		
 		return $html;
-	}
-	public static function  GnerateLnk($project_type_slg,$project_type_nme, $city_slg,$city_nme, $project_categories_slg ,$regions_slg){
-		
-		if($city_slg=='turkey')
-		$city_slg = '';
-		$arrlink = [];
-
-		if($project_categories_slg==''){
-		
-		
-		if($project_type_slg == ''  && $city_slg == ''  && $regions_slg==''/*&& $project_categories_slg == ''*/){
-			$cities = Helper::query("City", "all");
-			foreach($cities as $c){
-				if($c->id!=2)
-				$arrlink[] = '<li><a href="'. self::geo_listing_url($c) .'">'. $c->getName() .'</a></li>';
-			}
-			return implode('',$arrlink);
-		
-		}/*elseif($project_type_slg != ''  && $city_slg == ''  && $regions_slg==''){
-			$ptyp = Helper::query("ProjectType", "all");
-			foreach($ptyp as $c){
-				$arrlink[] = '<li><a href="'. route('front.search',[$c->slug,'turkey']) .'">'. $c->getName() .'</a></li>';
-			}
-			return implode('',$arrlink);
-			
-		}*/
-		elseif(($project_type_slg != ''  && $city_slg == '')  /*&& $regions_slg==''*/){
-			$cities = Helper::query("City", "all");
-			//exit();
-			$Rproject_type = Helper::query("ProjectType", "where", ["field" => "slug", "value" => $project_type_slg])->first();
-			
-			$ptyps = DB::select("SELECT distinct(dms_projects.city_id) FROM `dms_projects`,dms_project_type
-			WHERE dms_projects.id=dms_project_type.project_id and dms_project_type.project_type_id=?  and dms_projects.published=1 and dms_projects.sold != 100",array($Rproject_type->id));//.*
-			
-			$arr_ids = [];
-			foreach($ptyps as $r)
-			$arr_ids[] = $r->city_id;
-			
-			foreach($cities as $c){
-				if($c->id!=2 and in_array($c->id,$arr_ids))
-				$arrlink[] = '<li><a class="ptcity" href="'. self::geo_listing_url($c, $project_type_slg) .'">' . $project_type_nme .' '. $c->getName() .'</a></li>';
-			}
-			return implode('',$arrlink);
-			
-		}elseif($project_type_slg == ''  && $city_slg != ''  /*&& $regions_slg==''*/){
-			
-			$Rcity = Helper::query("City", "where", ["field" => "slug", "value" => $city_slg])->first();
-			$ptyps = DB::select("SELECT distinct(dms_project_type.project_type_id) 
-			FROM `dms_projects`,dms_project_type
-			WHERE dms_projects.id=dms_project_type.project_id and dms_projects.city_id=?  and dms_projects.published=1 and dms_projects.sold != 100",array($Rcity->id));//.*
-			
-			$arr_ids = [];
-			foreach($ptyps as $r)
-			$arr_ids[] = $r->project_type_id;
-			
-			$ptyp = Helper::query("ProjectType", "all");
-			foreach($ptyp as $c){
-				if(in_array($c->id,$arr_ids))
-				$arrlink[] = '<li><a class="pts" href="'. self::geo_listing_url($Rcity, $c->slug) .'">'. $c->getName() .' '. $city_nme .'</a></li>';
-			}
-			return implode('',$arrlink);
-		}
-		}
-		$conds = [];
-		if($project_type_slg!=''){
-			$Rproject_type = Helper::query("ProjectType", "where", ["field" => "slug", "value" => $project_type_slg])->first();
-			$conds[] = $Rproject_type->id;
-		}
-		if($city_slg!=''){
-			$Rcity = Helper::query("City", "where", ["field" => "slug", "value" => $city_slg])->first();
-			$conds[] = $Rcity->id;
-		}
-		/*echo ("SELECT distinct(dms_project_category.`project_category_id`) 
-		FROM `dms_project_category` ,dms_projects,dms_project_type
-		WHERE 
-		`dms_project_category`.`project_id`=dms_projects.id
-		and dms_projects.id=dms_project_type.project_id "
-		. ($project_type_slg!=''?" and dms_project_type.project_type_id=?":'')
-		. ($city_slg!=''?" and dms_projects.city_id=?":''));
-		exit;*/
-		$ptyps= DB::select("SELECT distinct(dms_project_category.`project_category_id`) 
-		FROM `dms_project_category` ,dms_projects,dms_project_type
-		WHERE 
-		`dms_project_category`.`project_id`=dms_projects.id
-		and dms_projects.id=dms_project_type.project_id and dms_projects.published=1 and dms_projects.sold != 100"
-		. ($project_type_slg!=''?" and dms_project_type.project_type_id=?":'')
-		. ($city_slg!=''?" and dms_projects.city_id=?":'')
-		,
-		$conds);
-		
-		$arr_ids = [];
-		foreach($ptyps as $r)
-			$arr_ids[] = $r->project_category_id;
-		
-		
-		
-		$pcats = Helper::query("ProjectCategory", "all");
-		
-		$activea='';
-		foreach($pcats as $c){
-			if($c->hide_search_page==0 && in_array($c->id,$arr_ids)){
-			$url = self::geo_listing_url($city_slg !== '' ? $city_slg : 'turkey', $project_type_slg, $c->slug);
-			
-			if( $project_categories_slg==$c->slug )
-				$activea = '<li class="active"><a href="'. $url .'">'. $c->getName() .'</a></li>';
-			else
-				$arrlink[] = '<li><a href="'. $url .'">'. $c->getName() .'</a></li>';
-			}
-		}
-		
-		if($activea!='')
-			array_unshift($arrlink, $activea);
-		
-		return implode('',$arrlink);
-	
 	}
 	public static function  parse_statistcics($Rregion,$type) {
 		if($Rregion){
@@ -832,16 +596,6 @@ class Helper
 				"2000000-+"          =>  '+'.Helper::usd_to_format("2M $",$format),
 			];
 		return $arr_prices;
-	}
-    public static function to_usd_format($ex,$nbre,$current_format){
-		
-		
-		$nbre = $nbre/(float)$ex[$current_format];
-		if(isset($ex['USD'])){
-			$nbre = $nbre*(float)$ex['USD'];
-		}
-		return round($nbre);
-		
 	}
     public static function usd_to_format_KM($nbre,$hide_format=false){
 		return str_replace(['.000.000','.000'],['M','K'],self::usd_to_format($nbre,'',$hide_format));
@@ -1558,6 +1312,10 @@ class Helper
      */
     public static function legacyListingUrlFromParts($type, $citySlug, $var1 = null, $var2 = null, $query = array())
     {
+        if ($type && !self::isLegacyListingType($type)) {
+            return null;
+        }
+
         $var1 = $var1 ? array_values(array_filter(explode(',', $var1))) : array();
         $var2 = $var2 ? array_values(array_filter(explode(',', $var2))) : array();
 
@@ -1578,9 +1336,6 @@ class Helper
 
         $params = array();
         if ($type && $type !== 'property-for-sale') {
-            if (!\App\Models\ProjectType::where('slug', $type)->first()) {
-                return null;
-            }
             $params['type'] = $type;
         }
         if ($categories) {
@@ -1624,6 +1379,82 @@ class Helper
         $query = array_merge($query, $params);
 
         return $url . ($query ? '?' . str_replace('%2C', ',', http_build_query($query)) : '');
+    }
+
+    /**
+     * First segment of an old /{type}/{city}/... listing URL: property-for-sale or a project type slug.
+     *
+     * @param string|null $slug
+     * @return bool
+     */
+    public static function isLegacyListingType($slug)
+    {
+        static $typeSlugs = null;
+        if ($slug === 'property-for-sale') {
+            return true;
+        }
+        if ($slug === null || $slug === '') {
+            return false;
+        }
+        // Case-insensitive, like the MySQL ProjectType slug lookup this replaces.
+        $slug = strtolower((string) $slug);
+        if ($typeSlugs === null) {
+            $typeSlugs = \App\Models\ProjectType::lists('slug');
+            $typeSlugs = array_map('strtolower', is_array($typeSlugs) ? $typeSlugs : $typeSlugs->toArray());
+        }
+        return in_array($slug, $typeSlugs, true);
+    }
+
+    /**
+     * Geo listing URL for a legacy search request. The old AMP search form
+     * (?amp=1) sends type, city and category as query fields instead of path segments.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @param string|null $type
+     * @param string|null $citySlug
+     * @param string|null $var1
+     * @param string|null $var2
+     * @return string|null
+     */
+    public static function legacyListingUrlFromRequest($request, $type, $citySlug, $var1 = null, $var2 = null)
+    {
+        if ($request->get('amp') == '1') {
+            // Only the old AMP form posts to a listing path (/property-for-sale/turkey);
+            // amp=1 on any other page is not a listing search.
+            if (!self::legacyListingUrlFromParts($type, $citySlug, $var1, $var2)) {
+                return null;
+            }
+            return self::legacyListingUrlFromParts(
+                $request->get('project_type') ?: 'property-for-sale',
+                $request->get('city') ?: 'turkey',
+                $request->get('project_category') ?: null
+            );
+        }
+
+        return self::legacyListingUrlFromParts($type, $citySlug, $var1, $var2, $request->except(array('ajax', 'amp', 'page')));
+    }
+
+    /**
+     * Geo listing URL for legacy search parts; falls back to the city/country listing.
+     *
+     * @param string|null $type
+     * @param string|null $citySlug
+     * @param string|null $var1
+     * @param string|null $var2
+     * @return string
+     */
+    public static function legacy_listing_url($type, $citySlug, $var1 = null, $var2 = null)
+    {
+        $url = self::legacyListingUrlFromParts($type, $citySlug, $var1, $var2);
+        if ($url) {
+            return $url;
+        }
+        // Unknown type slugs would otherwise end up as ?type=<slug> on the fallback listing.
+        $type = (string) $type;
+        if ($type !== '' && !self::isLegacyListingType($type)) {
+            $type = '';
+        }
+        return self::geo_listing_url((string) $citySlug, $type);
     }
 
     /**
@@ -2901,60 +2732,6 @@ curl_close($ch);
 		exit;
 		return $flavors;
     }
-	/**
-    * get compress projects cards
-    *
-    * @return void
-    */
-    public static function get_compress_cards($content)
-    {
-		
-		$thtm = [
-		'<aside class="col-md-6 col-sm-6 col-xs-12"> <div class="item"> <div class="project-card card-small" >  <div class="share project-social"> <i class="flaticon-share cshare"></i> <a href="#" class="likeCardItem" data-url="',
-		'<i class="fa fa-heart-o"></i></a> <span class="pull-right social shareBtnsFloating" data-url=',
-		'> <a href="#" class="btnshare" data-network="facebook"><i class="fa fa-facebook"></i></a> <a href="#" class="btnshare" data-network="whatsapp"><i class="fa fa-whatsapp"></i></a> </span>  <div class="d105" ><b>',
-		'</span></div> </div> <div class="contain" id="container" > <div class="image-project"> <a href=',
-		' target="_blank" >  <img class="img-responsive" alt=',
-		'</a> </div>   <div class="title-project">  <div class="start">',
-		'/> </a> </div>   <div class="title-project">  </div>  <div class="clearfix"></div> <div class="about-project new-style">',
-		'</div> <div class="clearfix"></div>  <div class="info-project">  <div class="status"> <div class="resale"> <div class="icon"></div> <p',
-		'</div> </div> <div class="key"> <div > <i class="flaticon-room-key2"></i> <span>',
-		'</span> </div> </div> <div class="coin"> <div> <i class="flaticon-coin2"></i> <span>',
-		'</span> </div> </div> </div>   <div class="details"><a href=',
-		'</a></div> </div> </div> </div> </aside>',
-		'<div class="price smlprice tpp1_1 hidden">  <strong>',
-		'<div class="price smlprice tpp1_2 hidden">  <strong>',
-		'<div class="price smlprice tpp1_3 hidden">  <strong>',
-		'<div class="price smlprice tpp1_4 hidden">  <strong>',
-		'<div class="price smlprice tpp1_5 hidden">  <strong>',
-		'<div class="price smlprice tpp2_3 hidden">  <strong>',
-		'<div class="price smlprice tpp2_4 hidden">  <strong>',
-		'<div class="price smlprice tpp2_5 hidden">  <strong>',
-		'<div class="price smlprice tpp2_6 hidden">  <strong>',
-		'</div> <div class="clearfix"></div>  <div class="info-project">  <div class="status"> <div class="ready"> <div class="icon"></div> <p',
-		'likeitem" data-typ="project" data-code="',
-		'</span> <ul class="dropdown-menu hidden">  <li><a data-val="',
-		'</div>  <div class="price smlprice">  <strong>',
-		'https://www.damas.net/projects/',
-		'https://www.damas.net/',
-		'</a></li>  </ul> </button>  <div class="start">',
-		'</strong> <span>',
-		'<div class="clearfix"></div>',
-		'" target="_blank" class="button">',
-		'<div id="projects-paginate" class="alikes text-center"> <aside class="col-md-12 col-sm-1 col-xs-12" style="width:100%;margin:0 0 20px 0"> <button class="btn btn-primary btnLoadMoreProjets" id="show_more" style="margin-top:0"><i class="fa fa-list"></i> '. trans("front.load more") .'<div class="lds-ring"> <div></div> <div></div> <div></div> <div></div> </div> </button> </aside> </div>',
-		'</a></li>  <li><a data-val="',
-		'" href="javascript:;">',
-		'img/bed.svg" alt="Damas"> <span>',
-		'</div>  <button class="bed"> <img src="',
-		'<div class="info-project">  <div class="status"> <div class="under-construction"> <div class="icon"></div> <p>'
-		];
-
-
-
-		
-
-		return str_replace($thtm,['%p1','%p2','%p3','%p4','%p5','%p6','%p7','%p8','%p9','%pa','%pb','%pc','%pd','%pe','%pf','%pg','%ph','%pi','%pj','%pk','%pl','%pm','%pn','%po','%pq','%pr','%ps','%pt','%pu','%x1','%x2','%x3','%x4','%x5','%x6','%x7','%x8'],$content);
-    }
 	
     
     /**
@@ -3990,138 +3767,6 @@ public static function time_elapsed_string($datetime, $full = false) {
 }
 
 
-public static function get_json_project($project){
-
-$current_lang = LaravelLocalization::getCurrentLocale();
-$is_mobile = Helper::is_mobile() || Helper::is_tablet();
-$infos = Helper::get_params();
-$flavor = array();
-if (/* Route::currentRouteName()!='front.search' and */ session()->get("filter_rooms") != '') {
-    list($salon, $room) = explode('_', session()->get("filter_rooms"));
-
-
-    $flavors = $project->flavors;
-
-    foreach ($flavors as $f) {
-        if ($f->room == $room and $f->salon == $salon and $f->sold_out == false) {
-            $flavor = $f;
-            break;
-        }
-    }
-
-
-    if (empty($flavor)) {
-        $arr_rooms = array('1_0', '1_1', '1_2', '1_3', '1_4', '1_5', '2_3', '2_4', '2_5', '2_6');
-        $arr_s_r = array();
-        foreach ($arr_rooms as $r) {
-            if ($r == session()->get("filter_rooms"))
-                break;
-            $arr_s_r[] = $r;
-        }
-
-        $arr_s_r = array_reverse($arr_s_r);
-
-        foreach ($flavors as $f) {
-            if ($f->sold_out == false) {
-                foreach ($arr_s_r as $r_s_r) {
-                    if ($f->salon . '_' . $f->room == $r_s_r) {
-                        $flavor = $f;
-                        break;
-                    }
-                }
-            }
-        }
-    }
-}
-
-if (empty($flavor)) {
-    $flavors = $project->flavors();
-    $flavors = $flavors->where('sold_out',false); //عدم عرض سعر الشقق المباعة 
-    $flavor = $flavors->orderBy("price", "ASC")->first();
-
-    if (empty($flavor)) {
-        $flavors = $project->flavors();
-        $flavor = $flavors->orderBy("price", "ASC")->first();
-    }
-}
-
-$projects_flavors = $project->flavors;
-
-$open_blank = @$open_blank ? true : false;
-$cardphoto = @$project->cardphoto;
-//$is_mobile = @$is_mobile;
-$project_min_price = Helper::decimal_format(@$flavor->price, $project->is_price_usd);
-
-			
-$data['url'] = $project->frontUrl();
-
-$iw = 360;
-$ih = 280;
-if (!$is_mobile) {
-if (isset($page) and $page == 'index') {
-$iw = 360;
-$ih = 196;
-} else {
-$iw = 384;
-$ih = 171;
-}
-} else {
-if (isset($page) and $page == 'index') {
-$iw = 360;
-$ih = 282;
-} else {
-$iw = 363;
-$ih = 258;
-}
-}
-
-
-$data['pic'] = Helper::get_thumbnail($cardphoto, $iw, $ih);
-
-$data['lat'] = substr($project->latitude,0,14);
-$data['long'] = substr($project->longitude,0,14);
-if(strlen($project_min_price)>8)
-	$data['price'] = '<strong> '. Helper::curr_format() .'</strong> '. $project_min_price;
-else
-	$data['price'] = '<strong> '. Helper::curr_format() .'</strong> '. $project_min_price;
-
-/*echo ''.session()->get("currency").'W';
-echo $data['price'];
-			exit;*/
-
-$data['title'] = $project->getIntroCard();
-
-$data['name'] = $project->getNameEn();
-
-
-$link_video = $project->getLinkVideo();
-parse_str(parse_url($link_video, PHP_URL_QUERY), $array_of_vars);
-$video_code = @$array_of_vars['v'];
-$data['youtube'] = '';
-if($video_code!='')
-$data['youtube'] = 'https://www.youtube.com/embed/' . $video_code.'?autoplay=1';
-$data['video_code'] = $video_code;
-
-list($sclass, $slab) = $project->getStatus();
-
-if($sclass=='under-construction'){
-$data['status'] = 'under-construction';
-$data['deliverd_date'] = date("Y/m", strtotime($project->delivered_date));
-}else{
-$data['status'] = 'ready';
-}
-$data['payment_method'] = $project->payment_method;
-$data['percent'] = $project->payment_percent;
-$data['months'] = $project->payment_months;
-$data['link_3d'] = $project->link_3d;
-$data['city'] = $project->city->getName();
-$data['region'] = $project->region->getName();
-
-$data['cash_discount'] = (int)$project->cash_discount;
-
-//$data['payment_method_trans'] = trans('front.' . $project->payment_method);
-return $data;
-}
 
 
 	public static function get_campaing($navs){

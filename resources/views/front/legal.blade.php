@@ -231,7 +231,7 @@ $emptypic = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABA
                     <?php if ($current_lang == 'ru') { ?>
                         <a class="more green" href="<?= route("front.blog") ?>"><?= trans("front.load more"); ?></a>
                     <?php } else { ?>
-                        <a class="more green" href="<?= route("front.search", ["blog", "tabu-turkey"]) ?>"><?= trans("front.load more"); ?></a>
+                        <a class="more green" href="<?= ($tapuPost = \App\Models\Post::findUnambiguousBySlug('tapu')) && $tapuPost->geoUrl() ? $tapuPost->geoUrl() : route('front.blog.index') ?>"><?= trans("front.load more"); ?></a>
                     <?php } ?>
 
 

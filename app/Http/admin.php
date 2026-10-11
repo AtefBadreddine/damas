@@ -556,13 +556,6 @@ Route::group(['prefix' => 'damas-administrator', 'namespace' => 'Admin', 'middle
         Route::any('/living_turkey', ['as' => 'admin.pages.living_turkey', 'uses' => 'AdminController@pages_living_turkey']);
     
         Route::any('/vacancies', ['as' => 'admin.pages.vacancies', 'uses' => 'AdminController@pages_vacancies']);
-        /* search seo page */
-        Route::group(['prefix' => 'search', 'middleware' => 'checkpermission:admin.pages.search'], function () {
-            Route::any('/', ['as' => 'admin.pages.search', 'uses' => 'AdminController@pages_search']);
-            Route::any('/create', ['as' => 'admin.pages.search.create', 'uses' => 'AdminController@pages_search_edit']);
-            Route::any('/{id}/edit', ['as' => 'admin.pages.search.edit', 'uses' => 'AdminController@pages_search_edit']);
-            Route::delete('/{id}/delete', ['as' => 'admin.pages.search.delete', 'uses' => 'AdminController@pages_search_delete']);
-        });
     });
     // users
     Route::group(['prefix' => 'users', 'middleware' => 'checkpermission:admin.users'], function () {

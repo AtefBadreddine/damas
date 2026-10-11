@@ -427,7 +427,6 @@ class BlogController extends BaseController
 				$inputs["post_scheduling"] = 0;
 				$inputs["post_scheduling_date"] = null;
             }
-			$inputs["with_projects_blog"] = @$inputs["with_projects_blog"] ? 1 : 0;
 			
 			
 			if($inputs["slug"]==''){

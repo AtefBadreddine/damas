@@ -293,51 +293,6 @@ class PostController extends BaseController
             $countryId = $row->countryRel->id;
         }
 
-        $ajax_projects_url = '';
-        if ($row->with_projects_blog == true) {
-            $url = $row->projects_url;
-            $t = explode('.com/', $url);
-            $t = explode('/', isset($t[1]) ? $t[1] : '');
-            $project_type = (isset($t[0]) ? $t[0] : 'property-for-sale');
-            $city = (isset($t[1]) ? $t[1] : 'turkey');
-
-            $regions = array();
-            $project_categories = array();
-
-            $var1 = (isset($t[2]) ? $t[2] : null);
-            $var2 = (isset($t[3]) ? $t[3] : null);
-
-            $var1 = $var1 ? explode(",", $var1) : array();
-            $var2 = $var2 ? explode(",", $var2) : array();
-
-            $q_tags = Helper::query("ProjectCategory", "whereIn", array("field" => "slug", "value" => $var1))->get();
-            if (count($q_tags) > 0) {
-                $project_categories = $var1;
-            } else {
-                $q_regions = Helper::query("Region", "whereIn", array("field" => "slug", "value" => $var1))->get();
-                if (count($q_regions) > 0) {
-                    $regions = $var1;
-                }
-            }
-            if ($var2) {
-                $q_regions = Helper::query("Region", "whereIn", array("field" => "slug", "value" => $var2))->get();
-                $regions = $var2;
-            }
-
-            $str_regions = '';
-            foreach ($regions as $reg) {
-                $str_regions = $str_regions . '&regions[]=' . $reg;
-            }
-
-            $str_project_categories = '';
-            foreach ($project_categories as $pcat) {
-                $str_project_categories = $str_project_categories . '&project_categories[]=' . $pcat;
-            }
-
-            $ajax_projects_url = '/property-for-sale/turkey?city=' . $city . $str_regions . '&project_type=' . $project_type . '&rooms=' . $str_project_categories . '&ajax=1&curr=USD&price_fields=0';
-            $ajax_projects_url = \LaravelLocalization::localizeUrl($ajax_projects_url);
-        }
-
         $post_id = $row->id;
         $src = '';
         $cookie_reffer = Cookie::get('reffer');
@@ -423,6 +378,6 @@ class PostController extends BaseController
         $post = $row;
         $listingUrl = route($postType->frontCountryRoute(), $country);
 
-        return view("front.blog.show", compact("post", "ajax_projects_url", "link_lang", "categories", "video_code", "faqs", "availables_langs", 'type', 'hide_whatsapp', 'listingUrl'));
+        return view("front.blog.show", compact("post", "link_lang", "categories", "video_code", "faqs", "availables_langs", 'type', 'hide_whatsapp', 'listingUrl'));
     }
 }

@@ -187,7 +187,9 @@ const projectTitles = {
         if ($url === '' || stripos($url, 'damas.net') === false) {
             return null;
         }
-        if (stripos($url, '/blog/') !== false || preg_match('#/blog/?$#i', $url)) {
+        // Recognise new guides routes and legacy blog routes.
+        $path = (string) parse_url($url, PHP_URL_PATH);
+        if (preg_match('#/(?:blog|guides)(?:/|$)#i', $path)) {
             return 'Guides';
         }
         if (stripos($url, '-for-sale/') !== false) {

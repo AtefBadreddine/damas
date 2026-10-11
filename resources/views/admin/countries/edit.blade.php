@@ -8,7 +8,7 @@
         <label>Slug <span class="red">(*)</span></label>
         <div class="input-group ltr">
             <span class="input-group-addon">/</span>
-            <?= Form::text("slug", $row->slug, ["class" => "form-control"]); ?>
+            <?= Form::text("slug", $row->slug, ["class" => "form-control", "data-search-validation-root" => "true"]); ?>
         </div>
         <span class="help-block">Used in the URL, e.g. turkiye</span>
     </div>
@@ -138,4 +138,134 @@
 </div>
 
 @include("admin.layouts.media_input_js")
+
+<!-- Frontend required-field checks; supports TinyMCE, Select2 and language tabs. -->
+<script>
+$(function () {
+    var countryField = document.querySelector('[data-search-validation-root]');
+    if (!countryField || !countryField.form) return;
+    var form = countryField.form;
+    // Edit this list to choose which fields are required.
+    var fields = [
+    [
+        "slug",
+        "Slug"
+    ],
+    [
+        "h1_ar",
+        "Arabic H1 tag"
+    ],
+    [
+        "h1_en",
+        "English H1 tag"
+    ],
+    [
+        "seo_title_ar",
+        "Arabic meta title"
+    ],
+    [
+        "seo_description_ar",
+        "Arabic meta description"
+    ],
+    [
+        "seo_title_en",
+        "English meta title"
+    ],
+    [
+        "seo_description_en",
+        "English meta description"
+    ],
+    [
+        "content_ar",
+        "Arabic content"
+    ],
+    [
+        "content_en",
+        "English content"
+    ]
+];
+
+    function editorFor(field) {
+        return window.tinymce && field.id ? window.tinymce.get(field.id) : null;
+    }
+
+    function hasValue(field) {
+        if (field.tagName === 'SELECT') {
+            return Array.prototype.some.call(field.options, function (option) {
+                return option.selected && option.value.trim() !== '';
+            });
+        }
+        var editor = editorFor(field);
+        var value = editor ? editor.getContent() : field.value;
+        if (field.name === 'content_ar' || field.name === 'content_en' || field.name === 'about_ar' || field.name === 'about_en') {
+            var container = document.createElement('div');
+            container.innerHTML = value;
+            // Images and other embedded content also count as content.
+            if (container.querySelector('img, video, audio, iframe, object, embed, svg')) return true;
+            value = container.textContent || '';
+        }
+        return value.replace(/[\s\u00a0\u200b-\u200f\ufeff]/g, '') !== '';
+    }
+
+    fields.forEach(function (item) {
+        var field = form.elements.namedItem(item[0]);
+        if (!field) return;
+        var group = field.closest('.form-group');
+        var label = group && group.querySelector('label');
+        if (label && !label.querySelector('.red')) {
+            var marker = document.createElement('span');
+            marker.className = 'red';
+            marker.textContent = ' (*)';
+            label.appendChild(marker);
+        }
+    });
+
+    // Validate before existing submit handlers run. Native required attributes
+    // cannot reliably focus hidden TinyMCE textareas or inactive language tabs.
+    form.addEventListener('submit', function (event) {
+        if (window.tinymce) window.tinymce.triggerSave();
+        form.querySelectorAll('[data-search-required-error]').forEach(function (message) {
+            var group = message.closest('.form-group');
+            if (group) group.classList.remove('has-error');
+            message.remove();
+        });
+        var firstMissing = null;
+        fields.forEach(function (item) {
+            var field = form.elements.namedItem(item[0]);
+            if (!field || hasValue(field)) return;
+            if (!firstMissing) firstMissing = field;
+            var group = field.closest('.form-group');
+            var message = document.createElement('span');
+            message.className = 'help-block';
+            message.setAttribute('data-search-required-error', 'true');
+            message.textContent = item[1] + ' is required.';
+            if (group) {
+                group.classList.add('has-error');
+                group.appendChild(message);
+            } else {
+                field.parentNode.appendChild(message);
+            }
+        });
+        if (!firstMissing) return;
+        event.preventDefault();
+        event.stopImmediatePropagation();
+        var pane = firstMissing.closest('.tab-pane');
+        if (pane) {
+            var tab = $(form).find('a[data-toggle="tab"]').filter(function () {
+                return this.getAttribute('href') === '#' + pane.id;
+            });
+            if (tab.length) tab.tab('show');
+        }
+        window.setTimeout(function () {
+            var group = firstMissing.closest('.form-group') || firstMissing;
+            group.scrollIntoView({behavior: 'smooth', block: 'center'});
+            var editor = editorFor(firstMissing);
+            if (editor) editor.focus();
+            else if ($(firstMissing).hasClass('select2-hidden-accessible') || $(firstMissing).data('select2')) {
+                $(firstMissing).select2('open');
+            } else firstMissing.focus();
+        }, 200);
+    }, true);
+});
+</script>
 @endsection

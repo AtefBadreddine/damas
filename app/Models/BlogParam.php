@@ -42,6 +42,17 @@ class BlogParam extends BaseModel
         return $this->belongsTo("App\Models\Country", "country_id");
     }
 
+    /** Featured selections must never fall back to another country. */
+    public static function forFeaturedCountry($country)
+    {
+        $countryId = Country::resolveId($country);
+        if ($countryId) {
+            $row = static::where('country_id', $countryId)->first();
+            if ($row) return $row;
+        }
+        return new static;
+    }
+
     /**
      * Blog params (including featured posts) for a country model, id, slug, or legacy code.
      * Falls back to Turkey when the country has no row yet.

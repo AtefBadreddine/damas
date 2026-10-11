@@ -16,6 +16,24 @@
 </style>
 <?php //$row = 1; ?>
 <fieldset>
+    <legend>Link settings</legend>
+    <div class="form-group col-md-4">
+        <label>Country <span class="red">(*)</span></label>
+        <select name="country_id" class="form-control select2me" required>
+            <option value="">Select a country</option>
+            @foreach($countries as $country)
+                <option value="{{ $country->id }}" {{ (string) old('country_id', $row->country_id) === (string) $country->id ? 'selected' : '' }}>{{ $country->name_en }}</option>
+            @endforeach
+        </select>
+    </div>
+    <div class="form-group col-md-8">
+        <label>English URL (optional)</label>
+        <input name="url_en" type="url" class="form-control ltr" value="{{ old('url_en', $row->url_en) }}" placeholder="https://damas.net/en/oman">
+        <p class="help-block">Leave empty to use the same path with /en/. Set a separate URL if the English destination differs.</p>
+    </div>
+</fieldset>
+
+<fieldset>
     <!--    <legend>Add a New post</legend>-->
     <div class="col-md-12">
         <div class="panel with-nav-tabs panel-default">
@@ -37,20 +55,20 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label>Arabic Keyword</label>
-                                <input class="form-control" placeholder="Arabic Keyword" value="<?= $row->keyword_ar ?>" name="keyword_ar" type="text">
+                                <input class="form-control" placeholder="Arabic Keyword" value="{{ old('keyword_ar', $row->keyword_ar) }}" name="keyword_ar" type="text">
                             </div> 
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label>URL</label>
+                                <label>Arabic URL / default URL <span class="red">(*)</span></label>
                                 <div class="input-group ltr">
                                     <span class="input-group-addon">URL</span>
-                                    <input class="form-control input-sm" placeholder="URL" value="<?= $row->url ?>" name="url" type="url">
+                                    <input class="form-control input-sm" placeholder="https://damas.net/ar/oman?type=apartments-for-sale" value="{{ old('url', $row->url) }}" name="url" type="url" required>
                                 </div>
                             </div>
                         </div>
                         <div class="col-md-4">
-                            <label>Display in</label>
+                            <label>Display on projects / guide categories</label>
                             <select name="display[]" class="form-control select2me" multiple required>
                                 <option value="projects" <?= strpos($row->display, ';projects;') !== false ?'selected':'' ?>>Projects</option>
 								@foreach(\App\Models\PostCategory::orderBy('placement','asc')->get() as $cat)
@@ -67,7 +85,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>English Keyword</label>
-                                <input class="form-control" placeholder="English Keyword" value="<?= $row->keyword_en ?>" name="keyword_en" type="text">
+                                <input class="form-control" placeholder="English Keyword" value="{{ old('keyword_en', $row->keyword_en) }}" name="keyword_en" type="text">
                             </div> 
                         </div>
 
@@ -79,7 +97,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>French Keyword</label>
-                                <input class="form-control" placeholder="French Keyword" value="<?= $row->keyword_fr ?>" name="keyword_fr" type="text">
+                                <input class="form-control" placeholder="French Keyword" value="{{ old('keyword_fr', $row->keyword_fr) }}" name="keyword_fr" type="text">
                             </div> 
                         </div>
 
@@ -90,7 +108,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>Persian Keyword</label>
-                                <input class="form-control" placeholder="Persian Keyword" value="<?= $row->keyword_fa ?>" name="keyword_fa" type="text">
+                                <input class="form-control" placeholder="Persian Keyword" value="{{ old('keyword_fa', $row->keyword_fa) }}" name="keyword_fa" type="text">
                             </div> 
                         </div>
 
@@ -105,7 +123,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>Russian Keyword</label>
-                                <input class="form-control" placeholder="Russian Keyword" value="<?= $row->keyword_ru ?>" name="keyword_ru" type="text">
+                                <input class="form-control" placeholder="Russian Keyword" value="{{ old('keyword_ru', $row->keyword_ru) }}" name="keyword_ru" type="text">
                             </div> 
                         </div>
 

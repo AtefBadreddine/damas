@@ -275,6 +275,11 @@ $menuLink = function ($routeName, $suffix = '') {
             <li>
                 <a <?= $menuLink('admin.blog.tags'); ?>><i class="fa fa-angle-double-right"></i>Tags</a>
             </li>
+            @if($auth_user->is('superadmin') or $auth_user->can('admin.blog') )<?php /*or $auth_user->can('admin.projects')*/ ?>
+			<li>
+                <a <?= $menuLink('admin.keywords2'); ?>><i class="fa fa-angle-double-right"></i>Keywords</a>
+            </li>
+			@endif
 <!--            <li>
                 <a <?= $menuLink('admin.blog.sections'); ?>><i class="fa fa-angle-double-right"></i> Sections</a>
             </li>-->
@@ -431,10 +436,10 @@ $menuLink = function ($routeName, $suffix = '') {
                 <a <?= $menuLink('admin.apparence.sliders'); ?>><i class="fa fa-angle-double-right"></i>Sliders</a>
             </li>*/ ?>
 			<li>
-                <a <?= $menuLink('admin.apparence.sections'); ?>><i class="fa fa-angle-double-right"></i>Home Projects</a>
+                <a <?= $menuLink('admin.apparence.sections'); ?>><i class="fa fa-angle-double-right"></i>Featured Projects</a>
             </li>
             <li>
-                <a <?= $menuLink('admin.fpost.edit'); ?>><i class="fa fa-angle-double-right"></i>Similar Posts</a>
+                <a <?= $menuLink('admin.fpost.edit'); ?>><i class="fa fa-angle-double-right"></i>Featured Posts</a>
             </li>
 			<?php /*
             <li>
@@ -446,11 +451,6 @@ $menuLink = function ($routeName, $suffix = '') {
             <li>
                <a <?= $menuLink('admin.clear_cache'); ?>><i class="fa fa-angle-double-right"></i>Cache</a>
             </li>
-            @if($auth_user->is('superadmin') or $auth_user->can('admin.blog') )<?php /*or $auth_user->can('admin.projects')*/ ?>
-			<li>
-                <a <?= $menuLink('admin.keywords2'); ?>><i class="fa fa-angle-double-right"></i>Keywords</a>
-            </li>
-			@endif
             @if($auth_user->is('superadmin') or $auth_user->can('admin.params'))
             <li>
                 <a <?= $menuLink('admin.params'); ?>><i class="fa fa-angle-double-right"></i>Home Page</a>

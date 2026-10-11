@@ -192,11 +192,26 @@ $str_get = $str_get . $k.'='.$v.'&';
     @if($route === 'admin.projects')
         <ul class="nav nav-tabs" style="margin:15px 10px 0;">
             <li class="{{ $projectCountryTab === 'all' ? 'active' : '' }}">
-                <a href="{{ route('admin.projects') . (empty($projectCountryParams) ? '' : '?' . http_build_query($projectCountryParams)) }}">All countries</a>
+                <a href="{{ route('admin.projects') . (empty($projectCountryParams) ? '' : '?' . http_build_query($projectCountryParams)) }}">All countries ({{ \DB::table('projects')->count() }})</a>
             </li>
+            <?php
+            $projectCounts = \DB::table('projects')
+            ->join('cities', 'projects.city_id', '=', 'cities.id')
+            ->select('cities.country_id', \DB::raw('COUNT(*) AS total'))
+            ->groupBy('cities.country_id')
+            ->get();
+            
+            $projectCountsByCountry = [];
+            foreach ($projectCounts as $count) {
+                $projectCountsByCountry[$count->country_id] = $count->total;
+            }
+            ?>
+            
             @foreach($projectCountries as $projectCountry)
                 <li class="{{ $projectCountryTab === (string) $projectCountry->id ? 'active' : '' }}">
-                    <a href="{{ route('admin.projects') . '?' . http_build_query(array_merge($projectCountryParams, ['project_country' => $projectCountry->id])) }}">{{ $projectCountry->name_en }}</a>
+                    <a href="{{ route('admin.projects') . '?' . http_build_query(array_merge($projectCountryParams, ['project_country' => $projectCountry->id])) }}">
+                        {{ $projectCountry->name_en }} ({{ isset($projectCountsByCountry[$projectCountry->id]) ? $projectCountsByCountry[$projectCountry->id] : 0 }})
+                    </a>
                 </li>
             @endforeach
         </ul>

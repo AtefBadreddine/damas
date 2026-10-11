@@ -23,7 +23,6 @@ if ($selectedMenuId) {
     <?php
     $inlineEditorHtml = ob_get_clean();
 }
-$editorPlaced = false;
 ?>
 <style>
 #admin-menu-manager { border-top: 3px solid #14858a; border-radius: 8px; }
@@ -87,42 +86,11 @@ $editorPlaced = false;
         </div>
     </div>
     <div class="box-body">
-        <div class="sm-tabs" role="tablist" aria-label="Menu language">
-            @foreach($menuLanguages as $menuLang => $menuLanguage)
-                <button type="button"
-                        class="sm-tab<?= $menuLang === 'ar' ? ' is-active' : ''; ?>"
-                        id="sm-tab-<?= $menuLang; ?>"
-                        role="tab"
-                        aria-controls="sm-pane-<?= $menuLang; ?>"
-                        aria-selected="<?= $menuLang === 'ar' ? 'true' : 'false'; ?>"
-                        tabindex="<?= $menuLang === 'ar' ? '0' : '-1'; ?>"
-                        data-menu-language="<?= $menuLang; ?>">
-                    <span lang="<?= $menuLang; ?>"><?= $menuLanguage['native']; ?></span>
-                    <span class="sm-tab-code"><?= strtoupper($menuLang); ?></span>
-                </button>
-            @endforeach
-        </div>
-
-        @foreach($menuLanguages as $menuLang => $menuLanguage)
-            <?php
-                $tabItems = Helper::menuItemsForLang($allMenuItems, $menuLang);
-                $editorForPane = '';
-                if ($selectedMenuId && !$editorPlaced && Helper::menuContainsId($tabItems, $selectedMenuId)) {
-                    $editorForPane = $inlineEditorHtml;
-                    $editorPlaced = true;
-                }
-            ?>
-            <section class="sm-pane<?= $menuLang === 'ar' ? ' is-active' : ''; ?>"
-                     id="sm-pane-<?= $menuLang; ?>"
-                     role="tabpanel"
-                     aria-labelledby="sm-tab-<?= $menuLang; ?>"
-                     tabindex="0">
-                <h4 class="sm-pane-title"><?= $menuLanguage['label']; ?> version links</h4>
-                <div class="sm-tree" dir="<?= $menuLanguage['direction']; ?>" lang="<?= $menuLang; ?>">
-                    <?= Helper::menu_tree_admin(0, 0, $tabItems, $menuLang, $selectedMenuId ?: null, $editorForPane); ?>
-                </div>
-            </section>
-        @endforeach
+        <section class="sm-pane is-active" id="sm-pane-all">
+            <div class="sm-tree" dir="rtl" lang="ar">
+                <?= Helper::menu_tree_admin(0, 0, $allMenuItems, 'ar', $selectedMenuId ?: null, $inlineEditorHtml); ?>
+            </div>
+        </section>
 
         @if(!$selectedMenuId)
         <div class="sm-editor" id="sm-link-editor">
@@ -140,78 +108,11 @@ $editorPlaced = false;
     var manager = document.getElementById('admin-menu-manager');
     if (!manager) return;
 
-    var tabs = manager.querySelectorAll('.sm-tab');
-    var panes = manager.querySelectorAll('.sm-pane');
-    var storageKey = 'admin-menu-language:' + manager.getAttribute('data-menu-base-url');
-    var selectedMenuId = manager.getAttribute('data-selected-menu-id');
     var baseUrl = manager.getAttribute('data-menu-base-url');
-    var selectedPanes = [];
+    var selectedMenuId = manager.getAttribute('data-selected-menu-id');
     var editor = document.getElementById('sm-inline-editor');
     var createEditor = document.getElementById('sm-link-editor');
     var newLinkBtn = document.getElementById('sm-new-link-btn');
-
-    if (selectedMenuId && selectedMenuId !== '0') {
-        for (var p = 0; p < panes.length; p++) {
-            var deleteButtons = panes[p].querySelectorAll('.sm-tree .button_confirm[data-id]');
-            for (var b = 0; b < deleteButtons.length; b++) {
-                if (deleteButtons[b].getAttribute('data-id') !== selectedMenuId) continue;
-                selectedPanes.push(panes[p]);
-                break;
-            }
-        }
-    }
-
-    function activateTab(language, focusTab) {
-        var selected = manager.querySelector('.sm-tab[data-menu-language="' + language + '"]');
-        if (!selected) return;
-
-        for (var i = 0; i < tabs.length; i++) {
-            var active = tabs[i] === selected;
-            tabs[i].classList.toggle('is-active', active);
-            tabs[i].setAttribute('aria-selected', active ? 'true' : 'false');
-            tabs[i].setAttribute('tabindex', active ? '0' : '-1');
-        }
-        for (var j = 0; j < panes.length; j++) {
-            panes[j].classList.toggle('is-active', panes[j].id === selected.getAttribute('aria-controls'));
-        }
-        placeEditor();
-        if (focusTab) selected.focus();
-        try { window.sessionStorage.setItem(storageKey, language); } catch (error) {}
-    }
-
-    for (var i = 0; i < tabs.length; i++) {
-        tabs[i].addEventListener('click', function () {
-            activateTab(this.getAttribute('data-menu-language'), false);
-        });
-        tabs[i].addEventListener('keydown', function (event) {
-            var index = Array.prototype.indexOf.call(tabs, this);
-            if (event.key === 'ArrowRight') index = (index + 1) % tabs.length;
-            else if (event.key === 'ArrowLeft') index = (index + tabs.length - 1) % tabs.length;
-            else if (event.key === 'Home') index = 0;
-            else if (event.key === 'End') index = tabs.length - 1;
-            else return;
-            event.preventDefault();
-            activateTab(tabs[index].getAttribute('data-menu-language'), true);
-        });
-    }
-
-    try {
-        var rememberedLanguage = window.sessionStorage.getItem(storageKey);
-        if (/^(ar|en|fr|fa|ru)$/.test(rememberedLanguage || '')) {
-            activateTab(rememberedLanguage, false);
-        }
-    } catch (error) {}
-
-    if (selectedPanes.length) {
-        var selectedItemVisible = false;
-        for (var p = 0; p < selectedPanes.length; p++) {
-            if (selectedPanes[p].classList.contains('is-active')) selectedItemVisible = true;
-        }
-        if (!selectedItemVisible) {
-            var selectedTab = document.getElementById(selectedPanes[0].getAttribute('aria-labelledby'));
-            if (selectedTab) activateTab(selectedTab.getAttribute('data-menu-language'), false);
-        }
-    }
 
     function placeEditor() {
         if (!editor) return;

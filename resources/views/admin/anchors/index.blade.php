@@ -177,20 +177,23 @@ const projectTitles = {
 </script>
 <?php
     $group_by = isset($_GET['group_by']) ? $_GET['group_by'] : 'none';
-    $posts = Helper::query("Post", "all");
     $anchors = [];
     $action_cta_exceptions = [
         'https://damas.net/whatsapp_share'
     ];
-    $classify_source_type = function ($url) {
-        $url = trim($url);
-        if ($url === '' || stripos($url, 'damas.net') === false) {
-            return null;
+    $source_labels_by_url = [];
+    $classify_source_type = function ($url) use (&$source_labels_by_url) {
+        if (isset($source_labels_by_url[$url])) {
+            return $source_labels_by_url[$url];
         }
-        // Recognise new guides routes and legacy blog routes.
-        $path = (string) parse_url($url, PHP_URL_PATH);
-        if (preg_match('#/(?:blog|guides)(?:/|$)#i', $path)) {
-            return 'Guides';
+        $path = (string)parse_url(trim($url), PHP_URL_PATH);
+        foreach ([
+            'Guides' => 'blog|guides', 'News' => 'news',
+            'Developers' => 'developers', 'Reports' => 'reports'
+        ] as $label => $segments) {
+            if (preg_match('#/(?:' . $segments . ')(?:/|$)#i', $path)) {
+                return $label;
+            }
         }
         return 'General';
     };
@@ -323,111 +326,198 @@ const projectTitles = {
     $arabic_count = 0;
     $english_count = 0;
     $source_type_filter = isset($_GET['source_type']) ? $_GET['source_type'] : 'all';
-    $original_blog_post_ids = [];
-    $posts_by_id = [];
-    foreach ($posts as $post) {
-        $post_id = (int) $post->id;
-        $original_blog_post_ids[$post_id] = true;
-        $posts_by_id[$post_id] = $post;
-    }
-    if ($group_by == 'disabled_blogs') {
-        foreach (\App\Models\Post::where('published', 0)->get() as $disabled_post) {
-            $post_id = (int) $disabled_post->id;
-            $original_blog_post_ids[$post_id] = true;
-            $posts_by_id[$post_id] = $disabled_post;
+    $countries = \App\Models\Country::ordered()->get();
+    $country_ids = [];
+    $country_aliases = [];
+    foreach ($countries as $country) {
+        $country_ids[(string)$country->id] = true;
+        foreach ([$country->code, $country->slug] as $alias) {
+            if ((string)$alias !== '') {
+                $country_aliases[(string)$alias] = (string)$country->id;
+            }
         }
     }
-    $posts = array_values($posts_by_id);
-        foreach ($posts as $post) {
-        if ($group_by == 'disabled_blogs' && (int) $post->published !== 0) {
-            continue;
-        }
-        if (@$_GET['country'] == 'oman') {
-            if (!($post->countryRel && $post->countryRel->code == 'oman')) {
-                continue;
-            }
-        } elseif (@$_GET['country'] == 'turkey') {
-            if ($post->countryRel && $post->countryRel->code == 'oman') {
-                continue;
-            }
-        }
-        if (empty($post->$content_field)) {
-            continue;
-        }
-        $html = html_entity_decode($post->$content_field, ENT_QUOTES | ENT_HTML5, 'UTF-8');
-        $dom = new \DOMDocument();
-        libxml_use_internal_errors(true);
-        $dom->loadHTML('<?xml encoding="UTF-8">' . $html);
-        libxml_clear_errors();
-        $post_id = (int) $post->id;
-        $blog_web_url = $post->frontUrl();
-        $web_urls = [];
-
-        if ($group_by == 'disabled_blogs') {
-            $web_urls[] = $blog_web_url;
-        } else {
-            if (isset($original_blog_post_ids[$post_id])) {
-                $web_urls[] = $blog_web_url;
-            }
-        }
-        $web_urls = array_values(array_unique($web_urls));
-        if (empty($web_urls)) {
-            continue;
-        }
-        $web_url = $web_urls[0];
-        $source_types = $classify_source_types($web_urls);
-        if (empty($source_types)) {
-            continue;
-        }
-        $source_type = implode(' + ', $source_types);
-        preg_match_all('/<a\b[^>]*>.*?<\/a\s*>/isu', $html, $raw_anchor_matches);
-        $anchor_index = 0;
-        foreach ($raw_anchor_matches[0] as $raw_anchor) {
-            $anchor_dom = new \DOMDocument();
-            libxml_use_internal_errors(true);
-            $anchor_dom->loadHTML('<?xml encoding="UTF-8"><body>' . $raw_anchor . '</body>');
-            libxml_clear_errors();
-            $link = $anchor_dom->getElementsByTagName('a')->item(0);
-            if (!$link) {
-                $anchor_index++;
-                continue;
-            }
-            $href = trim($link->getAttribute('href'));
-            $text = trim($link->textContent);
-            $display_text = $text;
-            if ($display_text === '') {
-                $child_name = null;
-                foreach ($link->childNodes as $child) {
-                    if ($child->nodeType === XML_ELEMENT_NODE) {
-                        $child_name = $child->nodeName;
-                        break;
-                    }
-                }
-                $display_text = $child_name ? '[<' . $child_name . '>]' : '[Empty Anchor]';
-            }
-            $link_type = $classify_link($href);
-            $anchors[] = [
-                'text' => $display_text,
-                'original_text' => $text,
-                'url' => $href,
-                'blog_id' => $post->id,
-                'content_field' => $content_field,
-                'anchor_index' => $anchor_index,
-                'signature' => sha1($raw_anchor),
-                'admin_url' => url("damas-administrator/blog/{$post->id}/edit"),
-                'web_url' => $web_url,
-                'web_urls' => $web_urls,
-                'source_type' => $source_type,
-                'source_types' => $source_types,
-                'source_title' => $post->$title_field,
-                'content' => $content_name,
-                'link_type' => $link_type,
-                'status' => isset($link_statuses[$href]) ? $link_statuses[$href] : null,
-                'updated_at' => $post->created_at
+    $selected_country = isset($_GET['country']) && is_string($_GET['country']) ? $_GET['country'] : 'all';
+    if (isset($country_aliases[$selected_country])) {
+        $selected_country = $country_aliases[$selected_country];
+    }
+    if ($selected_country !== 'all' && $selected_country !== 'global' && !isset($country_ids[$selected_country])) {
+        $selected_country = 'all';
+    }
+    $_GET['country'] = $selected_country;
+    $source_type_options = [
+        'guides' => ['Guides'], 'news' => ['News'],
+        'developers' => ['Developers'], 'reports' => ['Reports'],
+        'listing' => ['Countries', 'Cities', 'Districts'],
+        'country' => ['Countries'], 'city' => ['Cities'], 'region' => ['Districts'],
+        'general' => ['General'], 'project' => ['Projects']
+    ];
+    $owner_sources = [];
+    foreach (\App\Models\Post::with('countryRel')->orderBy('id')->get() as $record) {
+        $post_type = $record->postTypeEnum();
+        $owner_sources[] = [
+            'owner_type' => 'post', 'record' => $record, 'field_prefix' => 'content',
+            'country_id' => $record->countryRel ? (string)$record->countryRel->id : 'global',
+            'label' => $post_type->label(), 'url_method' => 'frontUrl',
+            'admin_url' => route($post_type->adminListRoute() . '.edit', $record->id)
+        ];
+    }
+    foreach (\App\Models\Project::with(['city.countryRel', 'region'])->orderBy('id')->get() as $record) {
+        foreach ([
+            'intro_location' => ['Overview', null],
+            'location' => ['Location', 'getLocation'],
+            'governmental' => ['Government', 'getGovernmental'],
+            'transportation' => ['Transportation', 'getTransportation'],
+            'future_look' => ['Future Look', 'getFutureLook']
+        ] as $prefix => $section) {
+            $owner_sources[] = [
+                'owner_type' => 'project', 'record' => $record, 'field_prefix' => $prefix,
+                'field_label' => $section[0], 'inherited_method' => $section[1],
+                'country_id' => $record->city && $record->city->countryRel
+                    ? (string)$record->city->countryRel->id : 'global',
+                'label' => 'Projects', 'url_method' => 'frontUrl',
+                'admin_url' => route('admin.projects.edit', $record->id)
             ];
-            $anchor_index++;
         }
     }
+    foreach ([
+        'country' => [$countries, 'content', 'Countries', 'countries'],
+        'city' => [\App\Models\City::with('countryRel')->get(), 'about', 'Cities', 'cities'],
+        'region' => [\App\Models\Region::with('city.countryRel')->get(), 'about', 'Districts', 'regions']
+    ] as $owner_type => $config) {
+        foreach ($config[0] as $record) {
+            if (!$record->slug) {
+                continue;
+            }
+            if ($owner_type === 'country') {
+                $country_id = (string)$record->id;
+            } elseif ($owner_type === 'city') {
+                $country_id = $record->countryRel ? (string)$record->countryRel->id : 'global';
+            } else {
+                $country_id = $record->city && $record->city->countryRel
+                    ? (string)$record->city->countryRel->id : 'global';
+            }
+            $owner_sources[] = [
+                'owner_type' => $owner_type, 'record' => $record, 'field_prefix' => $config[1],
+                'country_id' => $country_id, 'label' => $config[2], 'url_method' => 'listingUrl',
+                'admin_url' => route('admin.' . $config[3] . '.edit', $record->id)
+            ];
+        }
+    }
+    // Availability comes from records in this country/mode, independently of the
+    // chosen type, language, anchor text or link filters.
+    $available_source_labels = [];
+    foreach ($owner_sources as $source) {
+        if (($selected_country !== 'all' && $source['country_id'] !== $selected_country)
+            || ($group_by === 'disabled_blogs'
+                && ($source['owner_type'] !== 'post' || (int)$source['record']->published !== 0))) {
+            continue;
+        }
+        $available_source_labels[$source['label']] = true;
+    }
+    $source_type_labels = [];
+    foreach ([
+        'guides' => 'Guides', 'news' => 'News', 'developers' => 'Developers', 'reports' => 'Reports',
+        'project' => 'Projects', 'listing' => 'All Search Pages', 'country' => 'Countries',
+        'city' => 'Cities', 'region' => 'Districts', 'general' => 'General'
+    ] as $type => $label) {
+        if (array_intersect($source_type_options[$type], array_keys($available_source_labels))) {
+            $source_type_labels[$type] = $label;
+        }
+    }
+    if (!is_string($source_type_filter) || !isset($source_type_labels[$source_type_filter])) {
+        $source_type_filter = 'all';
+    }
+    $_GET['source_type'] = $source_type_filter;
+    $matches_source_type = function ($types) use ($source_type_filter, $source_type_options) {
+        return $source_type_filter === 'all'
+            || count(array_intersect($types, $source_type_options[$source_type_filter])) > 0;
+    };
+    $collect_anchors = function ($language) use ($owner_sources, $selected_country, $group_by, $link_statuses, $classify_link, &$source_labels_by_url) {
+        $result = [];
+        $inherited_sections = [];
+        foreach ($owner_sources as $source) {
+            $record = $source['record'];
+            if ($group_by === 'disabled_blogs'
+                && ($source['owner_type'] !== 'post' || (int)$record->published !== 0)) {
+                continue;
+            }
+            if ($selected_country !== 'all' && $source['country_id'] !== $selected_country) {
+                continue;
+            }
+            $field = $source['field_prefix'] . '_' . $language;
+            if ((string)$record->$field === '') {
+                continue;
+            }
+            // These project sections are fallbacks. Do not present an override
+            // from a district (or its linked post) as editable project content.
+            if (!empty($source['inherited_method']) && $record->region) {
+                $key = $record->region->id . '|' . $field;
+                if (!array_key_exists($key, $inherited_sections)) {
+                    $method = $source['inherited_method'];
+                    $inherited_sections[$key] = (string)$record->region->$method($language) !== '';
+                }
+                if ($inherited_sections[$key]) {
+                    continue;
+                }
+            }
+            try {
+                $method = $source['url_method'];
+                $web_url = $record->$method();
+            } catch (\Exception $error) {
+                continue;
+            }
+            if (!$web_url) {
+                continue;
+            }
+            $path = (string)parse_url($web_url, PHP_URL_PATH);
+            $path = preg_replace('#^/(?:ar|en)(?=/|$)#i', '', $path);
+            $web_url = url($language . '/' . ltrim($path, '/'));
+            $source_labels_by_url[$web_url] = $source['label'];
+            $title_field = ($source['owner_type'] === 'post' ? 'title_' : 'name_') . $language;
+            $html = html_entity_decode((string)$record->$field, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+            preg_match_all('/<a\b[^>]*>.*?<\/a\s*>/isu', $html, $matches);
+            foreach ($matches[0] as $index => $raw_anchor) {
+                $dom = new \DOMDocument();
+                $previous_errors = libxml_use_internal_errors(true);
+                $dom->loadHTML('<?xml encoding="UTF-8"><body>' . $raw_anchor . '</body>');
+                libxml_clear_errors();
+                libxml_use_internal_errors($previous_errors);
+                $link = $dom->getElementsByTagName('a')->item(0);
+                if (!$link) {
+                    continue;
+                }
+                $href = trim($link->getAttribute('href'));
+                $text = trim($link->textContent);
+                $display_text = $text;
+                if ($text === '') {
+                    $child_name = null;
+                    foreach ($link->childNodes as $child) {
+                        if ($child->nodeType === XML_ELEMENT_NODE) {
+                            $child_name = $child->nodeName;
+                            break;
+                        }
+                    }
+                    $display_text = $child_name ? '[<' . $child_name . '>]' : '[Empty Anchor]';
+                }
+                $result[] = [
+                    'text' => $display_text, 'original_text' => $text, 'url' => $href,
+                    'owner_type' => $source['owner_type'], 'owner_id' => (int)$record->id,
+                    'content_field' => $field, 'anchor_index' => $index, 'signature' => sha1($raw_anchor),
+                    'admin_url' => $source['admin_url'], 'web_url' => $web_url, 'web_urls' => [$web_url],
+                    'source_type' => $source['label'], 'source_types' => [$source['label']],
+                    'source_title' => (string)$record->$title_field,
+                    'content' => (isset($source['field_label']) ? $source['field_label'] : 'Content')
+                        . ($language === 'en' ? ' English' : ' Arabic'),
+                    'link_type' => $classify_link($href),
+                    'status' => isset($link_statuses[$href]) ? $link_statuses[$href] : null,
+                    'updated_at' => (string)($record->updated_at ?: $record->created_at)
+                ];
+            }
+        }
+        return $result;
+    };
+    $anchors = $collect_anchors(@$_GET['lang'] === 'en' ? 'en' : 'ar');
     $sort = @$_GET['sort'];
     $order = @$_GET['order'] == 'desc' ? 'desc' : 'asc';
     if ($sort == 'link_type') {
@@ -454,18 +544,9 @@ const projectTitles = {
             return $anchor['link_type'] == 'Action / CTA';
         });
     }
-    if ($source_type_filter != 'all') {
-        $wanted_source_type = [
-            'guides' => 'Guides',
-            'general' => 'General'
-        ];
-        if (isset($wanted_source_type[$source_type_filter])) {
-            $wanted = $wanted_source_type[$source_type_filter];
-            $anchors = array_filter($anchors, function ($anchor) use ($wanted) {
-                return isset($anchor['source_types']) && in_array($wanted, $anchor['source_types']);
-            });
-        }
-    }
+    $anchors = array_filter($anchors, function ($anchor) use ($matches_source_type) {
+        return $matches_source_type($anchor['source_types']);
+    });
     $available_statuses = [];
     $has_not_checked = false;
     foreach ($anchors as $anchor) {
@@ -505,159 +586,58 @@ const projectTitles = {
         });
     }
     $groupable_columns = ['text', 'url', 'web_url', 'link_type', 'status', 'disabled_blogs'];
-    $count_language_rows = function ($language_field) use ($posts, $link_statuses, $group_by, $groupable_columns, $classify_link, $matches_search, $matches_search_value, $search_column, $search_value, $search_mode, $status_label, $classify_source_types, $source_type_filter, $original_blog_post_ids) {
-        $language_title_field = $language_field == 'content_en' ? 'title_en' : 'title_ar';
+    $count_language_rows = function ($language_field) use ($collect_anchors, $group_by, $groupable_columns, $matches_search, $matches_search_value, $search_column, $search_value, $search_mode, $status_label, $matches_source_type) {
         $row_count = 0;
-        $group_keys = [];
         $group_counts = [];
-        $wanted_source_type = [
-            'guides' => 'Guides',
-            'general' => 'General'
-        ];
-        foreach ($posts as $post) {
-            if ($group_by == 'disabled_blogs' && (int) $post->published !== 0) {
+        $language = $language_field === 'content_en' ? 'en' : 'ar';
+        foreach ($collect_anchors($language) as $row) {
+            if (!$matches_source_type($row['source_types'])) {
                 continue;
             }
-            if (@$_GET['country'] == 'oman' && !($post->countryRel && $post->countryRel->code == 'oman')) {
+            $wanted_link_type = ['internal' => 'Internal', 'external' => 'External', 'action_cta' => 'Action / CTA'];
+            if (isset($wanted_link_type[@$_GET['link_type']]) && $row['link_type'] !== $wanted_link_type[$_GET['link_type']]) {
                 continue;
             }
-            if (@$_GET['country'] == 'turkey' && $post->countryRel && $post->countryRel->code == 'oman') {
+            if (@$_GET['status_filter'] === 'not_checked' && $row['status'] !== null) {
                 continue;
             }
-            if (empty($post->$language_field)) {
+            $selected_status = isset($_GET['status_filter']) ? $_GET['status_filter'] : 'all';
+            if ($selected_status !== 'all' && $selected_status !== '' && $selected_status !== 'not_checked'
+                && ($row['status'] === null || $status_label($row['status']) !== $selected_status)) {
                 continue;
             }
-            $post_id = (int) $post->id;
-            $language_html = html_entity_decode($post->$language_field, ENT_QUOTES | ENT_HTML5, 'UTF-8');
-            $language_blog_web_url = $post->frontUrl();
-            $language_web_urls = [];
-            if ($group_by == 'disabled_blogs') {
-                $language_web_urls[] = $language_blog_web_url;
-            } else {
-                if (isset($original_blog_post_ids[$post_id])) {
-                    $language_web_urls[] = $language_blog_web_url;
-                }
-            }
-            $language_web_urls = array_values(array_unique($language_web_urls));
-            if (empty($language_web_urls)) {
+            if ($search_value !== '' && $search_column !== 'count' && !$matches_search($row, $search_column, $search_value, $search_mode)) {
                 continue;
             }
-            $language_web_url = $language_web_urls[0];
-            $language_source_types = $classify_source_types($language_web_urls);
-            if (empty($language_source_types)) {
-                continue;
-            }
-            if ($source_type_filter != 'all' && isset($wanted_source_type[$source_type_filter]) && !in_array($wanted_source_type[$source_type_filter], $language_source_types)) {
-                continue;
-            }
-            preg_match_all('/<a\b[^>]*>.*?<\/a\s*>/isu', $language_html, $language_raw_anchors);
-            foreach ($language_raw_anchors[0] as $language_raw_anchor) {
-                $language_dom = new \DOMDocument();
-                libxml_use_internal_errors(true);
-                $language_dom->loadHTML('<?xml encoding="UTF-8"><body>' . $language_raw_anchor . '</body>');
-                libxml_clear_errors();
-                $language_link = $language_dom->getElementsByTagName('a')->item(0);
-                if (!$language_link) {
-                    continue;
-                }
-                $language_href = trim($language_link->getAttribute('href'));
-                $language_text = trim($language_link->textContent);
-                $language_display_text = $language_text;
-                if ($language_display_text === '') {
-                    $language_child_name = null;
-                    foreach ($language_link->childNodes as $language_child) {
-                        if ($language_child->nodeType === XML_ELEMENT_NODE) {
-                            $language_child_name = $language_child->nodeName;
-                            break;
-                        }
-                    }
-                    $language_display_text = $language_child_name ? '[<' . $language_child_name . '>]' : '[Empty Anchor]';
-                }
-                $language_link_type = $classify_link($language_href);
-                $language_status = isset($link_statuses[$language_href]) ? $link_statuses[$language_href] : null;
-                if (@$_GET['link_type'] == 'internal' && $language_link_type != 'Internal') {
-                    continue;
-                }
-                if (@$_GET['link_type'] == 'external' && $language_link_type != 'External') {
-                    continue;
-                }
-                if (@$_GET['link_type'] == 'action_cta' && $language_link_type != 'Action / CTA') {
-                    continue;
-                }
-                if (@$_GET['status_filter'] == 'not_checked' && $language_status !== null) {
-                    continue;
-                }
-                if (isset($_GET['status_filter']) && $_GET['status_filter'] !== 'all' && $_GET['status_filter'] !== 'not_checked' && $_GET['status_filter'] !== '') {
-                    if ($language_status === null || $status_label($language_status) !== $_GET['status_filter']) {
-                        continue;
-                    }
-                }
-                $language_row = [
-                    'text' => $language_display_text,
-                    'url' => $language_href,
-                    'web_url' => $language_web_url,
-                    'web_urls' => $language_web_urls,
-                    'source_type' => implode(' + ', $language_source_types),
-                    'source_types' => $language_source_types,
-                    'admin_url' => url("damas-administrator/blog/{$post->id}/edit"),
-                    'link_type' => $language_link_type,
-                    'status' => $language_status,
-                    'updated_at' => $post->created_at,
-                    'source_title' => $post->$language_title_field,
-                ];
-                if ($search_value !== '' && $search_column != 'count' && !$matches_search($language_row, $search_column, $search_value, $search_mode)) {
-                    continue;
-                }
-                if ($group_by == 'none' || !in_array($group_by, $groupable_columns)) {
-                    if ($search_column == 'count' && $search_value !== '' && !$matches_search_value('1', $search_value, $search_mode)) {
-                        continue;
-                    }
+            if ($group_by === 'none' || !in_array($group_by, $groupable_columns, true)) {
+                if ($search_column !== 'count' || $search_value === '' || $matches_search_value('1', $search_value, $search_mode)) {
                     $row_count++;
+                }
+                continue;
+            }
+            if (in_array($group_by, ['web_url', 'disabled_blogs'], true)) {
+                $keys = $row['web_urls'];
+            } elseif ($group_by === 'status') {
+                $keys = [$row['status'] === null ? '__NOT_CHECKED__' : $row['status']];
+            } else {
+                $keys = [$row[$group_by]];
+            }
+            foreach ($keys as $key) {
+                if ($search_column === 'web_url' && $search_value !== '' && !$matches_search_value($key, $search_value, $search_mode)) {
                     continue;
                 }
-                if ($group_by == 'text') {
-                    $group_value = $language_display_text;
-                } elseif ($group_by == 'url') {
-                    $group_value = $language_href;
-                } elseif (in_array($group_by, ['web_url', 'disabled_blogs'])) {
-                    foreach ($language_web_urls as $source_url) {
-                        if ($search_column == 'web_url' && $search_value !== '' && !$matches_search_value($source_url, $search_value, $search_mode)) {
-                            continue;
-                        }
-                        $group_key = (string) $source_url;
-                        $group_keys[$group_key] = true;
-                        if (!isset($group_counts[$group_key])) {
-                            $group_counts[$group_key] = 0;
-                        }
-                        $group_counts[$group_key]++;
-                    }
-                    continue;
-                } elseif ($group_by == 'link_type') {
-                    $group_value = $language_link_type;
-                } else {
-                    $group_value = $language_status === null ? '__NOT_CHECKED__' : (string) $language_status;
-                }
-                $group_key = (string) $group_value;
-                $group_keys[$group_key] = true;
-                if (!isset($group_counts[$group_key])) {
-                    $group_counts[$group_key] = 0;
-                }
-                $group_counts[$group_key]++;
+                $group_counts[(string)$key] = isset($group_counts[(string)$key]) ? $group_counts[(string)$key] + 1 : 1;
             }
         }
-        if ($group_by == 'none' || !in_array($group_by, $groupable_columns)) {
+        if ($group_by === 'none' || !in_array($group_by, $groupable_columns, true)) {
             return $row_count;
         }
-        if ($search_column == 'count' && $search_value !== '') {
-            $matched_groups = 0;
-            foreach ($group_counts as $group_count) {
-                if ($matches_search_value($group_count, $search_value, $search_mode)) {
-                    $matched_groups++;
-                }
-            }
-            return $matched_groups;
+        if ($search_column === 'count' && $search_value !== '') {
+            return count(array_filter($group_counts, function ($count) use ($matches_search_value, $search_value, $search_mode) {
+                return $matches_search_value($count, $search_value, $search_mode);
+            }));
         }
-        return count($group_keys);
+        return count($group_counts);
     };
     $arabic_count = $count_language_rows('content_ar');
     $english_count = $count_language_rows('content_en');
@@ -791,54 +771,6 @@ const projectTitles = {
             $displayed_urls[] = $url;
         }
     }
-    // $duplicate_source_batches = [];
-    // $duplicate_anchor_count = 0;
-    // if ($group_by == 'web_url') {
-    //     foreach ($display_rows as $row) {
-    //         $items = $row['items'];
-    //         usort($items, function ($a, $b) {
-    //             return $a['anchor_index'] <=> $b['anchor_index'];
-    //         });
-    //         $seen_pairs = [];
-    //         $duplicate_items = [];
-    //         $duplicate_physical_seen = [];
-    //         foreach ($items as $item) {
-    //             $pair_key = (string) $item['text'] . "\x1F" . (string) $item['url'];
-    //             if (!isset($seen_pairs[$pair_key])) {
-    //                 $seen_pairs[$pair_key] = true;
-    //                 continue;
-    //             }
-    //             $physical_key = $item['blog_id'] . '|' . $item['content_field'] . '|' . $item['anchor_index'] . '|' . $item['signature'];
-    //             if (isset($duplicate_physical_seen[$physical_key])) {
-    //                 continue;
-    //             }
-    //             $duplicate_physical_seen[$physical_key] = true;
-    //             $duplicate_items[] = [
-    //                 'post_id' => $item['blog_id'],
-    //                 'content_field' => $item['content_field'],
-    //                 'anchor_index' => $item['anchor_index'],
-    //                 'signature' => $item['signature']
-    //             ];
-    //         }
-    //         usort($duplicate_items, function ($a, $b) {
-    //             return $b['anchor_index'] <=> $a['anchor_index'];
-    //         });
-    //         $source_urls = [];
-    //         foreach ($row['items'] as $item) {
-    //             $item_web_urls = isset($item['web_urls']) && is_array($item['web_urls'])
-    //                 ? $item['web_urls']
-    //                 : [$item['web_url']];
-    //             foreach ($item_web_urls as $source_url) {
-    //                 $source_urls[$source_url] = true;
-    //             }
-    //         }
-    //         $duplicate_source_batches[] = [
-    //             'source_urls' => array_keys($source_urls),
-    //             'anchors' => $duplicate_items
-    //         ];
-    //         $duplicate_anchor_count += count($duplicate_items);
-    //     }
-    // }
 ?>
 <div id="anchors-page">
     <div class="filters">
@@ -847,14 +779,17 @@ const projectTitles = {
         </button>
         <select id="country-filter" onchange="window.location.href='?country='+this.value+'&lang=<?= @$_GET['lang'] == 'en' ? 'en' : 'ar' ?>&source_type=<?= urlencode($source_type_filter) ?>&link_type=<?= @$_GET['link_type'] ?: 'all' ?>&status_filter=<?= @$_GET['status_filter'] ?: 'all' ?>&group_by=<?= @$_GET['group_by'] ?: 'none' ?>&search_column=<?= urlencode($search_column) ?>&search_mode=<?= urlencode($search_mode) ?>&search_value=<?= urlencode($search_value) ?>'">
             <option value="all" <?= empty($_GET['country']) || $_GET['country'] == 'all' ? 'selected' : '' ?>>All Countries</option>
-            <option value="oman" <?= @$_GET['country'] == 'oman' ? 'selected' : '' ?>>Oman</option>
-            <option value="turkey" <?= @$_GET['country'] == 'turkey' ? 'selected' : '' ?>>Turkey</option>
+            @foreach($countries as $country)
+            <option value="{{ $country->id }}" <?= $selected_country === (string)$country->id ? 'selected' : '' ?>>{{ $country->name_en ?: $country->name_ar }}</option>
+            @endforeach
+            <option value="global" <?= $selected_country === 'global' ? 'selected' : '' ?>>Global / Unassigned</option>
         </select>
         <?php $source_type_filter = isset($_GET['source_type']) ? $_GET['source_type'] : 'all'; ?>
         <select onchange="window.location.href='?country=<?= @$_GET['country'] ?: 'all' ?>&lang=<?= @$_GET['lang'] == 'en' ? 'en' : 'ar' ?>&source_type='+this.value+'&link_type=<?= @$_GET['link_type'] ?: 'all' ?>&status_filter=<?= @$_GET['status_filter'] ?: 'all' ?>&group_by=<?= @$_GET['group_by'] ?: 'none' ?>&search_column=<?= urlencode($search_column) ?>&search_mode=<?= urlencode($search_mode) ?>&search_value=<?= urlencode($search_value) ?>'">
             <option value="all" <?= $source_type_filter == 'all' ? 'selected' : '' ?>>All Types</option>
-            <option value="guides" <?= $source_type_filter == 'guides' ? 'selected' : '' ?>>Guides</option>
-            <option value="general" <?= $source_type_filter == 'general' ? 'selected' : '' ?>>General</option>
+            <?php foreach ($source_type_labels as $type_value => $type_label): ?>
+            <option value="<?= $type_value ?>" <?= $source_type_filter === $type_value ? 'selected' : '' ?>><?= $type_label ?></option>
+            <?php endforeach; ?>
         </select>
         <select onchange="window.location.href='?country=<?= @$_GET['country'] ?: 'all' ?>&lang=<?= @$_GET['lang'] == 'en' ? 'en' : 'ar' ?>&source_type=<?= urlencode($source_type_filter) ?>&link_type=<?= @$_GET['link_type'] ?: 'all' ?>&status_filter='+this.value+'&group_by=<?= @$_GET['group_by'] ?: 'none' ?>&search_column=<?= urlencode($search_column) ?>&search_mode=<?= urlencode($search_mode) ?>&search_value=<?= urlencode($search_value) ?>'">
             <option value="all" <?= empty($_GET['status_filter']) || $_GET['status_filter'] == 'all' ? 'selected' : '' ?>>All HTTP</option>
@@ -885,15 +820,9 @@ const projectTitles = {
         <button id="update-link-statuses-button" type="button" class="btn btn-primary btn-sm" onclick="updateLinkStatuses()">
             <i class="fa fa-refresh"></i> Update HTTP
         </button>
-        <a target="_blank" href="<?= route('admin.anchors.export', [
-            'country' => @$_GET['country'] ?: 'all',
-            'lang' => @$_GET['lang'] == 'en' ? 'en' : 'ar',
-            'source_type' => $source_type_filter,
-            'link_type' => @$_GET['link_type'] ?: 'all',
-            'group_by' => @$_GET['group_by'] ?: 'none'
-        ]) ?>" class="btn btn-default btn-sm">
+        <button type="button" id="export-anchors-csv" class="btn btn-default btn-sm">
             <i class="fa fa-download"></i> Export CSV
-        </a>
+        </button>
         <button type="button" id="mass-update-open-button" style="display:none;">Mass Update</button>
         <div id="mass-update-popup" class="mass-update-popup" style="display:none;">
             <div class="mass-update-popup-content">
@@ -1002,13 +931,14 @@ const projectTitles = {
                         $mass_update_items = [];
                         $mass_update_seen = [];
                         foreach ($row['items'] as $item) {
-                            $mass_update_key = $item['blog_id'] . '|' . $item['content_field'] . '|' . $item['anchor_index'] . '|' . $item['signature'];
+                            $mass_update_key = $item['owner_type'] . '|' . $item['owner_id'] . '|' . $item['content_field'] . '|' . $item['anchor_index'] . '|' . $item['signature'];
                             if (isset($mass_update_seen[$mass_update_key])) {
                                 continue;
                             }
                             $mass_update_seen[$mass_update_key] = true;
                             $mass_update_items[] = [
-                                'post_id' => $item['blog_id'],
+                                'owner_type' => $item['owner_type'],
+                                'owner_id' => $item['owner_id'],
                                 'content_field' => $item['content_field'],
                                 'anchor_index' => $item['anchor_index'],
                                 'signature' => $item['signature']
@@ -1177,6 +1107,50 @@ const projectTitles = {
             </table>
         </div>
     </div>
+    <?php
+        $csv_rows = [['#', 'Count', 'Target Query', 'Target URL', 'Source URL', 'Edit / Admin', 'Source Type', 'Link Type', 'Status', 'Updated At']];
+        foreach (array_values($display_rows) as $csv_index => $csv_row) {
+            $csv_values = ['text' => [], 'url' => [], 'web_url' => [], 'admin_url' => [], 'source_type' => [], 'link_type' => [], 'status' => [], 'updated_at' => []];
+            foreach ($csv_row['items'] as $csv_item) {
+                foreach ($csv_values as $csv_field => $unused) {
+                    if ($csv_field === 'web_url') {
+                        $values = $csv_item['web_urls'];
+                    } elseif ($csv_field === 'status') {
+                        $values = [$status_label($csv_item['status'])];
+                    } else {
+                        $values = [(string)$csv_item[$csv_field]];
+                    }
+                    foreach ($values as $csv_value) {
+                        $csv_values[$csv_field][(string)$csv_value] = true;
+                    }
+                }
+            }
+            $csv_line = [$csv_index + 1, $csv_row['count']];
+            foreach ($csv_values as $values) {
+                $csv_line[] = implode(' | ', array_keys($values));
+            }
+            $csv_rows[] = $csv_line;
+        }
+    ?>
+    <script type="application/json" id="anchors-csv-data"><?= json_encode($csv_rows, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_UNESCAPED_UNICODE) ?></script>
+    <script>
+        document.getElementById('export-anchors-csv').addEventListener('click', function () {
+            const rows = JSON.parse(document.getElementById('anchors-csv-data').textContent);
+            const csv = '\uFEFF' + rows.map(row => row.map(value => {
+                let text = String(value);
+                if (/^[=+@-]/.test(text)) text = "'" + text;
+                return '"' + text.replace(/"/g, '""') + '"';
+            }).join(',')).join('\r\n');
+            const url = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8' }));
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'content-links-' + new Date().toISOString().slice(0, 10) + '.csv';
+            document.body.appendChild(link);
+            link.click();
+            link.remove();
+            setTimeout(() => URL.revokeObjectURL(url), 1000);
+        });
+    </script>
     <script>
         // async function removeDuplicateAnchors(){
         //     const button = document.getElementById("remove-duplicate-anchors-button");
@@ -1366,7 +1340,7 @@ const projectTitles = {
             selectedCheckboxes.forEach(checkbox => {
                 const checkboxAnchors = JSON.parse(checkbox.dataset.anchors);
                 checkboxAnchors.forEach(anchor => {
-                    const key = anchor.post_id + '|' + anchor.content_field + '|' + anchor.anchor_index + '|' + anchor.signature;
+                    const key = anchor.owner_type + '|' + anchor.owner_id + '|' + anchor.content_field + '|' + anchor.anchor_index + '|' + anchor.signature;
                     uniqueAnchors.set(key, anchor);
                 });
             });

@@ -1,6 +1,6 @@
 <?php
 if (!isset($availables_langs))
-    $availables_langs = ['ar', 'en'];
+    $availables_langs = LaravelLocalization::getSupportedLanguagesKeys();
 
 
 if (!isset($hide_whatsapp))

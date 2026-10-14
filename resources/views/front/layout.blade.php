@@ -1,8 +1,8 @@
 <?php
-// Controllers may still list fr/pe/ru; keep only supported locales for hreflang.
+// Controllers may list disabled locales; keep only supportedLocales for hreflang.
 $availables_langs = isset($availables_langs)
     ? array_values(array_intersect($availables_langs, LaravelLocalization::getSupportedLanguagesKeys()))
-    : ['ar', 'en'];
+    : LaravelLocalization::getSupportedLanguagesKeys();
 // The AR/EN switch only links to a translation that exists ($link_lang overrides).
 $hasLinkLang = isset($link_lang) && $link_lang != '';
 
@@ -152,6 +152,15 @@ foreach ($citys as $layoutCity) {
 		@if(in_array('en',$availables_langs))
 		<link rel="alternate" href="<?= seo_url("en"); ?>" hreflang="en"/>
         @endif
+		@if(in_array('fr',$availables_langs))
+		<link rel="alternate" href="<?= seo_url("fr"); ?>" hreflang="fr"/>
+        @endif
+		@if(in_array('pe',$availables_langs))
+		<link rel="alternate" href="<?= seo_url('pe'); ?>" hreflang='fa'/>
+		@endif
+		@if(in_array('ru',$availables_langs))
+		<link rel="alternate" href="<?= seo_url('ru'); ?>" hreflang='ru'/>
+		@endif
         <?php $xDefaultLang = in_array(LaravelLocalization::getDefaultLocale(), $availables_langs) ? LaravelLocalization::getDefaultLocale() : reset($availables_langs); ?>
         @if($xDefaultLang)
         <link rel="alternate" href="<?= seo_url($xDefaultLang); ?>" hreflang="x-default" />

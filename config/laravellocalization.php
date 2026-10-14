@@ -1,11 +1,19 @@
 <?php
 
 return [
+	// The only switch for a locale: listed here, it gets routes, sitemaps, hreflang and links.
+	// Not listed, its /{locale}/... URLs are 404s. Run config:clear and cache:clear after a change.
 	'supportedLocales' => [
 		'ar'          => ['name' => 'Arabic',                 'script' => 'Arab', 'native' => 'العربية'],
 		'en'          => ['name' => 'English',                'script' => 'Latn', 'native' => 'English'],
-		// fr, pe and ru are retired: RedirectToLocalePrefix 301s /fr|/pe|/ru/... to /en/...
+		// 'fr'          => ['name' => 'French',                 'script' => 'Latn', 'native' => 'français'],
+		// 'pe'          => ['name' => 'Persian',                'script' => 'Arab', 'native' => 'فارسی'],
+		// 'ru'          => ['name' => 'Russian',                'script' => 'Cyrl', 'native' => 'русский'],
 	],
+
+	// Every locale the code and DB columns can serve. This never enables anything; it only tells
+	// RedirectToLocalePrefix that /fr is a disabled locale (404), not a page slug to prefix with /ar.
+	'knownLocales' => ['ar', 'en', 'fr', 'pe', 'ru'],
 	
 	
 	

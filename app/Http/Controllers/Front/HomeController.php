@@ -4753,6 +4753,9 @@ class HomeController extends BaseController
 		
 		//echo 'damas.net<br>';
 
+		// French pushes only while fr is in supportedLocales; otherwise /fr URLs are 404s.
+		$frEnabled = in_array('fr', \LaravelLocalization::getSupportedLanguagesKeys());
+
 		$posts = DB::table('posts')
 				->where('title_ar','!=','')
 				//->whereIn('lang',array('ar','all'))
@@ -4785,6 +4788,15 @@ class HomeController extends BaseController
 			
 				DB::table('posts')->where("id",$p->id)->update(["send_notif_en" => 1]);
 			}
+			if($frEnabled and $p->send_notif_fr==false and $send_post==false and $p->title_fr!=''){
+				$send_post = true;
+				$url = 'https://damas.net/fr/'. ($p->type) .'/'.$p->slug;
+				Helper::sendOnesignalNotification($app_id_damasnet,$auth_key_damasnet,$p->title_fr,$p->seo_description_fr,$img,$url);
+				Helper::sendOnesignalNotification($app_id_damasturk,$auth_key_damasturk,$p->title_fr,$p->seo_description_fr,$img,$url);
+				Helper::sendOnesignalNotification($app_id_damasturk_no_w,$auth_key_damasturk_no_w,$p->title_fr,$p->seo_description_fr,$img,$url);
+
+				DB::table('posts')->where("id",$p->id)->update(["send_notif_fr" => 1]);
+			}
 			if($send_post == true)
 			break;
 		}
@@ -4795,8 +4807,11 @@ class HomeController extends BaseController
 		if($send_post == false){
 			$projects = DB::table('projects')
 					->where("published", 1)
-					->where(function($query) {
+					->where(function($query) use ($frEnabled) {
 							$query->where('send_notif_ar', 0)->orWhere('send_notif_en', 0);
+							if ($frEnabled) {
+								$query->orWhere('send_notif_fr', 0);
+							}
 					})
 					->orderBy('id','asc')
 					->get();
@@ -4823,7 +4838,15 @@ class HomeController extends BaseController
 					Helper::sendOnesignalNotification($app_id_damasturk_no_w,$auth_key_damasturk_no_w,$p->seo_title_en,$p->seo_description_en,$img,$url);
 					DB::table('projects')->where("id" , $pr->id)->update(["send_notif_en" => 1]);
 				}
-				
+				if($frEnabled and $p->send_notif_fr==false  and $send_post==false){
+
+					$url = 'https://www.damas.net/fr'.$notifPath;
+					Helper::sendOnesignalNotification($app_id_damasnet,$auth_key_damasnet,$p->seo_title_fr,$p->seo_description_fr,$img,$url);
+					Helper::sendOnesignalNotification($app_id_damasturk,$auth_key_damasturk,$p->seo_title_fr,$p->seo_description_fr,$img,$url);
+					Helper::sendOnesignalNotification($app_id_damasturk_no_w,$auth_key_damasturk_no_w,$p->seo_title_fr,$p->seo_description_fr,$img,$url);
+					DB::table('projects')->where("id" , $pr->id)->update(["send_notif_fr" => 1]);
+				}
+
 				
 				
 				break;

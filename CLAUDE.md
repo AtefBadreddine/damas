@@ -34,7 +34,7 @@ The URL scheme was restructured. **Old routes are kept only so they can 301 to t
   - `add` 301s unprefixed page URLs to `/ar/...`.
   - `strip` 301s `/ar/login` → `/login` and `/ar` → `/`.
   - Non-GET requests get a 307 instead of a 301.
-  - Retired `landing2-5` and `landing-*` URLs `abort(404)` here, before any other handling.
+  - Retired `landing2-5` and `landing-*` URLs, and URLs under disabled locales (`/fr/...` when `fr` isn't in `supportedLocales`), `abort(404)` here, before any other handling.
   - Unprefixed old listing URLs (`/{type}/{city}/{var1?}/{var2?}`, where `{type}` passes `Helper::isLegacyListingType()`) 301 straight to the geo URL here via `Helper::legacyListingUrlFromRequest()`, one hop, before the `/ar` redirect. The old AMP search form (`?amp=1` on a listing path) gets a 302. `?amp=1` on any other path is ignored.
 - **Endpoints stay unprefixed**: AJAX, cron, callus, login/register, `damas-administrator`, webhooks and similar are listed in `locale_prefix_hidden_segment()` in `app/Helpers/Helper.php`. Add any new technical endpoint there, or it will be redirected to `/ar/...`.
 - **`$legacyGroup`** in routes.php registers auth, endpoint and home routes twice. One copy is the normal one. The other is a `/{defaultLocale}/...` copy that strips the prefix.
@@ -52,7 +52,7 @@ The URL scheme was restructured. **Old routes are kept only so they can 301 to t
 ## Other architecture notes
 
 - **Full-page cache**: the `CacheGetPages` global middleware stores the HTML of every GET response for 30 days, keyed by full URL (`page_cache_*` in the file cache). Admin, cron, currency, webhook and some AJAX paths are exempt. After changing templates, routes or redirects, run `php artisan cache:clear` (or use the admin `clear_cache` action or `/clear-cache`), or you will see stale output.
-- **Locales** (`config/laravellocalization.php`): `ar` (default), `en`, `fr`, `pe` (Persian), `ru`. `hideDefaultLocaleInURL` is false. Content code maps `pe` to `fa` when selecting DB language columns.
+- **Locales** (`config/laravellocalization.php`): `supportedLocales` is the only switch. It currently enables `ar` (default) and `en`; `fr`, `pe` (Persian) and `ru` are commented out. An enabled locale gets routes, `/{locale}/sitemap_xml/*`, hreflang tags, `/qr` language options and French OneSignal pushes. Locales in `knownLocales` but not in `supportedLocales` `abort(404)` in `RedirectToLocalePrefix`. Run `config:clear` and `cache:clear` after toggling. `hideDefaultLocaleInURL` is false. Content code maps `pe` to `fa` when selecting DB language columns.
 - **Controllers are very large**: `Front/HomeController.php` (~7.8k lines), `Admin/AdminController.php` (~5k) and `app/Helpers/Helper.php` (~4.4k, a global `Helper` class plus global functions, classmap-autoloaded). Grep for the method you need instead of reading them whole. The newer, cleaner code is `Front/ProjectController` and `Front/PostController`.
 - **Models**: `app/Models`, tables prefixed `dms_`. Roles and permissions use `bican/roles`, enforced by the `checkpermission` middleware.
 - **Other front parts**: an AMP mirror under `/amp` (`Front/AmpController`, `resources/views/amp`), and the `exchange` middleware for currency conversion. A WhatsApp Business webhook (`/webhooks/whatsapp`) is configured in `config/whatsapp.php`.

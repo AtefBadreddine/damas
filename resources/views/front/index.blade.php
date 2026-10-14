@@ -1178,7 +1178,7 @@ limit 5", ['%' . $current_lang . '%']);
                         <?php
                         ?>
                         <li class="big">
-                            <a class="shadow_type" href="https://damas.net/ar/turkiye/istanbul">
+                            <a class="shadow_type" href="https://damas.net/{{ $current_lang }}/turkiye/istanbul">
                                 <div class="image_cont">
                                     <div class="image">
                                         <img class="lazy" src="https://damas.net/uploads/istanbul-front.jpeg" alt="damasturk" />
@@ -1192,7 +1192,7 @@ limit 5", ['%' . $current_lang . '%']);
                         </li>
 
                         <li class="small_muscat">
-                            <a class="shadow_type" href="https://damas.net/ar/oman/muscat">
+                            <a class="shadow_type" href="https://damas.net/{{ $current_lang }}/oman/muscat">
                                 <div class="image_cont">
                                     <div class="image">
                                         <?php /* <img class="lazy" data-src="<?= Helper::media_url_full(Helper::query("Media", "find", ["id" => $projects_count[4]->media_index])) ?>" alt="damasturk" /> */ ?>

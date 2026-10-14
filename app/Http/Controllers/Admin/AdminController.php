@@ -277,213 +277,232 @@ class AdminController extends BaseController
         $operation = $request->get('operation');
         $value = $request->get('value', '');
         $selected_anchors = $request->get('anchors', []);
-        $allowed_operations = [
-            'edit-text',
-            'edit-target-url',
-            'keep-text',
-            'remove-completely'
-        ];
-        if (!in_array($operation, $allowed_operations)) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Invalid operation.'
-            ], 400);
+        $allowed_operations = ['edit-text', 'edit-target-url', 'keep-text', 'remove-completely'];
+        if (!in_array($operation, $allowed_operations, true)) {
+            return response()->json(['success' => false, 'message' => 'Invalid operation.'], 400);
         }
         if (!is_array($selected_anchors) || empty($selected_anchors)) {
-            return response()->json([
-                'success' => false,
-                'message' => 'No anchors were selected.'
-            ], 400);
+            return response()->json(['success' => false, 'message' => 'No anchors were selected.'], 400);
         }
-        if (($operation == 'edit-text' || $operation == 'edit-target-url') && trim($value) === '') {
-            return response()->json([
-                'success' => false,
-                'message' => 'A new value is required.'
-            ], 400);
+        if (!is_string($value)) {
+            return response()->json(['success' => false, 'message' => 'The new value must be text.'], 400);
         }
+        if (in_array($operation, ['edit-text', 'edit-target-url'], true) && trim($value) === '') {
+            return response()->json(['success' => false, 'message' => 'A new value is required.'], 400);
+        }
+        // The client identifies an owner. Only this map can choose a table or field.
+        $owners = [
+            'project' => [
+                'table' => 'projects', 'model' => \App\Models\Project::class,
+                'fields' => [
+                    'intro_location_ar', 'intro_location_en', 'location_ar', 'location_en',
+                    'governmental_ar', 'governmental_en', 'transportation_ar', 'transportation_en',
+                    'future_look_ar', 'future_look_en'
+                ],
+                'relations' => ['city.countryRel', 'region'], 'url_method' => 'frontUrl'
+            ],
+            'post' => [
+                'table' => 'posts', 'model' => \App\Models\Post::class,
+                'fields' => ['content_ar', 'content_en'], 'relations' => ['countryRel'], 'url_method' => 'frontUrl'
+            ],
+            'country' => [
+                'table' => 'countries', 'model' => \App\Models\Country::class,
+                'fields' => ['content_ar', 'content_en'], 'relations' => [], 'url_method' => 'listingUrl'
+            ],
+            'city' => [
+                'table' => 'cities', 'model' => \App\Models\City::class,
+                'fields' => ['about_ar', 'about_en'], 'relations' => ['countryRel'], 'url_method' => 'listingUrl'
+            ],
+            'region' => [
+                'table' => 'regions', 'model' => \App\Models\Region::class,
+                'fields' => ['about_ar', 'about_en'], 'relations' => ['city.countryRel'], 'url_method' => 'listingUrl'
+            ]
+        ];
         $groups = [];
+        $skipped = 0;
+        $errors = [];
         foreach ($selected_anchors as $selected_anchor) {
-            if (!isset($selected_anchor['post_id'], $selected_anchor['content_field'], $selected_anchor['anchor_index'], $selected_anchor['signature'])) {
+            if (!is_array($selected_anchor)) {
+                $skipped++;
                 continue;
             }
-            $post_id = (int) $selected_anchor['post_id'];
-            $content_field = $selected_anchor['content_field'];
-            $anchor_index = (int) $selected_anchor['anchor_index'];
-            $signature = $selected_anchor['signature'];
-            if (!in_array($content_field, ['content_ar', 'content_en'])) {
+            // Keep accepting the old post_id payload for existing clients.
+            $owner_type = isset($selected_anchor['owner_type']) ? $selected_anchor['owner_type']
+                : (isset($selected_anchor['post_id']) && !isset($selected_anchor['owner_id']) ? 'post' : null);
+            $owner_id = isset($selected_anchor['owner_id']) ? $selected_anchor['owner_id']
+                : ($owner_type === 'post' && isset($selected_anchor['post_id']) ? $selected_anchor['post_id'] : null);
+            $owner_id = filter_var($owner_id, FILTER_VALIDATE_INT);
+            $field = isset($selected_anchor['content_field']) ? $selected_anchor['content_field'] : null;
+            $index = isset($selected_anchor['anchor_index']) ? filter_var($selected_anchor['anchor_index'], FILTER_VALIDATE_INT) : false;
+            $signature = isset($selected_anchor['signature']) ? $selected_anchor['signature'] : null;
+            if (!is_string($owner_type) || !isset($owners[$owner_type]) || $owner_id === false || $owner_id < 1
+                || !is_string($field) || !in_array($field, $owners[$owner_type]['fields'], true)
+                || $index === false || $index < 0 || !is_string($signature) || !preg_match('/^[a-f0-9]{40}$/', $signature)) {
+                $skipped++;
+                $errors[] = 'An anchor had an invalid owner, field, index or signature and was skipped.';
                 continue;
             }
-            if ($anchor_index < 0) {
-                continue;
-            }
-            $group_key = $post_id . '|' . $content_field;
+            $group_key = $owner_type . '|' . $owner_id . '|' . $field;
             if (!isset($groups[$group_key])) {
-                $groups[$group_key] = [
-                    'post_id' => $post_id,
-                    'content_field' => $content_field,
-                    'anchors' => []
-                ];
+                $groups[$group_key] = ['owner_type' => $owner_type, 'owner_id' => $owner_id, 'field' => $field, 'anchors' => []];
             }
-            $groups[$group_key]['anchors'][] = [
-                'anchor_index' => $anchor_index,
-                'signature' => $signature
-            ];
+            // Grouped rows can refer to the same physical anchor more than once.
+            $groups[$group_key]['anchors'][$index . '|' . $signature] = ['index' => $index, 'signature' => $signature];
         }
         if (empty($groups)) {
-            return response()->json([
-                'success' => false,
-                'message' => 'No valid anchors were received.'
-            ], 400);
+            return response()->json(['success' => false, 'message' => 'No valid anchors were received.', 'skipped' => $skipped, 'errors' => $errors], 400);
         }
         $updated = 0;
-        $skipped = 0;
-        $updated_posts = [];
-        $errors = [];
-        foreach ($groups as $group) {
-            $post = Helper::query("Post", "find", [
-                'id' => $group['post_id']
-            ]);
-            if (!$post) {
-                $skipped += count($group['anchors']);
-                $errors[] = 'Post ' . $group['post_id'] . ' was not found.';
-                continue;
-            }
-            $content_field = $group['content_field'];
-            $stored_content = $post->$content_field;
-            if (empty($stored_content)) {
-                $skipped += count($group['anchors']);
-                $errors[] = 'Post ' . $post->id . ' has empty ' . $content_field . '.';
-                continue;
-            }
-            preg_match_all('/&lt;a\b.*?&gt;.*?&lt;\/a\s*&gt;/isu', $stored_content, $encoded_matches, PREG_OFFSET_CAPTURE);
-            $encoded_anchors = isset($encoded_matches[0]) ? $encoded_matches[0] : [];
-            $targets = [];
-            foreach ($group['anchors'] as $selected_anchor) {
-                $index = $selected_anchor['anchor_index'];
-                if (!isset($encoded_anchors[$index])) {
-                    $skipped++;
-                    $errors[] = 'Anchor #' . $index . ' no longer exists in post ' . $post->id . '.';
+        $updated_records = [];
+        $opening_tag = function ($anchor) {
+            return preg_match('/^<a\b(?:[^>"\']|"[^"]*"|\'[^\']*\')*>/isu', $anchor, $match) ? $match[0] : null;
+        };
+        \DB::beginTransaction();
+        try {
+            foreach ($groups as $group) {
+                $owner = $owners[$group['owner_type']];
+                $description = ucfirst($group['owner_type']) . ' ' . $group['owner_id'];
+                $record = \DB::table($owner['table'])->where('id', $group['owner_id'])->lockForUpdate()->first();
+                if (!$record) {
+                    $skipped += count($group['anchors']);
+                    $errors[] = $description . ' was not found.';
                     continue;
                 }
-                $encoded_anchor = $encoded_anchors[$index][0];
-                $offset = $encoded_anchors[$index][1];
-                $raw_anchor = html_entity_decode($encoded_anchor, ENT_QUOTES | ENT_HTML5, 'UTF-8');
-                if (sha1($raw_anchor) !== $selected_anchor['signature']) {
-                    $skipped++;
-                    $errors[] = 'Anchor #' . $index . ' in post ' . $post->id . ' changed after the page was loaded and was skipped.';
+                $field = $group['field'];
+                $stored_content = (string)$record->$field;
+                if ($stored_content === '') {
+                    $skipped += count($group['anchors']);
+                    $errors[] = $description . ' has empty ' . $field . '.';
                     continue;
                 }
-                $replacement = $raw_anchor;
-                if ($operation == 'edit-text') {
-                    $open_end = strpos($raw_anchor, '>');
+                // Locate both storage formats using offsets in the original stored text.
+                preg_match_all('/<a\b[^>]*>.*?<\/a\s*>|&lt;a\b.*?&gt;.*?&lt;(?:\/|&sol;|&#0*47;|&#x0*2f;)a\s*&gt;/isu', $stored_content, $matches, PREG_OFFSET_CAPTURE);
+                $targets = [];
+                foreach ($group['anchors'] as $selected_anchor) {
+                    $index = $selected_anchor['index'];
+                    if (!isset($matches[0][$index])) {
+                        $skipped++;
+                        $errors[] = 'Anchor #' . $index . ' no longer exists in ' . $description . '.';
+                        continue;
+                    }
+                    $stored_anchor = $matches[0][$index][0];
+                    $offset = $matches[0][$index][1];
+                    $is_encoded = stripos($stored_anchor, '&lt;a') === 0;
+                    $decoded_anchor = html_entity_decode($stored_anchor, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+                    if (sha1($decoded_anchor) !== $selected_anchor['signature']) {
+                        $skipped++;
+                        $errors[] = 'Anchor #' . $index . ' in ' . $description . ' changed after the page was loaded and was skipped.';
+                        continue;
+                    }
+                    $raw_anchor = $is_encoded ? $decoded_anchor : $stored_anchor;
+                    $open = $opening_tag($raw_anchor);
                     $close_start = strripos($raw_anchor, '</a');
-                    if ($open_end === false || $close_start === false || $close_start <= $open_end) {
+                    if ($open === null || $close_start === false || $close_start < strlen($open)) {
                         $skipped++;
-                        $errors[] = 'Anchor #' . $index . ' in post ' . $post->id . ' has invalid anchor markup.';
+                        $errors[] = 'Anchor #' . $index . ' in ' . $description . ' has invalid anchor markup.';
                         continue;
                     }
-                    $old_inner = substr($raw_anchor, $open_end + 1, $close_start - ($open_end + 1));
-                    $space_token = '(?:\s|&nbsp;|&#160;|&#xA0;)';
-                    $leading_space = '';
-                    $trailing_space = '';
-                    if (preg_match('/^(' . $space_token . '*)/iu', $old_inner, $leading_match)) {
-                        $leading_space = $leading_match[1];
+                    $replacement = $raw_anchor;
+                    if ($operation === 'edit-text') {
+                        $old_inner = substr($raw_anchor, strlen($open), $close_start - strlen($open));
+                        $space_token = '(?:\s|\x{00A0}|&nbsp;|&#160;|&#xA0;)';
+                        preg_match('/^(' . $space_token . '*)/iu', $old_inner, $leading_match);
+                        preg_match('/(' . $space_token . '*)$/iu', $old_inner, $trailing_match);
+                        $safe_text = htmlspecialchars($value, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+                        $safe_text = preg_replace_callback('/(^ +| +$| {2,})/u', function ($match) {
+                            return str_repeat('&nbsp;', strlen($match[0]));
+                        }, $safe_text);
+                        $replacement = $open . $leading_match[1] . $safe_text . $trailing_match[1] . substr($raw_anchor, $close_start);
+                    } elseif ($operation === 'edit-target-url') {
+                        $safe_url = htmlspecialchars($value, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+                        // Consume entire attributes so a title containing "href=..." is not mistaken for href.
+                        preg_match_all('/(\s+)([^\s=<>\/]+)(?:\s*=\s*(?:"[^"]*"|\'[^\']*\'|[^\s>]+))?/u', $open, $attributes, PREG_SET_ORDER | PREG_OFFSET_CAPTURE);
+                        $href_found = false;
+                        foreach ($attributes as $attribute) {
+                            if (strtolower($attribute[2][0]) !== 'href') {
+                                continue;
+                            }
+                            $quote = preg_match('/=\s*(["\'])/', $attribute[0][0], $quote_match) ? $quote_match[1] : '"';
+                            $new_attribute = $attribute[1][0] . 'href=' . $quote . $safe_url . $quote;
+                            $open = substr($open, 0, $attribute[0][1]) . $new_attribute . substr($open, $attribute[0][1] + strlen($attribute[0][0]));
+                            $href_found = true;
+                            break;
+                        }
+                        if (!$href_found) {
+                            $open = substr($open, 0, -1) . ' href="' . $safe_url . '">';
+                        }
+                        $replacement = $open . substr($raw_anchor, strlen($opening_tag($raw_anchor)));
+                    } elseif ($operation === 'keep-text') {
+                        $replacement = substr($raw_anchor, strlen($open), $close_start - strlen($open));
+                    } elseif ($operation === 'remove-completely') {
+                        $replacement = '';
                     }
-                    if (preg_match('/(' . $space_token . '*)$/iu', $old_inner, $trailing_match)) {
-                        $trailing_space = $trailing_match[1];
-                    }
-                    $safe_text = htmlspecialchars($value, ENT_QUOTES | ENT_HTML5, 'UTF-8');
-                    $safe_text = preg_replace_callback('/(^ +| +$| {2,})/u', function ($match) {
-                        return str_repeat('&nbsp;', strlen($match[0]));
-                    }, $safe_text);
-                    $replacement = substr($raw_anchor, 0, $open_end + 1) . $leading_space . $safe_text . $trailing_space . substr($raw_anchor, $close_start);
-                } elseif ($operation == 'edit-target-url') {
-                    $open_end = strpos($raw_anchor, '>');
-                    if ($open_end === false) {
-                        $skipped++;
-                        $errors[] = 'Anchor #' . $index . ' in post ' . $post->id . ' has invalid anchor markup.';
-                        continue;
-                    }
-                    $opening_tag = substr($raw_anchor, 0, $open_end + 1);
-                    $anchor_body = substr($raw_anchor, $open_end + 1);
-                    $safe_url = htmlspecialchars($value, ENT_QUOTES | ENT_HTML5, 'UTF-8');
-                    if (preg_match('/\bhref\s*=\s*(["\']).*?\1/isu', $opening_tag)) {
-                        $opening_tag = preg_replace_callback('/\bhref\s*=\s*(["\']).*?\1/isu', function ($match) use ($safe_url) {
-                            return 'href=' . $match[1] . $safe_url . $match[1];
-                        }, $opening_tag, 1);
-                    } else {
-                        $opening_tag = substr($opening_tag, 0, -1) . ' href="' . $safe_url . '">';
-                    }
-                    $replacement = $opening_tag . $anchor_body;
-                } elseif ($operation == 'keep-text') {
-                    $open_end = strpos($raw_anchor, '>');
-                    $close_start = strripos($raw_anchor, '</a');
-                    if ($open_end === false || $close_start === false || $close_start <= $open_end) {
-                        $skipped++;
-                        $errors[] = 'Anchor #' . $index . ' in post ' . $post->id . ' has invalid anchor markup.';
-                        continue;
-                    }
-                    $replacement = substr(
-                        $raw_anchor,
-                        $open_end + 1,
-                        $close_start - ($open_end + 1)
-                    );
-                } elseif ($operation == 'remove-completely') {
-                    $replacement = '';
+                    $targets[] = [
+                        'offset' => $offset, 'length' => strlen($stored_anchor),
+                        'replacement' => $is_encoded ? htmlentities($replacement, ENT_QUOTES | ENT_HTML401, 'UTF-8') : $replacement
+                    ];
                 }
-                $encoded_replacement = $replacement === '' ? '' : htmlentities($replacement);
-                $targets[] = [
-                    'offset' => $offset,
-                    'length' => strlen($encoded_anchor),
-                    'replacement' => $encoded_replacement,
-                    'index' => $index
-                ];
+                if (empty($targets)) {
+                    continue;
+                }
+                usort($targets, function ($a, $b) { return $b['offset'] <=> $a['offset']; });
+                $new_stored_content = $stored_content;
+                foreach ($targets as $target) {
+                    $new_stored_content = substr($new_stored_content, 0, $target['offset'])
+                        . $target['replacement'] . substr($new_stored_content, $target['offset'] + $target['length']);
+                    $updated++;
+                }
+                if ($new_stored_content !== $stored_content) {
+                    \DB::table($owner['table'])->where('id', $group['owner_id'])->update([$field => $new_stored_content]);
+                    $updated_records[$group['owner_type'] . '|' . $group['owner_id']] = [
+                        'owner_type' => $group['owner_type'], 'owner_id' => $group['owner_id']
+                    ];
+                }
             }
-            if (empty($targets)) {
-                continue;
-            }
-            usort($targets, function ($a, $b) {
-                return $b['offset'] <=> $a['offset'];
-            });
-            $new_stored_content = $stored_content;
-            foreach ($targets as $target) {
-                $new_stored_content = substr($new_stored_content, 0, $target['offset'])
-                    . $target['replacement']
-                    . substr($new_stored_content, $target['offset'] + $target['length']);
-                $updated++;
-            }
-            if ($new_stored_content === $stored_content) {
-                continue;
-            }
-            \DB::table('posts')
-                ->where('id', $post->id)
-                ->update([
-                    $content_field => $new_stored_content
-                ]);
-            $updated_posts[$post->id] = $post;
+            \DB::commit();
+        } catch (\Exception $error) {
+            \DB::rollBack();
+            \Log::error('Anchors mass update failed', ['error' => $error->getMessage()]);
+            return response()->json(['success' => false, 'message' => 'The database update failed; no changes were saved.'], 500);
         }
-        foreach ($updated_posts as $post) {
-            $urls_cache = [];
-            $urls_cache[] = $post->frontUrl();
-            $urls_cache[] = route('front.blog');
-            Helper::Clear_cache($urls_cache);
+        // Invalidate exact Arabic/English page keys; old cache helpers assume the previous URL scheme.
+        foreach ($updated_records as $updated_record) {
+            try {
+                $owner = $owners[$updated_record['owner_type']];
+                $model = $owner['model'];
+                $record = $model::with($owner['relations'])->find($updated_record['owner_id']);
+                $method = $owner['url_method'];
+                $page_url = $record ? $record->$method() : null;
+                if ($page_url) {
+                    $path = preg_replace('#^/(?:ar|en)(?=/|$)#i', '', (string)parse_url($page_url, PHP_URL_PATH));
+                    foreach (['ar', 'en'] as $language) {
+                        $url = rtrim(url($language . '/' . ltrim($path, '/')), '/');
+                        \Cache::forget('page_cache_' . md5($url));
+                        \Cache::forget('page_cache_' . md5($url . '/'));
+                    }
+                }
+            } catch (\Exception $error) {
+                $errors[] = 'Saved ' . $updated_record['owner_type'] . ' ' . $updated_record['owner_id'] . ', but its page cache could not be refreshed.';
+                \Log::warning('Anchor page cache refresh failed', ['error' => $error->getMessage()]);
+            }
+        }
+        $posts_updated = 0;
+        foreach ($updated_records as $record) {
+            if ($record['owner_type'] === 'post') {
+                $posts_updated++;
+            }
         }
         \Log::info('ANCHORS MASS UPDATE FINISHED', [
-            'operation' => $operation,
-            'updated' => $updated,
-            'skipped' => $skipped,
-            'posts' => array_keys($updated_posts),
-            'errors' => $errors
+            'operation' => $operation, 'updated' => $updated, 'skipped' => $skipped,
+            'records' => array_keys($updated_records), 'errors' => $errors
         ]);
         return response()->json([
-            'success' => true,
-            'operation' => $operation,
-            'updated' => $updated,
-            'skipped' => $skipped,
-            'posts_updated' => count($updated_posts),
-            'errors' => $errors
+            'success' => true, 'operation' => $operation, 'updated' => $updated, 'skipped' => $skipped,
+            'posts_updated' => $posts_updated, 'records_updated' => count($updated_records), 'errors' => $errors
         ]);
     }
+
+
     
     /**
      * matatag tool crawler

@@ -53,6 +53,13 @@ class RedirectToLocalePrefix
             return $next($request);
         }
 
+        // Pages renamed or removed by the Oct 2026 restructure. $landingPath has no locale,
+        // so /x, /ar/x and /en/x all go straight to the new URL in that locale.
+        $renamedUrl = $this->renamedPageUrl($landingPath);
+        if ($renamedUrl) {
+            return redirect($renamedUrl . ($query ? '?' . $query : ''), $status);
+        }
+
         // Unprefixed legacy URLs already 301 in the controller. Skip the locale hop
         // so /blog/x goes once to /ar/guides/... instead of /blog/x -> /ar/blog/x -> geo.
         // /news and /projects listings still need /ar; only their old child paths skip.
@@ -98,5 +105,37 @@ class RedirectToLocalePrefix
         $url = url($locale . '/' . $path);
 
         return redirect($url . ($query ? '?' . $query : ''), $status);
+    }
+
+    /**
+     * New URL for a page path (without locale) that was renamed or removed, or null.
+     * route() and listingUrl() resolve to the request's locale prefix (/ar when unprefixed).
+     *
+     * @param string $path
+     * @return string|null
+     */
+    protected function renamedPageUrl($path)
+    {
+        static $routes = array(
+            'investment-turkey-istanbul' => 'front.investment',
+            'turkish-citizenship' => 'front.turkish_citizenship',
+            'legal-affairs-turkey' => 'front.legal',
+        );
+        if (isset($routes[$path])) {
+            return route($routes[$path]);
+        }
+
+        // Retired Turkey overview pages go to the Turkey listing.
+        if (in_array($path, array('living-turkey-real-estate-ownership', 'living_turkey', 'turkey-territories'), true)) {
+            return \Helper::geo_listing_url('turkey');
+        }
+
+        // Old district guides: /istanbul-districts[/basaksehir] -> the geo listing.
+        if (preg_match('#^([^/]+)-districts(?:/([^/]+))?$#', $path, $m)) {
+            return \Helper::legacyListingUrlFromParts('property-for-sale', $m[1], isset($m[2]) ? $m[2] : null)
+                ?: \Helper::geo_listing_url($m[1]);
+        }
+
+        return null;
     }
 }

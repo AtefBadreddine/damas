@@ -145,25 +145,26 @@ foreach ($citys as $layoutCity) {
         <meta name="robots" content="max-image-preview:large">
         
         <meta name="application-name" content="<?= $og_title; ?>" />
-		
+        <?php $seoQuery = isset($seo_query) && is_array($seo_query) ? $seo_query : array(); ?>
+
 		@if(in_array('ar',$availables_langs))
-        <link rel="alternate" href="<?= seo_url("ar"); ?>" hreflang="ar" />
+        <link rel="alternate" href="<?= seo_url("ar", $seoQuery); ?>" hreflang="ar" />
         @endif
 		@if(in_array('en',$availables_langs))
-		<link rel="alternate" href="<?= seo_url("en"); ?>" hreflang="en"/>
+		<link rel="alternate" href="<?= seo_url("en", $seoQuery); ?>" hreflang="en"/>
         @endif
 		@if(in_array('fr',$availables_langs))
-		<link rel="alternate" href="<?= seo_url("fr"); ?>" hreflang="fr"/>
+		<link rel="alternate" href="<?= seo_url("fr", $seoQuery); ?>" hreflang="fr"/>
         @endif
 		@if(in_array('pe',$availables_langs))
-		<link rel="alternate" href="<?= seo_url('pe'); ?>" hreflang='fa'/>
+		<link rel="alternate" href="<?= seo_url('pe', $seoQuery); ?>" hreflang='fa'/>
 		@endif
 		@if(in_array('ru',$availables_langs))
-		<link rel="alternate" href="<?= seo_url('ru'); ?>" hreflang='ru'/>
+		<link rel="alternate" href="<?= seo_url('ru', $seoQuery); ?>" hreflang='ru'/>
 		@endif
         <?php $xDefaultLang = in_array(LaravelLocalization::getDefaultLocale(), $availables_langs) ? LaravelLocalization::getDefaultLocale() : reset($availables_langs); ?>
         @if($xDefaultLang)
-        <link rel="alternate" href="<?= seo_url($xDefaultLang); ?>" hreflang="x-default" />
+        <link rel="alternate" href="<?= seo_url($xDefaultLang, $seoQuery); ?>" hreflang="x-default" />
         @endif
         
 		<link rel="alternate" type="application/rss+xml" href="<?= url('rss/news') ?>" title="<?= trans('front.news') ?>"/>
@@ -178,8 +179,8 @@ foreach ($citys as $layoutCity) {
         <meta name="author" content="damasturk" />
         <meta name="revisit-after" content="5 hours" />
         
-        <link rel="canonical" href="<?= seo_url(); ?>" />
-        <meta property="og:url" content="<?= seo_url(); ?>" />
+        <link rel="canonical" href="<?= seo_url(null, $seoQuery); ?>" />
+        <meta property="og:url" content="<?= seo_url(null, $seoQuery); ?>" />
         <meta property="og:type" content="article" />
         <meta property="og:title" content="<?= $og_title; ?>" />
         @if(@$amp_url)
@@ -201,10 +202,8 @@ foreach ($citys as $layoutCity) {
         @endif
 
 
-        @if (in_array(preg_replace('#^en/#', '', \Request::path()), [
+        @if (in_array(preg_replace('#^(?:' . implode('|', LaravelLocalization::getSupportedLanguagesKeys()) . ')/#', '', \Request::path()), [
             'turkey-guide',
-            'turkey-territories',
-            'istanbul-districts',
             'jobs',
             'job/salesman',
             'job/sales-manager',

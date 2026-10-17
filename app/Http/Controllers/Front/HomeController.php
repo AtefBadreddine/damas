@@ -122,7 +122,6 @@ class HomeController extends BaseController
 		$pageRoutes = [
 			'investment' => 'front.investment',
 			'legal' => 'front.legal',
-			'living_turkey' => 'front.living_turkey',
 			'privacy' => 'front.privacy',
 			'terms' => 'front.terms',
 		];

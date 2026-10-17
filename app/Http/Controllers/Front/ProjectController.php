@@ -243,7 +243,15 @@ limit 1", array($row->id, '%' . $lang . '%'));
             || $filters['rooms'] !== ''
             || $filters['price'] !== ''
             || $filters['sorting'] !== '';
-        $search_noindex = count($allprojects) === 0 || $hasListingFilters;
+        // One type and nothing else (/ar/turkiye/istanbul?type=villas-for-sale) is a landing page:
+        // old /villas-for-sale/istanbul URLs 301 here, so it stays indexable under its own URL.
+        $isTypeLanding = $filters['type']
+            && !$filters['categories']
+            && $filters['rooms'] === ''
+            && $filters['price'] === ''
+            && $filters['sorting'] === '';
+        $search_noindex = count($allprojects) === 0 || ($hasListingFilters && !$isTypeLanding);
+        $seo_query = $isTypeLanding ? array('type' => $filters['type']->slug) : array();
         $is_location_page = true;
         $locationCountry = $country;
         $locationCity = $city;
@@ -260,6 +268,7 @@ limit 1", array($row->id, '%' . $lang . '%'));
             '__var1',
             '__var2',
             'search_noindex',
+            'seo_query',
             'is_location_page',
             'filterFormUrl',
             'locationAreaUrl',
@@ -529,7 +538,8 @@ limit 1", array($row->id, '%' . $lang . '%'));
 
     /**
      * SEO and about copy for a geo listing.
-     * Title/description always come from the deepest geo row (district → city → country).
+     * Title/description come from the deepest geo row (district → city → country); a type-only
+     * filter gets a generated title ("فلل للبيع في اسطنبول | ...") since it is an indexable landing page.
      * Visible H1 uses that row unless type/category filters are on, in which case a generated heading is HTML-only.
      *
      * @param \App\Models\Country|null $country
@@ -588,6 +598,10 @@ limit 1", array($row->id, '%' . $lang . '%'));
         }
         if ($row && method_exists($row, 'getSeoTitle') && $row->getSeoTitle()) {
             $seoTitle = $row->getSeoTitle();
+        }
+        // Type landing pages get their own title; description and about text stay the geo row's.
+        if ($filterType && !$filterCategories) {
+            $seoTitle = $displayH1 . ' | ' . trim(trans('front.company name'));
         }
         $seoDescription = '';
         if ($row && method_exists($row, 'getSeoDescription') && $row->getSeoDescription()) {

@@ -54,3 +54,5 @@ desktop.ini
 # Misc local scratch (screenshots, one-off uploads)
 /lastup/
 docs/
+# Migration roadmap, inventory and plans (local only)
+/migration/

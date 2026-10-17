@@ -311,6 +311,7 @@ $proj_cats = Helper::query('ProjectCategory', "where", ["field" => "hide_search_
 "page_keywords"     =>    $city->getSeoKeywords(),
 "og_image"          =>    ($city->media?Helper::media_url_full($city->media):null),
 /*"amp_url"           =>    route("amp.front.investment")*/
+"page_index"        =>    "noindex, follow"
 ])
 
 

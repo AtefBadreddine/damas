@@ -42,6 +42,8 @@ The URL scheme was restructured. **Old routes are kept only so they can 301 to t
   - `project_show` and `blog_show_post` redirect to `geoUrl()`.
   - `blog_index` and `blog_show_category` redirect to the index route, as `/guides?category=slug`.
   - `search()` (the old listing renderer, now removed) only 301s via `Helper::legacyListingUrlFromRequest()` or 404s, and `redirect_url` uses the DB-driven short redirects. Build links to old-style type/city/tag/region combinations with `Helper::legacy_listing_url()`.
+- **Renamed/removed pages** (`investment-turkey-istanbul`, `turkish-citizenship`, `legal-affairs-turkey`, `living-turkey-real-estate-ownership`, `turkey-territories`, `{city}-districts[/{region}]`) 301 in one hop from `RedirectToLocalePrefix::renamedPageUrl()`, with or without a locale prefix. Add future page renames there.
+- **Type landing pages**: a geo listing with only `?type=` (no category/rooms/price/sorting) is indexable, with `?type=` kept in canonical/hreflang via `seo_url($locale, $seo_query)`, a generated title, and an entry in `sitemap/links`. Old `/{type}/{city}` URLs 301 to these. Any other filter combination stays `noindex`.
 - These redirect-only paths are deliberately **excluded** from the locale `add` redirect (the `$isLegacyRedirect` check in `RedirectToLocalePrefix`). That keeps each one to a single hop (`/blog/x` → `/ar/guides/...`) rather than chaining through `/ar/blog/x`. If you add a legacy path, update that check too.
 - Legacy routes pass `country` and `type` as **extra keys in the route action array**, not via `Route::defaults()`. On Laravel 5.1, `defaults()` overwrites the last path parameter. `HomeController::legacyRouteValue()` reads them back (route parameter first, then the action array).
 

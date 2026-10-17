@@ -66,9 +66,10 @@ if (!function_exists('localized_url')) {
 
 if (!function_exists('seo_url')) {
     /**
-     * Canonical/hreflang URL: localized path without query string, except ?page=N when N > 1.
+     * Canonical/hreflang URL: localized path without query string, except ?page=N when N > 1
+     * plus the allowed $query params (e.g. ?type= on geo type landing pages).
      */
-    function seo_url($locale = null)
+    function seo_url($locale = null, array $query = array())
     {
         $locale = $locale ?: LaravelLocalization::getCurrentLocale();
         $url = strtok(localized_url($locale), '?');
@@ -80,8 +81,11 @@ if (!function_exists('seo_url')) {
         }
 
         $page = (int) request()->get('page');
+        if ($page > 1) {
+            $query['page'] = $page;
+        }
 
-        return $page > 1 ? $url . '?page=' . $page : $url;
+        return $query ? $url . '?' . http_build_query($query) : $url;
     }
 }
 

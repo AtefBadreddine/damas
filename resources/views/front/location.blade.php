@@ -78,6 +78,7 @@ $hasAboutContent = trim(preg_replace('/\s+|&nbsp;|\x{00A0}/u', '', $aboutPlain))
     "page_description" => @$inputs["seo_description"],
     "page_keywords" => @$inputs["seo_keywords"],
     "og_image" => @$inputs["og_image"],
+    "seo_query" => isset($seo_query) ? $seo_query : array(),
 ])
 
 @section('main_content')

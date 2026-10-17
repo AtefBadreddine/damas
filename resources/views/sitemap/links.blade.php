@@ -26,6 +26,37 @@
 	}
 	$countries = array_filter($countries);
 
+	// Type landing pages (/ar/turkiye/istanbul?type=villas-for-sale) for each city and country
+	// with published, unsold projects of that type (same filter as the listing page).
+	$typeSlugs = \App\Models\ProjectType::lists('slug', 'id')->all();
+	$citiesById = $citys->keyBy('id');
+	$listingCityIds = $listingCitys->lists('id')->all();
+	$typeRows = \DB::table('project_type')
+		->join('projects', 'projects.id', '=', 'project_type.project_id')
+		->where('projects.published', 1)
+		->where('projects.sold', '!=', 100)
+		->select('projects.city_id', 'project_type.project_type_id')
+		->distinct()
+		->get();
+	$typeUrls = array();
+	foreach ($typeRows as $row) {
+		if (!isset($citiesById[$row->city_id], $typeSlugs[$row->project_type_id])) {
+			continue;
+		}
+		$typeSlug = $typeSlugs[$row->project_type_id];
+		if ($typeSlug === '' || $typeSlug === 'property-for-sale') {
+			continue;
+		}
+		$c = $citiesById[$row->city_id];
+		if (in_array($c->id, $listingCityIds) && $c->listingUrl()) {
+			$typeUrls[] = Helper::geo_listing_url($c, $typeSlug);
+		}
+		if ($c->countryRel && $c->countryRel->listingUrl()) {
+			$typeUrls[] = Helper::geo_listing_url($c->countryRel, $typeSlug);
+		}
+	}
+	$typeUrls = array_values(array_unique($typeUrls));
+
 	$postHubs = array();
 	foreach (\App\Enums\PostType::cases() as $postType) {
 		$postHubs[] = route($postType->frontIndexRoute());
@@ -94,6 +125,14 @@
 		@endif
 	@endforeach
 
+	@foreach ($typeUrls as $typeUrl)
+	<url>
+		<loc><?= htmlspecialchars($typeUrl, ENT_XML1); ?></loc>
+		<changefreq>weekly</changefreq>
+		<priority>0.8</priority>
+	</url>
+	@endforeach
+
 	@foreach ($postHubs as $hubUrl)
 	<url>
 		<loc><?= $hubUrl; ?></loc>
@@ -110,25 +149,6 @@
 			<changefreq>monthly</changefreq>
 			<priority>1</priority>
 		</url>
-		@endif
-	@endforeach
-
-	@foreach ($citys as $c)
-		@if ($c->enable_district_page == true)
-		<url>
-			<loc><?= $pageUrl($c->slug . '-districts'); ?></loc>
-			<lastmod><?= $c->updated_at->tz('UTC')->toAtomString(); ?></lastmod>
-			<changefreq>monthly</changefreq>
-			<priority>1</priority>
-		</url>
-		@foreach ($c->regions()->where('show_on_districts_page', true)->get() as $reg)
-		<url>
-			<loc><?= $pageUrl($c->slug . '-districts/' . $reg->slug); ?></loc>
-			<lastmod><?= $reg->updated_at->tz('UTC')->toAtomString(); ?></lastmod>
-			<changefreq>monthly</changefreq>
-			<priority>1</priority>
-		</url>
-		@endforeach
 		@endif
 	@endforeach
 

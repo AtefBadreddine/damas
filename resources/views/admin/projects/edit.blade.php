@@ -155,12 +155,18 @@
                                                 <div class="form-group">
                                                     <label>Slug <span class="red">(*)</span></label>
                                                     <div class="input-group ltr">
-                                                        <?php 
-                                                            $region = \DB::table('regions')->where("id", $row->region_id)->first();
-                                                            $city = \DB::table('cities')->where("id", $row->city_id)->first();
-                                                            $country = \DB::table('countries')->where("id", $city->country_id)->first();
+                                                        <?php
+                                                            // Projects may have no region (or city); show only the slugs that exist.
+                                                            $region = $row->region_id ? \DB::table('regions')->where("id", $row->region_id)->first() : null;
+                                                            $city = $row->city_id ? \DB::table('cities')->where("id", $row->city_id)->first() : null;
+                                                            $country = $city && $city->country_id ? \DB::table('countries')->where("id", $city->country_id)->first() : null;
+                                                            $slugPrefix = implode('/', array_filter(array(
+                                                                $country ? $country->slug : '',
+                                                                $city ? $city->slug : '',
+                                                                $region ? $region->slug : '',
+                                                            )));
                                                         ?>
-                                                        <span class="input-group-addon">damas.net/{{$country->slug}}/{{$city->slug}}/{{$region->slug}}/</span>
+                                                        <span class="input-group-addon">damas.net/{{ $slugPrefix !== '' ? $slugPrefix . '/' : '' }}</span>
                                                         <?= Form::text("slug", $row->slug, ["class" => "form-control input-sm ltr"]); ?>
                                                     </div>
                                                 </div>

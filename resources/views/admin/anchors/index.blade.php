@@ -348,7 +348,7 @@ const projectTitles = {
     $source_type_options = [
         'guides' => ['Guides'], 'news' => ['News'],
         'developers' => ['Developers'], 'reports' => ['Reports'],
-        'listing' => ['Countries', 'Cities', 'Districts'],
+        'listing' => ['Countries', 'Cities'],
         'country' => ['Countries'], 'city' => ['Cities'], 'region' => ['Districts'],
         'general' => ['General'], 'project' => ['Projects']
     ];
@@ -418,8 +418,8 @@ const projectTitles = {
     $source_type_labels = [];
     foreach ([
         'guides' => 'Guides', 'news' => 'News', 'developers' => 'Developers', 'reports' => 'Reports',
-        'project' => 'Projects', 'listing' => 'All Search Pages', 'country' => 'Countries',
-        'city' => 'Cities', 'region' => 'Districts', 'general' => 'General'
+        'project' => 'Projects', 'listing' => 'Listing',
+        'region' => 'Districts', 'general' => 'General'
     ] as $type => $label) {
         if (array_intersect($source_type_options[$type], array_keys($available_source_labels))) {
             $source_type_labels[$type] = $label;

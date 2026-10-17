@@ -155,7 +155,12 @@
                                                 <div class="form-group">
                                                     <label>Slug <span class="red">(*)</span></label>
                                                     <div class="input-group ltr">
-                                                        <span class="input-group-addon">projects/</span>
+                                                        <?php 
+                                                            $region = \DB::table('regions')->where("id", $row->region_id)->first();
+                                                            $city = \DB::table('cities')->where("id", $row->city_id)->first();
+                                                            $country = \DB::table('countries')->where("id", $city->country_id)->first();
+                                                        ?>
+                                                        <span class="input-group-addon">damas.net/{{$country->slug}}/{{$city->slug}}/{{$region->slug}}/</span>
                                                         <?= Form::text("slug", $row->slug, ["class" => "form-control input-sm ltr"]); ?>
                                                     </div>
                                                 </div>
@@ -551,12 +556,6 @@
                                                     <?= Form::textarea("seo_description_ar", $row->seo_description_ar, ["class" => "form-control text-align-right", "rows" => 5, "placeholder" => "Description"]); ?>
                                                 </div>
 
-                                                @if(@$hide_keywords==false)
-                                                <div class="form-group col-md-12" style="">
-                                                    <!--                            <label>Keywords</label>-->
-                                                    <?= Form::text("seo_keywords_ar", $row->seo_keywords_ar, ["class" => "form-control", "placeholder" => "Keywords"]); ?>
-                                                </div>
-                                                @endif
                                             </fieldset>
                                         </div>
                                     </div>
@@ -957,12 +956,6 @@
                                                     <?= Form::textarea("seo_description_en", $row->seo_description_en, ["class" => "form-control text-align-left", "rows" => 5, "placeholder" => "Description"]); ?>
                                                 </div>
 
-                                                @if(@$hide_keywords==false)
-                                                <div class="form-group col-md-12" style="">
-                                                    <!--                            <label>Keywords</label>-->
-                                                    <?= Form::text("seo_keywords_en", $row->seo_keywords_en, ["class" => "form-control", "placeholder" => "Keywords"]); ?>
-                                                </div>
-                                                @endif
                                             </fieldset>
                                         </div>
                                     </div>
@@ -1078,12 +1071,6 @@
                                                     <?= Form::textarea("seo_description_fr", $row->seo_description_fr, ["class" => "form-control text-align-left", "rows" => 5, "placeholder" => "Description"]); ?>
                                                 </div>
 
-                                                @if(@$hide_keywords==false)
-                                                <div class="form-group col-md-12" style="">
-                                                    <!--                            <label>Keywords</label>-->
-                                                    <?= Form::text("seo_keywords_fr", $row->seo_keywords_fr, ["class" => "form-control", "placeholder" => "Keywords"]); ?>
-                                                </div>
-                                                @endif
                                             </fieldset>
                                         </div>
                                     </div>
@@ -1147,12 +1134,6 @@
                                                     <?= Form::textarea("seo_description_fa", $row->seo_description_fa, ["class" => "form-control text-align-right", "rows" => 5, "placeholder" => "Description"]); ?>
                                                 </div>
 
-                                                @if(@$hide_keywords==false)
-                                                <div class="form-group col-md-12" style="">
-                                                    <!--                            <label>Keywords</label>-->
-                                                    <?= Form::text("seo_keywords_fa", $row->seo_keywords_fa, ["class" => "form-control", "placeholder" => "Keywords"]); ?>
-                                                </div>
-                                                @endif
                                             </fieldset>
                                         </div>
                                     </div>
@@ -1219,13 +1200,6 @@
                                                     <!--                            <label>Description</label>-->
                                                     <?= Form::textarea("seo_description_ru", $row->seo_description_ru, ["class" => "form-control text-align-right", "rows" => 5, "placeholder" => "Description"]); ?>
                                                 </div>
-
-                                                @if(@$hide_keywords==false)
-                                                <div class="form-group col-md-12" style="">
-                                                    <!--                            <label>Keywords</label>-->
-                                                    <?= Form::text("seo_keywords_ru", $row->seo_keywords_ru, ["class" => "form-control", "placeholder" => "Keywords"]); ?>
-                                                </div>
-                                                @endif
                                             </fieldset>
                                         </div>
                                     </div>
